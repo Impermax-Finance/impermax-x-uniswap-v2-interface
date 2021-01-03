@@ -4,10 +4,7 @@
   "description": "Impermax Finance UI ---",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev-server": "node index.js",
-    "start:dev": "npx webpack --watch --config webpack.dev-config.js",
-    "build": "npx webpack --env.production --config webpack.prod-config.js"
+    "start:dev": "npx pm2 start ecosystem-dev.config.js"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "./dist/",
+        "outDir": "./dist/www/build",
         "sourceMap": true,
         "resolveJsonModule": true,
         "noImplicitAny": true,

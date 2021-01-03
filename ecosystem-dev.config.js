@@ -12,9 +12,5 @@ module.exports = {
   },{
     name       : "front",
     script     : "npx webpack --watch --config webpack.dev-config.js",
-    
-  },{
-      name:   "ts-api",
-      script: "tsc --project tsconfig-server.json --watch"
   }]
 }
