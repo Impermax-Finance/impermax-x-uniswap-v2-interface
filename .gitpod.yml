@@ -1,6 +1,6 @@
 tasks:
   - init: npm install && npm install -g eslint
-  - command: npm run start:dev && npx pm2 monit
+    command: npm run start:dev && npx pm2 monit
 ports:
   - port: 8080
     onOpen: open-preview
