@@ -1,11 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import Routing from './Routing';
 import './index.scss';
-
-interface ViewProps {
-  children: React.ReactNode;
-}
 
 function App() {
   return <div className="app">
