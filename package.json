@@ -4,7 +4,9 @@
   "description": "Impermax Finance UI ---",
   "main": "index.js",
   "scripts": {
-    "start:dev": "npx pm2 start ecosystem-dev.config.js"
+    "start:dev": "npx pm2 start ecosystem-dev.config.js",
+    "stop:dev": "npx pm2 stop ecosystem-dev.config.js",
+    "start:dev-watch": "npx pm2 start ecosystem-dev.config.js && npx pm2 monit"
   },
   "repository": {
     "type": "git",
