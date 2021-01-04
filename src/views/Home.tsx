@@ -1,10 +1,14 @@
 import React from 'react';
 import View from '../components/View';
+import LendingPoolsSearch from '../components/LendingPoolsSearch';
 
-export default function() {
+/**
+ * Home page view.
+ */
+export default function Home() {
   return (<View>
       <div className="main-view">
-        <img src="/assets/icons/dai.svg" />
+        <LendingPoolsSearch />
       </div>
     </View>
   );

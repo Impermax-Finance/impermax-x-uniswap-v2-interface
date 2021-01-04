@@ -22,6 +22,9 @@ export enum AppRoutes {
   FarmingRoute
 }
 
+/**
+ * Generates the application routing structure.
+ */
 export default function Routing() {
   return (
     <div className="routing">

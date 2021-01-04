@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from "react-router-dom";
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
 import { HomeRoute, FarmingRoute } from '../../Routing';
@@ -11,6 +10,10 @@ interface ViewProps {
   children: React.ReactNode;
 }
 
+/**
+ * Creates a view component that wraps application page content.
+ * @param param0 ViewProps
+ */
 export default function View({ children }: ViewProps) {
   return (
       <div className="view">
