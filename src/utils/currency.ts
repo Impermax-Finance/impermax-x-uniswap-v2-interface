@@ -3,12 +3,12 @@ export interface Currency {
   icon: string 
 }
 
-const DAI: Currency = {
+export const DAI: Currency = {
   name: "DAI",
   icon: "/assets/icons/dai.svg"
 };
 
-const ETH: Currency = {
+export const ETH: Currency = {
   name: "ETH",
   icon: "/assets/icons/eth.svg"
 };

@@ -4,4 +4,19 @@
       color: grey;
     }
   }
+  .lending-pools-row {
+    .currency-name {
+      display: inline-flex;
+
+      .combined {
+        margin-right: 2rem;
+      }
+
+      .currency-icon {
+        width: 1.3rem;
+        position: relative;
+        top: -0.1rem;
+      }
+    }
+  }
 }
