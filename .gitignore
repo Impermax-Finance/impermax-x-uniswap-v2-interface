@@ -1,4 +1,4 @@
 node_modules
-www
+www/dist
 !www/dist/index.html
 .env
