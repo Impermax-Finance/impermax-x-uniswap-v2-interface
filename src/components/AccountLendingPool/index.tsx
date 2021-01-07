@@ -78,10 +78,10 @@ function AccountLendingPoolLPRow({ currency1, currency2 }: AccountLendingPoolLPR
         </Row>
         <Row>
           <Col>
-            <Button className="pool-row-btn" variant="primary">{t("Leverage")}</Button>
+            <Button className="pool-row-btn leverage" variant="primary">{t("Leverage")}</Button>
           </Col>
           <Col>
-            <Button className="pool-row-btn" variant="primary">{t("Obtain")}</Button>
+            <Button className="pool-row-btn obtain" variant="primary">{t("Obtain")}</Button>
           </Col>
         </Row>
       </Col>

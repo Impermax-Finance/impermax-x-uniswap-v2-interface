@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Routing from './Routing';
-import { Language } from './contexts';
+import { Language, Theme } from './contexts';
 import './index.scss';
 
 function App() {
@@ -14,7 +14,9 @@ function App() {
 
 const Contexts: React.FC = ({ children }) => {
   return <Language>
-    { children }
+    <Theme>
+      { children }
+    </Theme>
   </Language>
 }
 

@@ -4,6 +4,16 @@
   .pool-row-btn {
     width: 100%;
     margin-bottom: 1rem;
+    background-color: black;
+    border-color: black;
+    &.leverage {
+      background-color: rgb(38, 95, 21);
+      border-color: rgb(38, 95, 21);
+    }
+    &.obtain {
+      background-color: rgb(247, 4, 255);
+      border-color: rgb(247, 4, 255);
+    }
   }
   .account-lending-pool-row {
     margin-top: 2rem;
