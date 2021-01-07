@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import Table from 'react-bootstrap/Table'
+import Table from 'react-bootstrap/Table';
 import { LanguageContext } from '../../contexts/Language';
 import phrases from './translations';
 import { Currency, DAI, ETH } from './../../utils/currency';

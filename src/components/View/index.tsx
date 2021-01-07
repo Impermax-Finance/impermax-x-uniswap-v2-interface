@@ -18,7 +18,9 @@ export default function View({ children }: ViewProps) {
   return (
       <div className="view">
         <Navbar>
-          <Navbar.Brand>Icon</Navbar.Brand>
+          <Navbar.Brand>
+            <img className='impermax-brand' src="assets/impermax.png" />
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Nav className="mr-auto">
             <NavigationBarLink appRoute={HomeRoute} />
