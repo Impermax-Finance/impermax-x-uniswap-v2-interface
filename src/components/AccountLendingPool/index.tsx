@@ -7,6 +7,7 @@ import { LanguageContext } from '../../contexts/Language';
 import Button from 'react-bootstrap/Button';
 import phrases from './translations';
 import './index.scss';
+import { Currency, ETH, DAI } from '../../utils/currency';
 
 /**
  * Generates lending pool aggregate details.
@@ -44,34 +45,43 @@ function AccountLendingPoolDetails() {
   </>);
 }
 
+
+interface AccountLendingPoolLPRowProps {
+  currency1: Currency;
+  currency2: Currency;
+}
+
 /**
  * Build account lending pool detail rows for LP token currencies.
  */
-function AccountLendingPoolLPRow() {
+function AccountLendingPoolLPRow({ currency1, currency2 }: AccountLendingPoolLPRowProps) {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
   return (<>
-    <Row>
+    <Row className="account-lending-pool-row">
       <Col md={4}>
+        <img className='' src={currency1.icon} />
+        <img className='' src={currency2.icon} />
       </Col>
       <Col md={4}>
+        { `${currency1.fullName} - ${currency2.fullName}` }
       </Col>
       <Col md={4}>
         <Row>
           <Col>
-            <Button variant="primary">{t("Deposit")}</Button>
+            <Button className="pool-row-btn" variant="primary">{t("Deposit")}</Button>
           </Col>
           <Col>
-            <Button variant="primary">{t("Withdraw")}</Button>
+            <Button className="pool-row-btn" variant="primary">{t("Withdraw")}</Button>
           </Col>
         </Row>
         <Row>
           <Col>
-            <Button variant="primary">{t("Leverage")}</Button>
+            <Button className="pool-row-btn" variant="primary">{t("Leverage")}</Button>
           </Col>
           <Col>
-            <Button variant="primary">{t("Obtain")}</Button>
+            <Button className="pool-row-btn" variant="primary">{t("Obtain")}</Button>
           </Col>
         </Row>
       </Col>
@@ -79,18 +89,24 @@ function AccountLendingPoolLPRow() {
   </>);
 }
 
+interface AccountLendingPoolRowProps {
+  currency: Currency;
+}
+
 /**
  * Build account lending pool detail rows for single currencies.
  */
-function AccountLendingPoolRow() {
+function AccountLendingPoolRow({ currency }: AccountLendingPoolRowProps) {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
   return (<>
-    <Row>
+    <Row className="account-lending-pool-row">
       <Col md={4}>
+        <img className='' src={currency.icon} />
       </Col>
       <Col md={4}>
+        { `${currency.fullName}` }
       </Col>
       <Col md={4}>
         <Row>
@@ -126,7 +142,9 @@ export default function AccountLendingPool() {
             <Card.Body>
               <Container>
                 <AccountLendingPoolDetails />
-                <AccountLendingPoolRow />
+                <AccountLendingPoolLPRow currency1={ETH} currency2={DAI}/>
+                <AccountLendingPoolRow currency={ETH} />
+                <AccountLendingPoolRow currency={DAI} />
               </Container>
             </Card.Body>
           </Card>
