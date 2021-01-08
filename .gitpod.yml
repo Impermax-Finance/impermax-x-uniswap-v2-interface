@@ -2,7 +2,7 @@ image: gitpod/workspace-full
 
 tasks:
   - init: npm install && npm install -g eslint
-  - command: npm run start:dev-watch
+    command: npm run start:dev-watch
     name: Start PM2
 
 ports:
