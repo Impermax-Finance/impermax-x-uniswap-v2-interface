@@ -1,4 +1,4 @@
 node_modules
-www/dist
-!www/dist/index.html
+www/dist/build
+www/dist/assets
 .env
