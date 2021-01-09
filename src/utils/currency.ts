@@ -13,13 +13,13 @@ export interface LPTokenPair {
 export const DAI: Currency = {
   name: "DAI",
   fullName: "Dai",
-  icon: "/assets/icons/dai.svg"
+  icon: '/build/assets/icons/dai.svg'
 };
 
 export const ETH: Currency = {
   name: "ETH",
   fullName: "Ethereum",
-  icon: "/assets/icons/eth.svg"
+  icon: '/build/assets/icons/eth.svg'
 };
 
 export const DaiEthLP: LPTokenPair = {

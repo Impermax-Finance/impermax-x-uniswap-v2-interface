@@ -19,7 +19,7 @@ export default function View({ children }: ViewProps) {
       <div className="view">
         <Navbar>
           <Navbar.Brand>
-            <img className='impermax-brand' src="assets/impermax.png" />
+            <img className='impermax-brand' src="/build/assets/impermax.png" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Nav className="mr-auto">
