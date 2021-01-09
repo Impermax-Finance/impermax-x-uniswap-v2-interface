@@ -1,4 +1,7 @@
 import React, { useContext } from 'react';
+import {
+  Link
+} from "react-router-dom";
 import Table from 'react-bootstrap/Table';
 import { LanguageContext } from '../../contexts/Language';
 import phrases from './translations';
@@ -17,6 +20,7 @@ interface LendingCurrencyData {
 interface LendingPoolsRowProps {
   currency1: LendingCurrencyData;
   currency2: LendingCurrencyData;
+  lpPairAddress: string;
 }
 
 /**
@@ -24,11 +28,11 @@ interface LendingPoolsRowProps {
  */
 export function LendingPoolsRow(props: LendingPoolsRowProps) {
 
-  const { currency1, currency2 } = props;
+  const { currency1, currency2, lpPairAddress } = props;
 
   return (<tr className="lending-pools-row">
     <td className="currency-name">
-      <span className="combined">{currency1.currency.name}/{currency2.currency.name}</span>
+      <span className="combined"><Link to={lpPairAddress}>{currency1.currency.name}/{currency2.currency.name}</Link></span>
       <span>
         <div>
             <img className="currency-icon" src={currency1.currency.icon} />
@@ -123,6 +127,7 @@ export function LendingPoolsTable() {
       </thead>
       <tbody>
         <LendingPoolsRow
+          lpPairAddress={'farming/eth-dai'}
           currency1={DaiLendingCurrencyData}
           currency2={EthLendingCurrencyData} />
       </tbody>

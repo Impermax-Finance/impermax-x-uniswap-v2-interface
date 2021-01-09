@@ -41,7 +41,7 @@
     "@types/react-bootstrap": "^0.32.24",
     "@types/react-dom": "^16.9.8",
     "@types/react-router": "^5.1.8",
-    "@types/react-router-dom": "^5.1.5",
+    "@types/react-router-dom": "^5.1.7",
     "bn.js": "^5.1.2",
     "bnc-notify": "^1.2.2",
     "bnc-onboard": "^1.10.0",

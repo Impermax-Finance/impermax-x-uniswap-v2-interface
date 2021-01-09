@@ -7,7 +7,7 @@ import { LanguageContext } from '../../contexts/Language';
 import Button from 'react-bootstrap/Button';
 import phrases from './translations';
 import './index.scss';
-import { Currency, ETH, DAI } from '../../utils/currency';
+import { Currency, ETH, DAI, LPTokenPair } from '../../utils/currency';
 
 /**
  * Generates lending pool aggregate details.
@@ -130,10 +130,15 @@ function AccountLendingPoolRow({ currency }: AccountLendingPoolRowProps) {
   </>);
 }
 
+interface AccountLendingPoolProps {
+  lptoken: LPTokenPair;
+}
+
 /**
  * Generate the Account Lending Pool card, giving details about the particular user's equity in the pool.
  */
-export default function AccountLendingPool() {
+export default function AccountLendingPool({ lptoken }: AccountLendingPoolProps) {
+  const {currency1, currency2} = lptoken;
   return (<div className="account-lending-pool">
     <Container>
       <Row>
@@ -142,9 +147,9 @@ export default function AccountLendingPool() {
             <Card.Body>
               <Container>
                 <AccountLendingPoolDetails />
-                <AccountLendingPoolLPRow currency1={ETH} currency2={DAI}/>
-                <AccountLendingPoolRow currency={ETH} />
-                <AccountLendingPoolRow currency={DAI} />
+                <AccountLendingPoolLPRow currency1={currency1} currency2={currency2}/>
+                <AccountLendingPoolRow currency={currency1} />
+                <AccountLendingPoolRow currency={currency2} />
               </Container>
             </Card.Body>
           </Card>

@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import { Home } from './views';
+import { Home, Farm } from './views';
 
 export interface AppRoute {
   value: string;
@@ -10,6 +10,11 @@ export interface AppRoute {
 export const HomeRoute = {
   value: 'Home',
   to: '/'
+} as AppRoute;
+
+export const FarmRoute = {
+  value: 'Farm',
+  to: '/farming/:farmID'
 } as AppRoute;
 
 export const FarmingRoute = {
@@ -32,6 +37,9 @@ export default function Routing() {
           <Switch>
             <Route path={HomeRoute.to} exact>
               <Home />
+            </Route>
+            <Route path={FarmRoute.to}>
+              <Farm />
             </Route>
           </Switch>
       </Router>
