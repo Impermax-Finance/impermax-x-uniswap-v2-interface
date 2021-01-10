@@ -33,8 +33,14 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
   return (<tr className="lending-pools-row">
     <td>
       <div className="currency-name">
-        <span className="combined"><Link to={lpPairAddress}>{currency1.currency.name}/{currency2.currency.name}</Link></span>
-        <span>
+        <div className="combined">
+          <div className="currency-overlapped">
+            <img src={currency1.currency.icon} />
+            <img src={currency2.currency.icon} />
+          </div>
+          <Link to={lpPairAddress}>{currency1.currency.name}/{currency2.currency.name}</Link>
+        </div>
+        <div>
             <div>
                 <img className="currency-icon" src={currency1.currency.icon} />
                 {currency1.currency.name}
@@ -43,7 +49,7 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
                 <img className="currency-icon" src={currency2.currency.icon} />
                 {currency2.currency.name}
             </div>
-        </span>
+        </div>
       </div>
     </td>
     <td className="text-center">

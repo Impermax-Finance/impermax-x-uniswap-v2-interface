@@ -1,0 +1,14 @@
+.app {
+    background-color: #f5f6f7;
+    padding-bottom: 20px;
+}
+
+.card {
+    border-radius: 8px;
+    border: 0 none;
+    box-shadow: rgba(0, 0, 0, 0.07) 0 2px 4px 1px;
+
+    .card-body {
+        padding: 0;
+    }
+}
