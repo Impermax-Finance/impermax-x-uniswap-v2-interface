@@ -31,20 +31,22 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
   const { currency1, currency2, lpPairAddress } = props;
 
   return (<tr className="lending-pools-row">
-    <td className="currency-name">
-      <span className="combined"><Link to={lpPairAddress}>{currency1.currency.name}/{currency2.currency.name}</Link></span>
-      <span>
-        <div>
-            <img className="currency-icon" src={currency1.currency.icon} />
-            {currency1.currency.name}
-        </div>
-        <div>
-            <img className="currency-icon" src={currency2.currency.icon} />
-            {currency2.currency.name}
-        </div>
-      </span>
-    </td>
     <td>
+      <div className="currency-name">
+        <span className="combined"><Link to={lpPairAddress}>{currency1.currency.name}/{currency2.currency.name}</Link></span>
+        <span>
+            <div>
+                <img className="currency-icon" src={currency1.currency.icon} />
+                {currency1.currency.name}
+            </div>
+            <div>
+                <img className="currency-icon" src={currency2.currency.icon} />
+                {currency2.currency.name}
+            </div>
+        </span>
+      </div>
+    </td>
+    <td className="text-center">
       <div>
         {currency1.supply}
       </div>
@@ -52,7 +54,7 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
         {currency2.supply}
       </div>
     </td>
-    <td>
+    <td className="text-center">
       <div>
         {currency1.borrowed}
       </div>
@@ -60,7 +62,7 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
         {currency2.borrowed}
       </div>
     </td>
-    <td>
+    <td className="text-center">
       <div>
         {currency1.supplyAPY}
       </div>
@@ -68,7 +70,7 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
         {currency2.supplyAPY}
       </div>
     </td>
-    <td>
+    <td className="text-center">
       <div>
         {currency1.borrowAPY}
       </div>
@@ -76,7 +78,7 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
         {currency2.borrowAPY}
       </div>
     </td>
-    <td>
+    <td className="text-center">
       <div>
         {currency1.farmingAPY}
       </div>
@@ -118,11 +120,11 @@ export function LendingPoolsTable() {
       <thead>
         <tr>
           <th>{t("Market")}</th>
-          <th>{t("Total Supply")}</th>
-          <th>{t("Total Borrowed")}</th>
-          <th>{t("Supply APY")}</th>
-          <th>{t("Borrow APY")}</th>
-          <th>{t("Farming APY")}</th>
+          <th className="text-center">{t("Total Supply")}</th>
+          <th className="text-center">{t("Total Borrowed")}</th>
+          <th className="text-center">{t("Supply APY")}</th>
+          <th className="text-center">{t("Borrow APY")}</th>
+          <th className="text-center">{t("Farming APY")}</th>
         </tr>
       </thead>
       <tbody>
