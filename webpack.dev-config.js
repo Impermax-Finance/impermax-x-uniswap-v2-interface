@@ -59,6 +59,7 @@ module.exports = function(env, argv) {
     plugins: [
       new webpack.DefinePlugin({
         "process.env.MODE": '"development"',
+        "process.env.NETWORK": `"${process.env.NETWORK || 'kovan'}"`
       }),
       new CopyPlugin({
         patterns: [
