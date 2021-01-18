@@ -5,6 +5,8 @@ import { HomeRoute, FarmingRoute } from '../../Routing';
 
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { useWallet } from 'use-wallet';
+import { Button } from 'react-bootstrap';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -15,6 +17,7 @@ interface ViewProps {
  * @param param0 ViewProps
  */
 export default function View({ children }: ViewProps) {
+  const { connect, account, reset } = useWallet();
   return (
       <div className="view">
         <Navbar>
@@ -26,6 +29,11 @@ export default function View({ children }: ViewProps) {
             <NavigationBarLink appRoute={HomeRoute} />
             <NavigationBarLink appRoute={FarmingRoute} />
           </Nav>
+          {
+            !account ? 
+              <Button onClick={() => connect("provided")}>Connect</Button> :
+              <Button onClick={() => reset()}>Logout</Button>
+          }
         </Navbar>
         {children}
       </div>
