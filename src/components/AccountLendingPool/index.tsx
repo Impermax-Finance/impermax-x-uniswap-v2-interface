@@ -7,7 +7,7 @@ import { LanguageContext } from '../../contexts/Language';
 import Button from 'react-bootstrap/Button';
 import phrases from './translations';
 import './index.scss';
-import { Currency, ETH, DAI, LPTokenPair } from '../../utils/currency';
+import { Currency, LPTokenPair } from '../../utils/currency';
 
 /**
  * Generates lending pool aggregate details.
@@ -45,7 +45,10 @@ function AccountLendingPoolDetails() {
   </>);
 }
 
-
+/**
+ * Details about the liquidity pair and currency types in a tokenized liquidity position.
+ * @see Currency
+ */
 interface AccountLendingPoolLPRowProps {
   currency1: Currency;
   currency2: Currency;
@@ -53,6 +56,7 @@ interface AccountLendingPoolLPRowProps {
 
 /**
  * Build account lending pool detail rows for LP token currencies.
+ * @params AccountLendingPoolLPRowProps
  */
 function AccountLendingPoolLPRow({ currency1, currency2 }: AccountLendingPoolLPRowProps) {
   const languages = useContext(LanguageContext);
@@ -89,12 +93,17 @@ function AccountLendingPoolLPRow({ currency1, currency2 }: AccountLendingPoolLPR
   </>);
 }
 
+/**
+ * Details about lending currency type.
+ * @see Currency
+ */
 interface AccountLendingPoolRowProps {
   currency: Currency;
 }
 
 /**
  * Build account lending pool detail rows for single currencies.
+ * @params AccountLendingPoolRowProps.
  */
 function AccountLendingPoolRow({ currency }: AccountLendingPoolRowProps) {
   const languages = useContext(LanguageContext);
@@ -130,12 +139,17 @@ function AccountLendingPoolRow({ currency }: AccountLendingPoolRowProps) {
   </>);
 }
 
+/**
+ * Details about the LP pair associated with the account lending pool.
+ * @see LPTokenPair
+ */
 interface AccountLendingPoolProps {
   lptoken: LPTokenPair;
 }
 
 /**
  * Generate the Account Lending Pool card, giving details about the particular user's equity in the pool.
+ * @params AccountLendingPoolProps
  */
 export default function AccountLendingPool({ lptoken }: AccountLendingPoolProps) {
   const {currency1, currency2} = lptoken;
