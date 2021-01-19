@@ -11,7 +11,7 @@ module.exports = {
     }
   },{
     name       : "front",
-    watch      : ["www/web.js", "src", "webpack.dev-config.js", "tsconfig.json", ".env"],
+    watch      : ["www/web.js", "src", "tsconfig.json", ".env"],
     script     : "npx webpack --watch --config webpack.dev-config.js",
   }]
 }
