@@ -1,8 +1,8 @@
 module.exports = {
   apps : [{
     name        : "server",
-    script      : "./www/web.js",
-    watch       : true,
+    script      : "www/web.js",
+    watch       : ["www/web.js", "src", "webpack.dev-config.js", "tsconfig.json", ".env"],
     env: {
       "NODE_ENV": "development",
     },
@@ -11,6 +11,7 @@ module.exports = {
     }
   },{
     name       : "front",
+    watch      : ["www/web.js", "src", "webpack.dev-config.js", "tsconfig.json", ".env"],
     script     : "npx webpack --watch --config webpack.dev-config.js",
   }]
 }

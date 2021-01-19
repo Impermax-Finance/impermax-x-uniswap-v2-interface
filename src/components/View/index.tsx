@@ -6,7 +6,8 @@ import { HomeRoute, FarmingRoute } from '../../Routing';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { useWallet } from 'use-wallet';
-import { Button } from 'react-bootstrap';
+import { ConnectedWalletButtonComponent } from './ConnectedWalletButtonComponent';
+import NavButton from './NavButton';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -17,7 +18,15 @@ interface ViewProps {
  * @param param0 ViewProps
  */
 export default function View({ children }: ViewProps) {
-  const { connect, account, reset } = useWallet();
+  const { connect, status } = useWallet();
+  const onConnect = () => {
+    try {
+      localStorage.removeItem("signOut");
+      connect('injected');
+    } catch (error) {
+      console.log(error)
+    }
+  };
   return (
       <div className="view">
         <Navbar>
@@ -30,9 +39,9 @@ export default function View({ children }: ViewProps) {
             <NavigationBarLink appRoute={FarmingRoute} />
           </Nav>
           {
-            !account ? 
-              <Button onClick={() => connect("provided")}>Connect</Button> :
-              <Button onClick={() => reset()}>Logout</Button>
+            status === 'connected' ? 
+              <ConnectedWalletButtonComponent /> :
+              <NavButton variant="success" onClick={onConnect}>Connect Wallet</NavButton>
           }
         </Navbar>
         {children}
