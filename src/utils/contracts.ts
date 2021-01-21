@@ -1,4 +1,6 @@
 import { Networks } from './connections';
+import UniswapV2PairABI from '../abis/contracts/UniswapV2Pair.json';
+import Router01ABI from '../abis/contracts/Router01.json';
 
 export interface ContractDefinition {
   address: string;
@@ -27,11 +29,11 @@ export const ContractDefinitions: ContractDefinitions = {
   [Networks.Ropsten]: {
     [UniswapPairs.EthDai] : {
       address: '0x1c5dee94a34d795f9eeef830b68b80e44868d316', 
-      abi: {}
+      abi: UniswapV2PairABI
     },
     [ImpermaxInterfaces.Router] : {
       address: '0xA48C6262890A45ef1a523Cf617AA6E816cf4e72A', 
-      abi: {}
+      abi: Router01ABI
     }
   },
   [Networks.Mainnet]: {
