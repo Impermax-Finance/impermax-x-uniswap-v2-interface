@@ -1,6 +1,0 @@
-[submodule "submodules/core"]
-	path = submodules/core
-	url = https://github.com/Impermax-Finance/impermax-x-uniswapv2-core.git
-[submodule "submodules/periphery"]
-	path = submodules/periphery
-	url = https://github.com/Impermax-Finance/impermax-x-uniswapv2-periphery.git
