@@ -9,6 +9,7 @@ import { provider } from 'web3-core';
 export default function useWeb3() {
   const [web3, setWeb3] = useState<any>();
   const { ethereum } = useWallet<provider>()
+
   useEffect(() => {
     if (!ethereum) return;
     setWeb3((new Web3(ethereum)));

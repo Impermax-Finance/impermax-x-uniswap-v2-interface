@@ -1,7 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyPlugin = require("copy-webpack-plugin");
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();;
 
 module.exports = function(env, argv) {
   return {
@@ -14,7 +15,15 @@ module.exports = function(env, argv) {
       publicPath: 'build/'
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx']
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        fallback: {
+          "crypto": require.resolve('crypto-browserify'),
+          "stream": require.resolve("stream-browserify"),
+          "os": require.resolve("os-browserify/browser"),
+          "https": require.resolve("https-browserify"),
+          "http": require.resolve("stream-http"),
+          "url": require.resolve("url/")
+        },
     },
     module: {
       rules: [
@@ -57,9 +66,15 @@ module.exports = function(env, argv) {
       ]
     },
     plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+      }),
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+      }),
       new webpack.DefinePlugin({
         "process.env.MODE": '"development"',
-        "process.env.NETWORK": `"${process.env.NETWORK || 'kovan'}"`
+        "process.env.NETWORK": `"${process.env.NETWORK}"`
       }),
       new CopyPlugin({
         patterns: [

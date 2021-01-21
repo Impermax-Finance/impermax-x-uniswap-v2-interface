@@ -2,7 +2,7 @@
  * Type Map Union of valid ethereum networks.
  */
 export enum Networks {
-  Kovan = 'kovan',
+  Ropsten = 'ropsten',
   Mainnet = 'mainnet',
 }
 
@@ -30,12 +30,12 @@ export type ChainDetailsMap = {
  * @see ChainDetailsMap
  */
 export const chainDetailsMap: ChainDetailsMap = {
-  [Networks.Kovan]: {
-    networkId: 42,
-    networkName: Networks.Kovan,
+  [Networks.Ropsten]: {
+    networkId: 3,
+    networkName: Networks.Ropsten,
   },
   [Networks.Mainnet]: {
     networkId: 1,
-    networkName: Networks.Kovan,
+    networkName: Networks.Mainnet,
   }
 }
