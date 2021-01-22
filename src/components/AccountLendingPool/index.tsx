@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import phrases from './translations';
 import './index.scss';
 import { Currency, LPTokenPair } from '../../utils/currency';
-import useImpermax from '../../hooks/useImpermax';
+
 
 /**
  * Generates lending pool aggregate details.
@@ -17,7 +17,7 @@ function AccountLendingPoolDetails() {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
-  const impermax = useImpermax();
+
   return (<>
     <Row>
       <Col sm={12} md={6}>

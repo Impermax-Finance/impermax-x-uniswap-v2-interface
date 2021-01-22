@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Link
 } from "react-router-dom";
@@ -6,7 +6,10 @@ import Table from 'react-bootstrap/Table';
 import { LanguageContext } from '../../contexts/Language';
 import phrases from './translations';
 import { Currency, DAI, ETH } from './../../utils/currency';
+import useContracts, { ContractInstances, AvailableContracts } from '../../hooks/useContracts';
 import './index.scss';
+import { UniswapPairs } from '../../utils/contracts';
+import { pipe, compose, map } from 'ramda';
 
 interface LendingCurrencyData {
   currency: Currency;
@@ -101,6 +104,20 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
 export function LendingPoolsTable() {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
+  const contracts = useContracts();
+
+  const [lendingPoolRows, setLendingPoolRows] = useState([]);
+
+  const setData = async (availableContracts: AvailableContracts) => {
+  }
+  
+  useEffect(() => {
+
+    
+    
+    
+    
+  }, [contracts]);
 
   const DaiLendingCurrencyData: LendingCurrencyData = {
     currency: DAI,
