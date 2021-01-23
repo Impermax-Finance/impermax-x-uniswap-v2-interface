@@ -9,7 +9,6 @@ import { Currency, DAI, ETH } from './../../utils/currency';
 import './index.scss';
 import { LISTED_PAIRS } from '../../utils/constants';
 import { Networks } from '../../utils/connections';
-import useImpermax from '../../hooks/useImpermax';
 import { useLendingPool } from '../../hooks/useContract';
 import { BorrowableData, getBorrowableData } from '../../utils/borrowableData';
 
