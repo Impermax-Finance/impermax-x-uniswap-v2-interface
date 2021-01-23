@@ -4,7 +4,7 @@ import Router01JSON from '../abis/contracts/Router01.json';
 import { Currency, ETH, DAI } from './currency';
 
 export interface ContractDefinition {
-  address?: string;
+  address: string;
   abi: any;
 }
 
@@ -36,11 +36,6 @@ export enum ImpermaxInterfaces {
   Router = 'router',
 }
 
-/**
- * A union of Uniswap Pair contracts and Impermax contract.
- * @see ImpermaxInterfaces
- * @see UniswapPairs
- */
 export type Contracts = UniswapPairs | ImpermaxInterfaces;
 
 export type NetworkContracts = {

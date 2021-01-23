@@ -6,11 +6,11 @@ import AccountLendingPool from '../components/AccountLendingPool';
 import { SupportedLPs } from '../utils/currency';
 
 /**
- * Farm page view.
+ * LendingPool page view.
  */
-export default function Farm() {
-  const { farmID } = useParams<{ farmID: string }>();
-  const lptoken = SupportedLPs[farmID];
+export default function LendingPool() {
+  const { uniswapV2Pair } = useParams<{ uniswapV2Pair: string }>();
+  const lptoken = SupportedLPs['eth-dai'];
   return (<View>
     <div className="farm">
       <AccountLendingPool lptoken={lptoken} />
