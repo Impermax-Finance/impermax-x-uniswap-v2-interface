@@ -1,15 +1,36 @@
 import { Networks } from './connections';
 import UniswapV2PairJSON from '../abis/contracts/UniswapV2Pair.json';
 import Router01JSON from '../abis/contracts/Router01.json';
+import { Currency, ETH, DAI } from './currency';
 
 export interface ContractDefinition {
   address?: string;
   abi: any;
 }
 
+
+
 export enum UniswapPairs {
   EthDai = 'eth-dai',
 }
+
+export interface UniswapPair {
+  name: UniswapPairs;
+  currency1: Currency;
+  currency2: Currency;
+}
+
+export type UniswapPairData = {
+  [key in UniswapPairs]: UniswapPair;
+}
+
+export const UniswapPairData: UniswapPairData = {
+  [UniswapPairs.EthDai] : {
+    name: UniswapPairs.EthDai,
+    currency1: ETH,
+    currency2: DAI
+  }
+};
 
 export enum ImpermaxInterfaces {
   Router = 'router',

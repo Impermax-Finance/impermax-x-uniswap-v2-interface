@@ -11,7 +11,7 @@ type StaticContractInstances = {
   [key in Contracts]:  Contract
 }
 
-type LendingPoolContractData = {
+export type LendingPoolContractData = {
   pair: UniswapPairs,
   collateral: Contract,
   borrowable0: Contract,
