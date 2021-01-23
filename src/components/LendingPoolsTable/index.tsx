@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   Link
 } from "react-router-dom";
@@ -7,19 +7,13 @@ import { LanguageContext } from '../../contexts/Language';
 import phrases from './translations';
 import { Currency, DAI, ETH } from './../../utils/currency';
 import './index.scss';
-
-interface BorrowableData {
-  currency: Currency;
-  supply: string;
-  borrowed: string;
-  supplyAPY: string;
-  borrowAPY: string;
-  //farmingAPY: string;
-}
+import { LISTED_PAIRS } from '../../utils/constants';
+import { Networks } from '../../utils/connections';
+import useImpermax from '../../hooks/useImpermax';
+import { useLendingPool } from '../../hooks/useContract';
+import { BorrowableData, getBorrowableData } from '../../utils/borrowableData';
 
 interface LendingPoolsRowProps {
-  tokenA: BorrowableData;
-  tokenB: BorrowableData;
   uniswapV2PairAddress: string;
 }
 
@@ -28,68 +22,80 @@ interface LendingPoolsRowProps {
  */
 export function LendingPoolsRow(props: LendingPoolsRowProps) {
 
-  const { tokenA, tokenB, uniswapV2PairAddress } = props;
+  const { uniswapV2PairAddress } = props;
+
+  const [borrowableAData, setBorrowableAData] = useState<BorrowableData>();
+  const [borrowableBData, setBorrowableBData] = useState<BorrowableData>();
+  const lendingPool = useLendingPool(uniswapV2PairAddress);
+
+  useEffect(() => {
+    if (!lendingPool) return;
+    getBorrowableData(lendingPool.tokenA, lendingPool.borrowableA).then((result) => setBorrowableAData(result));
+    getBorrowableData(lendingPool.tokenB, lendingPool.borrowableB).then((result) => setBorrowableBData(result));
+  }, [lendingPool]);
+
+  if (!borrowableAData || !borrowableBData) return null;
 
   return (<tr className="lending-pools-row">
     <td>
       <div className="currency-name">
         <div className="combined">
           <div className="currency-overlapped">
-            <img src={tokenA.currency.icon} />
-            <img src={tokenB.currency.icon} />
+            <img src={"/build/assets/icons/" + borrowableAData.tokenAddress + ".svg"} />
+            <img src={"/build/assets/icons/" + borrowableBData.tokenAddress + ".svg"} />
           </div>
-          <Link to={uniswapV2PairAddress}>{tokenA.currency.name}/{tokenB.currency.name}</Link>
+          <Link to={"lending-pool/" + uniswapV2PairAddress}>{borrowableAData.symbol}/{borrowableBData.symbol}</Link>
         </div>
         <div>
           <div>
-            <img className="currency-icon" src={tokenA.currency.icon} />
-            {tokenA.currency.name}
+            <img className="currency-icon" src={"/build/assets/icons/" + borrowableAData.tokenAddress + ".svg"} />
+            {borrowableAData.symbol}
           </div>
           <div>
-            <img className="currency-icon" src={tokenB.currency.icon} />
-            {tokenB.currency.name}
+            <img className="currency-icon" src={"/build/assets/icons/" + borrowableBData.tokenAddress + ".svg"} />
+            {borrowableBData.symbol}
           </div>
         </div>
       </div>
     </td>
     <td className="text-center">
       <div>
-        {tokenA.supply}
+        {borrowableAData.supply}
       </div>
       <div>
-        {tokenB.supply}
-      </div>
-    </td>
-    <td className="text-center">
-      <div>
-        {tokenA.borrowed}
-      </div>
-      <div>
-        {tokenB.borrowed}
+        {borrowableBData.supply}
       </div>
     </td>
     <td className="text-center">
       <div>
-        {tokenA.supplyAPY}
+        {borrowableAData.borrowed}
       </div>
       <div>
-        {tokenB.supplyAPY}
+        {borrowableBData.borrowed}
       </div>
     </td>
     <td className="text-center">
       <div>
-        {tokenA.borrowAPY}
+        {borrowableAData.supplyAPY}
       </div>
       <div>
-        {tokenB.borrowAPY}
+        {borrowableBData.supplyAPY}
+      </div>
+    </td>
+    <td className="text-center">
+      <div>
+        {borrowableAData.borrowAPY}
+      </div>
+      <div>
+        {borrowableBData.borrowAPY}
       </div>
     </td>
     {/*<td className="text-center">
       <div>
-        {tokenA.farmingAPY}
+        {borrowableAData.farmingAPY}
       </div>
       <div>
-        {tokenB.farmingAPY}
+        {borrowableBData.farmingAPY}
       </div>
     </td>*/}
   </tr>);
@@ -101,24 +107,6 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
 export function LendingPoolsTable() {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
-
-  const DaiBorrowableData: BorrowableData = {
-    currency: DAI,
-    supply: "$12.38M",
-    borrowed: "$12.38M",
-    supplyAPY: "8.34%",
-    borrowAPY: "12.06%",
-    //farmingAPY: "15.23%"
-  };
-
-  const EthBorrowableData: BorrowableData = {
-    currency: ETH,
-    supply: "$12.38M",
-    borrowed: "$2.72M",
-    supplyAPY: "8.34%",
-    borrowAPY: "12.06%",
-    //farmingAPY: "15.23%"
-  }
 
   const t = (s: string) => (phrases[s][language]);
   return (<div className="lending-pools-table">
@@ -134,10 +122,9 @@ export function LendingPoolsTable() {
         </tr>
       </thead>
       <tbody>
-        <LendingPoolsRow
-          uniswapV2PairAddress={'farming/eth-dai'}
-          tokenA={DaiBorrowableData}
-          tokenB={EthBorrowableData} />
+        {LISTED_PAIRS[(process.env.NETWORK as Networks)].map((pair: string, key: any) =>    
+          <LendingPoolsRow uniswapV2PairAddress={pair} key={key} />
+        )}
       </tbody>
     </Table>
   </div>)
