@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 import phrases from './translations';
 import './index.scss';
 import { Networks } from '../../utils/connections';
-import { useLendingPool, Collateral, Borrowable } from '../../hooks/useContract';
+import { useLendingPool, Collateral, Borrowable, LendingPool } from '../../hooks/useContract';
 import { BorrowableData, getBorrowableData } from '../../utils/borrowableData';
 import { AccountData, getAccountData, AccountBorrowableData, AccountCollateralData } from '../../utils/accountData';
 import { getIconByTokenAddress } from '../../utils/icons';
@@ -142,44 +142,57 @@ function AccountLendingPoolRow({ accountBorrowableData }: AccountLendingPoolRowP
   </>);
 }
 
-
-interface AccountLendingPoolProps {
-  uniswapV2PairAddress: string;
+interface AccountLendingPoolContainerProps {
+  children: any;
 }
 
-/**
- * Generate the Account Lending Pool card, giving details about the particular user's equity in the pool.
- * @params AccountLendingPoolProps
- */
-export default function AccountLendingPool({ uniswapV2PairAddress }: AccountLendingPoolProps) {
-
-  const { account } = useWallet();
-  const [accountData, setAccountData] = useState<AccountData>();
-  const lendingPool = useLendingPool(uniswapV2PairAddress);
-
-  useEffect(() => {
-    if (!account || !lendingPool) return;
-    getAccountData(account, lendingPool).then((result) => setAccountData(result));
-  }, [account, lendingPool]);
-
-  if (!accountData) return null;
-
+function AccountLendingPoolContainer({ children }: AccountLendingPoolContainerProps) {
   return (<div className="account-lending-pool">
     <Container>
       <Row>
         <Col sm={12}>
           <Card>
             <Card.Body>
-              <Container>
-                <AccountLendingPoolDetails />
-                <AccountLendingPoolLPRow accountCollateralData={accountData.accountCollateralData}/>
-                <AccountLendingPoolRow accountBorrowableData={accountData.accountBorrowableAData} />
-                <AccountLendingPoolRow accountBorrowableData={accountData.accountBorrowableBData} />
-              </Container>
+              <Container>{ children }</Container>
             </Card.Body>
           </Card>
         </Col>
       </Row>
     </Container>
   </div>);
+}
+
+interface AccountLendingPoolProps {
+  lendingPool: LendingPool;
+}
+
+/**
+ * Generate the Account Lending Pool card, giving details about the particular user's equity in the pool.
+ * @params AccountLendingPoolProps
+ */
+export default function AccountLendingPool({ lendingPool }: AccountLendingPoolProps) {
+  const { connect, account } = useWallet();
+  const [accountData, setAccountData] = useState<AccountData>();
+
+  useEffect(() => {
+    if (!account || !lendingPool) return;
+    getAccountData(account, lendingPool).then((result) => setAccountData(result));
+  }, [account, lendingPool]);
+
+  if (!accountData) return (
+    <AccountLendingPoolContainer>
+      <div className="text-center py-5">
+        <Button onClick={() => {connect('injected')}}>Connect</Button>
+      </div>
+    </AccountLendingPoolContainer>
+  );
+
+  return (
+    <AccountLendingPoolContainer>
+      <AccountLendingPoolDetails />
+      <AccountLendingPoolLPRow accountCollateralData={accountData.accountCollateralData}/>
+      <AccountLendingPoolRow accountBorrowableData={accountData.accountBorrowableAData} />
+      <AccountLendingPoolRow accountBorrowableData={accountData.accountBorrowableBData} />
+    </AccountLendingPoolContainer>
+  );
 }

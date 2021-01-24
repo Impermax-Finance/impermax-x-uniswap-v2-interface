@@ -3,6 +3,7 @@ import View from '../components/View';
 import { useParams } from 'react-router-dom';
 
 import AccountLendingPool from '../components/AccountLendingPool';
+import { useLendingPool } from '../hooks/useContract';
 //import { SupportedLPs } from '../utils/currency';
 
 /**
@@ -10,10 +11,12 @@ import AccountLendingPool from '../components/AccountLendingPool';
  */
 export default function LendingPool() {
   const { uniswapV2PairAddress } = useParams<{ uniswapV2PairAddress: string }>();
+  const lendingPool = useLendingPool(uniswapV2PairAddress);
+
   //const lptoken = SupportedLPs['eth-dai'];
   return (<View>
-    <div className="farm">
-      <AccountLendingPool uniswapV2PairAddress={uniswapV2PairAddress} />
+    <div className="lending-pool">
+      <AccountLendingPool lendingPool={lendingPool} />
     </div>
   </View>);
 }
