@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { LanguageContext } from '../../contexts/Language';
 import Table from 'react-bootstrap/Table';
-import { Currency } from './../../utils/currency';
+import { Currency } from '../../utils/currency';
 import phrases from './translations';
 import './index.scss';
 
@@ -10,14 +10,14 @@ interface RowProps {
   amount: string;
 }
 
-function CurrencyEquityRow({ value, amount }: RowProps) {
+function BorrowableDetailsRow({ value, amount }: RowProps) {
   return (<tr>
     <td>{value}</td>
     <td>{amount}</td>
   </tr>);
 }
 
-interface CurrencyEquityDetailsProps {
+interface BorrowablesDetailsProps {
   currency: Currency;
   supply: string;
   borrowed: string;
@@ -30,7 +30,7 @@ interface CurrencyEquityDetailsProps {
  * Generate the Currency Equity Details card, giving information about the suppy and rates for a particular currency in
  * the system.
  */
-export default function CurrencyEquityDetails(props: CurrencyEquityDetailsProps) {
+export default function BorrowablesDetails(props: BorrowablesDetailsProps) {
   const { currency, supply, borrowed, supplyAPY, borrowAPY, utilizationRate } = props;
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
@@ -43,11 +43,11 @@ export default function CurrencyEquityDetails(props: CurrencyEquityDetailsProps)
     </div>
     <Table>
       <tbody>
-        <CurrencyEquityRow value={t("Total Supply")} amount={supply} />
-        <CurrencyEquityRow value={t("Total Borrow")} amount={borrowed} />
-        <CurrencyEquityRow value={t("Utilization Rate")} amount={utilizationRate} />
-        <CurrencyEquityRow value={t("Supply APY")} amount={supplyAPY} />
-        <CurrencyEquityRow value={t("Borrow APY")} amount={borrowAPY} />
+        <BorrowableDetailsRow value={t("Total Supply")} amount={supply} />
+        <BorrowableDetailsRow value={t("Total Borrow")} amount={borrowed} />
+        <BorrowableDetailsRow value={t("Utilization Rate")} amount={utilizationRate} />
+        <BorrowableDetailsRow value={t("Supply APY")} amount={supplyAPY} />
+        <BorrowableDetailsRow value={t("Borrow APY")} amount={borrowAPY} />
       </tbody>  
     </Table>
   </div>);
