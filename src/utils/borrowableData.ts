@@ -4,8 +4,10 @@ import BN from "bn.js";
 export interface BorrowableData {
   tokenAddress: string;
   symbol: string;
+  name: string;
   supply: string;
   borrowed: string;
+  utilizationRate: string;
   supplyAPY: string;
   borrowAPY: string;
   //farmingAPY: string;
@@ -27,8 +29,10 @@ export async function getBorrowableData(token: ERC20, borrowable: Borrowable) : 
   return {
     tokenAddress: token._address,
     symbol: await token.methods.symbol().call(),
+    name: await token.methods.name().call(),
     supply: "$0",
     borrowed: "$0",
+    utilizationRate: utilizationRate + "%",
     supplyAPY: formatAPY(supplyRate),
     borrowAPY: formatAPY(borrowRate)
   };
