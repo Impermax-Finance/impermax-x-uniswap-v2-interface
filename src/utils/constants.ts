@@ -6,6 +6,11 @@ export type NetworkIndex = {
   [key in Networks]: any
 };
 
+export const NETWORK_URL: NetworkIndex = {
+  [Networks.Ropsten]: 'wss://ropsten.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158',
+  [Networks.Mainnet]: 'wss://mainnet.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158'
+};
+
 export const ROUTER: NetworkIndex = {
   [Networks.Ropsten]: '0xA48C6262890A45ef1a523Cf617AA6E816cf4e72A',
   [Networks.Mainnet]: ''
