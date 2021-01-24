@@ -1,11 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import {
   Link
 } from "react-router-dom";
 import Table from 'react-bootstrap/Table';
 import { LanguageContext } from '../../contexts/Language';
 import phrases from './translations';
-import { Currency, DAI, ETH } from './../../utils/currency';
+import './index.scss';
+import useLendingPoolTableData from '../../hooks/useLendingPoolTableData';
+import { DAI, ETH } from '../../utils/currency';
 import './index.scss';
 import { LISTED_PAIRS } from '../../utils/constants';
 import { Networks } from '../../utils/connections';
@@ -100,12 +102,37 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
   </tr>);
 }
 
+
+
+
+
 /**
  * Generate a searchable lending pools table.
  */
 export function LendingPoolsTable() {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
+  
+
+  const [lendingPoolRows, setLendingPoolRows] = useState<BorrowableData[]>([]);
+
+  const lendingPoolTableData = useLendingPoolTableData();
+
+  const DaiBorrowableData: BorrowableData = {
+    supply: "$12.38M",
+    borrowed: "$12.38M",
+    supplyAPY: "8.34%",
+    borrowAPY: "12.06%",
+    //farmingAPY: "15.23%"
+  };
+
+  const EthBorrowableData: BorrowableData = {
+    supply: "$12.38M",
+    borrowed: "$2.72M",
+    supplyAPY: "8.34%",
+    borrowAPY: "12.06%",
+    //farmingAPY: "15.23%"
+  }
 
   const t = (s: string) => (phrases[s][language]);
   return (<div className="lending-pools-table">
