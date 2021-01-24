@@ -8,11 +8,19 @@ import { provider } from 'web3-core';
  */
 export default function useWeb3() {
   const [web3, setWeb3] = useState<any>();
-  const { ethereum } = useWallet<provider>()
+  const { ethereum } = useWallet<provider>();
 
   useEffect(() => {
-    if (!ethereum) return;
-    setWeb3((new Web3(ethereum)));
+    if (ethereum) {
+      setWeb3(new Web3(ethereum));
+      return;
+    }
+    const NETWORK_URL = process.env.REACT_APP_NETWORK_URL;
+    if (typeof NETWORK_URL === 'undefined') {
+      console.warn(`REACT_APP_NETWORK_URL should be a defined environment variable`);
+      return;
+    }
+    setWeb3(new Web3( new Web3.providers.WebsocketProvider( NETWORK_URL ) ));
   }, [ethereum]);
   return web3;
 }
