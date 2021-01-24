@@ -17,10 +17,6 @@ function formatAPY(n: number) : string {
   return (Math.round(percentage * 100) / 100).toFixed(2) + "%";
 }
 
-export async function getBorrowAPY(borrowable: Borrowable) : Promise<string> {
-  return formatAPY(await borrowable.methods.borrowRate().call());
-}
-
 export async function getBorrowableData(token: ERC20, borrowable: Borrowable) : Promise<BorrowableData> {
   const borrowRate = await borrowable.methods.borrowRate().call();
   const totalBorrows = await borrowable.methods.totalBorrows().call();

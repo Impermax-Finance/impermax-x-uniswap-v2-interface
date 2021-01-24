@@ -1,13 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
+import { useWallet } from 'use-wallet';
 import { LanguageContext } from '../../contexts/Language';
 import Button from 'react-bootstrap/Button';
 import phrases from './translations';
 import './index.scss';
-import { Currency, LPTokenPair } from '../../utils/currency';
+import { Networks } from '../../utils/connections';
+import { useLendingPool, Collateral, Borrowable } from '../../hooks/useContract';
+import { BorrowableData, getBorrowableData } from '../../utils/borrowableData';
+import { AccountData, getAccountData, AccountBorrowableData, AccountCollateralData } from '../../utils/accountData';
+import { getIconByTokenAddress } from '../../utils/icons';
 
 /**
  * Generates lending pool aggregate details.
@@ -49,26 +54,25 @@ function AccountLendingPoolDetails() {
  * @see Currency
  */
 interface AccountLendingPoolLPRowProps {
-  currency1: Currency;
-  currency2: Currency;
+  accountCollateralData: AccountCollateralData;
 }
 
 /**
  * Build account lending pool detail rows for LP token currencies.
  * @params AccountLendingPoolLPRowProps
  */
-function AccountLendingPoolLPRow({ currency1, currency2 }: AccountLendingPoolLPRowProps) {
+function AccountLendingPoolLPRow({ accountCollateralData }: AccountLendingPoolLPRowProps) {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
   return (<>
     <Row className="account-lending-pool-row">
       <Col md={4}>
-        <img className='' src={currency1.icon} />
-        <img className='' src={currency2.icon} />
+        <img className='' src={getIconByTokenAddress(accountCollateralData.tokenAAddress)} />
+        <img className='' src={getIconByTokenAddress(accountCollateralData.tokenBAddress)} />
       </Col>
       <Col md={4}>
-        { `${currency1.fullName} - ${currency2.fullName}` }
+        { `${accountCollateralData.symbolA} - ${accountCollateralData.symbolB}` }
       </Col>
       <Col md={4}>
         <Row>
@@ -97,24 +101,24 @@ function AccountLendingPoolLPRow({ currency1, currency2 }: AccountLendingPoolLPR
  * @see Currency
  */
 interface AccountLendingPoolRowProps {
-  currency: Currency;
+  accountBorrowableData: AccountBorrowableData;
 }
 
 /**
  * Build account lending pool detail rows for single currencies.
  * @params AccountLendingPoolRowProps.
  */
-function AccountLendingPoolRow({ currency }: AccountLendingPoolRowProps) {
+function AccountLendingPoolRow({ accountBorrowableData }: AccountLendingPoolRowProps) {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
   return (<>
     <Row className="account-lending-pool-row">
       <Col md={4}>
-        <img className='' src={currency.icon} />
+        <img className='' src={getIconByTokenAddress(accountBorrowableData.tokenAddress)} />
       </Col>
       <Col md={4}>
-        { `${currency.fullName}` }
+        { `${accountBorrowableData.symbol}` }
       </Col>
       <Col md={4}>
         <Row>
@@ -138,20 +142,28 @@ function AccountLendingPoolRow({ currency }: AccountLendingPoolRowProps) {
   </>);
 }
 
-/**
- * Details about the LP pair associated with the account lending pool.
- * @see LPTokenPair
- */
+
 interface AccountLendingPoolProps {
-  lptoken: LPTokenPair;
+  uniswapV2PairAddress: string;
 }
 
 /**
  * Generate the Account Lending Pool card, giving details about the particular user's equity in the pool.
  * @params AccountLendingPoolProps
  */
-export default function AccountLendingPool({ lptoken }: AccountLendingPoolProps) {
-  const {currency1, currency2} = lptoken;
+export default function AccountLendingPool({ uniswapV2PairAddress }: AccountLendingPoolProps) {
+
+  const { account } = useWallet();
+  const [accountData, setAccountData] = useState<AccountData>();
+  const lendingPool = useLendingPool(uniswapV2PairAddress);
+
+  useEffect(() => {
+    if (!account || !lendingPool) return;
+    getAccountData(account, lendingPool).then((result) => setAccountData(result));
+  }, [account, lendingPool]);
+
+  if (!accountData) return null;
+
   return (<div className="account-lending-pool">
     <Container>
       <Row>
@@ -160,9 +172,9 @@ export default function AccountLendingPool({ lptoken }: AccountLendingPoolProps)
             <Card.Body>
               <Container>
                 <AccountLendingPoolDetails />
-                <AccountLendingPoolLPRow currency1={currency1} currency2={currency2}/>
-                <AccountLendingPoolRow currency={currency1} />
-                <AccountLendingPoolRow currency={currency2} />
+                <AccountLendingPoolLPRow accountCollateralData={accountData.accountCollateralData}/>
+                <AccountLendingPoolRow accountBorrowableData={accountData.accountBorrowableAData} />
+                <AccountLendingPoolRow accountBorrowableData={accountData.accountBorrowableBData} />
               </Container>
             </Card.Body>
           </Card>

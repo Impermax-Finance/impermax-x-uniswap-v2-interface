@@ -14,7 +14,7 @@ export const HomeRoute = {
 
 export const LendingPoolRoute = {
   value: 'LendingPool',
-  to: '/lending-pool/:uniswapV2Pair'
+  to: '/lending-pool/:uniswapV2PairAddress'
 } as AppRoute;
 
 export const FarmingRoute = {
