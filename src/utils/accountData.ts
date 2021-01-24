@@ -1,5 +1,5 @@
 import { ERC20, Borrowable, LendingPool } from "../hooks/useContract"
-import BN from "bn.js";
+import { getPairConversionPrices } from '../utils/valueConversion'
 
 export interface AccountBorrowableData {
   tokenAddress: string;
@@ -33,18 +33,14 @@ export interface AccountData {
   accountCollateralData: AccountCollateralData;
 }
 
-async function convertToUSD(address: string, amount: number) {
-  //TODO
-  return amount;
-}
-
 export async function getAccountData(account: string, lendingPool: LendingPool) : Promise<AccountData> {
+  const pairConversionPrices = await getPairConversionPrices(lendingPool.uniswapV2Pair._address);
   const symbolA = await lendingPool.tokenA.methods.symbol().call();
   const symbolB = await lendingPool.tokenB.methods.symbol().call();
   const borrowedA = await lendingPool.borrowableA.methods.borrowBalance(account).call() / 1e18;
   const borrowedB = await lendingPool.borrowableB.methods.borrowBalance(account).call() / 1e18;
-  const borrowedAUSD = await convertToUSD(lendingPool.tokenA._address, borrowedA);
-  const borrowedBUSD = await convertToUSD(lendingPool.tokenB._address, borrowedB);
+  const borrowedAUSD = borrowedA * pairConversionPrices.tokenAPrice;
+  const borrowedBUSD = borrowedB * pairConversionPrices.tokenBPrice;
   const exchangeRateA = await lendingPool.borrowableA.methods.exchangeRate().call() / 1e18;
   const exchangeRateB = await lendingPool.borrowableB.methods.exchangeRate().call() / 1e18;
   const exchangeRateCollateral = await lendingPool.collateral.methods.exchangeRate().call() / 1e18;
@@ -56,9 +52,9 @@ export async function getAccountData(account: string, lendingPool: LendingPool) 
   const depositedA = balanceA * exchangeRateA / Math.pow(10, decimalsA);
   const depositedB = balanceB * exchangeRateB / Math.pow(10, decimalsB);
   const depositedCollateral = balanceCollateral * exchangeRateCollateral / 1e18;
-  const depositedAUSD = await convertToUSD(lendingPool.tokenA._address, depositedA);
-  const depositedBUSD = await convertToUSD(lendingPool.tokenB._address, depositedB);
-  const depositedCollateralUSD = await convertToUSD(lendingPool.uniswapV2Pair._address, depositedCollateral);
+  const depositedAUSD = depositedA * pairConversionPrices.tokenAPrice;
+  const depositedBUSD = depositedB * pairConversionPrices.tokenBPrice;
+  const depositedCollateralUSD = depositedCollateral * pairConversionPrices.LPPrice;
   const balanceUSD = depositedAUSD + depositedBUSD + depositedCollateralUSD;
   const debtUSD = borrowedAUSD + borrowedBUSD;
   const equityUSD = balanceUSD - debtUSD;

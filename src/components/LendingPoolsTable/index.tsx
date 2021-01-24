@@ -9,8 +9,9 @@ import './index.scss';
 import { LISTED_PAIRS } from '../../utils/constants';
 import { Networks } from '../../utils/connections';
 import { useLendingPool } from '../../hooks/useContract';
-import { BorrowableData, getBorrowableData } from '../../utils/borrowableData';
+import { BorrowableData, getBorrowablesData } from '../../utils/borrowableData';
 import { getIconByTokenAddress } from '../../utils/icons';
+import { formatPercentage, formatUSD } from '../../utils/format';
 
 interface LendingPoolsRowProps {
   uniswapV2PairAddress: string;
@@ -28,9 +29,10 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
   const lendingPool = useLendingPool(uniswapV2PairAddress);
 
   useEffect(() => {
-    if (!lendingPool) return;
-    getBorrowableData(lendingPool.tokenA, lendingPool.borrowableA).then((result) => setBorrowableAData(result));
-    getBorrowableData(lendingPool.tokenB, lendingPool.borrowableB).then((result) => setBorrowableBData(result));
+    getBorrowablesData(lendingPool).then(({borrowableAData, borrowableBData}) => {
+      setBorrowableAData(borrowableAData);
+      setBorrowableBData(borrowableBData);
+    });
   }, [lendingPool]);
 
   if (!borrowableAData || !borrowableBData) return null;
@@ -59,42 +61,42 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
     </td>
     <td className="text-center">
       <div>
-        {borrowableAData.supply}
+        {formatUSD(borrowableAData.supplyUSD)}
       </div>
       <div>
-        {borrowableBData.supply}
-      </div>
-    </td>
-    <td className="text-center">
-      <div>
-        {borrowableAData.borrowed}
-      </div>
-      <div>
-        {borrowableBData.borrowed}
+        {formatUSD(borrowableBData.supplyUSD)}
       </div>
     </td>
     <td className="text-center">
       <div>
-        {borrowableAData.supplyAPY}
+        {formatUSD(borrowableAData.borrowedUSD)}
       </div>
       <div>
-        {borrowableBData.supplyAPY}
+        {formatUSD(borrowableBData.borrowedUSD)}
       </div>
     </td>
     <td className="text-center">
       <div>
-        {borrowableAData.borrowAPY}
+        {formatPercentage(borrowableAData.supplyAPY)}
       </div>
       <div>
-        {borrowableBData.borrowAPY}
+        {formatPercentage(borrowableBData.supplyAPY)}
+      </div>
+    </td>
+    <td className="text-center">
+      <div>
+        {formatPercentage(borrowableAData.borrowAPY)}
+      </div>
+      <div>
+        {formatPercentage(borrowableBData.borrowAPY)}
       </div>
     </td>
     {/*<td className="text-center">
       <div>
-        {borrowableAData.farmingAPY}
+        {formatPercentage(borrowableAData.farmingAPY)}
       </div>
       <div>
-        {borrowableBData.farmingAPY}
+        {formatPercentage(borrowableBData.farmingAPY)}
       </div>
     </td>*/}
   </tr>);

@@ -1,0 +1,40 @@
+import { ApolloClient } from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { HttpLink } from 'apollo-link-http'
+import gql from 'graphql-tag'
+import { Networks } from "./connections";
+import { ROPSTEN_TO_MAINNET } from "./constants";
+
+export interface PairConversionPrices {
+  LPPrice: number;
+  tokenAPrice: number;
+  tokenBPrice: number;
+}
+
+export async function getPairConversionPrices(uniswapV2PairAddress: string) : Promise<PairConversionPrices> {
+  if (process.env.NETWORK as Networks === Networks.Ropsten) uniswapV2PairAddress = ROPSTEN_TO_MAINNET[uniswapV2PairAddress];
+  const query = gql`{
+    pair (id: "${uniswapV2PairAddress}") {
+      reserveUSD
+      reserve0
+      reserve1
+      totalSupply
+    }
+  }`;
+  const client = new ApolloClient({
+    link: new HttpLink({
+      uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+    }),
+    cache: new InMemoryCache(),
+  });
+  const result = await client.query({
+    query: query,
+    fetchPolicy: 'cache-first',
+  });
+  const pair = result.data.pair;
+  return {
+    LPPrice: pair.reserveUSD / pair.totalSupply,
+    tokenAPrice: pair.reserveUSD / 2 / pair.reserve0,
+    tokenBPrice: pair.reserveUSD / 2 / pair.reserve1,
+  };
+}

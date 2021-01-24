@@ -1,25 +1,25 @@
-import { ERC20, Borrowable } from "../hooks/useContract"
+import { ERC20, Borrowable, LendingPool } from "../hooks/useContract"
 import BN from "bn.js";
+import { getPairConversionPrices } from '../utils/valueConversion'
+
+function toAPY(n: number) : number {
+  const SECONDS_IN_YEAR = 365 * 24 * 3600;
+  return n * SECONDS_IN_YEAR / 1e18;
+}
 
 export interface BorrowableData {
   tokenAddress: string;
   symbol: string;
   name: string;
-  supply: string;
-  borrowed: string;
-  utilizationRate: string;
-  supplyAPY: string;
-  borrowAPY: string;
-  //farmingAPY: string;
+  supplyUSD: number;
+  borrowedUSD: number;
+  utilizationRate: number;
+  supplyAPY: number;
+  borrowAPY: number;
+  //farmingAPY: number;
 }
 
-function formatAPY(n: number) : string {
-  const SECONDS_IN_YEAR = 365 * 24 * 3600;
-  const percentage = n * SECONDS_IN_YEAR / 1e16;
-  return (Math.round(percentage * 100) / 100).toFixed(2) + "%";
-}
-
-export async function getBorrowableData(token: ERC20, borrowable: Borrowable) : Promise<BorrowableData> {
+export async function getBorrowableData(token: ERC20, borrowable: Borrowable, tokenPrice: number) : Promise<BorrowableData> {
   const borrowRate = await borrowable.methods.borrowRate().call();
   const totalBorrows = await borrowable.methods.totalBorrows().call();
   const totalBalance = await borrowable.methods.totalBalance().call();
@@ -30,10 +30,27 @@ export async function getBorrowableData(token: ERC20, borrowable: Borrowable) : 
     tokenAddress: token._address,
     symbol: await token.methods.symbol().call(),
     name: await token.methods.name().call(),
-    supply: "$0",
-    borrowed: "$0",
-    utilizationRate: utilizationRate + "%",
-    supplyAPY: formatAPY(supplyRate),
-    borrowAPY: formatAPY(borrowRate)
+    supplyUSD: supply / 1e18 * tokenPrice,
+    borrowedUSD: totalBorrows / 1e18 * tokenPrice,
+    utilizationRate: utilizationRate,
+    supplyAPY: toAPY(supplyRate),
+    borrowAPY: toAPY(borrowRate)
+  };
+}
+
+export interface BorrowablesData {
+  borrowableAData: BorrowableData|null;
+  borrowableBData: BorrowableData|null;
+}
+
+export async function getBorrowablesData(lendingPool: LendingPool) : Promise<BorrowablesData> {
+  if (!lendingPool) return {
+    borrowableAData: null,
+    borrowableBData: null
+  };
+  const pairConversionPrices = await getPairConversionPrices(lendingPool.uniswapV2Pair._address);
+  return {
+    borrowableAData: await getBorrowableData(lendingPool.tokenA, lendingPool.borrowableA, pairConversionPrices.tokenAPrice),
+    borrowableBData: await getBorrowableData(lendingPool.tokenB, lendingPool.borrowableB, pairConversionPrices.tokenBPrice)
   };
 }

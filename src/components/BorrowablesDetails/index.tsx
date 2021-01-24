@@ -5,19 +5,20 @@ import { Currency } from '../../utils/currency';
 import phrases from './translations';
 import './index.scss';
 import { LendingPool } from '../../hooks/useContract';
-import { BorrowableData, getBorrowableData } from '../../utils/borrowableData';
+import { BorrowableData, getBorrowablesData } from '../../utils/borrowableData';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { getIconByTokenAddress } from '../../utils/icons';
+import { formatPercentage, formatUSD } from '../../utils/format';
 
 interface RowProps {
+  name: string;
   value: string;
-  amount: string;
 }
 
-function BorrowableDetailsRow({ value, amount }: RowProps) {
+function BorrowableDetailsRow({ name, value }: RowProps) {
   return (<tr>
+    <td>{name}</td>
     <td>{value}</td>
-    <td>{amount}</td>
   </tr>);
 }
 
@@ -37,7 +38,6 @@ export function BorrowableDetails(props: BorrowableDetailsProps) {
 
   if (!borrowableData) return null;
 
-  //TODO rename to borrowable
   return (<div className="borrowable-details"> 
     <div className="header">
       <img className="currency-icon" src={getIconByTokenAddress(borrowableData.tokenAddress)} />
@@ -45,11 +45,11 @@ export function BorrowableDetails(props: BorrowableDetailsProps) {
     </div>
     <Table>
       <tbody>
-        <BorrowableDetailsRow value={t("Total Supply")} amount={borrowableData.supply} />
-        <BorrowableDetailsRow value={t("Total Borrow")} amount={borrowableData.borrowed} />
-        <BorrowableDetailsRow value={t("Utilization Rate")} amount={borrowableData.utilizationRate} />
-        <BorrowableDetailsRow value={t("Supply APY")} amount={borrowableData.supplyAPY} />
-        <BorrowableDetailsRow value={t("Borrow APY")} amount={borrowableData.borrowAPY} />
+        <BorrowableDetailsRow name={t("Total Supply")} value={formatUSD(borrowableData.supplyUSD)} />
+        <BorrowableDetailsRow name={t("Total Borrow")} value={formatUSD(borrowableData.borrowedUSD)} />
+        <BorrowableDetailsRow name={t("Utilization Rate")} value={formatPercentage(borrowableData.utilizationRate)} />
+        <BorrowableDetailsRow name={t("Supply APY")} value={formatPercentage(borrowableData.supplyAPY)} />
+        <BorrowableDetailsRow name={t("Borrow APY")} value={formatPercentage(borrowableData.borrowAPY)} />
       </tbody>  
     </Table>
   </div>);
@@ -66,9 +66,10 @@ export default function BorrowablesDetails(props: BorrowablesDetailsProps) {
   const [borrowableBData, setBorrowableBData] = useState<BorrowableData>();
 
   useEffect(() => {
-    if (!lendingPool) return;
-    getBorrowableData(lendingPool.tokenA, lendingPool.borrowableA).then((result) => setBorrowableAData(result));
-    getBorrowableData(lendingPool.tokenB, lendingPool.borrowableB).then((result) => setBorrowableBData(result));
+    getBorrowablesData(lendingPool).then(({borrowableAData, borrowableBData}) => {
+      setBorrowableAData(borrowableAData);
+      setBorrowableBData(borrowableBData);
+    });
   }, [lendingPool]);
 
   return (
