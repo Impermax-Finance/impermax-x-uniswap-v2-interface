@@ -24,6 +24,7 @@ export const WETH: NetworkIndex = {
 export const LISTED_PAIRS: NetworkIndex = {
   [Networks.Ropsten]: [
     '0x1c5dee94a34d795f9eeef830b68b80e44868d316', //ETH-DAI
+    '0x4E99615101cCBB83A462dC4DE2bc1362EF1365e5', //ETH-UNI
   ],
   [Networks.Mainnet]: [
   ]
