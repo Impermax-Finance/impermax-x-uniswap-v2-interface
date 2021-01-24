@@ -5,12 +5,12 @@ import {
 import Table from 'react-bootstrap/Table';
 import { LanguageContext } from '../../contexts/Language';
 import phrases from './translations';
-import { Currency, DAI, ETH } from './../../utils/currency';
 import './index.scss';
 import { LISTED_PAIRS } from '../../utils/constants';
 import { Networks } from '../../utils/connections';
 import { useLendingPool } from '../../hooks/useContract';
 import { BorrowableData, getBorrowableData } from '../../utils/borrowableData';
+import { getIconByTokenAddress } from '../../utils/icons';
 
 interface LendingPoolsRowProps {
   uniswapV2PairAddress: string;
@@ -40,18 +40,18 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
       <div className="currency-name">
         <div className="combined">
           <div className="currency-overlapped">
-            <img src={"/build/assets/icons/" + borrowableAData.tokenAddress + ".svg"} />
-            <img src={"/build/assets/icons/" + borrowableBData.tokenAddress + ".svg"} />
+            <img src={getIconByTokenAddress(borrowableAData.tokenAddress)} />
+            <img src={getIconByTokenAddress(borrowableBData.tokenAddress)} />
           </div>
           <Link to={"lending-pool/" + uniswapV2PairAddress}>{borrowableAData.symbol}/{borrowableBData.symbol}</Link>
         </div>
         <div>
           <div>
-            <img className="currency-icon" src={"/build/assets/icons/" + borrowableAData.tokenAddress + ".svg"} />
+            <img className="currency-icon" src={getIconByTokenAddress(borrowableAData.tokenAddress)} />
             {borrowableAData.symbol}
           </div>
           <div>
-            <img className="currency-icon" src={"/build/assets/icons/" + borrowableBData.tokenAddress + ".svg"} />
+            <img className="currency-icon" src={getIconByTokenAddress(borrowableBData.tokenAddress)} />
             {borrowableBData.symbol}
           </div>
         </div>
