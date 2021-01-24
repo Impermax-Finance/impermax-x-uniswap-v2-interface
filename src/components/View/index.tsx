@@ -3,11 +3,9 @@ import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
 import { HomeRoute, FarmingRoute } from '../../Routing';
 
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import { Button, Nav, Navbar, Container} from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import { ConnectedWalletButtonComponent } from './ConnectedWalletButtonComponent';
-import NavButton from './NavButton';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -30,19 +28,21 @@ export default function View({ children }: ViewProps) {
   return (
       <div className="view">
         <Navbar>
-          <Navbar.Brand>
-            <img className='impermax-brand' src="/build/assets/impermax.png" />
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Nav className="mr-auto">
-            <NavigationBarLink appRoute={HomeRoute} />
-            <NavigationBarLink appRoute={FarmingRoute} />
-          </Nav>
-          {
-            status === 'connected' ? 
-              <ConnectedWalletButtonComponent /> :
-              <NavButton variant="success" onClick={onConnect}>Connect Wallet</NavButton>
-          }
+          <Container>
+            <Navbar.Brand>
+              <img className='impermax-brand' src="/build/assets/impermax.png" />
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Nav className="mr-auto">
+              <NavigationBarLink appRoute={HomeRoute} />
+              <NavigationBarLink appRoute={FarmingRoute} />
+            </Nav>
+            {
+              status === 'connected' ? 
+                <ConnectedWalletButtonComponent /> :
+                <Button className="wallet-connector nav-button-green" onClick={onConnect}>Connect Wallet</Button>
+            }
+          </Container>
         </Navbar>
         {children}
       </div>

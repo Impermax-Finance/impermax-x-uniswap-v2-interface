@@ -35,7 +35,7 @@ export default function LendingPoolsSearch() {
     <Container>
       <Row>
         <Col sm={12}>
-          <Card>
+          <Card className="overflow-hidden">
             <Card.Body>
               {/*<SearchForm />*/}
               <LendingPoolsTable />

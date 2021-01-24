@@ -13,6 +13,24 @@ import { BorrowableData, getBorrowablesData } from '../../utils/borrowableData';
 import { getIconByTokenAddress } from '../../utils/icons';
 import { formatPercentage, formatUSD } from '../../utils/format';
 
+interface LendingPoolsColProps {
+  valueA: string;
+  valueB: string;
+}
+
+export function LendingPoolsCol({valueA, valueB}: LendingPoolsColProps) {
+  return (
+    <div className="col">
+      <div>
+        {valueA}
+      </div>
+      <div>
+        {valueB}
+      </div>
+    </div>
+  );
+}
+
 interface LendingPoolsRowProps {
   uniswapV2PairAddress: string;
 }
@@ -37,69 +55,36 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
 
   if (!borrowableAData || !borrowableBData) return null;
 
-  return (<tr className="lending-pools-row">
-    <td>
-      <div className="currency-name">
-        <div className="combined">
-          <div className="currency-overlapped">
-            <img src={getIconByTokenAddress(borrowableAData.tokenAddress)} />
-            <img src={getIconByTokenAddress(borrowableBData.tokenAddress)} />
-          </div>
-          <Link to={"lending-pool/" + uniswapV2PairAddress}>{borrowableAData.symbol}/{borrowableBData.symbol}</Link>
-        </div>
-        <div>
-          <div>
-            <img className="currency-icon" src={getIconByTokenAddress(borrowableAData.tokenAddress)} />
-            {borrowableAData.symbol}
+  return (
+    <Link to={"lending-pool/" + uniswapV2PairAddress} className="row lending-pools-row">
+      <div className="col-4">
+        <div className="currency-name">
+          <div className="combined">
+            <div className="currency-overlapped">
+              <img src={getIconByTokenAddress(borrowableAData.tokenAddress)} />
+              <img src={getIconByTokenAddress(borrowableBData.tokenAddress)} />
+            </div>
+          {borrowableAData.symbol}/{borrowableBData.symbol}
           </div>
           <div>
-            <img className="currency-icon" src={getIconByTokenAddress(borrowableBData.tokenAddress)} />
-            {borrowableBData.symbol}
+            <div>
+              <img className="currency-icon" src={getIconByTokenAddress(borrowableAData.tokenAddress)} />
+              {borrowableAData.symbol}
+            </div>
+            <div>
+              <img className="currency-icon" src={getIconByTokenAddress(borrowableBData.tokenAddress)} />
+              {borrowableBData.symbol}
+            </div>
           </div>
         </div>
       </div>
-    </td>
-    <td className="text-center">
-      <div>
-        {formatUSD(borrowableAData.supplyUSD)}
-      </div>
-      <div>
-        {formatUSD(borrowableBData.supplyUSD)}
-      </div>
-    </td>
-    <td className="text-center">
-      <div>
-        {formatUSD(borrowableAData.borrowedUSD)}
-      </div>
-      <div>
-        {formatUSD(borrowableBData.borrowedUSD)}
-      </div>
-    </td>
-    <td className="text-center">
-      <div>
-        {formatPercentage(borrowableAData.supplyAPY)}
-      </div>
-      <div>
-        {formatPercentage(borrowableBData.supplyAPY)}
-      </div>
-    </td>
-    <td className="text-center">
-      <div>
-        {formatPercentage(borrowableAData.borrowAPY)}
-      </div>
-      <div>
-        {formatPercentage(borrowableBData.borrowAPY)}
-      </div>
-    </td>
-    {/*<td className="text-center">
-      <div>
-        {formatPercentage(borrowableAData.farmingAPY)}
-      </div>
-      <div>
-        {formatPercentage(borrowableBData.farmingAPY)}
-      </div>
-    </td>*/}
-  </tr>);
+      <LendingPoolsCol valueA={formatUSD(borrowableAData.supplyUSD)} valueB={formatUSD(borrowableBData.supplyUSD)} />
+      <LendingPoolsCol valueA={formatUSD(borrowableAData.borrowedUSD)} valueB={formatUSD(borrowableBData.borrowedUSD)} />
+      <LendingPoolsCol valueA={formatPercentage(borrowableAData.supplyAPY)} valueB={formatPercentage(borrowableBData.supplyAPY)} />
+      <LendingPoolsCol valueA={formatPercentage(borrowableAData.borrowAPY)} valueB={formatPercentage(borrowableBData.borrowAPY)} />
+      {/*<LendingPoolsCol valueA={formatPercentage(borrowableAData.farmingAPY)} valueB={formatPercentage(borrowableBData.farmingAPY)} />*/}
+    </Link>
+  );
 }
 
 /**
@@ -111,22 +96,16 @@ export function LendingPoolsTable() {
 
   const t = (s: string) => (phrases[s][language]);
   return (<div className="lending-pools-table">
-    <Table>
-      <thead>
-        <tr>
-          <th>{t("Market")}</th>
-          <th className="text-center">{t("Total Supply")}</th>
-          <th className="text-center">{t("Total Borrowed")}</th>
-          <th className="text-center">{t("Supply APY")}</th>
-          <th className="text-center">{t("Borrow APY")}</th>
-          {/*<th className="text-center">{t("Farming APY")}</th>*/}
-        </tr>
-      </thead>
-      <tbody>
-        {LISTED_PAIRS[(process.env.NETWORK as Networks)].map((pair: string, key: any) =>    
-          <LendingPoolsRow uniswapV2PairAddress={pair} key={key} />
-        )}
-      </tbody>
-    </Table>
+    <div className="lending-pools-header row">
+      <div className="col-4">{t("Market")}</div>
+      <div className="col">{t("Total Supply")}</div>
+      <div className="col">{t("Total Borrowed")}</div>
+      <div className="col">{t("Supply APY")}</div>
+      <div className="col">{t("Borrow APY")}</div>
+      {/*<div className="col">{t("Farming APY")}</div>*/}
+    </div>
+    {LISTED_PAIRS[(process.env.NETWORK as Networks)].map((pair: string, key: any) =>    
+      <LendingPoolsRow uniswapV2PairAddress={pair} key={key} />
+    )}
   </div>)
 }
