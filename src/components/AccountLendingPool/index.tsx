@@ -7,12 +7,11 @@ import { LanguageContext } from '../../contexts/Language';
 import Button from 'react-bootstrap/Button';
 import phrases from './translations';
 import './index.scss';
-import { Networks } from '../../utils/connections';
-import { useLendingPool, Collateral, Borrowable, LendingPool } from '../../hooks/useContract';
-import { BorrowableData, getBorrowableData } from '../../utils/borrowableData';
+import { LendingPool } from '../../hooks/useContract';
 import { AccountData, getAccountData, AccountBorrowableData, AccountCollateralData } from '../../utils/accountData';
 import { getIconByTokenAddress, getUniswapAddLiquidity } from '../../utils/urlGenerator';
 import { formatUSD } from '../../utils/format';
+import DepositInteractionModal from '../DepositInteractionModal';
 
 
 interface AccountLendingPoolDetailsRowProps {
@@ -98,6 +97,7 @@ function AccountLendingPoolLPRow({ accountCollateralData }: AccountLendingPoolLP
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
+  const [showDepositModal, toggleDepositModal] = useState(false);
   return (<>
     <Row className="account-lending-pool-row">
       <Col md={3}>
@@ -122,7 +122,7 @@ function AccountLendingPoolLPRow({ accountCollateralData }: AccountLendingPoolLP
       <Col md={5} className="btn-table">
         <Row>
           <Col>
-            <Button variant="primary">{t("Deposit")}</Button>
+            <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
           </Col>
           <Col>
             <Button variant="primary">{t("Withdraw")}</Button>
@@ -142,6 +142,7 @@ function AccountLendingPoolLPRow({ accountCollateralData }: AccountLendingPoolLP
         </Row>
       </Col>
     </Row>
+    <DepositInteractionModal show={showDepositModal} toggleShow={toggleDepositModal} />
   </>);
 }
 

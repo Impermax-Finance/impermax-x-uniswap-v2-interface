@@ -3,7 +3,7 @@ import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
 import { HomeRoute, FarmingRoute } from '../../Routing';
 
-import { Button, Nav, Navbar, Container} from 'react-bootstrap';
+import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import { ConnectedWalletButtonComponent } from './ConnectedWalletButtonComponent';
 
@@ -25,6 +25,7 @@ export default function View({ children }: ViewProps) {
       console.log(error)
     }
   };
+  
   return (
       <div className="view">
         <Navbar>

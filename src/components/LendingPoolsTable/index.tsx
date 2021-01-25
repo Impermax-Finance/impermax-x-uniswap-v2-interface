@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import {
   Link
 } from "react-router-dom";
-import Table from 'react-bootstrap/Table';
 import { LanguageContext } from '../../contexts/Language';
 import phrases from './translations';
 import './index.scss';
