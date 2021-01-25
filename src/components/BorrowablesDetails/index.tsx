@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { LanguageContext } from '../../contexts/Language';
 import Table from 'react-bootstrap/Table';
-import { Currency } from '../../utils/currency';
 import phrases from './translations';
 import './index.scss';
 import { LendingPool } from '../../hooks/useContract';
 import { BorrowableData, getBorrowablesData } from '../../utils/borrowableData';
-import { Container, Row, Col, Card } from 'react-bootstrap';
-import { getIconByTokenAddress } from '../../utils/icons';
+import { Row, Col, Card } from 'react-bootstrap';
+import { getIconByTokenAddress } from '../../utils/urlGenerator';
 import { formatPercentage, formatUSD } from '../../utils/format';
 
 interface RowProps {
@@ -18,7 +17,7 @@ interface RowProps {
 function BorrowableDetailsRow({ name, value }: RowProps) {
   return (<tr>
     <td>{name}</td>
-    <td>{value}</td>
+    <td className="text-right">{value}</td>
   </tr>);
 }
 
@@ -74,24 +73,22 @@ export default function BorrowablesDetails(props: BorrowablesDetailsProps) {
 
   return (
     <div className="borrowables-details">
-      <Container>
-        <Row>
-          <Col sm={6}>
-            <Card>
-              <Card.Body>
-                <BorrowableDetails borrowableData={borrowableAData} />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col sm={6}>
-            <Card>
-              <Card.Body>
-                <BorrowableDetails borrowableData={borrowableBData} />
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+      <Row>
+        <Col sm={6}>
+          <Card>
+            <Card.Body>
+              <BorrowableDetails borrowableData={borrowableAData} />
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col sm={6}>
+          <Card>
+            <Card.Body>
+              <BorrowableDetails borrowableData={borrowableBData} />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }

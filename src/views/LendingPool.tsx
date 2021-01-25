@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import AccountLendingPool from '../components/AccountLendingPool';
 import BorrowablesDetails from '../components/BorrowablesDetails';
 import { useLendingPool } from '../hooks/useContract';
+import { Container } from 'react-bootstrap';
 
 /**
  * LendingPool page view.
@@ -14,9 +15,9 @@ export default function LendingPool() {
   const lendingPool = useLendingPool(uniswapV2PairAddress);
 
   return (<View>
-    <div className="lending-pool">
+    <Container className="lending-pool">
       <BorrowablesDetails lendingPool={lendingPool} />
       <AccountLendingPool lendingPool={lendingPool} />
-    </div>
+    </Container>
   </View>);
 }

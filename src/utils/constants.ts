@@ -23,7 +23,7 @@ export const ROUTER: NetworkIndex = {
 };
 
 export const WETH: NetworkIndex = {
-  [Networks.Ropsten]: '0xc778417e063141139fce010982780140aa0cd5ab',
+  [Networks.Ropsten]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
   [Networks.Mainnet]: ''
 };
 

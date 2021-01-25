@@ -10,7 +10,7 @@ import { LISTED_PAIRS } from '../../utils/constants';
 import { Networks } from '../../utils/connections';
 import { useLendingPool } from '../../hooks/useContract';
 import { BorrowableData, getBorrowablesData } from '../../utils/borrowableData';
-import { getIconByTokenAddress } from '../../utils/icons';
+import { getIconByTokenAddress } from '../../utils/urlGenerator';
 import { formatPercentage, formatUSD } from '../../utils/format';
 
 interface LendingPoolsColProps {

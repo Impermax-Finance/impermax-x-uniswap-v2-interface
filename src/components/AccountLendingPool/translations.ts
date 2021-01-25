@@ -22,6 +22,9 @@ const translations = {
   "Deposit": {
     'ENG': "Deposit"
   },
+  "Deposited": {
+    'ENG': "Deposited"
+  },
   "Withdraw": {
     'ENG': "Withdraw"
   },
@@ -33,6 +36,9 @@ const translations = {
   },
   "Borrow": {
     'ENG': "Borrow"
+  },
+  "Borrowed": {
+    'ENG': "Borrowed"
   },
   "Repay": {
     'ENG': "Repay"
