@@ -2,9 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Routing from './Routing';
 import { useWallet, UseWalletProvider } from 'use-wallet';
-import { Language, Theme } from './contexts';
+import { Language, Theme, Web3Provider } from './contexts';
 import './index.scss';
-import { chainDetailsMap, Networks } from './utils/connections';
+import Network from './contexts/Network';
+import { useChainId } from './hooks/useNetwork';
+import { ImpermaxRouterProvider } from './contexts/ImpermaxRouterProvider';
 
 function App() {
   return <div className="app">
@@ -19,15 +21,21 @@ function App() {
  * @param param0 ReactProps
  */
 const Contexts: React.FC = ({ children }) => {
-  const chain = chainDetailsMap;
-  const network = chain[process.env.NETWORK as Networks].networkId;
-  return (<UseWalletProvider chainId={network}>
-    <Language>
-      <Theme>
-        { children }
-      </Theme>
-    </Language>
-  </UseWalletProvider>);
+  return (
+    <Network>
+      <Language>
+        <Theme>
+          <UseWalletProvider chainId={useChainId()}>
+            <Web3Provider>
+              <ImpermaxRouterProvider>
+                { children }
+              </ImpermaxRouterProvider>
+            </Web3Provider>
+          </UseWalletProvider>
+        </Theme>
+      </Language>
+    </Network>
+  );
 }
 
 const wrapper = document.getElementById("impermax-app");

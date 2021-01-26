@@ -17,11 +17,8 @@ export interface LanguageContextI {
 export const LanguageContext = createContext<Partial<LanguageContextI>>({});
 
 const LanguageProvider: React.FC = ({children}) => {
-
     const context = useContext();
-
     return <LanguageContext.Provider value={context}>{children}</LanguageContext.Provider>
-
 }
 
 export default LanguageProvider;

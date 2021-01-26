@@ -7,11 +7,11 @@ import { LanguageContext } from '../../contexts/Language';
 import Button from 'react-bootstrap/Button';
 import phrases from './translations';
 import './index.scss';
-import { LendingPool } from '../../hooks/useContract';
-import { AccountData, getAccountData, AccountBorrowableData, AccountCollateralData } from '../../utils/accountData';
-import { getIconByTokenAddress, getUniswapAddLiquidity } from '../../utils/urlGenerator';
+import useUrlGenerator from '../../hooks/useUrlGenerator';
 import { formatUSD } from '../../utils/format';
 import DepositInteractionModal from '../DepositInteractionModal';
+import useImpermaxRouter, { useRouterAccount } from '../../hooks/useImpermaxRouter';
+import { AccountCollateralData, AccountBorrowableData, AccountData } from '../../impermax-router';
 
 
 interface AccountLendingPoolDetailsRowProps {
@@ -94,10 +94,10 @@ interface AccountLendingPoolLPRowProps {
  * @params AccountLendingPoolLPRowProps
  */
 function AccountLendingPoolLPRow({ accountCollateralData }: AccountLendingPoolLPRowProps) {
+  const { getIconByTokenAddress, getUniswapAddLiquidity } = useUrlGenerator();
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
-  const [showDepositModal, toggleDepositModal] = useState(false);
   return (<>
     <Row className="account-lending-pool-row">
       <Col md={3}>
@@ -122,7 +122,7 @@ function AccountLendingPoolLPRow({ accountCollateralData }: AccountLendingPoolLP
       <Col md={5} className="btn-table">
         <Row>
           <Col>
-            <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
+            <Button variant="primary">{t("Deposit")}</Button>
           </Col>
           <Col>
             <Button variant="primary">{t("Withdraw")}</Button>
@@ -142,7 +142,6 @@ function AccountLendingPoolLPRow({ accountCollateralData }: AccountLendingPoolLP
         </Row>
       </Col>
     </Row>
-    <DepositInteractionModal show={showDepositModal} toggleShow={toggleDepositModal} />
   </>);
 }
 
@@ -159,9 +158,13 @@ interface AccountLendingPoolRowProps {
  * @params AccountLendingPoolRowProps.
  */
 function AccountLendingPoolRow({ accountBorrowableData }: AccountLendingPoolRowProps) {
+  const { getIconByTokenAddress } = useUrlGenerator();
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
+
+  const [showDepositModal, toggleDepositModal] = useState(false);
+
   return (<>
     <Row className="account-lending-pool-row">
       <Col md={3}>
@@ -199,7 +202,7 @@ function AccountLendingPoolRow({ accountBorrowableData }: AccountLendingPoolRowP
         </Row>
         <Row>
           <Col>
-            <Button variant="primary">{t("Deposit")}</Button>
+            <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
           </Col>
           <Col>
             <Button variant="primary">{t("Withdraw")}</Button>
@@ -207,6 +210,14 @@ function AccountLendingPoolRow({ accountBorrowableData }: AccountLendingPoolRowP
         </Row>
       </Col>
     </Row>
+    <DepositInteractionModal 
+      show={showDepositModal} 
+      toggleShow={toggleDepositModal}
+      symbol={accountBorrowableData.symbol}
+      tokenAddress={accountBorrowableData.tokenAddress}
+      borrowableAddress={accountBorrowableData.borrowableAddress}
+      decimals={accountBorrowableData.decimals}
+    />
   </>);
 }
 
@@ -225,26 +236,30 @@ function AccountLendingPoolContainer({ children }: AccountLendingPoolContainerPr
 }
 
 interface AccountLendingPoolProps {
-  lendingPool: LendingPool;
+  uniswapV2PairAddress: string;
 }
 
 /**
  * Generate the Account Lending Pool card, giving details about the particular user's equity in the pool.
  * @params AccountLendingPoolProps
  */
-export default function AccountLendingPool({ lendingPool }: AccountLendingPoolProps) {
+export default function AccountLendingPool({ uniswapV2PairAddress }: AccountLendingPoolProps) {
   const { connect, account } = useWallet();
   const [accountData, setAccountData] = useState<AccountData>();
-
+  const impermaxRouter = useImpermaxRouter();
+  const routerAccount = useRouterAccount();
+  
   useEffect(() => {
-    if (!account || !lendingPool) return;
-    getAccountData(account, lendingPool).then((result) => setAccountData(result));
-  }, [account, lendingPool]);
+    if (!impermaxRouter || !routerAccount) return;
+    impermaxRouter.getAccountData(uniswapV2PairAddress).then((data) => {
+      setAccountData(data);
+    });
+  }, [impermaxRouter, routerAccount]);
 
   if (!accountData) return (
     <AccountLendingPoolContainer>
       <div className="text-center py-5">
-        <Button onClick={() => {connect('injected')}}>Connect</Button>
+        <Button onClick={() => {connect('injected')}}>Connect to use the App</Button>
       </div>
     </AccountLendingPoolContainer>
   );

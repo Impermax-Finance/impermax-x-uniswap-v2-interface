@@ -4,6 +4,7 @@ import { HttpLink } from 'apollo-link-http'
 import gql from 'graphql-tag'
 import { Networks } from "./connections";
 import { ROPSTEN_TO_MAINNET } from "./constants";
+import { useConvertToMainnet } from '../hooks/useNetwork';
 
 export interface PairConversionPrices {
   LPPrice: number;
@@ -11,10 +12,10 @@ export interface PairConversionPrices {
   tokenBPrice: number;
 }
 
-export async function getPairConversionPrices(uniswapV2PairAddress: string) : Promise<PairConversionPrices> {
-  if (process.env.NETWORK as Networks === Networks.Ropsten) uniswapV2PairAddress = ROPSTEN_TO_MAINNET[uniswapV2PairAddress];
+export async function getPairConversionPrices(uniswapV2PairAddress: string, convertToMainnet: Function) : Promise<PairConversionPrices> {
+  const actualAddress = convertToMainnet(uniswapV2PairAddress);
   const query = gql`{
-    pair (id: "${uniswapV2PairAddress}") {
+    pair (id: "${actualAddress}") {
       reserveUSD
       reserve0
       reserve1

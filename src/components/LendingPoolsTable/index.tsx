@@ -5,12 +5,12 @@ import {
 import { LanguageContext } from '../../contexts/Language';
 import phrases from './translations';
 import './index.scss';
-import { LISTED_PAIRS } from '../../utils/constants';
-import { Networks } from '../../utils/connections';
 import { useLendingPool } from '../../hooks/useContract';
-import { BorrowableData, getBorrowablesData } from '../../utils/borrowableData';
-import { getIconByTokenAddress } from '../../utils/urlGenerator';
+import { BorrowableData, PoolToken } from '../../impermax-router';
+import useUrlGenerator from '../../hooks/useUrlGenerator';
 import { formatPercentage, formatUSD } from '../../utils/format';
+import { useListedPairs } from '../../hooks/useNetwork';
+import useImpermaxRouter from '../../hooks/useImpermaxRouter';
 
 interface LendingPoolsColProps {
   valueA: string;
@@ -38,21 +38,26 @@ interface LendingPoolsRowProps {
  * Component for a single Lending Pool row.
  */
 export function LendingPoolsRow(props: LendingPoolsRowProps) {
-
   const { uniswapV2PairAddress } = props;
 
+  const { getIconByTokenAddress } = useUrlGenerator();
   const [borrowableAData, setBorrowableAData] = useState<BorrowableData>();
   const [borrowableBData, setBorrowableBData] = useState<BorrowableData>();
-  const lendingPool = useLendingPool(uniswapV2PairAddress);
+  const impermaxRouter = useImpermaxRouter();
 
   useEffect(() => {
-    getBorrowablesData(lendingPool).then(({borrowableAData, borrowableBData}) => {
-      setBorrowableAData(borrowableAData);
-      setBorrowableBData(borrowableBData);
+    if (!impermaxRouter) return;
+    impermaxRouter.getBorrowableData(uniswapV2PairAddress, PoolToken.BorrowableA).then((data) => {
+      setBorrowableAData(data);
     });
-  }, [lendingPool]);
+    impermaxRouter.getBorrowableData(uniswapV2PairAddress, PoolToken.BorrowableB).then((data) => {
+      setBorrowableBData(data);
+    });
+  }, [impermaxRouter]);
 
-  if (!borrowableAData || !borrowableBData) return null;
+  if (!borrowableAData || !borrowableBData) return (<div>
+    Loading
+  </div>);
 
   return (
     <Link to={"lending-pool/" + uniswapV2PairAddress} className="row lending-pools-row">
@@ -92,6 +97,7 @@ export function LendingPoolsRow(props: LendingPoolsRowProps) {
 export function LendingPoolsTable() {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
+  const listedPairs = useListedPairs();
 
   const t = (s: string) => (phrases[s][language]);
   return (<div className="lending-pools-table">
@@ -103,7 +109,7 @@ export function LendingPoolsTable() {
       <div className="col">{t("Borrow APY")}</div>
       {/*<div className="col">{t("Farming APY")}</div>*/}
     </div>
-    {LISTED_PAIRS[(process.env.NETWORK as Networks)].map((pair: string, key: any) =>    
+    {listedPairs.map((pair: string, key: any) =>    
       <LendingPoolsRow uniswapV2PairAddress={pair} key={key} />
     )}
   </div>)

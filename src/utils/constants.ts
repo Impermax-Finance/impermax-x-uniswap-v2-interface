@@ -46,3 +46,8 @@ export const ROPSTEN_TO_MAINNET: AddressIndex = {
   [ROPSTEN_ETH_DAI]: MAINNET_ETH_DAI,
   [ROPSTEN_ETH_UNI]: MAINNET_ETH_UNI,
 }
+
+export const CONVERT_TO_MAINNET: NetworkIndex = {
+  [Networks.Ropsten]: ROPSTEN_TO_MAINNET,
+  [Networks.Mainnet]: {},
+}

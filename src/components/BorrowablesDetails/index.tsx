@@ -6,8 +6,10 @@ import './index.scss';
 import { LendingPool } from '../../hooks/useContract';
 import { BorrowableData, getBorrowablesData } from '../../utils/borrowableData';
 import { Row, Col, Card } from 'react-bootstrap';
-import { getIconByTokenAddress } from '../../utils/urlGenerator';
+import useUrlGenerator from '../../hooks/useUrlGenerator';
 import { formatPercentage, formatUSD } from '../../utils/format';
+import { PoolToken } from '../../impermax-router';
+import useImpermaxRouter from '../../hooks/useImpermaxRouter';
 
 interface RowProps {
   name: string;
@@ -22,7 +24,8 @@ function BorrowableDetailsRow({ name, value }: RowProps) {
 }
 
 interface BorrowableDetailsProps {
-  borrowableData: BorrowableData;
+  uniswapV2PairAddress: string;
+  poolToken: PoolToken;
 }
 
 /**
@@ -30,10 +33,21 @@ interface BorrowableDetailsProps {
  * the system.
  */
 export function BorrowableDetails(props: BorrowableDetailsProps) {
-  const { borrowableData } = props;
+  const { uniswapV2PairAddress, poolToken } = props;
+
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
+  const { getIconByTokenAddress } = useUrlGenerator();
+  const [borrowableData, setBorrowableData] = useState<BorrowableData>();
+  const impermaxRouter = useImpermaxRouter();
+
+  useEffect(() => {
+    if (!impermaxRouter) return;
+    impermaxRouter.getBorrowableData(uniswapV2PairAddress, poolToken).then((data) => {
+      setBorrowableData(data);
+    });
+  }, [impermaxRouter]);
 
   if (!borrowableData) return null;
 
@@ -55,21 +69,11 @@ export function BorrowableDetails(props: BorrowableDetailsProps) {
 }
 
 interface BorrowablesDetailsProps {
-  lendingPool: LendingPool;
+  uniswapV2PairAddress: string;
 }
 
 export default function BorrowablesDetails(props: BorrowablesDetailsProps) {
-  const { lendingPool } = props;
-
-  const [borrowableAData, setBorrowableAData] = useState<BorrowableData>();
-  const [borrowableBData, setBorrowableBData] = useState<BorrowableData>();
-
-  useEffect(() => {
-    getBorrowablesData(lendingPool).then(({borrowableAData, borrowableBData}) => {
-      setBorrowableAData(borrowableAData);
-      setBorrowableBData(borrowableBData);
-    });
-  }, [lendingPool]);
+  const { uniswapV2PairAddress } = props;
 
   return (
     <div className="borrowables-details">
@@ -77,14 +81,14 @@ export default function BorrowablesDetails(props: BorrowablesDetailsProps) {
         <Col sm={6}>
           <Card>
             <Card.Body>
-              <BorrowableDetails borrowableData={borrowableAData} />
+              <BorrowableDetails uniswapV2PairAddress={uniswapV2PairAddress} poolToken={PoolToken.BorrowableA} />
             </Card.Body>
           </Card>
         </Col>
         <Col sm={6}>
           <Card>
             <Card.Body>
-              <BorrowableDetails borrowableData={borrowableBData} />
+              <BorrowableDetails uniswapV2PairAddress={uniswapV2PairAddress} poolToken={PoolToken.BorrowableB} />
             </Card.Body>
           </Card>
         </Col>

@@ -16,7 +16,7 @@ interface ViewProps {
  * @param param0 ViewProps
  */
 export default function View({ children }: ViewProps) {
-  const { connect, status } = useWallet();
+  const { account, connect } = useWallet();
   const onConnect = () => {
     try {
       localStorage.removeItem("signOut");
@@ -27,25 +27,25 @@ export default function View({ children }: ViewProps) {
   };
   
   return (
-      <div className="view">
-        <Navbar>
-          <Container>
-            <Navbar.Brand>
-              <img className='impermax-brand' src="/build/assets/impermax.png" />
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Nav className="mr-auto">
-              <NavigationBarLink appRoute={HomeRoute} />
-              <NavigationBarLink appRoute={FarmingRoute} />
-            </Nav>
-            {
-              status === 'connected' ? 
-                <ConnectedWalletButtonComponent /> :
-                <Button className="wallet-connector nav-button-green" onClick={onConnect}>Connect Wallet</Button>
-            }
-          </Container>
-        </Navbar>
-        {children}
-      </div>
+    <div className="view">
+      <Navbar>
+        <Container>
+          <Navbar.Brand>
+            <img className='impermax-brand' src="/build/assets/impermax.png" />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Nav className="mr-auto">
+            <NavigationBarLink appRoute={HomeRoute} />
+            <NavigationBarLink appRoute={FarmingRoute} />
+          </Nav>
+          {
+            account ? 
+              <ConnectedWalletButtonComponent account={account} /> :
+              <Button className="wallet-connector nav-button-green" onClick={onConnect}>Connect Wallet</Button>
+          }
+        </Container>
+      </Navbar>
+      {children}
+    </div>
   );
 }

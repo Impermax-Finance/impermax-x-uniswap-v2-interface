@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 
 import AccountLendingPool from '../components/AccountLendingPool';
 import BorrowablesDetails from '../components/BorrowablesDetails';
-import { useLendingPool } from '../hooks/useContract';
 import { Container } from 'react-bootstrap';
 
 /**
@@ -12,12 +11,13 @@ import { Container } from 'react-bootstrap';
  */
 export default function LendingPool() {
   const { uniswapV2PairAddress } = useParams<{ uniswapV2PairAddress: string }>();
-  const lendingPool = useLendingPool(uniswapV2PairAddress);
+
+  //TODO create context for address
 
   return (<View>
     <Container className="lending-pool">
-      <BorrowablesDetails lendingPool={lendingPool} />
-      <AccountLendingPool lendingPool={lendingPool} />
+      <BorrowablesDetails uniswapV2PairAddress={uniswapV2PairAddress} />
+      <AccountLendingPool uniswapV2PairAddress={uniswapV2PairAddress} />
     </Container>
   </View>);
 }

@@ -1,4 +1,7 @@
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from "../InteractionModal";import React from "react";import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody } from "../InteractionModal";import React, { useCallback, useState } from "react";import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
+import NumericalInput from "../NumericalInput";
+import { useWallet } from "use-wallet";
+import useImpermaxRouter from "../../hooks/useImpermaxRouter";
 
 /**
  * Props for the deposit interaction modal.
@@ -8,6 +11,10 @@ import InteractionModal, { InteractionModalHeader, InteractionModalBody } from "
 export interface DepositInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
+  symbol: string;
+  tokenAddress: string;
+  borrowableAddress: string;
+  decimals: number;
 }
 
 /**
@@ -15,7 +22,16 @@ export interface DepositInteractionModalProps {
  * @param param0 any Props for component
  * @see DepositInteractionModalProps
  */
-export default function DepositInteractionModal({show, toggleShow}: DepositInteractionModalProps) {
+export default function DepositInteractionModal({show, toggleShow, symbol, tokenAddress, borrowableAddress, decimals}: DepositInteractionModalProps) {
+  const [val, setVal] = useState<string>("");
+  const onUserInput = (input: string) => setVal(input);
+
+  const impermaxRouter = useImpermaxRouter();
+
+  const onDeposit = async () => {
+    await impermaxRouter.deposit(tokenAddress, borrowableAddress, val, decimals);
+  }
+
   return (
     <InteractionModal show={show} onHide={() => toggleShow(false)}>
       <>
@@ -25,28 +41,28 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
             New Leverage
           </div>
           <div>
-            xxx -> xxx
+            xxx -&gt; xxx
           </div>
           <div>
             New Liquidation Prices
           </div>
           <div>
-            xxx -> xxx
+            xxx -&gt; xxx
           </div>
           <div>
             Current Price
           </div>
           <div>
-            xxx -> xxx
+            xxx -&gt; xxx
           </div>
           <div>
             <InputGroup className="mb-3">
               <InputGroup.Prepend>
                 <Button variant="outline-secondary">MAX</Button>
               </InputGroup.Prepend>
-              <FormControl aria-describedby="basic-addon1" />
+              <NumericalInput value={val} onUserInput={input => {onUserInput(input)}} />
               <InputGroup.Append>
-                <InputGroup.Text>ETH</InputGroup.Text>
+                <InputGroup.Text>{symbol}</InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
           </div>
@@ -55,7 +71,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
               <Button variant="success" block>Approve</Button>
             </Col>
             <Col xs={6}>
-              <Button variant='secondary' block>Deposit</Button>
+              <Button variant='secondary' block onClick={onDeposit}>Deposit</Button>
             </Col>
           </Row>
         </InteractionModalBody>
