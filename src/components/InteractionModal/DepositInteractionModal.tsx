@@ -30,10 +30,11 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
 
   const impermaxRouter = useImpermaxRouter();
   useEffect(() => {
-    if (poolTokenType == PoolTokenType.Collateral) {
+    /*if (poolTokenType == PoolTokenType.Collateral) {
       impermaxRouter.getAccountCollateralData(uniswapV2PairAddress).then(({symbolA, symbolB}) => setSymbol(symbolA+'-'+symbolB));
     }
-    else impermaxRouter.getBorrowableBaseInfo(uniswapV2PairAddress, poolTokenType).then( ({symbol}) => setSymbol(symbol) );
+    else impermaxRouter.getBorrowableBaseInfo(uniswapV2PairAddress, poolTokenType).then( ({symbol}) => setSymbol(symbol) );*/
+    impermaxRouter.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
   }, [impermaxRouter]);
 
   const onDeposit = async () => {
