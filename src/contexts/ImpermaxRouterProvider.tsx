@@ -29,7 +29,7 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         setRouterAccount(account);
       }
       setImpermaxRouter(impermaxRouter);
-    } else if (account && account != routerAccount) {
+    } else if (account) {
       impermaxRouter.unlockWallet(web3, account);
       setRouterAccount(account);
     }

@@ -5,19 +5,15 @@ import useImpermaxRouter from "../../hooks/useImpermaxRouter";
 import { Link } from "react-router-dom";
 import { LendingPoolsCol } from "./LendingPoolsCol";
 import { formatUSD, formatPercentage } from "../../utils/format";
-
-
-interface LendingPoolsRowProps {
-  uniswapV2PairAddress: string;
-}
+import { useContext } from "../../contexts/Theme";
+import usePairAddress from "../../hooks/usePairAddress";
 
 /**
  * Component for a single Lending Pool row.
  */
-export default function LendingPoolsRow(props: LendingPoolsRowProps) {
-  const { uniswapV2PairAddress } = props;
-
-  const { getIconByTokenAddress } = useUrlGenerator();
+export default function LendingPoolsRow() {
+  const uniswapV2PairAddress = usePairAddress();
+  const { getIconByTokenAddress, getLendingPool } = useUrlGenerator();
   const [borrowableAData, setBorrowableAData] = useState<BorrowableData>();
   const [borrowableBData, setBorrowableBData] = useState<BorrowableData>();
   const impermaxRouter = useImpermaxRouter();
@@ -37,7 +33,7 @@ export default function LendingPoolsRow(props: LendingPoolsRowProps) {
   </div>);
 
   return (
-    <Link to={"lending-pool/" + uniswapV2PairAddress} className="row lending-pools-row">
+    <Link to={getLendingPool(uniswapV2PairAddress)} className="row lending-pools-row">
       <div className="col-4">
         <div className="currency-name">
           <div className="combined">

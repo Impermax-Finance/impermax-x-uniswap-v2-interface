@@ -4,6 +4,7 @@ import phrases from './translations';
 import './index.scss';
 import { useListedPairs } from '../../hooks/useNetwork';
 import LendingPoolsRow from './LendingPoolsRow';
+import PairAddressContext from '../../contexts/PairAddress';
 
 /**
  * Generate a searchable lending pools table.
@@ -23,8 +24,12 @@ export function LendingPoolsTable() {
       <div className="col">{t("Borrow APY")}</div>
       {/*<div className="col">{t("Farming APY")}</div>*/}
     </div>
-    {listedPairs.map((pair: string, key: any) =>    
-      <LendingPoolsRow uniswapV2PairAddress={pair} key={key} />
-    )}
+    {listedPairs.map((pair: string, key: any) => {
+      return (
+        <PairAddressContext.Provider value={pair} key={key}>
+          <LendingPoolsRow />
+        </PairAddressContext.Provider>
+      )
+    })}
   </div>)
 }

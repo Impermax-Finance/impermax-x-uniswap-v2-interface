@@ -1,35 +1,49 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import useUrlGenerator from "../../hooks/useUrlGenerator";
 import { LanguageContext } from "../../contexts/Language";
 import phrases from './translations';
 import { Row, Col, Button, Card } from "react-bootstrap";
 import { AccountCollateralData } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
-
-
-interface AccountLendingPoolLPRowProps {
-  accountCollateralData: AccountCollateralData;
-}
+import usePairAddress from "../../hooks/usePairAddress";
+import useImpermaxRouter, { useRouterAccount } from "../../hooks/useImpermaxRouter";
+import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
 
 /**
  * Build account lending pool detail rows for LP token currencies.
  * @params AccountLendingPoolLPRowProps
  */
-export default function AccountLendingPoolLPRow({ accountCollateralData }: AccountLendingPoolLPRowProps) {
+export default function AccountLendingPoolLPRow() {
+  const uniswapV2PairAddress = usePairAddress();
   const { getIconByTokenAddress, getUniswapAddLiquidity } = useUrlGenerator();
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
+
+  const impermaxRouter = useImpermaxRouter();
+  const routerAccount = useRouterAccount();
+  const [data, setData] = useState<AccountCollateralData>();
+  useEffect(() => {
+    if (!impermaxRouter || !routerAccount) return;
+    impermaxRouter.getAccountCollateralData(uniswapV2PairAddress).then((data) => {
+      setData(data);
+    });
+  }, [impermaxRouter, routerAccount]);
+
+  const [showDepositModal, toggleDepositModal] = useState(false);
+
+  if (!data) return (<>Loading</>);
+
   return (<>
     <Row className="account-lending-pool-row">
       <Col md={3}>
         <Row className="account-lending-pool-name-icon">
           <Col className="token-icon icon-overlapped">
-            <img src={getIconByTokenAddress(accountCollateralData.tokenAAddress)} />
-            <img src={getIconByTokenAddress(accountCollateralData.tokenBAddress)} />
+            <img src={getIconByTokenAddress(data.tokenAAddress)} />
+            <img src={getIconByTokenAddress(data.tokenBAddress)} />
           </Col>
           <Col className="token-name">
-            { `${accountCollateralData.symbolA}-${accountCollateralData.symbolB} LP` }
+            { `${data.symbolA}-${data.symbolB} LP` }
           </Col>
         </Row>
       </Col>
@@ -44,7 +58,7 @@ export default function AccountLendingPoolLPRow({ accountCollateralData }: Accou
       <Col md={5} className="btn-table">
         <Row>
           <Col>
-            <Button variant="primary">{t("Deposit")}</Button>
+            <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
           </Col>
           <Col>
             <Button variant="primary">{t("Withdraw")}</Button>
@@ -58,11 +72,15 @@ export default function AccountLendingPoolLPRow({ accountCollateralData }: Accou
             <a 
               className="btn obtain" 
               target="_blank" 
-              href={getUniswapAddLiquidity(accountCollateralData.tokenAAddress, accountCollateralData.tokenBAddress)}
+              href={getUniswapAddLiquidity(data.tokenAAddress, data.tokenBAddress)}
             >{t("Obtain")}</a>
           </Col>
         </Row>
       </Col>
     </Row>
+    <DepositInteractionModal 
+      show={showDepositModal} 
+      toggleShow={toggleDepositModal}
+    />
   </>);
 }

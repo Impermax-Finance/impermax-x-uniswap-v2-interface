@@ -1,7 +1,10 @@
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";import React, { useCallback, useState } from "react";import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";import React, { useCallback, useState, useEffect } from "react";import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { useWallet } from "use-wallet";
 import useImpermaxRouter from "../../hooks/useImpermaxRouter";
+import { PoolTokenType } from "../../impermax-router/interfaces";
+import usePairAddress from "../../hooks/usePairAddress";
+import usePoolToken from "../../hooks/usePoolToken";
 
 /**
  * Props for the deposit interaction modal.
@@ -11,10 +14,6 @@ import useImpermaxRouter from "../../hooks/useImpermaxRouter";
 export interface DepositInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
-  symbol: string;
-  tokenAddress: string;
-  borrowableAddress: string;
-  decimals: number;
 }
 
 /**
@@ -22,14 +21,23 @@ export interface DepositInteractionModalProps {
  * @param param0 any Props for component
  * @see DepositInteractionModalProps
  */
-export default function DepositInteractionModal({show, toggleShow, symbol, tokenAddress, borrowableAddress, decimals}: DepositInteractionModalProps) {
+export default function DepositInteractionModal({show, toggleShow}: DepositInteractionModalProps) {
+  const uniswapV2PairAddress = usePairAddress();
+  const poolTokenType = usePoolToken();
   const [val, setVal] = useState<string>("");
+  const [symbol, setSymbol] = useState<string>("");
   const onUserInput = (input: string) => setVal(input);
 
   const impermaxRouter = useImpermaxRouter();
+  useEffect(() => {
+    if (poolTokenType == PoolTokenType.Collateral) {
+      impermaxRouter.getAccountCollateralData(uniswapV2PairAddress).then(({symbolA, symbolB}) => setSymbol(symbolA+'-'+symbolB));
+    }
+    else impermaxRouter.getBorrowableBaseInfo(uniswapV2PairAddress, poolTokenType).then( ({symbol}) => setSymbol(symbol) );
+  }, [impermaxRouter]);
 
   const onDeposit = async () => {
-    await impermaxRouter.deposit(tokenAddress, borrowableAddress, val, decimals);
+    await impermaxRouter.deposit(uniswapV2PairAddress, poolTokenType, val);
   }
 
   return (

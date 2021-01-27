@@ -1,64 +1,68 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import useUrlGenerator from "../../hooks/useUrlGenerator";
 import { LanguageContext } from "../../contexts/Language";
 import phrases from './translations';
 import { Row, Col, Button, Card } from "react-bootstrap";
-import { AccountBorrowableData } from "../../impermax-router/interfaces";
+import { AccountBorrowableData, PoolTokenType } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
 import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
-
-
-interface AccountLendingPoolRowProps {
-  accountBorrowableData: AccountBorrowableData;
-}
+import usePoolToken from "../../hooks/usePoolToken";
+import usePairAddress from "../../hooks/usePairAddress";
+import useImpermaxRouter, { useRouterAccount } from "../../hooks/useImpermaxRouter";
 
 /**
  * Build account lending pool detail rows for single currencies.
  * @params AccountLendingPoolRowProps.
  */
-export default function AccountLendingPoolRow({ accountBorrowableData }: AccountLendingPoolRowProps) {
+export default function AccountLendingPoolRow() {
+  const uniswapV2PairAddress = usePairAddress();
+  const poolTokenType = usePoolToken();
   const { getIconByTokenAddress } = useUrlGenerator();
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
 
+  const impermaxRouter = useImpermaxRouter();
+  const routerAccount = useRouterAccount();
+  const [data, setData] = useState<AccountBorrowableData>();
+  useEffect(() => {
+    if (!impermaxRouter || !routerAccount) return;
+    impermaxRouter.getAccountBorrowableData(uniswapV2PairAddress, poolTokenType).then((data) => {
+      setData(data);
+    });
+  }, [impermaxRouter, routerAccount]);
+
   const [showDepositModal, toggleDepositModal] = useState(false);
+
+  if (!data) return (<>Loading</>);
 
   return (<>
     <Row className="account-lending-pool-row">
       <Col md={3}>
         <Row className="account-lending-pool-name-icon">
           <Col className="token-icon">
-            <img className='' src={getIconByTokenAddress(accountBorrowableData.tokenAddress)} />
+            <img className='' src={getIconByTokenAddress(data.tokenAddress)} />
           </Col>
           <Col className="token-name">
-            { `${accountBorrowableData.symbol}` }
+            { `${data.symbol}` }
           </Col>
         </Row>
       </Col>
       <Col md={4} className="inline-account-token-info-container">
         <InlineAccountTokenInfo
           name={t("Borrowed")}
-          symbol={accountBorrowableData.symbol}
+          symbol={data.symbol}
           value={42.35}
           valueUSD={10204}
         />
         <InlineAccountTokenInfo
           name={t("Deposited")}
-          symbol={accountBorrowableData.symbol}
+          symbol={data.symbol}
           value={42.35}
           valueUSD={10204}
         />
       </Col>
       <Col md={5} className="btn-table">
-        <Row>
-          <Col>
-            <Button variant="primary">{t("Borrow")}</Button>
-          </Col>
-          <Col>
-            <Button variant="primary">{t("Repay")}</Button>
-          </Col>
-        </Row>
         <Row>
           <Col>
             <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
@@ -67,15 +71,19 @@ export default function AccountLendingPoolRow({ accountBorrowableData }: Account
             <Button variant="primary">{t("Withdraw")}</Button>
           </Col>
         </Row>
+        <Row>
+          <Col>
+            <Button variant="primary">{t("Borrow")}</Button>
+          </Col>
+          <Col>
+            <Button variant="primary">{t("Repay")}</Button>
+          </Col>
+        </Row>
       </Col>
     </Row>
     <DepositInteractionModal 
       show={showDepositModal} 
       toggleShow={toggleDepositModal}
-      symbol={accountBorrowableData.symbol}
-      tokenAddress={accountBorrowableData.tokenAddress}
-      borrowableAddress={accountBorrowableData.borrowableAddress}
-      decimals={accountBorrowableData.decimals}
     />
   </>);
 }

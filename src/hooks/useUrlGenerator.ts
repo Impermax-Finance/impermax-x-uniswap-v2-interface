@@ -8,6 +8,9 @@ export interface UrlGenerator {
 export default function useUrlGenerator() {
   const WETH = useWETH();
   return {
+    getLendingPool: (address: string) => {
+      return "/lending-pool/" + address;
+    },
     getIconByTokenAddress: (address: string) => {
       return "/build/assets/icons/" + address + ".svg";
     },

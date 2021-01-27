@@ -1,7 +1,5 @@
 import { Networks } from './connections';
 
-//TODO default network should be mainnet
-
 export type NetworkIndex = {
   [key in Networks]: any
 };

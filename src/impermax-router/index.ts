@@ -168,7 +168,7 @@ export default class ImpermaxRouter {
   async getTokenPrice(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
     const pairConversionPrices = await this.getPairConversionPrices(uniswapV2PairAddress);
     if (poolTokenType == PoolTokenType.BorrowableA) return pairConversionPrices.tokenAPrice;
-    if (poolTokenType == PoolTokenType.BorrowableB) return pairConversionPrices.tokenAPrice;
+    if (poolTokenType == PoolTokenType.BorrowableB) return pairConversionPrices.tokenBPrice;
     return pairConversionPrices.LPPrice;
   }
 
@@ -245,17 +245,19 @@ export default class ImpermaxRouter {
     }
   }
 
-  async deposit(tokenAddress: Address, borrowableAddress: Address, val: string|number, decimals: number) {
-    //E ora la cosa figa: qua non mi servono i dati importati perchè ce li ho in cache!
+  async deposit(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, val: string|number) {
+    const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    const decimals = (poolTokenType == PoolTokenType.Collateral) ? 18 :
+      (await this.getBorrowableBaseInfo(uniswapV2PairAddress, poolTokenType)).decimals;
     const amount = decimalToBalance(val, decimals);
     const deadline = this.getDeadline();
     try {
-      if (tokenAddress == this.WETH) {
-        const result = await this.router.methods.mintETH(borrowableAddress, this.account, deadline).call({from: this.account, value: amount});
-        await this.router.methods.mintETH(borrowableAddress, this.account, deadline).send({from: this.account, value: amount});
+      if (token._address == this.WETH) {
+        const result = await this.router.methods.mintETH(poolToken._address, this.account, deadline).call({from: this.account, value: amount});
+        await this.router.methods.mintETH(poolToken._address, this.account, deadline).send({from: this.account, value: amount});
       } else {
-        const result = await this.router.methods.mint(borrowableAddress, amount, this.account, deadline).call({from: this.account});
-        await this.router.methods.mint(borrowableAddress, amount, this.account, deadline).send({from: this.account});
+        const result = await this.router.methods.mint(poolToken._address, amount, this.account, deadline).call({from: this.account});
+        await this.router.methods.mint(poolToken._address, amount, this.account, deadline).send({from: this.account, value: 0});
       }
     } catch (e) {
       console.log(e);

@@ -4,10 +4,13 @@ import { useWallet } from 'use-wallet';
 import Button from 'react-bootstrap/Button';
 import './index.scss';
 import useImpermaxRouter, { useRouterAccount } from '../../hooks/useImpermaxRouter';
-import { AccountData } from '../../impermax-router/interfaces';
+import { AccountData, PoolTokenType } from '../../impermax-router/interfaces';
 import AccountLendingPoolDetails from './AccountLendingPoolDetails';
 import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
 import AccountLendingPoolRow from './AccountLendingPoolRow';
+import PairAddressContext from '../../contexts/PairAddress';
+import PoolTokenContext from '../../contexts/PoolToken';
+import usePairAddress from '../../hooks/usePairAddress';
 
 interface AccountLendingPoolContainerProps {
   children: any;
@@ -23,28 +26,15 @@ function AccountLendingPoolContainer({ children }: AccountLendingPoolContainerPr
   </div>);
 }
 
-interface AccountLendingPoolProps {
-  uniswapV2PairAddress: string;
-}
-
 /**
  * Generate the Account Lending Pool card, giving details about the particular user's equity in the pool.
  * @params AccountLendingPoolProps
  */
-export default function AccountLendingPool({ uniswapV2PairAddress }: AccountLendingPoolProps) {
+export default function AccountLendingPool() {
   const { connect, account } = useWallet();
-  const [accountData, setAccountData] = useState<AccountData>();
-  const impermaxRouter = useImpermaxRouter();
   const routerAccount = useRouterAccount();
-  
-  useEffect(() => {
-    if (!impermaxRouter || !routerAccount) return;
-    impermaxRouter.getAccountData(uniswapV2PairAddress).then((data) => {
-      setAccountData(data);
-    });
-  }, [impermaxRouter, routerAccount]);
 
-  if (!accountData) return (
+  if (!routerAccount) return (
     <AccountLendingPoolContainer>
       <div className="text-center py-5">
         <Button onClick={() => {connect('injected')}}>Connect to use the App</Button>
@@ -55,9 +45,15 @@ export default function AccountLendingPool({ uniswapV2PairAddress }: AccountLend
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolDetails />
-      <AccountLendingPoolLPRow accountCollateralData={accountData.accountCollateralData}/>
-      <AccountLendingPoolRow accountBorrowableData={accountData.accountBorrowableAData} />
-      <AccountLendingPoolRow accountBorrowableData={accountData.accountBorrowableBData} />
+      <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
+        <AccountLendingPoolLPRow />
+      </PoolTokenContext.Provider>
+      <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
+        <AccountLendingPoolRow />
+      </PoolTokenContext.Provider>
+      <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
+        <AccountLendingPoolRow />
+      </PoolTokenContext.Provider>
     </AccountLendingPoolContainer>
   );
 }
