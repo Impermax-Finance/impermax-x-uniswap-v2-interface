@@ -12,8 +12,6 @@ import { Container } from 'react-bootstrap';
 export default function LendingPool() {
   const { uniswapV2PairAddress } = useParams<{ uniswapV2PairAddress: string }>();
 
-  //TODO create context for address
-
   return (<View>
     <Container className="lending-pool">
       <BorrowablesDetails uniswapV2PairAddress={uniswapV2PairAddress} />

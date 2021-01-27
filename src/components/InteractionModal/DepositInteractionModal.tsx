@@ -1,4 +1,4 @@
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from "../InteractionModal";import React, { useCallback, useState } from "react";import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";import React, { useCallback, useState } from "react";import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { useWallet } from "use-wallet";
 import useImpermaxRouter from "../../hooks/useImpermaxRouter";
