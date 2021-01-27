@@ -8,93 +8,39 @@ import Router01JSON from '../abis/contracts/IRouter01.json';
 import BorrowableJSON from '../abis/contracts/IBorrowable.json';
 import CollateralSON from '../abis/contracts/ICollateral.json';
 import FactoryJSON from '../abis/contracts/IFactory.json';
-import { getPairConversionPrices } from "../utils/valueConversion";
+import { getPairConversionPrices, PairConversionPrices } from "../utils/valueConversion";
+import { 
+  Router, 
+  Address, 
+  LendingPool, 
+  PoolTokenType, 
+  BorrowableBaseInfo, 
+  PoolTokenBalance, 
+  ImpermaxRouterCfg, 
+  BorrowableData, 
+  AccountBorrowableData, 
+  AccountCollateralData, 
+  AccountData 
+} from "./interfaces";
 
-export type Address = string;
-export type Router = Contract;
-export type ERC20 = Contract;
-export type UniswapV2Pair = Contract;
-export type Borrowable = Contract;
-export type Collateral = Contract;
 
-export type LendingPool = {
-  uniswapV2Pair: UniswapV2Pair,
-  tokenA: ERC20,
-  tokenB: ERC20,
-  collateral: Collateral,
-  borrowableA: Borrowable,
-  borrowableB: Borrowable,
-}
-
-export enum PoolToken {
-  Collateral = 'collateral',
-  BorrowableA = 'borrowableA',
-  BorrowableB = 'borrowableB',
-}
-
-export interface BorrowableData {
-  tokenAddress: string;
-  symbol: string;
-  name: string;
-  supplyUSD: number;
-  borrowedUSD: number;
-  utilizationRate: number;
-  supplyAPY: number;
-  borrowAPY: number;
-  //farmingAPY: number;
-}
-
-export interface AccountBorrowableData {
-  tokenAddress: string;
-  borrowableAddress: string;
-  symbol: string;
-  decimals: number;
-  borrowed: number;
-  borrowedUSD: number;
-  deposited: number;
-  depositedUSD: number;
-}
-
-export interface AccountCollateralData {
-  tokenAAddress: string;
-  tokenBAddress: string;
-  collateralAddress: string;
-  symbolA: string;
-  symbolB: string;
-  decimals: number;
-  deposited: number;
-  depositedUSD: number;
-}
-
-export interface RiskMetrics {
-  //Todo
-}
-
-export interface AccountData {
-  equityUSD: number;
-  balanceUSD: number;
-  debtUSD: number;
-  riskMetrics: RiskMetrics;
-  accountBorrowableAData: AccountBorrowableData;
-  accountBorrowableBData: AccountBorrowableData;
-  accountCollateralData: AccountCollateralData;
-}
-
-export interface ImpermaxRouterCfg {
-  web3: any;
-  routerAddress: Address;
-  WETH: Address;
-  convertToMainnet: Function;
-}
- 
 export default class ImpermaxRouter {
   web3: any;
   router: Router;
   account: Address;
   WETH: Address;
   convertToMainnet: Function;
-  lendingPool: {
-    [key in Address]: Promise<LendingPool>
+  lendingPoolCache: {
+    [key in Address]?: {
+      lendingPool?: Promise<LendingPool>,
+      poolToken?: {
+        [key in PoolTokenType]?: {
+          borrowableBaseInfo?: Promise<BorrowableBaseInfo>,
+          poolTokenBalance?: Promise<PoolTokenBalance>,
+        }
+      },
+      pairConversionPrices?: Promise<PairConversionPrices>,
+    }
   };
 
   constructor(cfg: ImpermaxRouterCfg) {
@@ -102,7 +48,7 @@ export default class ImpermaxRouter {
     this.router = this.newRouter(cfg.routerAddress);
     this.WETH = cfg.WETH;
     this.convertToMainnet = cfg.convertToMainnet;
-    this.lendingPool = {};
+    this.lendingPoolCache = {};
   }
 
   newRouter(address: Address) { return new this.web3.eth.Contract(Router01JSON.abi, address) }
@@ -116,6 +62,15 @@ export default class ImpermaxRouter {
     this.web3 = web3;
     this.account = account;
     this.router = this.newRouter(this.router._address);
+  }
+
+  getDeadline() { //1 hour deadline
+    return BigNumber.from(Math.floor(Date.now() / 1000) + 3600);
+  }
+
+  toAPY(n: number) : number {
+    const SECONDS_IN_YEAR = 365 * 24 * 3600;
+    return n * SECONDS_IN_YEAR;
   }
 
   async initializeLendingPool(uniswapV2PairAddress: Address) : Promise<LendingPool> {
@@ -133,124 +88,165 @@ export default class ImpermaxRouter {
     };
   }
 
-  async getLendingPool(uniswapV2PairAddress: Address) : Promise<LendingPool> {
-    if (!(uniswapV2PairAddress in this.lendingPool))
-      this.lendingPool[uniswapV2PairAddress] = this.initializeLendingPool(uniswapV2PairAddress);
-    return this.lendingPool[uniswapV2PairAddress];
-  }
-
-  getDeadline() { //1 hour deadline
-    return BigNumber.from(Math.floor(Date.now() / 1000) + 3600);
-  }
-
-  toAPY(n: number) : number {
-    const SECONDS_IN_YEAR = 365 * 24 * 3600;
-    return n * SECONDS_IN_YEAR / 1e18;
-  }
-
-  async getBorrowableData(uniswapV2PairAddress: Address, poolToken: PoolToken) : Promise<BorrowableData> {
+  async getContracts(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType | PoolTokenType) : Promise<[Contract, Contract]> {
     const lendingPool = await this.getLendingPool(uniswapV2PairAddress);
-    const pairConversionPrices = await getPairConversionPrices(uniswapV2PairAddress, this.convertToMainnet);
-    let borrowable, token, tokenPrice;
-    if (poolToken === PoolToken.BorrowableA) {
-      borrowable = lendingPool.borrowableA;
-      token = lendingPool.tokenA;
-      tokenPrice = pairConversionPrices.tokenAPrice;
-    }
-    else if (poolToken === PoolToken.BorrowableB) {
-      borrowable = lendingPool.borrowableB;
-      token = lendingPool.tokenB;
-      tokenPrice = pairConversionPrices.tokenBPrice;
-    }
-    else return null;
-    const borrowRate = await borrowable.methods.borrowRate().call();
-    const totalBorrows = await borrowable.methods.totalBorrows().call();
-    const totalBalance = await borrowable.methods.totalBalance().call();
-    const supply = totalBalance + totalBorrows;
-    const utilizationRate = supply == 0 ? 0 : totalBalance / supply;
-    const supplyRate = borrowRate * utilizationRate;
+    if (poolTokenType === PoolTokenType.BorrowableA)
+      return [lendingPool.borrowableA, lendingPool.tokenA];
+    if (poolTokenType === PoolTokenType.BorrowableB) 
+      return [lendingPool.borrowableB, lendingPool.tokenB];
+    return [lendingPool.collateral, lendingPool.uniswapV2Pair];
+  }
+
+  async initalizeBorrowableBaseInfo(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<BorrowableBaseInfo> {
+    console.log("Called get borrowable base info for:", uniswapV2PairAddress, poolTokenType);
+    const [borrowable, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    const decimals = await token.methods.decimals().call() * 1;
+    const normalize = (n: number) => n / Math.pow(10, decimals);
     return {
       tokenAddress: token._address,
-      symbol: await token.methods.symbol().call(),
+      borrowableAddress: borrowable._address,
       name: await token.methods.name().call(),
-      supplyUSD: supply / 1e18 * tokenPrice,
-      borrowedUSD: totalBorrows / 1e18 * tokenPrice,
+      symbol: await token.methods.symbol().call(),
+      decimals: decimals,
+      totalBalance: normalize(await borrowable.methods.totalBalance().call()),
+      totalBorrows: normalize(await borrowable.methods.totalBorrows().call()),
+      borrowRate: await borrowable.methods.borrowRate().call() / 1e18,
+    };
+  }
+
+  async initializePoolTokenBalance(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<PoolTokenBalance> {
+    console.log("Called pool token balance for:", uniswapV2PairAddress, poolTokenType);
+    let decimals: number;
+    if (poolTokenType === PoolTokenType.Collateral) decimals = 18;
+    else {
+      const info = await this.getBorrowableBaseInfo(uniswapV2PairAddress, poolTokenType);
+      decimals = info.decimals;
+    }
+    const [poolToken,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    const normalize = (n: number) => n / Math.pow(10, decimals);
+    const exchangeRate = await poolToken.methods.exchangeRate().call() / 1e18;
+    const balance = normalize(await poolToken.methods.balanceOf(this.account).call());
+    const deposited = balance * exchangeRate;
+    return {
+      deposited: deposited,
+      borrowed: poolTokenType === PoolTokenType.Collateral ? null :
+        normalize(await poolToken.methods.borrowBalance(this.account).call()),
+    };
+  }
+
+  getLendingPoolCache(uniswapV2PairAddress: Address) {
+    if (!(uniswapV2PairAddress in this.lendingPoolCache))
+      this.lendingPoolCache[uniswapV2PairAddress] = {};
+    return this.lendingPoolCache[uniswapV2PairAddress];
+  }
+  getPoolTokenCache(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) {
+    const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+    if (!cache.poolToken) cache.poolToken = {};
+    if (!(poolTokenType in cache.poolToken)) cache.poolToken[poolTokenType] = {};
+    return cache.poolToken[poolTokenType];
+  }
+  async getLendingPool(uniswapV2PairAddress: Address) : Promise<LendingPool> {
+    const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+    if (!cache.lendingPool) cache.lendingPool = this.initializeLendingPool(uniswapV2PairAddress);
+    return cache.lendingPool;
+  }
+  async getBorrowableBaseInfo(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<BorrowableBaseInfo> {
+    const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
+    if (!cache.borrowableBaseInfo) cache.borrowableBaseInfo = this.initalizeBorrowableBaseInfo(uniswapV2PairAddress, poolTokenType);
+    return cache.borrowableBaseInfo;
+  }
+  async getPoolTokenBalance(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<PoolTokenBalance> {
+    const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
+    if (!cache.poolTokenBalance) cache.poolTokenBalance = this.initializePoolTokenBalance(uniswapV2PairAddress, poolTokenType);
+    return cache.poolTokenBalance;
+  }
+  async getPairConversionPrices(uniswapV2PairAddress: Address) : Promise<PairConversionPrices> {
+    const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+    if (!cache.pairConversionPrices) cache.pairConversionPrices = getPairConversionPrices(uniswapV2PairAddress, this.convertToMainnet);
+    return cache.pairConversionPrices;
+  }
+  async getTokenPrice(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+    const pairConversionPrices = await this.getPairConversionPrices(uniswapV2PairAddress);
+    if (poolTokenType == PoolTokenType.BorrowableA) return pairConversionPrices.tokenAPrice;
+    if (poolTokenType == PoolTokenType.BorrowableB) return pairConversionPrices.tokenAPrice;
+    return pairConversionPrices.LPPrice;
+  }
+
+  async getBorrowableData(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<BorrowableData> {
+    const info = await this.getBorrowableBaseInfo(uniswapV2PairAddress, poolTokenType);
+    const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
+    const supply = info.totalBalance + info.totalBorrows;
+    const utilizationRate = supply == 0 ? 0 : info.totalBalance / supply;
+    const supplyRate = info.borrowRate * utilizationRate;
+    return {
+      tokenAddress: info.tokenAddress,
+      symbol: info.symbol,
+      name: info.name,
+      supplyUSD: supply * tokenPrice,
+      borrowedUSD: info.totalBorrows * tokenPrice,
       utilizationRate: utilizationRate,
       supplyAPY: this.toAPY(supplyRate),
-      borrowAPY: this.toAPY(borrowRate)
+      borrowAPY: this.toAPY(info.borrowRate)
+    };
+  }
+
+  async getAccountBorrowableData(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<AccountBorrowableData> {
+    if (!this.account) return null;
+    const info = await this.getBorrowableBaseInfo(uniswapV2PairAddress, poolTokenType);
+    const balance = await this.getPoolTokenBalance(uniswapV2PairAddress, poolTokenType);
+    const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
+    return {
+      tokenAddress: info.tokenAddress,
+      borrowableAddress: info.borrowableAddress,
+      symbol: info.symbol,
+      decimals: info.decimals,
+      borrowed: balance.borrowed,
+      borrowedUSD: balance.borrowed * tokenPrice,
+      deposited: balance.deposited,
+      depositedUSD: balance.deposited * tokenPrice,
+    };
+  }
+
+  async getAccountCollateralData(uniswapV2PairAddress: Address) : Promise<AccountCollateralData> {
+    if (!this.account) return null;
+    const [contract,] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+    const dataA = await this.getBorrowableBaseInfo(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+    const dataB = await this.getBorrowableBaseInfo(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+    const balance = await this.getPoolTokenBalance(uniswapV2PairAddress, PoolTokenType.Collateral);
+    const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, PoolTokenType.Collateral);
+    return {
+      tokenAAddress: dataA.tokenAddress,
+      tokenBAddress: dataB.tokenAddress,
+      collateralAddress: contract._address,
+      symbolA: dataA.symbol,
+      symbolB: dataB.symbol,
+      decimals: 18,
+      deposited: balance.deposited,
+      depositedUSD: balance.deposited * tokenPrice
     };
   }
 
   async getAccountData(uniswapV2PairAddress: Address) : Promise<AccountData> {
     if (!this.account) return null;
-    const lendingPool = await this.getLendingPool(uniswapV2PairAddress);
-    const pairConversionPrices = await getPairConversionPrices(uniswapV2PairAddress, this.convertToMainnet);
-    const symbolA = await lendingPool.tokenA.methods.symbol().call();
-    const symbolB = await lendingPool.tokenB.methods.symbol().call();
-    const borrowedA = await lendingPool.borrowableA.methods.borrowBalance(this.account).call() / 1e18;
-    const borrowedB = await lendingPool.borrowableB.methods.borrowBalance(this.account).call() / 1e18;
-    const borrowedAUSD = borrowedA * pairConversionPrices.tokenAPrice;
-    const borrowedBUSD = borrowedB * pairConversionPrices.tokenBPrice;
-    const exchangeRateA = await lendingPool.borrowableA.methods.exchangeRate().call() / 1e18;
-    const exchangeRateB = await lendingPool.borrowableB.methods.exchangeRate().call() / 1e18;
-    const exchangeRateCollateral = await lendingPool.collateral.methods.exchangeRate().call() / 1e18;
-    const balanceA = await lendingPool.borrowableA.methods.balanceOf(this.account).call();
-    const balanceB = await lendingPool.borrowableB.methods.balanceOf(this.account).call();
-    const balanceCollateral = await lendingPool.collateral.methods.balanceOf(this.account).call();
-    const decimalsA = await lendingPool.tokenA.methods.decimals().call();
-    const decimalsB = await lendingPool.tokenB.methods.decimals().call();
-    const depositedA = balanceA * exchangeRateA / Math.pow(10, decimalsA);
-    const depositedB = balanceB * exchangeRateB / Math.pow(10, decimalsB);
-    const depositedCollateral = balanceCollateral * exchangeRateCollateral / 1e18;
-    const depositedAUSD = depositedA * pairConversionPrices.tokenAPrice;
-    const depositedBUSD = depositedB * pairConversionPrices.tokenBPrice;
-    const depositedCollateralUSD = depositedCollateral * pairConversionPrices.LPPrice;
-    const balanceUSD = depositedAUSD + depositedBUSD + depositedCollateralUSD;
-    const debtUSD = borrowedAUSD + borrowedBUSD;
+    const dataA = await this.getAccountBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+    const dataB = await this.getAccountBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+    const dataCollateral = await this.getAccountCollateralData(uniswapV2PairAddress);
+    const balanceUSD = dataA.depositedUSD + dataB.depositedUSD + dataCollateral.depositedUSD;
+    const debtUSD = dataA.borrowedUSD + dataB.borrowedUSD;
     const equityUSD = balanceUSD - debtUSD;
-
-    const accountBorrowableAData = {
-      tokenAddress: lendingPool.tokenA._address,
-      borrowableAddress: lendingPool.borrowableA._address,
-      symbol: symbolA,
-      decimals: decimalsA,
-      borrowed: borrowedA,
-      borrowedUSD: borrowedAUSD,
-      deposited: depositedA,
-      depositedUSD: depositedAUSD
-    };
-    const accountBorrowableBData = {
-      tokenAddress: lendingPool.tokenB._address,
-      borrowableAddress: lendingPool.borrowableB._address,
-      symbol: symbolB,
-      decimals: decimalsB,
-      borrowed: borrowedB,
-      borrowedUSD: borrowedBUSD,
-      deposited: depositedB,
-      depositedUSD: depositedBUSD
-    };
-    const accountCollateralData = {
-      tokenAAddress: lendingPool.tokenA._address,
-      tokenBAddress: lendingPool.tokenB._address,
-      collateralAddress: lendingPool.collateral._address,
-      symbolA: symbolA,
-      symbolB: symbolB,
-      decimals: 18,
-      deposited: symbolB,
-      depositedUSD: depositedAUSD
-    };
     return {
       equityUSD: equityUSD,
       balanceUSD: balanceUSD,
       debtUSD: debtUSD,
       riskMetrics: {},
-      accountBorrowableAData: accountBorrowableAData,
-      accountBorrowableBData: accountBorrowableBData,
-      accountCollateralData: accountCollateralData,
+      accountBorrowableAData: dataA,
+      accountBorrowableBData: dataB,
+      accountCollateralData: dataCollateral,
     }
   }
 
   async deposit(tokenAddress: Address, borrowableAddress: Address, val: string|number, decimals: number) {
+    //E ora la cosa figa: qua non mi servono i dati importati perchè ce li ho in cache!
     const amount = decimalToBalance(val, decimals);
     const deadline = this.getDeadline();
     try {

@@ -2,7 +2,7 @@ import React from 'react';
 import './index.scss';
 import { Row, Col, Card } from 'react-bootstrap';
 import BorrowableDetails from './BorrowableDetails';
-import { PoolToken } from '../../impermax-router';
+import { PoolTokenType } from '../../impermax-router/interfaces';
 
 
 interface BorrowablesDetailsProps {
@@ -18,14 +18,14 @@ export default function BorrowablesDetails(props: BorrowablesDetailsProps) {
         <Col sm={6}>
           <Card>
             <Card.Body>
-              <BorrowableDetails uniswapV2PairAddress={uniswapV2PairAddress} poolToken={PoolToken.BorrowableA} />
+              <BorrowableDetails uniswapV2PairAddress={uniswapV2PairAddress} poolTokenType={PoolTokenType.BorrowableA} />
             </Card.Body>
           </Card>
         </Col>
         <Col sm={6}>
           <Card>
             <Card.Body>
-              <BorrowableDetails uniswapV2PairAddress={uniswapV2PairAddress} poolToken={PoolToken.BorrowableB} />
+              <BorrowableDetails uniswapV2PairAddress={uniswapV2PairAddress} poolTokenType={PoolTokenType.BorrowableB} />
             </Card.Body>
           </Card>
         </Col>

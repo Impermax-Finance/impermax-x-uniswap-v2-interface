@@ -3,7 +3,7 @@ import useUrlGenerator from "../../hooks/useUrlGenerator";
 import { LanguageContext } from "../../contexts/Language";
 import phrases from './translations';
 import { Row, Col, Button, Card } from "react-bootstrap";
-import { AccountBorrowableData } from "../../impermax-router";
+import { AccountBorrowableData } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
 import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
 

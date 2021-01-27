@@ -5,12 +5,12 @@ import useUrlGenerator from "../../hooks/useUrlGenerator";
 import useImpermaxRouter from "../../hooks/useImpermaxRouter";
 import { Table } from "react-bootstrap";
 import { formatUSD, formatPercentage } from "../../utils/format";
-import { PoolToken, BorrowableData } from "../../impermax-router";
+import { PoolTokenType, BorrowableData } from "../../impermax-router/interfaces";
 import BorrowableDetailsRow from "./BorrowableDetailsRow";
 
 interface BorrowableDetailsProps {
   uniswapV2PairAddress: string;
-  poolToken: PoolToken;
+  poolTokenType: PoolTokenType;
 }
 
 /**
@@ -18,7 +18,7 @@ interface BorrowableDetailsProps {
  * the system.
  */
 export default function BorrowableDetails(props: BorrowableDetailsProps) {
-  const { uniswapV2PairAddress, poolToken } = props;
+  const { uniswapV2PairAddress, poolTokenType } = props;
 
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
@@ -29,7 +29,7 @@ export default function BorrowableDetails(props: BorrowableDetailsProps) {
 
   useEffect(() => {
     if (!impermaxRouter) return;
-    impermaxRouter.getBorrowableData(uniswapV2PairAddress, poolToken).then((data) => {
+    impermaxRouter.getBorrowableData(uniswapV2PairAddress, poolTokenType).then((data) => {
       setBorrowableData(data);
     });
   }, [impermaxRouter]);

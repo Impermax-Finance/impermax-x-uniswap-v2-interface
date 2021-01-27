@@ -4,7 +4,7 @@ import { useWallet } from 'use-wallet';
 import Button from 'react-bootstrap/Button';
 import './index.scss';
 import useImpermaxRouter, { useRouterAccount } from '../../hooks/useImpermaxRouter';
-import { AccountData } from '../../impermax-router';
+import { AccountData } from '../../impermax-router/interfaces';
 import AccountLendingPoolDetails from './AccountLendingPoolDetails';
 import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
 import AccountLendingPoolRow from './AccountLendingPoolRow';
