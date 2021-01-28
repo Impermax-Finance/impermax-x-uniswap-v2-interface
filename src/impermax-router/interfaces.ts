@@ -1,6 +1,10 @@
+import { Networks } from "../utils/connections";
+
 export type Address = string;
 export type Contract = any;
 export type Router = Contract;
+export type Factory = Contract;
+export type SimpleUniswapOracle = Contract;
 export type ERC20 = Contract;
 export type UniswapV2Pair = Contract;
 export type Borrowable = Contract;
@@ -26,7 +30,7 @@ export interface BorrowableData {
   symbol: string;
   name: string;
   supplyUSD: number;
-  borrowedUSD: number;
+  totalBorrowsUSD: number;
   utilizationRate: number;
   supplyAPY: number;
   borrowAPY: number;
@@ -56,10 +60,15 @@ export interface AccountCollateralData {
 }
 
 export interface RiskMetrics {
-  //Todo
+  leverage: number;
+  liquidationPrices: [number, number];
+  marketPrice: number;
+  TWAPPrice: number;
 }
 
 export interface AccountData {
+  symbolA: string;
+  symbolB: string;
   equityUSD: number;
   balanceUSD: number;
   debtUSD: number;
@@ -68,7 +77,10 @@ export interface AccountData {
 
 export interface ImpermaxRouterCfg {
   web3: any;
+  chainId: number;
   routerAddress: Address;
+  factoryAddress: Address;
+  simpleUniswapOracleAddress: Address;
   WETH: Address;
   convertToMainnet: Function;
 }

@@ -24,7 +24,7 @@ export default function AccountLendingPoolLPRow() {
   const routerAccount = useRouterAccount();
   const [data, setData] = useState<AccountCollateralData>();
   useEffect(() => {
-    if (!impermaxRouter || !routerAccount) return;
+    if (!impermaxRouter || !routerAccount) return setData(null);
     impermaxRouter.getAccountCollateralData(uniswapV2PairAddress).then((data) => {
       setData(data);
     });

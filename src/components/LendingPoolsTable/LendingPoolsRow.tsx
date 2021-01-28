@@ -52,7 +52,7 @@ export default function LendingPoolsRow() {
         </div>
       </div>
       <LendingPoolsCol valueA={formatUSD(borrowableAData.supplyUSD)} valueB={formatUSD(borrowableBData.supplyUSD)} />
-      <LendingPoolsCol valueA={formatUSD(borrowableAData.borrowedUSD)} valueB={formatUSD(borrowableBData.borrowedUSD)} />
+      <LendingPoolsCol valueA={formatUSD(borrowableAData.totalBorrowsUSD)} valueB={formatUSD(borrowableBData.totalBorrowsUSD)} />
       <LendingPoolsCol valueA={formatPercentage(borrowableAData.supplyAPY)} valueB={formatPercentage(borrowableBData.supplyAPY)} />
       <LendingPoolsCol valueA={formatPercentage(borrowableAData.borrowAPY)} valueB={formatPercentage(borrowableBData.borrowAPY)} />
       {/*<LendingPoolsCol valueA={formatPercentage(borrowableAData.farmingAPY)} valueB={formatPercentage(borrowableBData.farmingAPY)} />*/}

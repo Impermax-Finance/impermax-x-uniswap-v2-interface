@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import ImpermaxRouter from '../impermax-router';
 import useWeb3 from '../hooks/useWeb3';
-import { useRouterAddress, useWETH, useConvertToMainnet } from '../hooks/useNetwork';
+import { useRouterAddress, useWETH, useConvertToMainnet, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId } from '../hooks/useNetwork';
 
 export interface ImpermaxRouterContextI {
   impermaxRouter?: ImpermaxRouter;
@@ -14,7 +14,10 @@ export const ImpermaxRouterContext = createContext<ImpermaxRouterContextI>({});
 export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const { account } = useWallet();
   const web3 = useWeb3();
+  const chainId = useChainId();
   const routerAddress = useRouterAddress();
+  const factoryAddress = useFactoryAddress();
+  const simpleUniswapOracleAddress = useSimpleUniswapOracleAddress();
   const WETH = useWETH();
   const convertToMainnet = useConvertToMainnet();
   const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
@@ -23,7 +26,15 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if(!web3) return;
     if (!impermaxRouter) {
-      const impermaxRouter = new ImpermaxRouter({web3, routerAddress, WETH, convertToMainnet});
+      const impermaxRouter = new ImpermaxRouter({
+        web3, 
+        chainId,
+        routerAddress, 
+        factoryAddress, 
+        simpleUniswapOracleAddress, 
+        WETH, 
+        convertToMainnet
+      });
       if (account) {
         impermaxRouter.unlockWallet(web3, account);
         setRouterAccount(account);

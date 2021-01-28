@@ -21,6 +21,16 @@ export function useRouterAddress() {
   return routerAddress;
 }
 
+export function useFactoryAddress() {
+  const { factoryAddress } = useContext(NetworkContext);
+  return factoryAddress;
+}
+
+export function useSimpleUniswapOracleAddress() {
+  const { simpleUniswapOracleAddress } = useContext(NetworkContext);
+  return simpleUniswapOracleAddress;
+}
+
 export function useListedPairs() {
   const { listedPairs } = useContext(NetworkContext);
   return listedPairs;

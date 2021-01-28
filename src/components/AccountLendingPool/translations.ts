@@ -14,10 +14,10 @@ const translations = {
     'ENG': "Current Leverage"
   },
   "Liquidation Prices": {
-    'ENG': "Liquidation Prices"
+    'ENG': "Liquidation Prices (TWAP)"
   },
-  "Current Price": {
-    'ENG': "Current Price"
+  "TWAP Price": {
+    'ENG': "TWAP Price"
   },
   "Deposit": {
     'ENG': "Deposit"

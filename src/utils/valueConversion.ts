@@ -12,10 +12,10 @@ export interface PairConversionPrices {
   tokenBPrice: number;
 }
 
-export async function getPairConversionPrices(uniswapV2PairAddress: string, convertToMainnet: Function) : Promise<PairConversionPrices> {
-  const actualAddress = convertToMainnet(uniswapV2PairAddress);
+export async function getPairConversionPrices(uniswapV2PairAddress: string) : Promise<PairConversionPrices> {
+  //const actualAddress = convertToMainnet(uniswapV2PairAddress);
   const query = gql`{
-    pair (id: "${actualAddress}") {
+    pair (id: "${uniswapV2PairAddress}") {
       reserveUSD
       reserve0
       reserve1

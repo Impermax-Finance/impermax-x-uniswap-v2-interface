@@ -27,7 +27,7 @@ export default function AccountLendingPoolRow() {
   const routerAccount = useRouterAccount();
   const [data, setData] = useState<AccountBorrowableData>();
   useEffect(() => {
-    if (!impermaxRouter || !routerAccount) return;
+    if (!impermaxRouter || !routerAccount) return setData(null);
     impermaxRouter.getAccountBorrowableData(uniswapV2PairAddress, poolTokenType).then((data) => {
       setData(data);
     });

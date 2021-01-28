@@ -80,20 +80,61 @@ export async function getTotalBalanceUSD(this: ImpermaxRouter, uniswapV2PairAddr
   return totalBalance * tokenPrice;
 }
 
-// Deposited
-export async function initializeDeposited(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const [poolToken,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  const exchangeRate = await this.getExchangeRate(uniswapV2PairAddress, poolTokenType);
-  const balance = await poolToken.methods.balanceOf(this.account).call();
-  return (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) * exchangeRate;
+// Safety Margin
+export async function initializeSafetyMargin(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const [collateral,] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+  const safetyMarginSqrt = await collateral.methods.safetyMarginSqrt().call();
+  return (safetyMarginSqrt / 1e18) ** 2;
 }
-export async function getDeposited(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
-  if (!cache.deposited) cache.deposited = this.initializeDeposited(uniswapV2PairAddress, poolTokenType);
-  return cache.deposited;
+export async function getSafetyMargin(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+  if (!cache.safetyMargin) cache.safetyMargin = this.initializeSafetyMargin(uniswapV2PairAddress);
+  return cache.safetyMargin;
 }
-export async function getDepositedUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const deposited = await this.getDeposited(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return deposited * tokenPrice;
+
+// Liquidation Incentive
+export async function initializeLiquidationIncentive(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const [collateral,] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+  const liquidationIncentive = await collateral.methods.liquidationIncentive().call();
+  return liquidationIncentive / 1e18;
+}
+export async function getLiquidationIncentive(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+  if (!cache.liquidationIncentive) cache.liquidationIncentive = this.initializeLiquidationIncentive(uniswapV2PairAddress);
+  return cache.liquidationIncentive;
+}
+
+// Price Denom LP
+export async function initializePriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
+  const [collateral,] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+  const { price0, price1 } = await collateral.methods.getPrices().call();
+  return [price0 / 1e18, price1 / 1e18];
+}
+export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
+  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+  if (!cache.priceDenomLP) cache.priceDenomLP = this.initializePriceDenomLP(uniswapV2PairAddress);
+  return cache.priceDenomLP;
+}
+
+// Market Price
+export async function initializeMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const [,uniswapV2Pair] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+  const { reserve0, reserve1 } = await uniswapV2Pair.methods.getReserves().call();
+  return 1 * reserve1 / reserve0;
+}
+export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+  if (!cache.marketPrice) cache.marketPrice = this.initializeMarketPrice(uniswapV2PairAddress);
+  return cache.marketPrice;
+}
+
+// TWAP Price
+export async function initializeTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const { price } = await this.simpleUniswapOracle.methods.getResult(uniswapV2PairAddress).call();
+  return price / 2**112;
+}
+export async function getTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+  if (!cache.TWAPPrice) cache.TWAPPrice = this.initializeTWAPPrice(uniswapV2PairAddress);
+  return cache.TWAPPrice;
 }

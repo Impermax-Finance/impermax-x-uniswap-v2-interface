@@ -8,34 +8,48 @@ import Router01JSON from '../abis/contracts/IRouter01.json';
 import BorrowableJSON from '../abis/contracts/IBorrowable.json';
 import CollateralSON from '../abis/contracts/ICollateral.json';
 import FactoryJSON from '../abis/contracts/IFactory.json';
+import SimpleUniswapOracleJSON from '../abis/contracts/ISimpleUniswapOracle.json';
 import { getPairConversionPrices, PairConversionPrices } from "../utils/valueConversion";
 import { 
-  Router, 
-  Address, 
-  LendingPool, 
+  Router,
+  Address,
+  LendingPool,
   PoolTokenType,
-  ImpermaxRouterCfg, 
+  ImpermaxRouterCfg,
   BorrowableData, 
   AccountBorrowableData, 
   AccountCollateralData, 
-  AccountData 
+  AccountData, 
+  Factory,
+  SimpleUniswapOracle
 } from "./interfaces";
 import * as contracts from "./contracts";
 import * as fetchers from "./fetchers";
 import * as borrowableFetchers from "./borrowableFetchers";
 import * as utils from "./utils";
 import * as interactions from "./interactions"
+import * as account from "./account"
+import { Networks } from "../utils/connections";
 
 export default class ImpermaxRouter {
   [x: string]: any;
   web3: any;
+  chainId: number;
   router: Router;
+  factory: Factory;
+  simpleUniswapOracle: SimpleUniswapOracle;
   account: Address;
   WETH: Address;
   convertToMainnet: Function;
   lendingPoolCache: {
     [key in Address]?: {
       lendingPool?: Promise<LendingPool>,
+      safetyMargin?: Promise<number>,
+      liquidationIncentive?: Promise<number>,
+      priceDenomLP?: Promise<[number, number]>,
+      marketPrice?: Promise<number>,
+      TWAPPrice?: Promise<number>,
+      pairConversionPrices?: Promise<PairConversionPrices>,
       poolToken?: {
         [key in PoolTokenType]?: {
           name?: Promise<string>,
@@ -49,13 +63,15 @@ export default class ImpermaxRouter {
           borrowed?: Promise<number>,
         }
       },
-      pairConversionPrices?: Promise<PairConversionPrices>,
     }
   };
 
   constructor(cfg: ImpermaxRouterCfg) {
     this.web3 = cfg.web3;
+    this.chainId = cfg.chainId;
     this.router = this.newRouter(cfg.routerAddress);
+    this.factory = this.newFactory(cfg.factoryAddress);
+    this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
     this.WETH = cfg.WETH;
     this.convertToMainnet = cfg.convertToMainnet;
     this.lendingPoolCache = {};
@@ -63,15 +79,19 @@ export default class ImpermaxRouter {
 
   newRouter(address: Address) { return new this.web3.eth.Contract(Router01JSON.abi, address) }
   newFactory(address: Address) { return new this.web3.eth.Contract(FactoryJSON.abi, address) }
+  newSimpleUniswapOracle(address: Address) { return new this.web3.eth.Contract(SimpleUniswapOracleJSON.abi, address) }
   newUniswapV2Pair(address: Address) { return new this.web3.eth.Contract(UniswapV2PairJSON.abi, address) }
   newERC20(address: Address) { return new this.web3.eth.Contract(ERC20JSON.abi, address) }
   newCollateral(address: Address) { return new this.web3.eth.Contract(CollateralSON.abi, address) }
   newBorrowable(address: Address) { return new this.web3.eth.Contract(BorrowableJSON.abi, address) }
 
-  unlockWallet(web3: any, account: Address) {
+  async unlockWallet(web3: any, account: Address) {
     this.web3 = web3;
     this.account = account;
     this.router = this.newRouter(this.router._address);
+    this.factory = this.newFactory(this.factory._address);
+    this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle._address);
+    this.lendingPoolCache = {};
   }
 
   // Contracts
@@ -89,40 +109,55 @@ export default class ImpermaxRouter {
   public initializeDecimals = fetchers.initializeDecimals;
   public initializeExchangeRate = fetchers.initializeExchangeRate;
   public initializeTotalBalance = fetchers.initializeTotalBalance;
-  public initializeDeposited = fetchers.initializeDeposited;
+  public initializeSafetyMargin = fetchers.initializeSafetyMargin;
+  public initializeLiquidationIncentive = fetchers.initializeLiquidationIncentive;
+  public initializePriceDenomLP = fetchers.initializePriceDenomLP;
+  public initializeMarketPrice = fetchers.initializeMarketPrice;
+  public initializeTWAPPrice = fetchers.initializeTWAPPrice;
   public getName = fetchers.getName;
   public getSymbol = fetchers.getSymbol;
   public getDecimals = fetchers.getDecimals;
   public getExchangeRate = fetchers.getExchangeRate;
   public getTotalBalance = fetchers.getTotalBalance;
   public getTotalBalanceUSD = fetchers.getTotalBalanceUSD;
-  public getDeposited = fetchers.getDeposited;
-  public getDepositedUSD = fetchers.getDepositedUSD;
+  public getSafetyMargin = fetchers.getSafetyMargin;
+  public getLiquidationIncentive = fetchers.getLiquidationIncentive;
+  public getPriceDenomLP = fetchers.getPriceDenomLP;
+  public getMarketPrice = fetchers.getMarketPrice;
+  public getTWAPPrice = fetchers.getTWAPPrice;
 
   // Borrowable Fetchers
   public initializeBorrowRate = borrowableFetchers.initializeBorrowRate;
   public initializeTotalBorrows = borrowableFetchers.initializeTotalBorrows;
-  public initializeBorrowed = borrowableFetchers.initializeBorrowed;
   public getTotalBorrows = borrowableFetchers.getTotalBorrows;
   public getTotalBorrowsUSD = borrowableFetchers.getTotalBorrowsUSD;
   public getBorrowRate = borrowableFetchers.getBorrowRate;
   public getBorrowAPY = borrowableFetchers.getBorrowAPY;
-  public getBorrowed = borrowableFetchers.getBorrowed;
-  public getBorrowedUSD = borrowableFetchers.getBorrowedUSD;
   public getSupply = borrowableFetchers.getSupply;
   public getSupplyUSD = borrowableFetchers.getSupplyUSD;
   public getUtilizationRate = borrowableFetchers.getUtilizationRate;
   public getSupplyRate = borrowableFetchers.getSupplyRate;
   public getSupplyAPY = borrowableFetchers.getSupplyAPY;
 
-  public getBalanceUSD = borrowableFetchers.getBalanceUSD;
-  public getDebtUSD = borrowableFetchers.getDebtUSD;
-  public getEquityUSD = borrowableFetchers.getEquityUSD;
+  // Account
+  public initializeBorrowed = account.initializeBorrowed;
+  public initializeDeposited = account.initializeDeposited;
+  public getBorrowed = account.getBorrowed;
+  public getBorrowedUSD = account.getBorrowedUSD;
+  public getDeposited = account.getDeposited;
+  public getDepositedUSD = account.getDepositedUSD;
+  public getBalanceUSD = account.getBalanceUSD;
+  public getDebtUSD = account.getDebtUSD;
+  public getEquityUSD = account.getEquityUSD;
+  public getLeverage = account.getLeverage;
+  public getLiquidationPriceSwings = account.getLiquidationPriceSwings;
+  public getLiquidationPrices = account.getLiquidationPrices;
 
   // Utils
   public normalize = utils.normalize;
   public getDeadline = utils.getDeadline;
   public toAPY = utils.toAPY;
+  public initializePairConversionPricesRopsten = utils.initializePairConversionPricesRopsten;
   public getPairConversionPricesInternal = utils.getPairConversionPricesInternal;
   public getTokenPrice = utils.getTokenPrice;
 
@@ -137,7 +172,7 @@ export default class ImpermaxRouter {
       symbol: await this.getSymbol(uniswapV2PairAddress, poolTokenType),
       name: await this.getName(uniswapV2PairAddress, poolTokenType),
       supplyUSD: await this.getSupplyUSD(uniswapV2PairAddress, poolTokenType),
-      borrowedUSD: await this.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType),
+      totalBorrowsUSD: await this.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType),
       utilizationRate: await this.getUtilizationRate(uniswapV2PairAddress, poolTokenType),
       supplyAPY: await this.getSupplyAPY(uniswapV2PairAddress, poolTokenType),
       borrowAPY: await this.getBorrowAPY(uniswapV2PairAddress, poolTokenType),
@@ -175,10 +210,17 @@ export default class ImpermaxRouter {
   async getAccountData(uniswapV2PairAddress: Address) : Promise<AccountData> {
     if (!this.account) return null;
     return {
+      symbolA: await this.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableA),
+      symbolB: await this.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableB),
       equityUSD: await this.getEquityUSD(uniswapV2PairAddress),
       balanceUSD: await this.getBalanceUSD(uniswapV2PairAddress),
       debtUSD: await this.getDebtUSD(uniswapV2PairAddress),
-      riskMetrics: {},
+      riskMetrics: {
+        leverage: await this.getLeverage(uniswapV2PairAddress),
+        liquidationPrices: await this.getLiquidationPrices(uniswapV2PairAddress),
+        marketPrice: await this.getMarketPrice(uniswapV2PairAddress),
+        TWAPPrice: await this.getTWAPPrice(uniswapV2PairAddress),
+      },
     }
   }
 }

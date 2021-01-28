@@ -42,7 +42,7 @@ export default function BorrowableDetails() {
     <Table>
       <tbody>
         <BorrowableDetailsRow name={t("Total Supply")} value={formatUSD(borrowableData.supplyUSD)} />
-        <BorrowableDetailsRow name={t("Total Borrow")} value={formatUSD(borrowableData.borrowedUSD)} />
+        <BorrowableDetailsRow name={t("Total Borrow")} value={formatUSD(borrowableData.totalBorrowsUSD)} />
         <BorrowableDetailsRow name={t("Utilization Rate")} value={formatPercentage(borrowableData.utilizationRate)} />
         <BorrowableDetailsRow name={t("Supply APY")} value={formatPercentage(borrowableData.supplyAPY)} />
         <BorrowableDetailsRow name={t("Borrow APY")} value={formatPercentage(borrowableData.borrowAPY)} />

@@ -4,8 +4,8 @@ import phrases from './translations';
 import { Row, Col } from "react-bootstrap";
 import { AccountData } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
-import useImpermaxRouter from "../../hooks/useImpermaxRouter";
-import { formatUSD } from "../../utils/format";
+import useImpermaxRouter, { useRouterAccount } from "../../hooks/useImpermaxRouter";
+import { formatUSD, formatFloat, formatLeverage, formatLiquidationPrices } from "../../utils/format";
 
 
 interface AccountLendingPoolDetailsRowProps {
@@ -37,10 +37,11 @@ export default function AccountLendingPoolDetails() {
   const uniswapV2PairAddress = usePairAddress();
   const [accountData, setAccountData] = useState<AccountData>();
   const impermaxRouter = useImpermaxRouter();
+  const routerAccount = useRouterAccount();
   useEffect(() => {
-    if (!impermaxRouter) return;
+    if (!impermaxRouter || !routerAccount) return setAccountData(null);
     impermaxRouter.getAccountData(uniswapV2PairAddress).then((data) => setAccountData(data));
-  }, [impermaxRouter]);
+  }, [impermaxRouter, routerAccount]);
 
   if (!accountData) return (<div>
     Loading
@@ -54,9 +55,12 @@ export default function AccountLendingPoolDetails() {
         <AccountLendingPoolDetailsRow name={t("Total Debt")} value={formatUSD(accountData.debtUSD)} />
       </Col>
       <Col sm={12} md={6}>
-        <AccountLendingPoolDetailsRow name={t("Current Leverage")} value={"3.33x"} />
-        <AccountLendingPoolDetailsRow name={t("Liquidation Prices")} value={"0.4785 - 0.9844"} />
-        <AccountLendingPoolDetailsRow name={t("Current Price")} value={"0.6724"} />
+        <AccountLendingPoolDetailsRow name={t("Current Leverage")} value={formatLeverage(accountData.riskMetrics.leverage)} />
+        <AccountLendingPoolDetailsRow name={t("Liquidation Prices")} value={formatLiquidationPrices(accountData.riskMetrics.liquidationPrices)} />
+        <AccountLendingPoolDetailsRow 
+          name={t("TWAP Price") + ' (' + accountData.symbolA + '/' + accountData.symbolB + ')'} 
+          value={formatFloat(accountData.riskMetrics.TWAPPrice, 4)+' (current: '+formatFloat(accountData.riskMetrics.marketPrice, 4)+')'} 
+        />
       </Col>
     </Row>
   </>);
