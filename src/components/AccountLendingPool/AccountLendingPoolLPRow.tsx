@@ -6,8 +6,9 @@ import { Row, Col, Button, Card } from "react-bootstrap";
 import { AccountCollateralData } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
 import usePairAddress from "../../hooks/usePairAddress";
-import useImpermaxRouter, { useRouterAccount } from "../../hooks/useImpermaxRouter";
+import useImpermaxRouter, { useRouterAccount, useRouterUpdate } from "../../hooks/useImpermaxRouter";
 import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
+import LeverageInteractionModal from "../InteractionModal/LeverageInteractionModal";
 
 /**
  * Build account lending pool detail rows for LP token currencies.
@@ -22,15 +23,17 @@ export default function AccountLendingPoolLPRow() {
 
   const impermaxRouter = useImpermaxRouter();
   const routerAccount = useRouterAccount();
+  const routerUpdate = useRouterUpdate();
   const [data, setData] = useState<AccountCollateralData>();
   useEffect(() => {
     if (!impermaxRouter || !routerAccount) return setData(null);
     impermaxRouter.getAccountCollateralData(uniswapV2PairAddress).then((data) => {
       setData(data);
     });
-  }, [impermaxRouter, routerAccount]);
+  }, [impermaxRouter, routerAccount, routerUpdate]);
 
   const [showDepositModal, toggleDepositModal] = useState(false);
+  const [showLeverageModal, toggleLeverageModal] = useState(false);
 
   if (!data) return (<>Loading</>);
 
@@ -66,7 +69,7 @@ export default function AccountLendingPoolLPRow() {
         </Row>
         <Row>
           <Col>
-            <Button className="leverage" variant="primary">{t("Leverage")}</Button>
+            <Button className="leverage" variant="primary" onClick={() => toggleLeverageModal(true)}>{t("Leverage")}</Button>
           </Col>
           <Col>
             <a 
@@ -81,6 +84,10 @@ export default function AccountLendingPoolLPRow() {
     <DepositInteractionModal 
       show={showDepositModal} 
       toggleShow={toggleDepositModal}
+    />
+    <LeverageInteractionModal 
+      show={showLeverageModal} 
+      toggleShow={toggleLeverageModal}
     />
   </>);
 }

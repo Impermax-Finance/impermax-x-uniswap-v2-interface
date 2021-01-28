@@ -1,5 +1,6 @@
 import ImpermaxRouter from "."
 import { Address, LendingPool, PoolTokenType, Contract } from "./interfaces";
+import { decimalToBalance } from "../utils/ether-utils";
 
 export async function initializeLendingPool(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<LendingPool> {
   const lPool = await this.router.methods.getLendingPool(uniswapV2PairAddress).call();
@@ -29,7 +30,7 @@ export async function getLendingPool(this: ImpermaxRouter, uniswapV2PairAddress:
 }
 
 export async function getContracts(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<[Contract, Contract]> {
-  const lendingPool = await this.getLendingPool(uniswapV2PairAddress);
+  const lendingPool = await this.getLendingPool(uniswapV2PairAddress);  
   if (poolTokenType === PoolTokenType.BorrowableA)
     return [lendingPool.borrowableA, lendingPool.tokenA];
   if (poolTokenType === PoolTokenType.BorrowableB) 

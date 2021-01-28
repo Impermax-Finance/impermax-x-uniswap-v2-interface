@@ -8,8 +8,9 @@ import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
 import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
 import usePoolToken from "../../hooks/usePoolToken";
 import usePairAddress from "../../hooks/usePairAddress";
-import useImpermaxRouter, { useRouterAccount } from "../../hooks/useImpermaxRouter";
+import useImpermaxRouter, { useRouterAccount, useRouterUpdate } from "../../hooks/useImpermaxRouter";
 import BorrowInteractionModal from "../InteractionModal/BorrowInteractionModal";
+import RepayInteractionModal from "../InteractionModal/RepayInteractionModal";
 
 /**
  * Build account lending pool detail rows for single currencies.
@@ -25,16 +26,18 @@ export default function AccountLendingPoolRow() {
 
   const impermaxRouter = useImpermaxRouter();
   const routerAccount = useRouterAccount();
+  const routerUpdate = useRouterUpdate();
   const [data, setData] = useState<AccountBorrowableData>();
   useEffect(() => {
     if (!impermaxRouter || !routerAccount) return setData(null);
     impermaxRouter.getAccountBorrowableData(uniswapV2PairAddress, poolTokenType).then((data) => {
       setData(data);
     });
-  }, [impermaxRouter, routerAccount]);
+  }, [impermaxRouter, routerAccount, routerUpdate]);
 
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showBorrowModal, toggleBorrowModal] = useState(false);
+  const [showRepayModal, toggleRepaywModal] = useState(false);
 
   if (!data) return (<>Loading</>);
 
@@ -78,7 +81,7 @@ export default function AccountLendingPoolRow() {
             <Button variant="primary" onClick={() => toggleBorrowModal(true)}>{t("Borrow")}</Button>
           </Col>
           <Col>
-            <Button variant="primary">{t("Repay")}</Button>
+            <Button variant="primary" onClick={() => toggleRepaywModal(true)}>{t("Repay")}</Button>
           </Col>
         </Row>
       </Col>
@@ -90,6 +93,10 @@ export default function AccountLendingPoolRow() {
     <BorrowInteractionModal 
       show={showBorrowModal} 
       toggleShow={toggleBorrowModal}
+    />
+    <RepayInteractionModal 
+      show={showRepayModal} 
+      toggleShow={toggleRepaywModal}
     />
   </>);
 }

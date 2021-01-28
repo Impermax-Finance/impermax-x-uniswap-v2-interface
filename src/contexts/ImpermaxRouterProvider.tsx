@@ -7,6 +7,8 @@ import { useRouterAddress, useWETH, useConvertToMainnet, useFactoryAddress, useS
 export interface ImpermaxRouterContextI {
   impermaxRouter?: ImpermaxRouter;
   routerAccount?: string;
+  routerUpdate?: number;
+  doUpdate?: Function;
 }
 
 export const ImpermaxRouterContext = createContext<ImpermaxRouterContextI>({});
@@ -22,6 +24,12 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const convertToMainnet = useConvertToMainnet();
   const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
   const [routerAccount, setRouterAccount] = useState<string>();
+  const [routerUpdate, setRouterUpdate] = useState<number>(0);
+  const doUpdate = () => {
+    if (!impermaxRouter) return;
+    impermaxRouter.cleanCache();
+    setRouterUpdate(routerUpdate+1);
+  };
 
   useEffect(() => {
     if(!web3) return;
@@ -46,5 +54,5 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     }
   }, [web3, account]);
 
-  return <ImpermaxRouterContext.Provider value={{ impermaxRouter, routerAccount }}>{children}</ImpermaxRouterContext.Provider>;
+  return <ImpermaxRouterContext.Provider value={{ impermaxRouter, routerAccount, routerUpdate, doUpdate }}>{children}</ImpermaxRouterContext.Provider>;
 };

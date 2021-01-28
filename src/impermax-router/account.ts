@@ -82,12 +82,17 @@ export async function getLiquidationPriceSwings(this: ImpermaxRouter, uniswapV2P
 	const actualCollateral = valueCollateral / liquidationIncentive;
 	const rad = Math.sqrt(actualCollateral ** 2 - 4 * valueA * valueB);
 	const t = (actualCollateral + rad) / (2 * Math.sqrt(safetyMargin));
-	const priceSwingA = (t / valueA) ** 2;
-	const priceSwingB = (t / valueB) ** 2;
+	let priceSwingA = (t / valueA) ** 2;
+  let priceSwingB = (t / valueB) ** 2;
+  if (priceSwingA == Infinity) priceSwingA = null;
+  if (priceSwingB == Infinity) priceSwingB = null;
 	return [priceSwingA, priceSwingB];
 }
 export async function getLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const currentPrice = await this.getTWAPPrice(uniswapV2PairAddress);
-	const [priceSwingA, priceSwingB] = await this.getLiquidationPriceSwings(uniswapV2PairAddress);
-	return [currentPrice / priceSwingA, currentPrice * priceSwingB];
+  const [priceSwingA, priceSwingB] = await this.getLiquidationPriceSwings(uniswapV2PairAddress);
+	return [
+    (priceSwingA) ? currentPrice / priceSwingA : null, 
+    (priceSwingB) ? currentPrice * priceSwingB : null
+  ];
 }

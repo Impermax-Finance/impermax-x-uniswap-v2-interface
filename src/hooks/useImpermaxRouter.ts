@@ -10,3 +10,13 @@ export function useRouterAccount() {
   const { routerAccount } = useContext(ImpermaxRouterContext);
   return routerAccount;
 }
+
+export function useRouterUpdate() {
+  const { routerUpdate } = useContext(ImpermaxRouterContext);
+  return routerUpdate;
+}
+
+export function useDoUpdate() {
+  const { doUpdate } = useContext(ImpermaxRouterContext);
+  return doUpdate;
+}

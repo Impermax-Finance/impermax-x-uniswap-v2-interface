@@ -4,7 +4,7 @@ import phrases from './translations';
 import { Row, Col } from "react-bootstrap";
 import { AccountData } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
-import useImpermaxRouter, { useRouterAccount } from "../../hooks/useImpermaxRouter";
+import useImpermaxRouter, { useRouterAccount, useRouterUpdate } from "../../hooks/useImpermaxRouter";
 import { formatUSD, formatFloat, formatLeverage, formatLiquidationPrices } from "../../utils/format";
 
 
@@ -38,10 +38,11 @@ export default function AccountLendingPoolDetails() {
   const [accountData, setAccountData] = useState<AccountData>();
   const impermaxRouter = useImpermaxRouter();
   const routerAccount = useRouterAccount();
+  const routerUpdate = useRouterUpdate();
   useEffect(() => {
     if (!impermaxRouter || !routerAccount) return setAccountData(null);
     impermaxRouter.getAccountData(uniswapV2PairAddress).then((data) => setAccountData(data));
-  }, [impermaxRouter, routerAccount]);
+  }, [impermaxRouter, routerAccount, routerUpdate]);
 
   if (!accountData) return (<div>
     Loading
