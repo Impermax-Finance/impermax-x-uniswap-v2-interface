@@ -7,23 +7,21 @@ import { Table } from "react-bootstrap";
 import { formatUSD, formatPercentage } from "../../utils/format";
 import { PoolTokenType, BorrowableData } from "../../impermax-router/interfaces";
 import BorrowableDetailsRow from "./BorrowableDetailsRow";
-
-interface BorrowableDetailsProps {
-  uniswapV2PairAddress: string;
-  poolTokenType: PoolTokenType;
-}
+import usePairAddress from "../../hooks/usePairAddress";
+import usePoolToken from "../../hooks/usePoolToken";
 
 /**
  * Generate the Currency Equity Details card, giving information about the suppy and rates for a particular currency in
  * the system.
  */
-export default function BorrowableDetails(props: BorrowableDetailsProps) {
-  const { uniswapV2PairAddress, poolTokenType } = props;
-
+export default function BorrowableDetails() {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
   const { getIconByTokenAddress } = useUrlGenerator();
+
+  const uniswapV2PairAddress = usePairAddress();
+  const poolTokenType = usePoolToken();
   const [borrowableData, setBorrowableData] = useState<BorrowableData>();
   const impermaxRouter = useImpermaxRouter();
 

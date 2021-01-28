@@ -13,17 +13,17 @@ import usePoolToken from "../../hooks/usePoolToken";
  * @property show Shows or hides the modal.
  * @property toggleShow A function to update the show variable to show or hide the Modal.
  */
-export interface DepositInteractionModalProps {
+export interface BorrowInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
 }
 
 /**
- * Styled component for the deposit modal.
+ * Styled component for the norrow modal.
  * @param param0 any Props for component
- * @see DepositInteractionModalProps
+ * @see BorrowInteractionModalProps
  */
-export default function DepositInteractionModal({show, toggleShow}: DepositInteractionModalProps) {
+export default function BorrowInteractionModal({show, toggleShow}: BorrowInteractionModalProps) {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<string>("");
@@ -35,14 +35,14 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
     impermaxRouter.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
   }, [impermaxRouter]);
 
-  const onDeposit = async () => {
-    await impermaxRouter.deposit(uniswapV2PairAddress, poolTokenType, val);
+  const onBorrow = async () => {
+    await impermaxRouter.borrow(uniswapV2PairAddress, poolTokenType, val);
   }
 
   return (
     <InteractionModal show={show} onHide={() => toggleShow(false)}>
       <>
-        <InteractionModalHeader value="Deposit" />
+        <InteractionModalHeader value="Borrow" />
         <InteractionModalBody>
           <div>
             New Leverage
@@ -78,7 +78,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
               <Button variant="success" block>Approve</Button>
             </Col>
             <Col xs={6}>
-              <Button variant='secondary' block onClick={onDeposit}>Deposit</Button>
+              <Button variant='secondary' block onClick={onBorrow}>Borrow</Button>
             </Col>
           </Row>
         </InteractionModalBody>

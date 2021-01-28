@@ -48,18 +48,20 @@ export async function getBorrowRate(this: ImpermaxRouter, uniswapV2PairAddress: 
   if (!cache.borrowRate) cache.borrowRate = this.initializeBorrowRate(uniswapV2PairAddress, poolTokenType);
   return cache.borrowRate;
 }
+export async function getBorrowAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
+  return this.toAPY(borrowRate);
+}
 
 // Supply
 export async function getSupply(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const totalBalance = await this.getTotalBalance(uniswapV2PairAddress, poolTokenType);
   const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
-  console.log("getSupply", totalBalance, totalBorrows);
   return totalBalance + totalBorrows;
 }
 export async function getSupplyUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const supply = await this.getSupply(uniswapV2PairAddress, poolTokenType);
   const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  console.log("getSupplyUSD", supply, tokenPrice, supply * tokenPrice);
   return supply * tokenPrice;
 }
 
@@ -67,7 +69,7 @@ export async function getSupplyUSD(this: ImpermaxRouter, uniswapV2PairAddress: A
 export async function getUtilizationRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const supply = await this.getSupply(uniswapV2PairAddress, poolTokenType);
   if (supply == 0) return 0;
-  const totalBalance = await this.getTotalBalance(uniswapV2PairAddress, poolTokenType);
+  const totalBalance = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
   return totalBalance / supply;
 }
 
@@ -75,6 +77,27 @@ export async function getUtilizationRate(this: ImpermaxRouter, uniswapV2PairAddr
 export async function getSupplyRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
   const utilizationRate = await this.getUtilizationRate(uniswapV2PairAddress, poolTokenType);
-  console.log("getSupplyRate", borrowRate, utilizationRate);
   return borrowRate * utilizationRate;
+}
+export async function getSupplyAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  const supplyRate = await this.getSupplyRate(uniswapV2PairAddress, poolTokenType);
+  return this.toAPY(supplyRate);
+}
+
+// Account Balance
+export async function getBalanceUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const depositedAUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const depositedBUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+  const depositedCUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.Collateral);
+  return depositedAUSD + depositedBUSD + depositedCUSD;
+}
+export async function getDebtUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const borrowedAUSD = await this.getBorrowedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const borrowedBUSD = await this.getBorrowedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+  return borrowedAUSD + borrowedBUSD;
+}
+export async function getEquityUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const balanceUSD = await this.getBalanceUSD(uniswapV2PairAddress);
+  const debtUSD = await this.getDebtUSD(uniswapV2PairAddress);
+  return balanceUSD - debtUSD;
 }

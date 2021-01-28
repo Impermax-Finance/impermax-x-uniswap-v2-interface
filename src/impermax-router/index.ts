@@ -13,9 +13,7 @@ import {
   Router, 
   Address, 
   LendingPool, 
-  PoolTokenType, 
-  BorrowableBaseInfo, 
-  PoolTokenBalance, 
+  PoolTokenType,
   ImpermaxRouterCfg, 
   BorrowableData, 
   AccountBorrowableData, 
@@ -26,7 +24,7 @@ import * as contracts from "./contracts";
 import * as fetchers from "./fetchers";
 import * as borrowableFetchers from "./borrowableFetchers";
 import * as utils from "./utils";
-import { deposit } from "./interactions"
+import * as interactions from "./interactions"
 
 export default class ImpermaxRouter {
   [x: string]: any;
@@ -108,12 +106,18 @@ export default class ImpermaxRouter {
   public getTotalBorrows = borrowableFetchers.getTotalBorrows;
   public getTotalBorrowsUSD = borrowableFetchers.getTotalBorrowsUSD;
   public getBorrowRate = borrowableFetchers.getBorrowRate;
+  public getBorrowAPY = borrowableFetchers.getBorrowAPY;
   public getBorrowed = borrowableFetchers.getBorrowed;
   public getBorrowedUSD = borrowableFetchers.getBorrowedUSD;
   public getSupply = borrowableFetchers.getSupply;
   public getSupplyUSD = borrowableFetchers.getSupplyUSD;
   public getUtilizationRate = borrowableFetchers.getUtilizationRate;
   public getSupplyRate = borrowableFetchers.getSupplyRate;
+  public getSupplyAPY = borrowableFetchers.getSupplyAPY;
+
+  public getBalanceUSD = borrowableFetchers.getBalanceUSD;
+  public getDebtUSD = borrowableFetchers.getDebtUSD;
+  public getEquityUSD = borrowableFetchers.getEquityUSD;
 
   // Utils
   public normalize = utils.normalize;
@@ -123,9 +127,9 @@ export default class ImpermaxRouter {
   public getTokenPrice = utils.getTokenPrice;
 
   // Interactions
-  public deposit = deposit;
+  public deposit = interactions.deposit;
+  public borrow = interactions.borrow;
   
-
 
   async getBorrowableData(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<BorrowableData> {
     return {
@@ -135,8 +139,8 @@ export default class ImpermaxRouter {
       supplyUSD: await this.getSupplyUSD(uniswapV2PairAddress, poolTokenType),
       borrowedUSD: await this.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType),
       utilizationRate: await this.getUtilizationRate(uniswapV2PairAddress, poolTokenType),
-      supplyAPY: this.toAPY(await this.getSupplyRate(uniswapV2PairAddress, poolTokenType)),
-      borrowAPY: this.toAPY(await this.getBorrowRate(uniswapV2PairAddress, poolTokenType))
+      supplyAPY: await this.getSupplyAPY(uniswapV2PairAddress, poolTokenType),
+      borrowAPY: await this.getBorrowAPY(uniswapV2PairAddress, poolTokenType),
     };
   }
 
@@ -170,20 +174,11 @@ export default class ImpermaxRouter {
 
   async getAccountData(uniswapV2PairAddress: Address) : Promise<AccountData> {
     if (!this.account) return null;
-    const dataA = await this.getAccountBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-    const dataB = await this.getAccountBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-    const dataCollateral = await this.getAccountCollateralData(uniswapV2PairAddress);
-    const balanceUSD = dataA.depositedUSD + dataB.depositedUSD + dataCollateral.depositedUSD;
-    const debtUSD = dataA.borrowedUSD + dataB.borrowedUSD;
-    const equityUSD = balanceUSD - debtUSD;
     return {
-      equityUSD: equityUSD,
-      balanceUSD: balanceUSD,
-      debtUSD: debtUSD,
+      equityUSD: await this.getEquityUSD(uniswapV2PairAddress),
+      balanceUSD: await this.getBalanceUSD(uniswapV2PairAddress),
+      debtUSD: await this.getDebtUSD(uniswapV2PairAddress),
       riskMetrics: {},
-      accountBorrowableAData: dataA,
-      accountBorrowableBData: dataB,
-      accountCollateralData: dataCollateral,
     }
   }
 }

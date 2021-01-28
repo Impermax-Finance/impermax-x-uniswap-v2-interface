@@ -21,22 +21,6 @@ export enum PoolTokenType {
   BorrowableB = 'borrowableB',
 }
 
-export interface BorrowableBaseInfo {
-  tokenAddress: Address;
-  borrowableAddress: Address;
-  name: string;
-  symbol: string;
-  decimals: number;
-  totalBalance: number;
-  totalBorrows: number;
-  borrowRate: number;
-}
-
-export interface PoolTokenBalance {
-  deposited: number;
-  borrowed?: number;
-}
-
 export interface BorrowableData {
   tokenAddress: string;
   symbol: string;
@@ -80,9 +64,6 @@ export interface AccountData {
   balanceUSD: number;
   debtUSD: number;
   riskMetrics: RiskMetrics;
-  accountBorrowableAData: AccountBorrowableData;
-  accountBorrowableBData: AccountBorrowableData;
-  accountCollateralData: AccountCollateralData;
 }
 
 export interface ImpermaxRouterCfg {

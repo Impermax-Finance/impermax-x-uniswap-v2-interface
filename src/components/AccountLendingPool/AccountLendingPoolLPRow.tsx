@@ -51,8 +51,8 @@ export default function AccountLendingPoolLPRow() {
         <InlineAccountTokenInfo
           name={t("Deposited")}
           symbol="LP"
-          value={42.35}
-          valueUSD={10204}
+          value={data.deposited}
+          valueUSD={data.depositedUSD}
         />
       </Col>
       <Col md={5} className="btn-table">

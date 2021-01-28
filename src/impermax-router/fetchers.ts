@@ -67,7 +67,6 @@ export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress
 export async function initializeTotalBalance(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const [poolToken,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const amount = await poolToken.methods.totalBalance().call();
-  console.log("initializeTotalBalance", amount / 1e18);
   return this.normalize(uniswapV2PairAddress, poolTokenType, amount);
 }
 export async function getTotalBalance(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {

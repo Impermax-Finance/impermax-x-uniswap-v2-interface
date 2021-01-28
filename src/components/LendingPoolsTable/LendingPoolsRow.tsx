@@ -1,5 +1,5 @@
 import useUrlGenerator from "../../hooks/useUrlGenerator";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { BorrowableData, PoolTokenType } from "../../impermax-router/interfaces";
 import useImpermaxRouter from "../../hooks/useImpermaxRouter";
 import { Link } from "react-router-dom";
@@ -20,12 +20,8 @@ export default function LendingPoolsRow() {
 
   useEffect(() => {
     if (!impermaxRouter) return;
-    impermaxRouter.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => {
-      setBorrowableAData(data);
-    });
-    impermaxRouter.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => {
-      setBorrowableBData(data);
-    });
+    impermaxRouter.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setBorrowableAData(data));
+    impermaxRouter.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setBorrowableBData(data));
   }, [impermaxRouter]);
 
   if (!borrowableAData || !borrowableBData) return (<div>

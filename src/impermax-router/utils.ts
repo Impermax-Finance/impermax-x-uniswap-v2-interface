@@ -5,7 +5,6 @@ import { PairConversionPrices, getPairConversionPrices } from "../utils/valueCon
 
 export async function normalize(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: number) : Promise<number> {
   const decimals = await this.getDecimals(uniswapV2PairAddress, poolTokenType);
-  console.log("normalize", decimals, amount / Math.pow(10, decimals));
   return amount / Math.pow(10, decimals);
 }
 

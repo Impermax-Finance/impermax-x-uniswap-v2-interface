@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { formatUSD } from "../../utils/format";
+import { formatUSD, formatFloat } from "../../utils/format";
 
 
 export interface InlineAccountTokenInfoProps {
@@ -18,7 +18,7 @@ export default function InlineAccountTokenInfo({ name, symbol, value, valueUSD }
       </Col>
       <Col className="values">
         <Row>
-          <Col>{value} {symbol}</Col>
+          <Col>{formatFloat(value)} {symbol}</Col>
         </Row>
         <Row>
           <Col>{formatUSD(valueUSD)}</Col>
