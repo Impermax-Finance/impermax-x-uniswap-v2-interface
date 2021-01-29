@@ -33,6 +33,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const onLeverage = async () => {
     await impermaxRouter.leverage(uniswapV2PairAddress, val);
     doUpdate();
+    toggleShow(false);
   }
 
   return (

@@ -3,7 +3,7 @@ import InteractionModal, { InteractionModalHeader, InteractionModalBody } from "
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { useWallet } from "use-wallet";
-import useImpermaxRouter from "../../hooks/useImpermaxRouter";
+import useImpermaxRouter, { useDoUpdate } from "../../hooks/useImpermaxRouter";
 import { PoolTokenType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
@@ -31,12 +31,15 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
   const onUserInput = (input: string) => setVal(input);
 
   const impermaxRouter = useImpermaxRouter();
+  const doUpdate = useDoUpdate();
   useEffect(() => {
     impermaxRouter.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
   }, [impermaxRouter]);
 
   const onRepay = async () => {
     await impermaxRouter.repay(uniswapV2PairAddress, poolTokenType, val);
+    doUpdate();
+    toggleShow(false);
   }
 
   return (
