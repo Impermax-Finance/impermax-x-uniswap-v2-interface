@@ -3,10 +3,11 @@ import InteractionModal, { InteractionModalHeader, InteractionModalBody } from "
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { useWallet } from "use-wallet";
-import useImpermaxRouter, { useDoUpdate } from "../../hooks/useImpermaxRouter";
+import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { PoolTokenType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
+import RiskMetrics from "./RiskMetrics";
 
 /**
  * Props for the deposit interaction modal.
@@ -30,12 +31,12 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
   const [symbol, setSymbol] = useState<string>("");
   const onUserInput = (input: string) => setVal(input);
 
+  useRouterCallback((router) => {
+    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
+  });
+
   const impermaxRouter = useImpermaxRouter();
   const doUpdate = useDoUpdate();
-  useEffect(() => {
-    impermaxRouter.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
-  }, [impermaxRouter]);
-
   const onRepay = async () => {
     await impermaxRouter.repay(uniswapV2PairAddress, poolTokenType, val);
     doUpdate();
@@ -47,24 +48,10 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
       <>
         <InteractionModalHeader value="Repay" />
         <InteractionModalBody>
-          <div>
-            New Leverage
-          </div>
-          <div>
-            xxx -&gt; xxx
-          </div>
-          <div>
-            New Liquidation Prices
-          </div>
-          <div>
-            xxx -&gt; xxx
-          </div>
-          <div>
-            Current Price
-          </div>
-          <div>
-            xxx -&gt; xxx
-          </div>
+          <RiskMetrics
+            changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? -1 * parseFloat(val) : 0}
+            changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? -1 * parseFloat(val) : 0}
+          />
           <div>
             <InputGroup className="mb-3">
               <InputGroup.Prepend>

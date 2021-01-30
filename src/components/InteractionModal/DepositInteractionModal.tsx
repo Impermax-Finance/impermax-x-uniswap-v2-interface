@@ -3,10 +3,12 @@ import InteractionModal, { InteractionModalHeader, InteractionModalBody } from "
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { useWallet } from "use-wallet";
-import useImpermaxRouter, { useDoUpdate } from "../../hooks/useImpermaxRouter";
+import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { PoolTokenType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
+import { formatFloat } from "../../utils/format";
+import RiskMetrics from "./RiskMetrics";
 
 /**
  * Props for the deposit interaction modal.
@@ -27,15 +29,18 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<string>("");
+
   const [symbol, setSymbol] = useState<string>("");
-  const onUserInput = (input: string) => setVal(input);
+  const [availableBalance, setAvailableBalance] = useState<number>(0);
+  useRouterCallback((router) => {
+    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
+    router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((balance) => setAvailableBalance(balance));
+  });
 
   const impermaxRouter = useImpermaxRouter();
   const doUpdate = useDoUpdate();
-  useEffect(() => {
-    impermaxRouter.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
-  }, [impermaxRouter]);
-
+  const onUserInput = (input: string) => setVal(input);
+  const onMax = () => setVal(availableBalance.toString());
   const onDeposit = async () => {
     await impermaxRouter.deposit(uniswapV2PairAddress, poolTokenType, val);
     doUpdate();
@@ -47,28 +52,16 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
       <>
         <InteractionModalHeader value="Deposit" />
         <InteractionModalBody>
+          { poolTokenType == PoolTokenType.Collateral ? (
+            <RiskMetrics changeCollateral={parseFloat(val)} />
+          ) : (null) }
           <div>
-            New Leverage
-          </div>
-          <div>
-            xxx -&gt; xxx
-          </div>
-          <div>
-            New Liquidation Prices
-          </div>
-          <div>
-            xxx -&gt; xxx
-          </div>
-          <div>
-            Current Price
-          </div>
-          <div>
-            xxx -&gt; xxx
+            Available: {formatFloat(availableBalance)} {symbol}
           </div>
           <div>
             <InputGroup className="mb-3">
               <InputGroup.Prepend>
-                <Button variant="outline-secondary">MAX</Button>
+                <Button variant="outline-secondary" onClick={onMax}>MAX</Button>
               </InputGroup.Prepend>
               <NumericalInput value={val} onUserInput={input => {onUserInput(input)}} />
               <InputGroup.Append>

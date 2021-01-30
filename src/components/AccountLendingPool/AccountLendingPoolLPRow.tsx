@@ -6,7 +6,7 @@ import { Row, Col, Button, Card } from "react-bootstrap";
 import { AccountCollateralData } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
 import usePairAddress from "../../hooks/usePairAddress";
-import useImpermaxRouter, { useRouterAccount, useRouterUpdate } from "../../hooks/useImpermaxRouter";
+import { useRouterCallback } from "../../hooks/useImpermaxRouter";
 import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
 import LeverageInteractionModal from "../InteractionModal/LeverageInteractionModal";
 
@@ -21,16 +21,11 @@ export default function AccountLendingPoolLPRow() {
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
 
-  const impermaxRouter = useImpermaxRouter();
-  const routerAccount = useRouterAccount();
-  const routerUpdate = useRouterUpdate();
   const [data, setData] = useState<AccountCollateralData>();
-  useEffect(() => {
-    if (!impermaxRouter || !routerAccount) return setData(null);
-    impermaxRouter.getAccountCollateralData(uniswapV2PairAddress).then((data) => {
-      setData(data);
-    });
-  }, [impermaxRouter, routerAccount, routerUpdate]);
+  useRouterCallback((router) => {
+    if (!router.account) return setData(null);
+    router.getAccountCollateralData(uniswapV2PairAddress).then((data) => setData(data));
+  });
 
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showLeverageModal, toggleLeverageModal] = useState(false);

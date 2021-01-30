@@ -1,5 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ImpermaxRouterContext } from '../contexts/ImpermaxRouterProvider';
+import ImpermaxRouter from '../impermax-router';
 
 export default function useImpermaxRouter() {
   const { impermaxRouter } = useContext(ImpermaxRouterContext);
@@ -19,4 +20,11 @@ export function useRouterUpdate() {
 export function useDoUpdate() {
   const { doUpdate } = useContext(ImpermaxRouterContext);
   return doUpdate;
+}
+
+export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, a?: Array<any>) {
+  const { impermaxRouter, routerAccount, routerUpdate } = useContext(ImpermaxRouterContext);
+  useEffect(() => {
+    if (impermaxRouter) f(impermaxRouter);
+  }, [impermaxRouter, routerAccount, routerUpdate].concat(a))
 }

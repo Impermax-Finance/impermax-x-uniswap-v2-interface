@@ -64,6 +64,7 @@ export interface RiskMetrics {
   liquidationPrices: [number, number];
   marketPrice: number;
   TWAPPrice: number;
+  safetyMargin: number;
 }
 
 export interface AccountData {

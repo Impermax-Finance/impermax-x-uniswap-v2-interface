@@ -1,7 +1,7 @@
 import useUrlGenerator from "../../hooks/useUrlGenerator";
 import React, { useState, useEffect, useCallback } from "react";
 import { BorrowableData, PoolTokenType } from "../../impermax-router/interfaces";
-import useImpermaxRouter from "../../hooks/useImpermaxRouter";
+import useImpermaxRouter, { useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { Link } from "react-router-dom";
 import { LendingPoolsCol } from "./LendingPoolsCol";
 import { formatUSD, formatPercentage } from "../../utils/format";
@@ -16,13 +16,11 @@ export default function LendingPoolsRow() {
   const { getIconByTokenAddress, getLendingPool } = useUrlGenerator();
   const [borrowableAData, setBorrowableAData] = useState<BorrowableData>();
   const [borrowableBData, setBorrowableBData] = useState<BorrowableData>();
-  const impermaxRouter = useImpermaxRouter();
 
-  useEffect(() => {
-    if (!impermaxRouter) return;
-    impermaxRouter.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setBorrowableAData(data));
-    impermaxRouter.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setBorrowableBData(data));
-  }, [impermaxRouter]);
+  useRouterCallback((router) => {
+    router.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setBorrowableAData(data));
+    router.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setBorrowableBData(data));
+  });
 
   if (!borrowableAData || !borrowableBData) return (<div>
     Loading

@@ -71,16 +71,23 @@ export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address,
   }
 }
 
+export async function getLeverageAmounts(this: ImpermaxRouter, uniswapV2PairAddress: Address, val: string) : Promise<[number, number, number]> {
+  const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
+  const currentLeverage = await this.getLeverage(uniswapV2PairAddress);
+  const collateralValue = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
+  if (!val) val = currentLeverage.toString();
+  const changeCollateralValue = collateralValue * parseFloat(val) / currentLeverage - collateralValue;
+  const valueForEach = changeCollateralValue / 2;
+  return [valueForEach / priceA, valueForEach / priceB, changeCollateralValue];
+}
 export async function leverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, val: string) {
   const [borrowableA, tokenA] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const [borrowableB, tokenB] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
-  const collateralValue = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const valueForEach = collateralValue / 2 * parseFloat(val);
+  const amountsNumber = await this.getLeverageAmounts(uniswapV2PairAddress, val);
   const decimalsA = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const decimalsB = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const amountA = decimalToBalance(valueForEach / priceA, decimalsA);
-  const amountB = decimalToBalance(valueForEach / priceB, decimalsB);
+  const amountA = decimalToBalance(amountsNumber[0], decimalsA);
+  const amountB = decimalToBalance(amountsNumber[1], decimalsB);
   const deadline = this.getDeadline();
   try {
     await borrowableA.methods.borrowApprove(this.router._address, amountA).call({from: this.account});

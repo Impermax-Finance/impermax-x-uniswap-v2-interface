@@ -1,5 +1,5 @@
 import ImpermaxRouter from ".";
-import { Address, PoolTokenType, BorrowableData, AccountBorrowableData, AccountCollateralData, AccountData } from "./interfaces";
+import { Address, PoolTokenType, BorrowableData, AccountBorrowableData, AccountCollateralData, AccountData, RiskMetrics } from "./interfaces";
 
 export async function getBorrowableData(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<BorrowableData> {
   return {
@@ -42,6 +42,27 @@ export async function getAccountCollateralData(this: ImpermaxRouter, uniswapV2Pa
   };
 }
 
+export async function getNewRiskMetrics(
+  this: ImpermaxRouter, 
+  uniswapV2PairAddress: Address, 
+  changeBorrowedA: number, 
+  changeBorrowedB: number, 
+  changeCollateral: number
+) : Promise<RiskMetrics> {
+  if (!this.account) return null;
+  return {
+    leverage: await this.getNewLeverage(uniswapV2PairAddress, changeBorrowedA, changeBorrowedB, changeCollateral),
+    liquidationPrices: await this.getNewLiquidationPrices(uniswapV2PairAddress, changeBorrowedA, changeBorrowedB, changeCollateral),
+    marketPrice: await this.getMarketPrice(uniswapV2PairAddress),
+    TWAPPrice: await this.getTWAPPrice(uniswapV2PairAddress),
+    safetyMargin: await this.getSafetyMargin(uniswapV2PairAddress),
+  };
+}
+export async function getRiskMetrics(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<RiskMetrics> {
+  return this.getNewRiskMetrics(uniswapV2PairAddress, 0, 0, 0);
+}
+
+
 export async function getAccountData(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<AccountData> {
   if (!this.account) return null;
   return {
@@ -50,11 +71,6 @@ export async function getAccountData(this: ImpermaxRouter, uniswapV2PairAddress:
     equityUSD: await this.getEquityUSD(uniswapV2PairAddress),
     balanceUSD: await this.getBalanceUSD(uniswapV2PairAddress),
     debtUSD: await this.getDebtUSD(uniswapV2PairAddress),
-    riskMetrics: {
-      leverage: await this.getLeverage(uniswapV2PairAddress),
-      liquidationPrices: await this.getLiquidationPrices(uniswapV2PairAddress),
-      marketPrice: await this.getMarketPrice(uniswapV2PairAddress),
-      TWAPPrice: await this.getTWAPPrice(uniswapV2PairAddress),
-    },
+    riskMetrics: await this.getRiskMetrics(uniswapV2PairAddress),
   }
 }

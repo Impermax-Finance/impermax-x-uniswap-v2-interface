@@ -60,6 +60,7 @@ export default class ImpermaxRouter {
           totalBalance?: Promise<number>,
           totalBorrows?: Promise<number>,
           borrowRate?: Promise<number>,
+          availableBalance?: Promise<number>,
           deposited?: Promise<number>,
           borrowed?: Promise<number>,
         }
@@ -145,8 +146,10 @@ export default class ImpermaxRouter {
   public getSupplyAPY = borrowableFetchers.getSupplyAPY;
 
   // Account
+  public initializeAvailableBalance = account.initializeAvailableBalance;
   public initializeBorrowed = account.initializeBorrowed;
   public initializeDeposited = account.initializeDeposited;
+  public getAvailableBalance = account.getAvailableBalance;
   public getBorrowed = account.getBorrowed;
   public getBorrowedUSD = account.getBorrowedUSD;
   public getDeposited = account.getDeposited;
@@ -154,6 +157,10 @@ export default class ImpermaxRouter {
   public getBalanceUSD = account.getBalanceUSD;
   public getDebtUSD = account.getDebtUSD;
   public getEquityUSD = account.getEquityUSD;
+  public getValues = account.getValues;
+  public getNewLeverage = account.getNewLeverage;
+  public getNewLiquidationPriceSwings = account.getNewLiquidationPriceSwings;
+  public getNewLiquidationPrices = account.getNewLiquidationPrices;
   public getLeverage = account.getLeverage;
   public getLiquidationPriceSwings = account.getLiquidationPriceSwings;
   public getLiquidationPrices = account.getLiquidationPrices;
@@ -170,11 +177,14 @@ export default class ImpermaxRouter {
   public deposit = interactions.deposit;
   public borrow = interactions.borrow;
   public repay = interactions.repay;
+  public getLeverageAmounts = interactions.getLeverageAmounts;
   public leverage = interactions.leverage;
   
   // Data
   public getBorrowableData = data.getBorrowableData;
   public getAccountBorrowableData = data.getAccountBorrowableData;
   public getAccountCollateralData = data.getAccountCollateralData;
+  public getRiskMetrics = data.getRiskMetrics;
+  public getNewRiskMetrics = data.getNewRiskMetrics;
   public getAccountData = data.getAccountData;
 }

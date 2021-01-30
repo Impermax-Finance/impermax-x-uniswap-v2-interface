@@ -8,7 +8,7 @@ import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
 import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
 import usePoolToken from "../../hooks/usePoolToken";
 import usePairAddress from "../../hooks/usePairAddress";
-import useImpermaxRouter, { useRouterAccount, useRouterUpdate } from "../../hooks/useImpermaxRouter";
+import useImpermaxRouter, { useRouterAccount, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import BorrowInteractionModal from "../InteractionModal/BorrowInteractionModal";
 import RepayInteractionModal from "../InteractionModal/RepayInteractionModal";
 
@@ -24,16 +24,11 @@ export default function AccountLendingPoolRow() {
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
 
-  const impermaxRouter = useImpermaxRouter();
-  const routerAccount = useRouterAccount();
-  const routerUpdate = useRouterUpdate();
   const [data, setData] = useState<AccountBorrowableData>();
-  useEffect(() => {
-    if (!impermaxRouter || !routerAccount) return setData(null);
-    impermaxRouter.getAccountBorrowableData(uniswapV2PairAddress, poolTokenType).then((data) => {
-      setData(data);
-    });
-  }, [impermaxRouter, routerAccount, routerUpdate]);
+  useRouterCallback((router) => {
+    if (!router.account) return setData(null);
+    router.getAccountBorrowableData(uniswapV2PairAddress, poolTokenType).then((data) => setData(data));
+  });
 
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showBorrowModal, toggleBorrowModal] = useState(false);

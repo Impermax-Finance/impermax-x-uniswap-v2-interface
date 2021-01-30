@@ -15,7 +15,9 @@ export async function initializeName(this: ImpermaxRouter, uniswapV2PairAddress:
     const nameB = await this.getName(uniswapV2PairAddress, PoolTokenType.BorrowableB);
     return nameA + '-' + nameB + ' LP';
   }
-  return (await this.getContracts(uniswapV2PairAddress, poolTokenType))[1].methods.name().call();
+  const [,token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  if (token._address == this.WETH) return 'Ethereum';
+  return token.methods.name().call();
 }
 export async function getName(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
@@ -30,7 +32,9 @@ export async function initializeSymbol(this: ImpermaxRouter, uniswapV2PairAddres
     const symbolB = await this.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableB);
     return symbolA + '-' + symbolB;
   }
-  return (await this.getContracts(uniswapV2PairAddress, poolTokenType))[1].methods.symbol().call();
+  const [,token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  if (token._address == this.WETH) return 'ETH';
+  return token.methods.symbol().call();
 }
 export async function getSymbol(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);

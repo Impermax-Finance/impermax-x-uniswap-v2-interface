@@ -3,10 +3,11 @@ import InteractionModal, { InteractionModalHeader, InteractionModalBody } from "
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { useWallet } from "use-wallet";
-import useImpermaxRouter, { useDoUpdate } from "../../hooks/useImpermaxRouter";
+import useImpermaxRouter, { useDoUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { PoolTokenType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
+import RiskMetrics from "./RiskMetrics";
 
 /**
  * Props for the deposit interaction modal.
@@ -28,6 +29,18 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const [val, setVal] = useState<string>("");
   const onUserInput = (input: string) => setVal(input);
 
+  const [borrowAmounts, setBorrowAmounts] = useState<[number, number, number]>([0,0,0]);
+  const [symbolA, setSymbolA] = useState<string>();
+  const [symbolB, setSymbolB] = useState<string>();
+  useRouterCallback((router) => {
+    router.getLeverageAmounts(uniswapV2PairAddress, val).then((data) => setBorrowAmounts(data));
+  }, [val]);
+  useRouterCallback((router) => {
+    router.getLeverage(uniswapV2PairAddress).then((data) => setVal(data.toString()));
+    router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setSymbolA(data));
+    router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setSymbolB(data));
+  });
+
   const impermaxRouter = useImpermaxRouter();
   const doUpdate = useDoUpdate();
   const onLeverage = async () => {
@@ -41,24 +54,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
       <>
         <InteractionModalHeader value="Leverage" />
         <InteractionModalBody>
-          <div>
-            New Leverage
-          </div>
-          <div>
-            xxx -&gt; xxx
-          </div>
-          <div>
-            New Liquidation Prices
-          </div>
-          <div>
-            xxx -&gt; xxx
-          </div>
-          <div>
-            Current Price
-          </div>
-          <div>
-            xxx -&gt; xxx
-          </div>
+          <RiskMetrics changeBorrowedA={borrowAmounts[0]} changeBorrowedB={borrowAmounts[1]} changeCollateral={borrowAmounts[2]} />
           <div>
             <InputGroup className="mb-3">
               <InputGroup.Prepend>
@@ -70,6 +66,14 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
               </InputGroup.Append>
             </InputGroup>
           </div>
+          <Row>
+            <Col xs={6}>You will borrow at most</Col>
+            <Col xs={6}>{borrowAmounts[0]} {symbolA}</Col>
+          </Row>
+          <Row>
+            <Col xs={6}>You will borrow at most</Col>
+            <Col xs={6}>{borrowAmounts[1]} {symbolB}</Col>
+          </Row>
           <Row>
             <Col xs={6}>
               <Button variant="success" block>Approve</Button>

@@ -17,13 +17,3 @@ export function formatUSD(n: number) : string {
 export function formatLeverage(n: number) : string {
   return (Math.round(n * 100) / 100).toFixed(2) + 'x';
 }
-
-export function formatLiquidationPrices(liquidationPrices: [number, number]) : string {
-  if (!liquidationPrices[0] && !liquidationPrices[1]) return '-';
-  if (!liquidationPrices[0] || !liquidationPrices[1]) {
-    if (liquidationPrices[0]) return formatToDecimals(liquidationPrices[0], 6) + '- /';
-    if (liquidationPrices[1]) return '/ -' + formatToDecimals(liquidationPrices[1], 6);
-  }
-  // Notice both prices should have the same number of decimals
-  return formatToDecimals(liquidationPrices[0], 6) + ' - ' + formatToDecimals(liquidationPrices[1], 6);
-}
