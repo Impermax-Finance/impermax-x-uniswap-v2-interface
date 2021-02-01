@@ -8,6 +8,8 @@ import { PoolTokenType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
+import InputAmount from "../InputAmount";
+import InteractionButton, { ButtonStates } from "../InteractionButton";
 
 /**
  * Props for the deposit interaction modal.
@@ -28,11 +30,13 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<string>("");
-  const [symbol, setSymbol] = useState<string>("");
   const onUserInput = (input: string) => setVal(input);
 
+  const [symbol, setSymbol] = useState<string>("");
+  const [maxBorrowable, setMaxBorrowable] = useState<number>(0);
   useRouterCallback((router) => {
-    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
+    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
+    router.getMaxBorrowable(uniswapV2PairAddress, poolTokenType).then((data) => setMaxBorrowable(data));
   });
 
   const impermaxRouter = useImpermaxRouter();
@@ -52,23 +56,19 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
             changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? parseFloat(val) : 0}
             changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? parseFloat(val) : 0}
           />
-          <div>
-            <InputGroup className="mb-3">
-              <InputGroup.Prepend>
-                <Button variant="outline-secondary">MAX</Button>
-              </InputGroup.Prepend>
-              <NumericalInput value={val} onUserInput={input => {onUserInput(input)}} />
-              <InputGroup.Append>
-                <InputGroup.Text>{symbol}</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-          </div>
-          <Row>
+          <InputAmount 
+            val={val}
+            setVal={setVal}
+            suffix={symbol}
+            maxTitle={'Available'}
+            max={maxBorrowable}
+          />
+          <Row className="interaction-row">
             <Col xs={6}>
-              <Button variant="success" block>Approve</Button>
+              <InteractionButton name="Approve" state={ButtonStates.Ready} />
             </Col>
             <Col xs={6}>
-              <Button variant='secondary' block onClick={onBorrow}>Borrow</Button>
+              <InteractionButton name="Borrow" state={ButtonStates.Disabled} onClick={onBorrow} />
             </Col>
           </Row>
         </InteractionModalBody>

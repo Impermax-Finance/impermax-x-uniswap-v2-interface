@@ -8,6 +8,8 @@ import { PoolTokenType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
+import InputAmount from "../InputAmount";
+import InteractionButton, { ButtonStates } from "../InteractionButton";
 
 /**
  * Props for the deposit interaction modal.
@@ -28,11 +30,15 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<string>("");
-  const [symbol, setSymbol] = useState<string>("");
   const onUserInput = (input: string) => setVal(input);
 
+  const [symbol, setSymbol] = useState<string>("");
+  const [availableBalance, setAvailableBalance] = useState<number>(0);
+  const [borrowed, setBorrowed] = useState<number>(0);
   useRouterCallback((router) => {
-    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
+    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
+    router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((data) => setAvailableBalance(data));
+    router.getBorrowed(uniswapV2PairAddress, poolTokenType).then((data) => setBorrowed(data));
   });
 
   const impermaxRouter = useImpermaxRouter();
@@ -52,23 +58,19 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
             changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? -1 * parseFloat(val) : 0}
             changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? -1 * parseFloat(val) : 0}
           />
-          <div>
-            <InputGroup className="mb-3">
-              <InputGroup.Prepend>
-                <Button variant="outline-secondary">MAX</Button>
-              </InputGroup.Prepend>
-              <NumericalInput value={val} onUserInput={input => {onUserInput(input)}} />
-              <InputGroup.Append>
-                <InputGroup.Text>{symbol}</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-          </div>
-          <Row>
+          <InputAmount 
+            val={val}
+            setVal={setVal}
+            suffix={symbol}
+            maxTitle={'Available'}
+            max={Math.min(availableBalance, borrowed)}
+          />
+          <Row className="interaction-row">
             <Col xs={6}>
-              <Button variant="success" block>Approve</Button>
+              <InteractionButton name="Approve" state={ButtonStates.Ready} />
             </Col>
             <Col xs={6}>
-              <Button variant='secondary' block onClick={onRepay}>Repay</Button>
+              <InteractionButton name="Repay" state={ButtonStates.Disabled} onClick={onRepay} />
             </Col>
           </Row>
         </InteractionModalBody>

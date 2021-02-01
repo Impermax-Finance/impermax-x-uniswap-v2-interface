@@ -1,6 +1,7 @@
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 import React, { ReactElement } from 'react';
+import './index.scss';
 
 export const InteractionModalFooter = styled(Modal.Footer)`
 `

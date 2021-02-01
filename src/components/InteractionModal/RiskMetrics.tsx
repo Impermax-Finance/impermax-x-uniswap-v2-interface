@@ -51,7 +51,7 @@ export default function RiskMetrics({changeBorrowedA, changeBorrowedB, changeCol
     </DetailsRow>
     <DetailsRow 
       name={t("TWAP Price") + ' (' + symbolA + '/' + symbolB + ')'} 
-      value={formatFloat(riskMetrics.TWAPPrice, 4)+' (current: '+formatFloat(riskMetrics.marketPrice, 4)+')'} 
+      value={formatFloat(riskMetrics.TWAPPrice, 4)+' (current: '+formatFloat(riskMetrics.marketPrice, 4)+')'}
     />
   </div>);
 }

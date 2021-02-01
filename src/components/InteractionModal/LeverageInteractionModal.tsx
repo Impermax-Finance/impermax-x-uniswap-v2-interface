@@ -8,6 +8,7 @@ import { PoolTokenType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
+import { formatFloat, formatToDecimals } from "../../utils/format";
 
 /**
  * Props for the deposit interaction modal.
@@ -36,7 +37,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
     router.getLeverageAmounts(uniswapV2PairAddress, val).then((data) => setBorrowAmounts(data));
   }, [val]);
   useRouterCallback((router) => {
-    router.getLeverage(uniswapV2PairAddress).then((data) => setVal(data.toString()));
+    router.getLeverage(uniswapV2PairAddress).then((data) => setVal((Math.ceil(data * 1000) / 1000).toString()));
     router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setSymbolA(data));
     router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setSymbolB(data));
   });
@@ -66,14 +67,20 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
               </InputGroup.Append>
             </InputGroup>
           </div>
-          <Row>
-            <Col xs={6}>You will borrow at most</Col>
-            <Col xs={6}>{borrowAmounts[0]} {symbolA}</Col>
-          </Row>
-          <Row>
-            <Col xs={6}>You will borrow at most</Col>
-            <Col xs={6}>{borrowAmounts[1]} {symbolB}</Col>
-          </Row>
+          <div className="transaction-recap">
+            <Row>
+              <Col xs={6}>You will borrow at most</Col>
+              <Col xs={6} className="text-right">{formatFloat(borrowAmounts[0])} {symbolA}</Col>
+            </Row>
+            <Row>
+              <Col xs={6}>You will borrow at most</Col>
+              <Col xs={6} className="text-right">{formatFloat(borrowAmounts[1])} {symbolB}</Col>
+            </Row>
+            <Row>
+              <Col xs={6}>You will get at least</Col>
+              <Col xs={6} className="text-right">{formatFloat(borrowAmounts[2])} {symbolA}-{symbolB}</Col>
+            </Row>
+          </div>
           <Row>
             <Col xs={6}>
               <Button variant="success" block>Approve</Button>

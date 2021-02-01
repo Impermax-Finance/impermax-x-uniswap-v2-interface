@@ -13,36 +13,38 @@ import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonStates } from "../InteractionButton";
 
 /**
- * Props for the deposit interaction modal.
+ * Props for the withdraw interaction modal.
  * @property show Shows or hides the modal.
  * @property toggleShow A function to update the show variable to show or hide the Modal.
  */
-export interface DepositInteractionModalProps {
+export interface WithdrawInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
 }
 
 /**
- * Styled component for the deposit modal.
+ * Styled component for the withdraw modal.
  * @param param0 any Props for component
- * @see DepositInteractionModalProps
+ * @see WithdrawInteractionModalProps
  */
-export default function DepositInteractionModal({show, toggleShow}: DepositInteractionModalProps) {
+export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInteractionModalProps) {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<string>("");
 
   const [symbol, setSymbol] = useState<string>("");
-  const [availableBalance, setAvailableBalance] = useState<number>(0);
+  const [deposited, setDeposited] = useState<number>(0);
   useRouterCallback((router) => {
     router.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
-    router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((balance) => setAvailableBalance(balance));
+    router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((balance) => setDeposited(balance));
   });
+
+  //valutare rischio e disponibilità cash
 
   const impermaxRouter = useImpermaxRouter();
   const doUpdate = useDoUpdate();
   const onDeposit = async () => {
-    await impermaxRouter.deposit(uniswapV2PairAddress, poolTokenType, val);
+    await impermaxRouter.withdraw(uniswapV2PairAddress, poolTokenType, val);
     doUpdate();
     toggleShow(false);
   }
@@ -50,24 +52,24 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   return (
     <InteractionModal show={show} onHide={() => toggleShow(false)}>
       <>
-        <InteractionModalHeader value="Deposit" />
+        <InteractionModalHeader value="Withdraw" />
         <InteractionModalBody>
           { poolTokenType == PoolTokenType.Collateral ? (
-            <RiskMetrics changeCollateral={parseFloat(val)} />
+            <RiskMetrics changeCollateral={-1 * parseFloat(val)} />
           ) : (null) }
           <InputAmount 
             val={val}
             setVal={setVal}
             suffix={symbol}
             maxTitle={'Available'}
-            max={availableBalance}
+            max={deposited}
           />
           <Row className="interaction-row">
             <Col xs={6}>
               <InteractionButton name="Approve" state={ButtonStates.Ready} />
             </Col>
             <Col xs={6}>
-              <InteractionButton name="Deposit" state={ButtonStates.Disabled} onClick={onDeposit} />
+              <InteractionButton name="Withdraw" state={ButtonStates.Disabled} onClick={onDeposit} />
             </Col>
           </Row>
         </InteractionModalBody>

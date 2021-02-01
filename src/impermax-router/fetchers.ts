@@ -119,6 +119,11 @@ export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress
   if (!cache.priceDenomLP) cache.priceDenomLP = this.initializePriceDenomLP(uniswapV2PairAddress);
   return cache.priceDenomLP;
 }
+export async function getBorrowablePriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
+  if (poolTokenType == PoolTokenType.BorrowableA) return priceA;
+  return priceB;
+}
 
 // Market Price
 export async function initializeMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {

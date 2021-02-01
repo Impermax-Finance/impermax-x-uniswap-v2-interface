@@ -11,6 +11,7 @@ import usePairAddress from "../../hooks/usePairAddress";
 import useImpermaxRouter, { useRouterAccount, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import BorrowInteractionModal from "../InteractionModal/BorrowInteractionModal";
 import RepayInteractionModal from "../InteractionModal/RepayInteractionModal";
+import WithdrawInteractionModal from "../InteractionModal/WithdrawInteractionModal";
 
 /**
  * Build account lending pool detail rows for single currencies.
@@ -31,6 +32,7 @@ export default function AccountLendingPoolRow() {
   });
 
   const [showDepositModal, toggleDepositModal] = useState(false);
+  const [showWithdrawModal, toggleWithdrawModal] = useState(false);
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepaywModal] = useState(false);
 
@@ -68,7 +70,7 @@ export default function AccountLendingPoolRow() {
             <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
           </Col>
           <Col>
-            <Button variant="primary">{t("Withdraw")}</Button>
+            <Button variant="primary" onClick={() => toggleWithdrawModal(true)}>{t("Withdraw")}</Button>
           </Col>
         </Row>
         <Row>
@@ -84,6 +86,10 @@ export default function AccountLendingPoolRow() {
     <DepositInteractionModal 
       show={showDepositModal} 
       toggleShow={toggleDepositModal}
+    />
+    <WithdrawInteractionModal 
+      show={showWithdrawModal} 
+      toggleShow={toggleWithdrawModal}
     />
     <BorrowInteractionModal 
       show={showBorrowModal} 

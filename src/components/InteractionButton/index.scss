@@ -1,0 +1,20 @@
+.interaction-button {
+  display: block;
+  height: 60px;
+  border-radius: 0.75rem;
+  font-size: 1.1875rem;
+  width: 100%;
+  border: 0;
+  outline: 0 !important;
+
+  &.disabled {
+    cursor: auto;
+    background-color: #dcdee3;
+    color: #76797f;
+  }
+
+  &.ready {
+    background-color: #05c881;
+    color: #fff;
+  }
+}
