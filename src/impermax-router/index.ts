@@ -62,6 +62,8 @@ export default class ImpermaxRouter {
           totalBalance?: Promise<number>,
           totalBorrows?: Promise<number>,
           borrowRate?: Promise<number>,
+          reserveFactor?: Promise<number>,
+          accrualTimestamp?: Promise<number>,
           availableBalance?: Promise<number>,
           deposited?: Promise<number>,
           borrowed?: Promise<number>,
@@ -138,13 +140,19 @@ export default class ImpermaxRouter {
   public getTWAPPrice = fetchers.getTWAPPrice;
 
   // Borrowable Fetchers
+  public initializeReserveFactor = borrowableFetchers.initializeReserveFactor;
+  public initializeAccrualTimestamp = borrowableFetchers.initializeAccrualTimestamp;
   public initializeBorrowRate = borrowableFetchers.initializeBorrowRate;
   public initializeTotalBorrows = borrowableFetchers.initializeTotalBorrows;
+  public getReserveFactor = borrowableFetchers.getReserveFactor;
+  public getAccrualTimestamp = borrowableFetchers.getAccrualTimestamp;
   public getTotalBorrows = borrowableFetchers.getTotalBorrows;
+  public getCurrentTotalBorrows = borrowableFetchers.getCurrentTotalBorrows;
   public getTotalBorrowsUSD = borrowableFetchers.getTotalBorrowsUSD;
   public getBorrowRate = borrowableFetchers.getBorrowRate;
   public getBorrowAPY = borrowableFetchers.getBorrowAPY;
   public getSupply = borrowableFetchers.getSupply;
+  public getCurrentSupply = borrowableFetchers.getCurrentSupply;
   public getSupplyUSD = borrowableFetchers.getSupplyUSD;
   public getUtilizationRate = borrowableFetchers.getUtilizationRate;
   public getSupplyRate = borrowableFetchers.getSupplyRate;

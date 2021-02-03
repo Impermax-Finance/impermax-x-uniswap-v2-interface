@@ -38,7 +38,10 @@ export async function initializeBorrowed(this: ImpermaxRouter, uniswapV2PairAddr
   const [borrowable,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const exchangeRate = await this.getExchangeRate(uniswapV2PairAddress, poolTokenType);
   const balance = await borrowable.methods.borrowBalance(this.account).call();
-  return (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) * exchangeRate;
+  const storedAmount = (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) * exchangeRate;
+  const accrualTimestamp = await this.getAccrualTimestamp(uniswapV2PairAddress, poolTokenType);
+  const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
+  return storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
 }
 export async function getBorrowed(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
