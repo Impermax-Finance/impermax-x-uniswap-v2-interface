@@ -33,13 +33,11 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
   const [val, setVal] = useState<string>("");
 
   const [symbol, setSymbol] = useState<string>("");
-  const [deposited, setDeposited] = useState<number>(0);
+  const [maxWithdrawable, setMaxWithdrawable] = useState<number>(0);
   useRouterCallback((router) => {
     router.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
-    router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((balance) => setDeposited(balance));
+    router.getMaxWithdrawable(uniswapV2PairAddress, poolTokenType).then((balance) => setMaxWithdrawable(balance));
   });
-
-  //valutare rischio e disponibilità cash
 
   const impermaxRouter = useImpermaxRouter();
   const doUpdate = useDoUpdate();
@@ -62,7 +60,7 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
             setVal={setVal}
             suffix={symbol}
             maxTitle={'Available'}
-            max={deposited}
+            max={maxWithdrawable}
           />
           <Row className="interaction-row">
             <Col xs={6}>

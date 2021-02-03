@@ -45,9 +45,15 @@ export default function RiskMetrics({changeBorrowedA, changeBorrowedB, changeCol
 
   if (!riskMetrics || !newRiskMetrics) return null;
   return (<div>
-    <DetailsRow name={t("New Leverage")} value={formatLeverage(riskMetrics.leverage) + ' -> ' + formatLeverage(newRiskMetrics.leverage)} />
+    <DetailsRow name={t("New Leverage")}>
+      {formatLeverage(riskMetrics.leverage)}
+      <i className="change-arrow" />
+      {formatLeverage(newRiskMetrics.leverage)}
+    </DetailsRow>
     <DetailsRow name={t("New Liquidation Prices")}>
-      <LiquidationPrices riskMetrics={riskMetrics}></LiquidationPrices> -> <LiquidationPrices riskMetrics={newRiskMetrics}></LiquidationPrices>
+      <LiquidationPrices riskMetrics={riskMetrics}></LiquidationPrices> 
+      <i className="change-arrow" /> 
+      <LiquidationPrices riskMetrics={newRiskMetrics}></LiquidationPrices>
     </DetailsRow>
     <DetailsRow 
       name={t("TWAP Price") + ' (' + symbolA + '/' + symbolB + ')'} 

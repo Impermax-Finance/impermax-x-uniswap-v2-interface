@@ -9,6 +9,8 @@ import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
 import { formatFloat, formatToDecimals } from "../../utils/format";
+import InputAmount from "../InputAmount";
+import InteractionButton, { ButtonStates } from "../InteractionButton";
 
 /**
  * Props for the deposit interaction modal.
@@ -33,6 +35,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const [borrowAmounts, setBorrowAmounts] = useState<[number, number, number]>([0,0,0]);
   const [symbolA, setSymbolA] = useState<string>();
   const [symbolB, setSymbolB] = useState<string>();
+  const [maxLeverage, setMaxLeverage] = useState<number>(1);
   useRouterCallback((router) => {
     router.getLeverageAmounts(uniswapV2PairAddress, val).then((data) => setBorrowAmounts(data));
   }, [val]);
@@ -40,6 +43,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
     router.getLeverage(uniswapV2PairAddress).then((data) => setVal((Math.ceil(data * 1000) / 1000).toString()));
     router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setSymbolA(data));
     router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setSymbolB(data));
+    router.getMaxLeverage(uniswapV2PairAddress).then((data) => setMaxLeverage(data));
   });
 
   const impermaxRouter = useImpermaxRouter();
@@ -56,17 +60,13 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
         <InteractionModalHeader value="Leverage" />
         <InteractionModalBody>
           <RiskMetrics changeBorrowedA={borrowAmounts[0]} changeBorrowedB={borrowAmounts[1]} changeCollateral={borrowAmounts[2]} />
-          <div>
-            <InputGroup className="mb-3">
-              <InputGroup.Prepend>
-                <Button variant="outline-secondary">MAX</Button>
-              </InputGroup.Prepend>
-              <NumericalInput value={val} onUserInput={input => {onUserInput(input)}} />
-              <InputGroup.Append>
-                <InputGroup.Text>x</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-          </div>
+          <InputAmount 
+            val={val}
+            setVal={setVal}
+            suffix={'x'}
+            maxTitle={'Max leverage'}
+            max={maxLeverage}
+          />
           <div className="transaction-recap">
             <Row>
               <Col xs={6}>You will borrow at most</Col>
@@ -81,12 +81,17 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
               <Col xs={6} className="text-right">{formatFloat(borrowAmounts[2])} {symbolA}-{symbolB}</Col>
             </Row>
           </div>
-          <Row>
+          <Row className="interaction-row">
             <Col xs={6}>
-              <Button variant="success" block>Approve</Button>
+              <InteractionButton name={"Approve " + symbolA} state={ButtonStates.Ready} />
             </Col>
             <Col xs={6}>
-              <Button variant='secondary' block onClick={onLeverage}>Leverage</Button>
+              <InteractionButton name={"Approve " + symbolB} state={ButtonStates.Ready} />
+            </Col>
+          </Row>
+          <Row className="interaction-row">
+            <Col>
+              <InteractionButton name="Leverage" state={ButtonStates.Disabled} onClick={onLeverage} />
             </Col>
           </Row>
         </InteractionModalBody>

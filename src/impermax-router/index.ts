@@ -37,6 +37,7 @@ export default class ImpermaxRouter {
   web3: any;
   chainId: number;
   uiMargin: number;
+  dust: number;
   router: Router;
   factory: Factory;
   simpleUniswapOracle: SimpleUniswapOracle;
@@ -73,6 +74,7 @@ export default class ImpermaxRouter {
     this.web3 = cfg.web3;
     this.chainId = cfg.chainId;
     this.uiMargin = 1.05;
+    this.dust = 1.000001;
     this.router = this.newRouter(cfg.routerAddress);
     this.factory = this.newFactory(cfg.factoryAddress);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
@@ -168,7 +170,9 @@ export default class ImpermaxRouter {
   public getLiquidationPriceSwings = account.getLiquidationPriceSwings;
   public getLiquidationPrices = account.getLiquidationPrices;
   public getMaxBorrowable = account.getMaxBorrowable;
-
+  public getMaxLeverage = account.getMaxLeverage;
+  public getMaxWithdrawable = account.getMaxWithdrawable;
+  
   // Utils
   public normalize = utils.normalize;
   public getDeadline = utils.getDeadline;
@@ -179,6 +183,7 @@ export default class ImpermaxRouter {
 
   // Interactions
   public deposit = interactions.deposit;
+  public withdraw = interactions.withdraw;
   public borrow = interactions.borrow;
   public repay = interactions.repay;
   public getLeverageAmounts = interactions.getLeverageAmounts;

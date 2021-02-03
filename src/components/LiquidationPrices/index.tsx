@@ -36,6 +36,9 @@ interface LiquidationPricesProps {
  */
 export default function LiquidationPrices({riskMetrics} : LiquidationPricesProps) {
   if (!riskMetrics.liquidationPrices[0] && !riskMetrics.liquidationPrices[1]) return (<>-</>);
+  if (riskMetrics.liquidationPrices[0] >= riskMetrics.TWAPPrice || riskMetrics.liquidationPrices[1] <= riskMetrics.TWAPPrice) return (
+    <span className={"liquidation-price risk-5"}>Liquidatable</span>
+  );
   return (<>
     <LiquidationPrice
       liquidationPrice={riskMetrics.liquidationPrices[0]}
