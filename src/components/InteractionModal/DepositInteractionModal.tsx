@@ -11,6 +11,8 @@ import { formatFloat } from "../../utils/format";
 import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonStates } from "../InteractionButton";
+import TransactionSize from "./TransactionRecap/TransactionSize";
+import SupplyAPY from "./TransactionRecap/SupplyAPY";
 
 /**
  * Props for the deposit interaction modal.
@@ -62,6 +64,10 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
             maxTitle={'Available'}
             max={availableBalance}
           />
+          <div className="transaction-recap">
+            <TransactionSize amount={parseFloat(val)} />
+            <SupplyAPY />
+          </div>
           <Row className="interaction-row">
             <Col xs={6}>
               <InteractionButton name="Approve" state={ButtonStates.Ready} />

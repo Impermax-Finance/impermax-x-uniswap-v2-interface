@@ -7,10 +7,11 @@ import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } fr
 import { PoolTokenType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
-import { formatFloat } from "../../utils/format";
+import { formatFloat, formatUSD } from "../../utils/format";
 import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonStates } from "../InteractionButton";
+import TransactionSize from "./TransactionRecap/TransactionSize";
 
 /**
  * Props for the withdraw interaction modal.
@@ -35,8 +36,8 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
   const [symbol, setSymbol] = useState<string>("");
   const [maxWithdrawable, setMaxWithdrawable] = useState<number>(0);
   useRouterCallback((router) => {
-    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
-    router.getMaxWithdrawable(uniswapV2PairAddress, poolTokenType).then((balance) => setMaxWithdrawable(balance));
+    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
+    router.getMaxWithdrawable(uniswapV2PairAddress, poolTokenType).then((data) => setMaxWithdrawable(data));
   });
 
   const impermaxRouter = useImpermaxRouter();
@@ -62,6 +63,9 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
             maxTitle={'Available'}
             max={maxWithdrawable}
           />
+          <div className="transaction-recap">
+            <TransactionSize amount={parseFloat(val)} />
+          </div>
           <Row className="interaction-row">
             <Col xs={6}>
               <InteractionButton name="Approve" state={ButtonStates.Ready} />

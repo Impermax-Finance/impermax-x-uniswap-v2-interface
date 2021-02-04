@@ -1,5 +1,6 @@
-export function formatFloat(n: number, precision: number = 6) : string {
-  return n.toPrecision(precision);
+export function formatFloat(n: number, significant: number = 6) : string {
+  if (!n) return '0';  
+  return parseFloat(n.toPrecision(significant)).toString();
 }
 
 export function formatToDecimals(n: number, decimals: number = 2) : string {
@@ -11,6 +12,7 @@ export function formatPercentage(n: number, decimals: number = 2) : string {
 }
 
 export function formatUSD(n: number) : string {
+  if (!n) return "$0";
   return "$" + formatToDecimals(n, 2);
 }
 

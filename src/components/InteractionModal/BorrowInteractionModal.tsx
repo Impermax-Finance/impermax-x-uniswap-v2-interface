@@ -10,6 +10,8 @@ import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonStates } from "../InteractionButton";
+import BorrowAPY from "./TransactionRecap/BorrowAPY";
+import BorrowFee from "./TransactionRecap/BorrowFee";
 
 /**
  * Props for the deposit interaction modal.
@@ -63,6 +65,10 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
             maxTitle={'Available'}
             max={maxBorrowable}
           />
+          <div className="transaction-recap">
+            <BorrowFee amount={parseFloat(val)} />
+            <BorrowAPY />
+          </div>
           <Row className="interaction-row">
             <Col xs={6}>
               <InteractionButton name="Approve" state={ButtonStates.Ready} />

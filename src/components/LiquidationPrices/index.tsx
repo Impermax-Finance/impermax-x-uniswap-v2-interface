@@ -12,6 +12,7 @@ interface LiquidationPriceProps {
 }
 
 function LiquidationPrice({liquidationPrice, TWAPPrice, safetyMargin} : LiquidationPriceProps) {
+  if (liquidationPrice == Infinity) return (<>/</>)
   const safetyFactor = liquidationPrice > TWAPPrice ? liquidationPrice / TWAPPrice - 1 : TWAPPrice / liquidationPrice - 1;
   const riskFactor = safetyMargin - 1;
   const riskClass = 

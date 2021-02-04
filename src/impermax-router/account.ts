@@ -127,8 +127,6 @@ export async function getNewLiquidationPriceSwings(
 	const t = (actualCollateral + rad) / (2 * Math.sqrt(safetyMargin));
 	let priceSwingA = (t / valueA) ** 2;
   let priceSwingB = (t / valueB) ** 2;
-  if (priceSwingA == Infinity) priceSwingA = null;
-  if (priceSwingB == Infinity) priceSwingB = null;
 	return [priceSwingA, priceSwingB];
 }
 export async function getNewLiquidationPrices(

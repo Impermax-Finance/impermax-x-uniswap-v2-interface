@@ -10,6 +10,7 @@ import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonStates } from "../InteractionButton";
+import { formatUSD } from "../../utils/format";
 
 /**
  * Props for the deposit interaction modal.
