@@ -30,8 +30,7 @@ export interface RepayInteractionModalProps {
 export default function RepayInteractionModal({show, toggleShow}: RepayInteractionModalProps) {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
-  const [val, setVal] = useState<string>("");
-  const onUserInput = (input: string) => setVal(input);
+  const [val, setVal] = useState<number>(0);
 
   const [symbol, setSymbol] = useState<string>("");
   const [availableBalance, setAvailableBalance] = useState<number>(0);
@@ -56,8 +55,8 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
         <InteractionModalHeader value="Repay" />
         <InteractionModalBody>
           <RiskMetrics
-            changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? -1 * parseFloat(val) : 0}
-            changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? -1 * parseFloat(val) : 0}
+            changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? -val : 0}
+            changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? -val : 0}
           />
           <InputAmount 
             val={val}

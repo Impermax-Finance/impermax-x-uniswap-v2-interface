@@ -31,7 +31,7 @@ export interface WithdrawInteractionModalProps {
 export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInteractionModalProps) {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
-  const [val, setVal] = useState<string>("");
+  const [val, setVal] = useState<number>(0);
 
   const [symbol, setSymbol] = useState<string>("");
   const [maxWithdrawable, setMaxWithdrawable] = useState<number>(0);
@@ -54,7 +54,7 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
         <InteractionModalHeader value="Withdraw" />
         <InteractionModalBody>
           { poolTokenType == PoolTokenType.Collateral ? (
-            <RiskMetrics changeCollateral={-1 * parseFloat(val)} />
+            <RiskMetrics changeCollateral={-val} />
           ) : (null) }
           <InputAmount 
             val={val}
@@ -64,7 +64,7 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
             max={maxWithdrawable}
           />
           <div className="transaction-recap">
-            <TransactionSize amount={parseFloat(val)} />
+            <TransactionSize amount={val} />
           </div>
           <Row className="interaction-row">
             <Col xs={6}>

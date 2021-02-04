@@ -5,7 +5,7 @@ import { TokenKind } from "graphql";
 import { BigNumber } from "ethers";
 import BN from "bn.js";
 
-export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, val: string) {
+export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, val: number) {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const tokenAddress = token._address;
   const poolTokenAddress = poolToken._address;
@@ -28,13 +28,13 @@ export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Addres
   }
 }
 
-export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, val: string) {
+export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, val: number) {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const tokenAddress = token._address;
   const poolTokenAddress = poolToken._address;
   const decimals = await this.getDecimals(uniswapV2PairAddress, poolTokenType);
   const exchangeRate = await this.getExchangeRate(uniswapV2PairAddress, poolTokenType);
-  const tokens = decimalToBalance(parseFloat(val) / exchangeRate, decimals);
+  const tokens = decimalToBalance(val / exchangeRate, decimals);
   const deadline = this.getDeadline();
   try {
     if (tokenAddress == this.WETH) {
@@ -54,7 +54,7 @@ export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Addre
   }
 }
 
-export async function borrow(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, val: string) {
+export async function borrow(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, val: number) {
   const [borrowable, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const tokenAddress = token._address;
   const borrowableAddress = borrowable._address;
@@ -78,7 +78,7 @@ export async function borrow(this: ImpermaxRouter, uniswapV2PairAddress: Address
   }
 }
 
-export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, val: string) {
+export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, val: number) {
   const [borrowable, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const tokenAddress = token._address;
   const borrowableAddress = borrowable._address;
@@ -100,16 +100,16 @@ export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address,
   }
 }
 
-export async function getLeverageAmounts(this: ImpermaxRouter, uniswapV2PairAddress: Address, val: string) : Promise<[number, number, number]> {
+export async function getLeverageAmounts(this: ImpermaxRouter, uniswapV2PairAddress: Address, val: number) : Promise<[number, number, number]> {
   const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
   const currentLeverage = await this.getLeverage(uniswapV2PairAddress);
   const collateralValue = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
-  if (!val) val = currentLeverage.toString();
-  const changeCollateralValue = collateralValue * parseFloat(val) / currentLeverage - collateralValue;
+  if (!val) val = currentLeverage;
+  const changeCollateralValue = collateralValue * val / currentLeverage - collateralValue;
   const valueForEach = changeCollateralValue / 2;
   return [valueForEach / priceA, valueForEach / priceB, changeCollateralValue];
 }
-export async function leverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, val: string) {
+export async function leverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, val: number) {
   const [borrowableA, tokenA] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const [borrowableB, tokenB] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   const amountsNumber = await this.getLeverageAmounts(uniswapV2PairAddress, val);

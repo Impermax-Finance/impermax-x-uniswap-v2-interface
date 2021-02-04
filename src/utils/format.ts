@@ -1,9 +1,18 @@
+/*
+ * Return the number floored to a certain amount of significant digits
+ */
 export function formatFloat(n: number, significant: number = 6) : string {
-  if (!n) return '0';  
-  return parseFloat(n.toPrecision(significant)).toString();
+  if (!n) return '0';
+  if (n >= 10 ** (significant-1)) return Math.floor(n).toString();
+  const rounded = parseFloat(n.toPrecision(significant));
+  if (rounded <= n) return rounded.toString();
+  const decimals = rounded.toString().split('.')[1].length;
+  const floored = rounded - 10 ** (-decimals);
+  return parseFloat(floored.toPrecision(significant)).toString();
 }
 
 export function formatToDecimals(n: number, decimals: number = 2) : string {
+  if (n == Infinity) return "∞";
   return (Math.round(n * (10 ** decimals)) / (10 ** decimals)).toFixed(decimals);
 }
 
@@ -17,5 +26,6 @@ export function formatUSD(n: number) : string {
 }
 
 export function formatLeverage(n: number) : string {
-  return (Math.round(n * 100) / 100).toFixed(2) + 'x';
+  if (n == Infinity) return "∞";
+  return formatToDecimals(n, 2) + 'x';
 }

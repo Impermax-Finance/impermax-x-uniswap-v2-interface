@@ -31,8 +31,7 @@ export interface BorrowInteractionModalProps {
 export default function BorrowInteractionModal({show, toggleShow}: BorrowInteractionModalProps) {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
-  const [val, setVal] = useState<string>("");
-  const onUserInput = (input: string) => setVal(input);
+  const [val, setVal] = useState<number>(0);
 
   const [symbol, setSymbol] = useState<string>("");
   const [maxBorrowable, setMaxBorrowable] = useState<number>(0);
@@ -55,8 +54,8 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
         <InteractionModalHeader value="Borrow" />
         <InteractionModalBody>
           <RiskMetrics
-            changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? parseFloat(val) : 0}
-            changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? parseFloat(val) : 0}
+            changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? val : 0}
+            changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? val : 0}
           />
           <InputAmount 
             val={val}
@@ -66,7 +65,7 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
             max={maxBorrowable}
           />
           <div className="transaction-recap">
-            <BorrowFee amount={parseFloat(val)} />
+            <BorrowFee amount={val} />
             <BorrowAPY />
           </div>
           <Row className="interaction-row">

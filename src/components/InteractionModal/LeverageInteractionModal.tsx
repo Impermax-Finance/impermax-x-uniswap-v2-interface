@@ -29,8 +29,7 @@ export interface LeverageInteractionModalProps {
  */
 export default function LeverageInteractionModal({show, toggleShow}: LeverageInteractionModalProps) {
   const uniswapV2PairAddress = usePairAddress();
-  const [val, setVal] = useState<string>("");
-  const onUserInput = (input: string) => setVal(input);
+  const [val, setVal] = useState<number>(0);
 
   const [borrowAmounts, setBorrowAmounts] = useState<[number, number, number]>([0,0,0]);
   const [symbolA, setSymbolA] = useState<string>();
@@ -40,7 +39,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
     router.getLeverageAmounts(uniswapV2PairAddress, val).then((data) => setBorrowAmounts(data));
   }, [val]);
   useRouterCallback((router) => {
-    router.getLeverage(uniswapV2PairAddress).then((data) => setVal((Math.ceil(data * 1000) / 1000).toString()));
+    router.getLeverage(uniswapV2PairAddress).then((data) => setVal(Math.ceil(data * 1000) / 1000));
     router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setSymbolA(data));
     router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setSymbolB(data));
     router.getMaxLeverage(uniswapV2PairAddress).then((data) => setMaxLeverage(data));

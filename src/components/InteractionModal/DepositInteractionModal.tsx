@@ -32,7 +32,7 @@ export interface DepositInteractionModalProps {
 export default function DepositInteractionModal({show, toggleShow}: DepositInteractionModalProps) {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
-  const [val, setVal] = useState<string>("");
+  const [val, setVal] = useState<number>(0);
 
   const [symbol, setSymbol] = useState<string>("");
   const [availableBalance, setAvailableBalance] = useState<number>(0);
@@ -55,7 +55,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
         <InteractionModalHeader value="Deposit" />
         <InteractionModalBody>
           { poolTokenType == PoolTokenType.Collateral ? (
-            <RiskMetrics changeCollateral={parseFloat(val)} />
+            <RiskMetrics changeCollateral={val} />
           ) : (null) }
           <InputAmount 
             val={val}
@@ -65,7 +65,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
             max={availableBalance}
           />
           <div className="transaction-recap">
-            <TransactionSize amount={parseFloat(val)} />
+            <TransactionSize amount={val} />
             <SupplyAPY />
           </div>
           <Row className="interaction-row">

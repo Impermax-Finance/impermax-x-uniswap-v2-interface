@@ -5,17 +5,20 @@ import { formatFloat } from "../../utils/format";
 import './index.scss';
 
 interface InputAmountProps {
-  val: string;
-  setVal: Function;
+  val: number;
+  setVal(input: number): void;
   suffix: string;
   maxTitle: string;
   max: number;
 }
 
 export default function InputAmount({val, setVal, suffix, maxTitle, max}: InputAmountProps) {
-
-  const onUserInput = (input: string) => setVal(input);
-  const onMax = () => setVal(max.toString());
+  const [stringVal, setStringVal] = useState<string>("");
+  const onUserInput = (input: string) => setStringVal(input);
+  const onMax = () => setStringVal(formatFloat(max).toString());
+  useEffect(() => {
+    setVal(stringVal ? parseFloat(stringVal) : 0)
+  }, [stringVal]);
 
   return (
     <div className="input-amount">
@@ -26,7 +29,7 @@ export default function InputAmount({val, setVal, suffix, maxTitle, max}: InputA
         <InputGroup.Prepend className="max-input">
           <button onClick={onMax}>MAX</button>
         </InputGroup.Prepend>
-        <NumericalInput value={val} onUserInput={input => {onUserInput(input)}} />
+        <NumericalInput value={stringVal} onUserInput={input => {onUserInput(input)}} />
         <InputGroup.Append className="suffix">
           <span>{suffix}</span>
         </InputGroup.Append>
