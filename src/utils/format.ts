@@ -6,7 +6,7 @@ export function formatFloat(n: number, significant: number = 6) : string {
   if (n >= 10 ** (significant-1)) return Math.floor(n).toString();
   const rounded = parseFloat(n.toPrecision(significant));
   if (rounded <= n) return rounded.toString();
-  const decimals = rounded.toString().split('.')[1].length;
+  const decimals = rounded.toPrecision(significant).split('.')[1].length;
   const floored = rounded - 10 ** (-decimals);
   return parseFloat(floored.toPrecision(significant)).toString();
 }

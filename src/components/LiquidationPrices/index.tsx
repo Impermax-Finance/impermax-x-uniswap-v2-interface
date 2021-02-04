@@ -1,6 +1,6 @@
 import React from "react";
 import './index.scss';
-import { formatToDecimals } from "../../utils/format";
+import { formatToDecimals, formatFloat } from "../../utils/format";
 import { RiskMetrics } from "../../impermax-router/interfaces";
 
 const LIQ_K = 1.7;
@@ -22,7 +22,7 @@ function LiquidationPrice({liquidationPrice, TWAPPrice, safetyMargin} : Liquidat
     safetyFactor > riskFactor * LIQ_K ** -2 ? "risk-4" : "risk-5";
   return (
     <span className={"liquidation-price " + riskClass}>
-      {formatToDecimals(liquidationPrice, 6)}
+      {formatFloat(liquidationPrice, 4)}
     </span>
   );
 }
@@ -35,19 +35,24 @@ interface LiquidationPricesProps {
  * Generates lending pool aggregate details.
  */
 export default function LiquidationPrices({riskMetrics} : LiquidationPricesProps) {
-  if (!riskMetrics.liquidationPrices[0] && !riskMetrics.liquidationPrices[1]) return (<>-</>);
-  if (riskMetrics.liquidationPrices[0] >= riskMetrics.TWAPPrice || riskMetrics.liquidationPrices[1] <= riskMetrics.TWAPPrice) return (
+  const price0 = riskMetrics.liquidationPrices[0];
+  const price1 = riskMetrics.liquidationPrices[1];
+  const TWAPPrice = riskMetrics.TWAPPrice;
+  const safetyMargin = riskMetrics.safetyMargin;
+  if (!price0 && !price1) return (<>-</>);
+  if (price0 >= TWAPPrice || price1 <= TWAPPrice) return (
     <span className={"liquidation-price risk-5"}>Liquidatable</span>
   );
+
   return (<>
     <LiquidationPrice
-      liquidationPrice={riskMetrics.liquidationPrices[0]}
-      TWAPPrice={riskMetrics.TWAPPrice}
-      safetyMargin={riskMetrics.safetyMargin}
+      liquidationPrice={price0}
+      TWAPPrice={TWAPPrice}
+      safetyMargin={safetyMargin}
     /> - <LiquidationPrice
-      liquidationPrice={riskMetrics.liquidationPrices[1]}
-      TWAPPrice={riskMetrics.TWAPPrice}
-      safetyMargin={riskMetrics.safetyMargin}
+      liquidationPrice={price1}
+      TWAPPrice={TWAPPrice}
+      safetyMargin={safetyMargin}
     />
   </>);
 }

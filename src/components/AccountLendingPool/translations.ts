@@ -16,9 +16,6 @@ const translations = {
   "Liquidation Prices": {
     'ENG': "Liquidation Prices (TWAP)"
   },
-  "TWAP Price": {
-    'ENG': "TWAP Price"
-  },
   "Deposit": {
     'ENG': "Deposit"
   },

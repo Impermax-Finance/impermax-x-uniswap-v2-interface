@@ -20,3 +20,12 @@ export default function DetailsRow({ name, value, children }: DetailsRowProps) {
     </div>
   );
 }
+
+interface DetailsRowCustomProps {
+  children: any;
+}
+export function DetailsRowCustom({ children }: DetailsRowCustomProps) {
+  return (
+    <div className="details-row">{ children }</div>
+  );
+}

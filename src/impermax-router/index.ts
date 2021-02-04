@@ -33,7 +33,6 @@ import * as data from "./data"
 import { Networks } from "../utils/connections";
 
 export default class ImpermaxRouter {
-  [x: string]: any;
   web3: any;
   chainId: number;
   uiMargin: number;
@@ -44,6 +43,7 @@ export default class ImpermaxRouter {
   account: Address;
   WETH: Address;
   convertToMainnet: Function;
+  priceInverted: boolean;
   lendingPoolCache: {
     [key in Address]?: {
       lendingPool?: Promise<LendingPool>,
@@ -82,6 +82,7 @@ export default class ImpermaxRouter {
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
     this.WETH = cfg.WETH;
     this.convertToMainnet = cfg.convertToMainnet;
+    this.priceInverted = cfg.priceInverted;
     this.lendingPoolCache = {};
   }
 
@@ -104,6 +105,10 @@ export default class ImpermaxRouter {
 
   cleanCache() {
     this.lendingPoolCache = {};
+  }
+
+  setPriceInverted(priceInverted: boolean) {
+    this.priceInverted = priceInverted;
   }
 
   // Contracts

@@ -4,10 +4,11 @@ import phrases from './translations';
 import { Row, Col } from "react-bootstrap";
 import { AccountData } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
-import { useRouterCallback } from "../../hooks/useImpermaxRouter";
+import { useRouterCallback, useTogglePriceInverted, usePriceInverted } from "../../hooks/useImpermaxRouter";
 import { formatUSD, formatFloat, formatLeverage } from "../../utils/format";
 import LiquidationPrices from "../LiquidationPrices";
 import DetailsRow from "../DetailsRow";
+import CurrentPrice from "../CurrentPrice";
 
 
 /**
@@ -20,9 +21,16 @@ export default function AccountLendingPoolDetails() {
 
   const uniswapV2PairAddress = usePairAddress();
   const [accountData, setAccountData] = useState<AccountData>();
+  const [symbols, setSymbols] = useState<string>();
+  const priceInverted = usePriceInverted();
+  const togglePriceInverted = useTogglePriceInverted();
   useRouterCallback((router) => {
     if (!router.account) return setAccountData(null);
-    router.getAccountData(uniswapV2PairAddress).then((data) => setAccountData(data));
+    router.getAccountData(uniswapV2PairAddress).then((data) => {
+      setAccountData(data);
+      if (!priceInverted) setSymbols(data.symbolA + '/' + data.symbolB);
+      else setSymbols(data.symbolB + '/' + data.symbolA);
+    });
   });
 
   if (!accountData) return (<div>
@@ -41,10 +49,7 @@ export default function AccountLendingPoolDetails() {
         <DetailsRow name={t("Liquidation Prices")}>
           <LiquidationPrices riskMetrics={accountData.riskMetrics} />
         </DetailsRow>
-        <DetailsRow 
-          name={t("TWAP Price") + ' (' + accountData.symbolA + '/' + accountData.symbolB + ')'} 
-          value={formatFloat(accountData.riskMetrics.TWAPPrice, 4)+' (current: '+formatFloat(accountData.riskMetrics.marketPrice, 4)+')'} 
-        />
+        <CurrentPrice riskMetrics={accountData.riskMetrics} symbolA={accountData.symbolA} symbolB={accountData.symbolB} />
       </Col>
     </Row>
   </>);

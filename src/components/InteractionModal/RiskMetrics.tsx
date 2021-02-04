@@ -8,6 +8,7 @@ import useImpermaxRouter, { useRouterAccount, useRouterUpdate, useDoUpdate, useR
 import { formatUSD, formatFloat, formatLeverage } from "../../utils/format";
 import LiquidationPrices from "../LiquidationPrices";
 import DetailsRow from "../DetailsRow";
+import CurrentPrice from "../CurrentPrice";
 
 interface RiskMetricsProps {
   changeBorrowedA?: number;
@@ -55,9 +56,6 @@ export default function RiskMetrics({changeBorrowedA, changeBorrowedB, changeCol
       <i className="change-arrow" /> 
       <LiquidationPrices riskMetrics={newRiskMetrics}></LiquidationPrices>
     </DetailsRow>
-    <DetailsRow 
-      name={t("TWAP Price") + ' (' + symbolA + '/' + symbolB + ')'} 
-      value={formatFloat(riskMetrics.TWAPPrice, 4)+' (current: '+formatFloat(riskMetrics.marketPrice, 4)+')'}
-    />
+    <CurrentPrice riskMetrics={riskMetrics} symbolA={symbolA} symbolB={symbolB} />
   </div>);
 }

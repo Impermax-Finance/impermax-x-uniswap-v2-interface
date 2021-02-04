@@ -9,6 +9,8 @@ export interface ImpermaxRouterContextI {
   routerAccount?: string;
   routerUpdate?: number;
   doUpdate?: Function;
+  priceInverted?: boolean;
+  togglePriceInverted?: Function;
 }
 
 export const ImpermaxRouterContext = createContext<ImpermaxRouterContextI>({});
@@ -25,10 +27,16 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
   const [routerAccount, setRouterAccount] = useState<string>();
   const [routerUpdate, setRouterUpdate] = useState<number>(0);
+  const [priceInverted, setPriceInverted] = useState<boolean>(false);
   const doUpdate = () => {
     if (!impermaxRouter) return;
     impermaxRouter.cleanCache();
     setRouterUpdate(routerUpdate+1);
+  };
+  const togglePriceInverted = () => {
+    if (!impermaxRouter) return;
+    impermaxRouter.setPriceInverted(!priceInverted);
+    setPriceInverted(!priceInverted);
   };
 
   useEffect(() => {
@@ -41,7 +49,8 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         factoryAddress, 
         simpleUniswapOracleAddress, 
         WETH, 
-        convertToMainnet
+        convertToMainnet,
+        priceInverted
       });
       if (account) {
         impermaxRouter.unlockWallet(web3, account);
@@ -54,5 +63,12 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     }
   }, [web3, account]);
 
-  return <ImpermaxRouterContext.Provider value={{ impermaxRouter, routerAccount, routerUpdate, doUpdate }}>{children}</ImpermaxRouterContext.Provider>;
+  return <ImpermaxRouterContext.Provider value={{ 
+    impermaxRouter, 
+    routerAccount, 
+    routerUpdate, 
+    doUpdate, 
+    priceInverted, 
+    togglePriceInverted 
+  }}>{children}</ImpermaxRouterContext.Provider>;
 };

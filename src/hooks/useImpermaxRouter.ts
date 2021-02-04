@@ -22,9 +22,19 @@ export function useDoUpdate() {
   return doUpdate;
 }
 
+export function usePriceInverted() {
+  const { priceInverted } = useContext(ImpermaxRouterContext);
+  return priceInverted;
+}
+
+export function useTogglePriceInverted() {
+  const { togglePriceInverted } = useContext(ImpermaxRouterContext);
+  return togglePriceInverted;
+}
+
 export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, a?: Array<any>) {
-  const { impermaxRouter, routerAccount, routerUpdate } = useContext(ImpermaxRouterContext);
+  const { impermaxRouter, routerAccount, routerUpdate, priceInverted } = useContext(ImpermaxRouterContext);
   useEffect(() => {
     if (impermaxRouter) f(impermaxRouter);
-  }, [impermaxRouter, routerAccount, routerUpdate].concat(a))
+  }, [impermaxRouter, routerAccount, routerUpdate, priceInverted].concat(a));
 }
