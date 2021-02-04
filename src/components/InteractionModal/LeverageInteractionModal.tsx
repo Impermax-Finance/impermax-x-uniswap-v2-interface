@@ -66,6 +66,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
             maxTitle={'Max leverage'}
             max={maxLeverage}
           />
+          <input type="range" className="form-range" value={val} step={0.1} min={1} max={maxLeverage} onChange={(event) => setVal(parseFloat(event.target.value))} />
           <div className="transaction-recap">
             <Row>
               <Col xs={6}>You will borrow at most</Col>

@@ -13,12 +13,19 @@ interface InputAmountProps {
 }
 
 export default function InputAmount({val, setVal, suffix, maxTitle, max}: InputAmountProps) {
-  const [stringVal, setStringVal] = useState<string>("");
+  const [stringVal, setStringVal] = useState<string>(val.toString());
   const onUserInput = (input: string) => setStringVal(input);
   const onMax = () => setStringVal(formatFloat(max).toString());
   useEffect(() => {
-    setVal(stringVal ? parseFloat(stringVal) : 0)
+    const newVal = stringVal ? parseFloat(stringVal) : 0;
+    if (val === newVal) return; // avoid infinite loop
+    setVal(newVal);
   }, [stringVal]);
+  useEffect(() => {
+    const newStringVal = formatFloat(val);
+    if (stringVal === newStringVal) return; // avoid infinite loop
+    setStringVal(newStringVal);
+  }, [val]);
 
   return (
     <div className="input-amount">
