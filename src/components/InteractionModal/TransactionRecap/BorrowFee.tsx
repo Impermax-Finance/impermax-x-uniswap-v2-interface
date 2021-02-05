@@ -8,18 +8,10 @@ import { formatFloat, formatUSD, formatPercentage } from "../../../utils/format"
 
 export interface BorrowFeeProps {
   amount: number;
+  symbol: string;
 }
 
-export default function BorrowFee({amount}: BorrowFeeProps) {
-  const poolTokenType = usePoolToken();
-  if (poolTokenType == PoolTokenType.Collateral) return null;
-  const uniswapV2PairAddress = usePairAddress();
-
-  const [symbol, setSymbol] = useState<string>("");
-  useRouterCallback((router) => {
-    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
-  });
-
+export default function BorrowFee({ amount, symbol }: BorrowFeeProps) {
   return (
     <Row>
       <Col xs={6}>Borrow Fee:</Col>

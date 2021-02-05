@@ -46,3 +46,34 @@
     }
   }
 }
+
+.input-amount-mini {
+  display: flex;
+  justify-content: flex-end;
+
+  .input-container {
+    display: flex;
+    background-color: #fff;
+    height: 30px;
+    border-radius: 0.5rem;
+    border: 1px solid #c0c4cd;
+    width: 74px;
+    justify-content: flex-end;
+
+    input {
+      text-align: right;
+      border: 0;
+      font-size: 1rem;
+      outline: 0;
+      width: 42px;
+    }
+
+    .suffix {
+      display: flex;
+      align-items: center;
+      padding: 0 0.5rem 0 0.25rem;
+      color: #8f9297;
+    }
+  }
+}
+

@@ -100,23 +100,35 @@ export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address,
   }
 }
 
-export async function getLeverageAmounts(this: ImpermaxRouter, uniswapV2PairAddress: Address, val: number) : Promise<[number, number, number]> {
+export async function getLeverageAmounts(
+  this: ImpermaxRouter, 
+  uniswapV2PairAddress: Address, 
+  val: number, 
+  slippage: number
+) : Promise<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number, cAmountMin: number}> {
   const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
   const currentLeverage = await this.getLeverage(uniswapV2PairAddress);
   const collateralValue = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
-  if (!val) val = currentLeverage;
+  //if (!val) val = currentLeverage;
   const changeCollateralValue = collateralValue * val / currentLeverage - collateralValue;
   const valueForEach = changeCollateralValue / 2;
-  return [valueForEach / priceA, valueForEach / priceB, changeCollateralValue];
+  return {
+    bAmountA: valueForEach / priceA,
+    bAmountB: valueForEach / priceB,
+    cAmount: changeCollateralValue,
+    bAmountAMin: valueForEach / priceA / Math.sqrt(slippage),
+    bAmountBMin: valueForEach / priceB / Math.sqrt(slippage),
+    cAmountMin: changeCollateralValue / Math.sqrt(Math.sqrt(slippage)),
+  };
 }
-export async function leverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, val: number) {
+export async function leverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, val: number, slippage: number) {
   const [borrowableA, tokenA] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const [borrowableB, tokenB] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const amountsNumber = await this.getLeverageAmounts(uniswapV2PairAddress, val);
+  const amountsFloat = await this.getLeverageAmounts(uniswapV2PairAddress, val, slippage);
   const decimalsA = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const decimalsB = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const amountA = decimalToBalance(amountsNumber[0], decimalsA);
-  const amountB = decimalToBalance(amountsNumber[1], decimalsB);
+  const amountA = decimalToBalance(amountsFloat.bAmountA, decimalsA);
+  const amountB = decimalToBalance(amountsFloat.bAmountB, decimalsB);
   const deadline = this.getDeadline();
   try {
     await borrowableA.methods.borrowApprove(this.router._address, amountA).call({from: this.account});

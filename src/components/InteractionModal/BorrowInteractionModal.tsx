@@ -65,7 +65,7 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
             max={maxBorrowable}
           />
           <div className="transaction-recap">
-            <BorrowFee amount={val} />
+            <BorrowFee amount={val} symbol={symbol} />
             <BorrowAPY />
           </div>
           <Row className="interaction-row">
