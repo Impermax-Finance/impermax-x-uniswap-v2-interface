@@ -34,7 +34,7 @@ export function useTogglePriceInverted() {
 
 export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, a?: Array<any>) {
   const { impermaxRouter, routerAccount, routerUpdate, priceInverted } = useContext(ImpermaxRouterContext);
-  useEffect(() => {
+  return useEffect(() => {
     if (impermaxRouter) f(impermaxRouter);
   }, [impermaxRouter, routerAccount, routerUpdate, priceInverted].concat(a));
 }

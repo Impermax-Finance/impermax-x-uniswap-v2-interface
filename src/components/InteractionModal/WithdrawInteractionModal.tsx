@@ -10,7 +10,7 @@ import usePoolToken from "../../hooks/usePoolToken";
 import { formatFloat, formatUSD } from "../../utils/format";
 import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
-import InteractionButton, { ButtonStates } from "../InteractionButton";
+import InteractionButton, { ButtonState } from "../InteractionButton";
 import TransactionSize from "./TransactionRecap/TransactionSize";
 
 /**
@@ -68,10 +68,10 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
           </div>
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton name="Approve" state={ButtonStates.Ready} />
+              <InteractionButton name="Approve" state={ButtonState.Ready} />
             </Col>
             <Col xs={6}>
-              <InteractionButton name="Withdraw" state={ButtonStates.Disabled} onClick={onDeposit} />
+              <InteractionButton name="Withdraw" state={ButtonState.Disabled} onClick={onDeposit} />
             </Col>
           </Row>
         </InteractionModalBody>

@@ -27,6 +27,7 @@ import * as contracts from "./contracts";
 import * as fetchers from "./fetchers";
 import * as borrowableFetchers from "./borrowableFetchers";
 import * as utils from "./utils";
+import * as approve from "./approve"
 import * as interactions from "./interactions"
 import * as account from "./account"
 import * as data from "./data"
@@ -37,6 +38,7 @@ export default class ImpermaxRouter {
   chainId: number;
   uiMargin: number;
   dust: number;
+  library: any;
   router: Router;
   factory: Factory;
   simpleUniswapOracle: SimpleUniswapOracle;
@@ -193,6 +195,13 @@ export default class ImpermaxRouter {
   public initializePairConversionPricesRopsten = utils.initializePairConversionPricesRopsten;
   public getPairConversionPricesInternal = utils.getPairConversionPricesInternal;
   public getTokenPrice = utils.getTokenPrice;
+
+  // Approve
+  public getOwnerSpender = approve.getOwnerSpender;
+  public approve = approve.approve;
+  public getAllowance = approve.getAllowance;
+  public getPermitData = approve.getPermitData;
+  public getApprovalInfo = approve.getApprovalInfo;
 
   // Interactions
   public deposit = interactions.deposit;

@@ -1,8 +1,10 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import  "./index.scss";
 
-export enum ButtonStates {
+export enum ButtonState {
   Disabled = 'disabled',
   Ready = 'ready',
   Pending = 'pending',
@@ -11,12 +13,16 @@ export enum ButtonStates {
 
 export interface InteractionButtonProps {
   name: string;
-  state: ButtonStates;
+  state: ButtonState;
   onClick?(): void;
 }
 
 export default function InteractionButton({name, onClick, state}: InteractionButtonProps) {
   return (
-    <button onClick={onClick} className={'interaction-button ' + state}>{name}</button>
+    <button onClick={onClick} className={'interaction-button ' + state}>
+      {name}
+      { state === ButtonState.Pending ? ( <Spinner animation="border" size="sm" /> ) : null }
+      { state === ButtonState.Done ? ( <FontAwesomeIcon icon={faCheck} /> ) : null }
+    </button>
   );
 }

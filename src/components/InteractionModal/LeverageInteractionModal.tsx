@@ -10,7 +10,7 @@ import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
 import { formatFloat, formatToDecimals } from "../../utils/format";
 import InputAmount, { InputAmountMini } from "../InputAmount";
-import InteractionButton, { ButtonStates } from "../InteractionButton";
+import InteractionButton, { ButtonState } from "../InteractionButton";
 import BorrowFee from "./TransactionRecap/BorrowFee";
 
 /**
@@ -126,15 +126,15 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
           ) }
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton name={"Approve " + symbolA} state={ButtonStates.Ready} />
+              <InteractionButton name={"Approve " + symbolA} state={ButtonState.Ready} />
             </Col>
             <Col xs={6}>
-              <InteractionButton name={"Approve " + symbolB} state={ButtonStates.Ready} />
+              <InteractionButton name={"Approve " + symbolB} state={ButtonState.Ready} />
             </Col>
           </Row>
           <Row className="interaction-row">
             <Col>
-              <InteractionButton name="Leverage" state={ButtonStates.Disabled} onClick={onLeverage} />
+              <InteractionButton name="Leverage" state={ButtonState.Disabled} onClick={onLeverage} />
             </Col>
           </Row>
         </InteractionModalBody>

@@ -9,7 +9,7 @@ import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
-import InteractionButton, { ButtonStates } from "../InteractionButton";
+import InteractionButton, { ButtonState } from "../InteractionButton";
 import { formatUSD } from "../../utils/format";
 
 /**
@@ -67,10 +67,10 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
           />
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton name="Approve" state={ButtonStates.Ready} />
+              <InteractionButton name="Approve" state={ButtonState.Ready} />
             </Col>
             <Col xs={6}>
-              <InteractionButton name="Repay" state={ButtonStates.Disabled} onClick={onRepay} />
+              <InteractionButton name="Repay" state={ButtonState.Disabled} onClick={onRepay} />
             </Col>
           </Row>
         </InteractionModalBody>

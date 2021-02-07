@@ -7,6 +7,8 @@ import './index.scss';
 import Network from './contexts/Network';
 import { useChainId } from './hooks/useNetwork';
 import { ImpermaxRouterProvider } from './contexts/ImpermaxRouterProvider';
+import { Provider } from 'react-redux';
+import store from './state';
 
 function App() {
   return <div className="app">
@@ -22,19 +24,21 @@ function App() {
  */
 const Contexts: React.FC = ({ children }) => {
   return (
-    <Network>
-      <Language>
-        <Theme>
-          <UseWalletProvider chainId={useChainId()}>
-            <Web3Provider>
-              <ImpermaxRouterProvider>
-                { children }
-              </ImpermaxRouterProvider>
-            </Web3Provider>
-          </UseWalletProvider>
-        </Theme>
-      </Language>
-    </Network>
+    <Provider store={store}>
+      <Network>
+        <Language>
+          <Theme>
+            <UseWalletProvider chainId={useChainId()}>
+              <Web3Provider>
+                <ImpermaxRouterProvider>
+                  { children }
+                </ImpermaxRouterProvider>
+              </Web3Provider>
+            </UseWalletProvider>
+          </Theme>
+        </Language>
+      </Network>
+    </Provider>
   );
 }
 

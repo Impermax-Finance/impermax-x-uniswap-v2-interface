@@ -9,7 +9,7 @@ import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
-import InteractionButton, { ButtonStates } from "../InteractionButton";
+import InteractionButton, { ButtonState } from "../InteractionButton";
 import BorrowAPY from "./TransactionRecap/BorrowAPY";
 import BorrowFee from "./TransactionRecap/BorrowFee";
 
@@ -70,10 +70,10 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
           </div>
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton name="Approve" state={ButtonStates.Ready} />
+              <InteractionButton name="Approve" state={ButtonState.Ready} />
             </Col>
             <Col xs={6}>
-              <InteractionButton name="Borrow" state={ButtonStates.Disabled} onClick={onBorrow} />
+              <InteractionButton name="Borrow" state={ButtonState.Disabled} onClick={onBorrow} />
             </Col>
           </Row>
         </InteractionModalBody>

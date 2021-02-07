@@ -25,6 +25,12 @@ export enum PoolTokenType {
   BorrowableB = 'borrowableB',
 }
 
+export enum ApprovalType {
+  POOL_TOKEN,
+  UNDERLYING,
+  BORROW,
+}
+
 export interface BorrowableData {
   tokenAddress: string;
   symbol: string;

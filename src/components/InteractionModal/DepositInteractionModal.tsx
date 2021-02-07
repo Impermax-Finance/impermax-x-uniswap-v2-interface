@@ -4,15 +4,19 @@ import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { useWallet } from "use-wallet";
 import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
-import { PoolTokenType } from "../../impermax-router/interfaces";
+import { PoolTokenType, ERC20, ApprovalType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import { formatFloat } from "../../utils/format";
 import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
-import InteractionButton, { ButtonStates } from "../InteractionButton";
+import InteractionButton, { ButtonState } from "../InteractionButton";
 import TransactionSize from "./TransactionRecap/TransactionSize";
 import SupplyAPY from "./TransactionRecap/SupplyAPY";
+import useApprove from "../../hooks/useApprove";
+import { BigNumber } from "ethers";
+import { decimalToBalance } from "../../utils/ether-utils";
+import useDeposit from "../../hooks/useDeposit";
 
 /**
  * Props for the deposit interaction modal.
@@ -35,19 +39,17 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   const [val, setVal] = useState<number>(0);
 
   const [symbol, setSymbol] = useState<string>("");
+  const [decimals, setDecimals] = useState<number>();
   const [availableBalance, setAvailableBalance] = useState<number>(0);
   useRouterCallback((router) => {
-    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((symbol) => setSymbol(symbol));
-    router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((balance) => setAvailableBalance(balance));
+    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
+    router.getDecimals(uniswapV2PairAddress, poolTokenType).then((data) => setDecimals(data));
+    router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((data) => setAvailableBalance(data));
   });
 
-  const impermaxRouter = useImpermaxRouter();
-  const doUpdate = useDoUpdate();
-  const onDeposit = async () => {
-    await impermaxRouter.deposit(uniswapV2PairAddress, poolTokenType, val);
-    doUpdate();
-    toggleShow(false);
-  }
+  const amount = decimalToBalance(val, decimals);
+  const [approvalState, onApprove] = useApprove(ApprovalType.UNDERLYING, amount);
+  const [depositState, onDeposit] = useDeposit(approvalState, amount);
 
   return (
     <InteractionModal show={show} onHide={() => toggleShow(false)}>
@@ -70,10 +72,18 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
           </div>
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton name="Approve" state={ButtonStates.Ready} />
+              <InteractionButton 
+                name="Approve"
+                onClick={approvalState === ButtonState.Ready ? onApprove : null}
+                state={approvalState}
+              />
             </Col>
             <Col xs={6}>
-              <InteractionButton name="Deposit" state={ButtonStates.Disabled} onClick={onDeposit} />
+              <InteractionButton 
+                name="Deposit" 
+                onClick={depositState === ButtonState.Ready ? onDeposit : null} 
+                state={depositState} 
+              />
             </Col>
           </Row>
         </InteractionModalBody>
