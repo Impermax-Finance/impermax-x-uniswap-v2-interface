@@ -4,8 +4,28 @@ import { decimalToBalance } from "../utils/ether-utils";
 import { TokenKind } from "graphql";
 import { BigNumber, ethers } from "ethers";
 import BN from "bn.js";
+import { PermitData } from "../hooks/useApprove";
 
 const MAX_UINT256 = ethers.constants.MaxUint256;
+
+const EIP712DOMAIN = [
+  { name: "name", type: "string" },
+  { name: "version", type: "string" },
+  { name: "chainId", type: "uint256" },
+  { name: "verifyingContract", type: "address" },
+];
+const PERMIT = [
+  { name: "owner", type: "address" },
+  { name: "spender", type: "address" },
+  { name: "value", type: "uint256" },
+  { name: "nonce", type: "uint256" },
+  { name: "deadline", type: "uint256" },
+];
+const TYPES = {
+  EIP712Domain: EIP712DOMAIN,
+  Permit: PERMIT,
+  BorrowPermit: PERMIT,
+}
 
 export function getOwnerSpender(this: ImpermaxRouter) : {owner: string, spender: string} {
   return {
@@ -30,45 +50,41 @@ export async function approve(this: ImpermaxRouter, uniswapV2PairAddress: Addres
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   if (approvalType == ApprovalType.POOL_TOKEN) return poolToken.methods.approve(spender, amount).send({from: owner});
   if (approvalType == ApprovalType.UNDERLYING) return token.methods.approve(spender, amount).send({from: owner});
-  if (approvalType == ApprovalType.BORROW) return poolToken.methods.borrowaAprove(spender, amount).send({from: owner});
+  if (approvalType == ApprovalType.BORROW) return poolToken.methods.borrowApprove(spender, amount).send({from: owner});
 }
 
-export async function getPermitData(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, approvalType: ApprovalType, amount: BigNumber, callBack: Function) {
+export async function getPermitData(
+  this: ImpermaxRouter, 
+  uniswapV2PairAddress: Address, 
+  poolTokenType: PoolTokenType, 
+  approvalType: ApprovalType, 
+  amount: BigNumber, 
+  deadlineArg: BigNumber | null,
+  callBack: (permitData: PermitData) => void
+) {
+  if (approvalType === ApprovalType.UNDERLYING && poolTokenType != PoolTokenType.Collateral) return callBack(null);
   const {owner, spender} = this.getOwnerSpender();
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const contract = approvalType == ApprovalType.UNDERLYING ? token : poolToken;
-  const nonce = await contract.methods.nonces(spender).call();
+  const nonce = await contract.methods.nonces(owner).call();
   const name = await contract.methods.name().call();
+  const deadline = deadlineArg ? deadlineArg : this.getDeadline();
 
   const data = JSON.stringify({
-    types: {
-      EIP712Domain: [
-        { name: "name", type: "string" },
-        { name: "version", type: "string" },
-        { name: "chainId", type: "uint256" },
-        { name: "verifyingContract", type: "address" },
-      ],
-      Permit: [
-        { name: "owner", type: "address" },
-        { name: "spender", type: "address" },
-        { name: "value", type: "uint256" },
-        { name: "nonce", type: "uint256" },
-        { name: "deadline", type: "uint256" },
-      ],
-    },
+    types: TYPES,
     domain: {
       name: name,
       version: "1",
       chainId: this.chainId,
       verifyingContract: contract._address,
     },
-    primaryType: "Permit",
+    primaryType: approvalType == ApprovalType.BORROW ? "BorrowPermit" : "Permit",
     message: {
       owner: owner, 
       spender: spender, 
-      value: amount.toString(), // è corretto?
+      value: amount.toString(),
       nonce: BigNumber.from(nonce).toHexString(),
-      deadline: this.getDeadline().toNumber(),
+      deadline: deadline.toNumber(),
     }
   });
   
@@ -78,22 +94,20 @@ export async function getPermitData(this: ImpermaxRouter, uniswapV2PairAddress: 
       params: [owner, data],
       from: owner
     },
-    function(err: any, data: any) {
+    (err: any, data: any) => {
       if (err) {
         console.error(err);
-        callBack(false);
-        return;
+        return callBack(null);
       }
       const signature = data.result.substring(2);
       const r = "0x" + signature.substring(0, 64);
       const s = "0x" + signature.substring(64, 128);
       const v = parseInt(signature.substring(128, 130), 16);
-      // The signature is now comprised of r, s, and v.
-      const permitData = ethers.utils.defaultAbiCoder.encode(
+      const permitData: string = ethers.utils.defaultAbiCoder.encode(
 				['bool', 'uint8', 'bytes32', 'bytes32'],
 				[false, v, r, s]
       );
-      callBack(permitData);
+      callBack({permitData, deadline, amount});
     }
   );
 }

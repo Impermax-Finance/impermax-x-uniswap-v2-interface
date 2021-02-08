@@ -184,9 +184,9 @@ export default class ImpermaxRouter {
   public getLeverage = account.getLeverage;
   public getLiquidationPriceSwings = account.getLiquidationPriceSwings;
   public getLiquidationPrices = account.getLiquidationPrices;
+  public getMaxWithdrawable = account.getMaxWithdrawable;
   public getMaxBorrowable = account.getMaxBorrowable;
   public getMaxLeverage = account.getMaxLeverage;
-  public getMaxWithdrawable = account.getMaxWithdrawable;
   
   // Utils
   public normalize = utils.normalize;

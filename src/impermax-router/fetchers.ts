@@ -111,8 +111,10 @@ export async function getLiquidationIncentive(this: ImpermaxRouter, uniswapV2Pai
 // Price Denom LP
 export async function initializePriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const [collateral,] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+  const decimalsA = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const decimalsB = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   const { price0, price1 } = await collateral.methods.getPrices().call();
-  return [price0 / 1e18, price1 / 1e18];
+  return [price0 / Math.pow(10, decimalsA), price1 / Math.pow(10, decimalsB)];
 }
 export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);

@@ -4,13 +4,16 @@ import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { useWallet } from "use-wallet";
 import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
-import { PoolTokenType } from "../../impermax-router/interfaces";
+import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
 import { formatUSD } from "../../utils/format";
+import { decimalToBalance } from "../../utils/ether-utils";
+import useApprove from "../../hooks/useApprove";
+import useRepay from "../../hooks/useRepay";
 
 /**
  * Props for the deposit interaction modal.
@@ -33,20 +36,22 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
   const [val, setVal] = useState<number>(0);
 
   const [symbol, setSymbol] = useState<string>("");
+  const [decimals, setDecimals] = useState<number>();
   const [availableBalance, setAvailableBalance] = useState<number>(0);
   const [borrowed, setBorrowed] = useState<number>(0);
   useRouterCallback((router) => {
     router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
+    router.getDecimals(uniswapV2PairAddress, poolTokenType).then((data) => setDecimals(data));
     router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((data) => setAvailableBalance(data));
     router.getBorrowed(uniswapV2PairAddress, poolTokenType).then((data) => setBorrowed(data));
   });
 
-  const impermaxRouter = useImpermaxRouter();
-  const doUpdate = useDoUpdate();
+  const amount = decimalToBalance(val, decimals);
+  const [approvalState, onApprove,] = useApprove(ApprovalType.UNDERLYING, amount);
+  const [repayState, repay] = useRepay(approvalState, amount);
   const onRepay = async () => {
-    await impermaxRouter.repay(uniswapV2PairAddress, poolTokenType, val);
-    doUpdate();
-    toggleShow(false);
+    await repay();
+    setVal(0);
   }
 
   return (
@@ -67,10 +72,18 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
           />
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton name="Approve" state={ButtonState.Ready} />
+              <InteractionButton 
+                name="Approve"
+                onClick={approvalState === ButtonState.Ready ? onApprove : null}
+                state={approvalState}
+              />
             </Col>
             <Col xs={6}>
-              <InteractionButton name="Repay" state={ButtonState.Disabled} onClick={onRepay} />
+              <InteractionButton 
+                name="Repay" 
+                onClick={repayState === ButtonState.Ready ? onRepay : null} 
+                state={repayState} 
+              />
             </Col>
           </Row>
         </InteractionModalBody>

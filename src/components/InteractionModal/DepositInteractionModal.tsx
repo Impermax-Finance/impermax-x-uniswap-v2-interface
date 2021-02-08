@@ -48,8 +48,12 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   });
 
   const amount = decimalToBalance(val, decimals);
-  const [approvalState, onApprove] = useApprove(ApprovalType.UNDERLYING, amount);
-  const [depositState, onDeposit] = useDeposit(approvalState, amount);
+  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.UNDERLYING, amount);
+  const [depositState, deposit] = useDeposit(approvalState, amount, permitData);
+  const onDeposit = async () => {
+    await deposit();
+    setVal(0);
+  }
 
   return (
     <InteractionModal show={show} onHide={() => toggleShow(false)}>

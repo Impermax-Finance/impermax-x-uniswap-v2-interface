@@ -4,7 +4,7 @@ import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { useWallet } from "use-wallet";
 import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
-import { PoolTokenType } from "../../impermax-router/interfaces";
+import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import { formatFloat, formatUSD } from "../../utils/format";
@@ -12,6 +12,9 @@ import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
 import TransactionSize from "./TransactionRecap/TransactionSize";
+import { decimalToBalance } from "../../utils/ether-utils";
+import useApprove from "../../hooks/useApprove";
+import useWithdraw from "../../hooks/useWithdraw";
 
 /**
  * Props for the withdraw interaction modal.
@@ -34,18 +37,22 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
   const [val, setVal] = useState<number>(0);
 
   const [symbol, setSymbol] = useState<string>("");
+  const [decimals, setDecimals] = useState<number>();
+  const [exchangeRate, setExchangeRate] = useState<number>(1);
   const [maxWithdrawable, setMaxWithdrawable] = useState<number>(0);
   useRouterCallback((router) => {
     router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
+    router.getDecimals(uniswapV2PairAddress, poolTokenType).then((data) => setDecimals(data));
+    router.getExchangeRate(uniswapV2PairAddress, poolTokenType).then((data) => setExchangeRate(data));
     router.getMaxWithdrawable(uniswapV2PairAddress, poolTokenType).then((data) => setMaxWithdrawable(data));
   });
 
-  const impermaxRouter = useImpermaxRouter();
-  const doUpdate = useDoUpdate();
-  const onDeposit = async () => {
-    await impermaxRouter.withdraw(uniswapV2PairAddress, poolTokenType, val);
-    doUpdate();
-    toggleShow(false);
+  const tokens = decimalToBalance(val / exchangeRate, decimals);
+  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens);
+  const [withdrawState, withdraw] = useWithdraw(approvalState, tokens, permitData);
+  const onWithdraw = async () => {
+    await withdraw();
+    setVal(0);
   }
 
   return (
@@ -68,10 +75,18 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
           </div>
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton name="Approve" state={ButtonState.Ready} />
+              <InteractionButton 
+                name="Approve"
+                onClick={approvalState === ButtonState.Ready ? onApprove : null}
+                state={approvalState}
+              />
             </Col>
             <Col xs={6}>
-              <InteractionButton name="Withdraw" state={ButtonState.Disabled} onClick={onDeposit} />
+              <InteractionButton 
+                name="Withdraw" 
+                onClick={withdrawState === ButtonState.Ready ? onWithdraw : null} 
+                state={withdrawState} 
+              />
             </Col>
           </Row>
         </InteractionModalBody>
