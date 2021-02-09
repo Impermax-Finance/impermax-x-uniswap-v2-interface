@@ -9,6 +9,7 @@ import { PoolTokenType, BorrowableData } from "../../impermax-router/interfaces"
 import BorrowableDetailsRow from "./BorrowableDetailsRow";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
+import { useSymbol, useName, useUnderlyingAddress, useSupplyUSD, useTotalBorrowsUSD, useUtilizationRate, useSupplyAPY, useBorrowAPY } from "../../hooks/useData";
 
 /**
  * Generate the Currency Equity Details card, giving information about the suppy and rates for a particular currency in
@@ -20,28 +21,27 @@ export default function BorrowableDetails() {
   const t = (s: string) => (phrases[s][language]);
   const { getIconByTokenAddress } = useUrlGenerator();
 
-  const uniswapV2PairAddress = usePairAddress();
-  const poolTokenType = usePoolToken();
-  const [borrowableData, setBorrowableData] = useState<BorrowableData>();
-
-  useRouterCallback((router) => {
-    router.getBorrowableData(uniswapV2PairAddress, poolTokenType).then((data) => setBorrowableData(data));
-  });
-
-  if (!borrowableData) return null;
+  const tokenAddress = useUnderlyingAddress();
+  const name = useName();
+  const symbol = useSymbol();
+  const supplyUSD = useSupplyUSD();
+  const totalBorrowsUSD = useTotalBorrowsUSD();
+  const utilizationRate = useUtilizationRate();
+  const supplyAPY = useSupplyAPY();
+  const borrowAPY = useBorrowAPY();
 
   return (<div className="borrowable-details"> 
     <div className="header">
-      <img className="currency-icon" src={getIconByTokenAddress(borrowableData.tokenAddress)} />
-      {borrowableData.name} ({borrowableData.symbol})
+      <img className="currency-icon" src={getIconByTokenAddress(tokenAddress)} />
+      {name} ({symbol})
     </div>
     <Table>
       <tbody>
-        <BorrowableDetailsRow name={t("Total Supply")} value={formatUSD(borrowableData.supplyUSD)} />
-        <BorrowableDetailsRow name={t("Total Borrow")} value={formatUSD(borrowableData.totalBorrowsUSD)} />
-        <BorrowableDetailsRow name={t("Utilization Rate")} value={formatPercentage(borrowableData.utilizationRate)} />
-        <BorrowableDetailsRow name={t("Supply APY")} value={formatPercentage(borrowableData.supplyAPY)} />
-        <BorrowableDetailsRow name={t("Borrow APY")} value={formatPercentage(borrowableData.borrowAPY)} />
+        <BorrowableDetailsRow name={t("Total Supply")} value={formatUSD(supplyUSD)} />
+        <BorrowableDetailsRow name={t("Total Borrow")} value={formatUSD(totalBorrowsUSD)} />
+        <BorrowableDetailsRow name={t("Utilization Rate")} value={formatPercentage(utilizationRate)} />
+        <BorrowableDetailsRow name={t("Supply APY")} value={formatPercentage(supplyAPY)} />
+        <BorrowableDetailsRow name={t("Borrow APY")} value={formatPercentage(borrowAPY)} />
       </tbody>  
     </Table>
   </div>);

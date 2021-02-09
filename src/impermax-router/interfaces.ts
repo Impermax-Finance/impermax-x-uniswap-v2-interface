@@ -31,55 +31,15 @@ export enum ApprovalType {
   BORROW,
 }
 
-export interface BorrowableData {
-  tokenAddress: string;
-  symbol: string;
-  name: string;
-  supplyUSD: number;
-  totalBorrowsUSD: number;
-  utilizationRate: number;
-  supplyAPY: number;
-  borrowAPY: number;
-  //farmingAPY: number;
+export interface Changes {
+  changeBorrowedA: number;
+  changeBorrowedB: number;
+  changeCollateral: number;
 }
-
-export interface AccountBorrowableData {
-  tokenAddress: string;
-  borrowableAddress: string;
-  symbol: string;
-  decimals: number;
-  borrowed: number;
-  borrowedUSD: number;
-  deposited: number;
-  depositedUSD: number;
-}
-
-export interface AccountCollateralData {
-  tokenAAddress: string;
-  tokenBAddress: string;
-  collateralAddress: string;
-  symbolA: string;
-  symbolB: string;
-  decimals: number;
-  deposited: number;
-  depositedUSD: number;
-}
-
-export interface RiskMetrics {
-  leverage: number;
-  liquidationPrices: [number, number];
-  marketPrice: number;
-  TWAPPrice: number;
-  safetyMargin: number;
-}
-
-export interface AccountData {
-  symbolA: string;
-  symbolB: string;
-  equityUSD: number;
-  balanceUSD: number;
-  debtUSD: number;
-  riskMetrics: RiskMetrics;
+export const NO_CHANGES = {
+  changeBorrowedA: 0,
+  changeBorrowedB: 0,
+  changeCollateral: 0,
 }
 
 export interface ImpermaxRouterCfg {

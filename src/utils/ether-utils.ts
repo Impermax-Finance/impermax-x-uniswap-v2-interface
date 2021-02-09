@@ -1,10 +1,13 @@
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import { BigNumber } from 'ethers';
+import { formatToDecimals } from './format';
 
 export function balanceToDecimal(s: string): string {
   return formatUnits(s);
 }
 
 export function decimalToBalance(d: string | number, decimals = 18): BigNumber {
-  return parseUnits(String(d), decimals);
+  const n = parseFloat(d.toString());
+  const s = formatToDecimals(Math.max(n, 0), decimals);
+  return parseUnits(s, decimals);
 }

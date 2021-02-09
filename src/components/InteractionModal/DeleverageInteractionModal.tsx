@@ -7,7 +7,7 @@ import useImpermaxRouter, { useDoUpdate, useRouterCallback } from "../../hooks/u
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
-import RiskMetrics from "./RiskMetrics";
+import RiskMetrics from "../RiskMetrics";
 import { formatFloat, formatToDecimals } from "../../utils/format";
 import InputAmount, { InputAmountMini } from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
@@ -15,6 +15,7 @@ import BorrowFee from "./TransactionRecap/BorrowFee";
 import useDeleverage from "../../hooks/useDeleverage";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
+import { useSymbol, useDecimals, useDeposited, useBorrowed, useExchangeRate, useDeleverageAmounts } from "../../hooks/useData";
 
 
 export interface DeleverageInteractionModalProps {
@@ -27,37 +28,20 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
 
-  const [changeAmounts, setChangeAmounts] = 
-    useState<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number}>
-    ({bAmountA: 0, bAmountB: 0, cAmount: 0, bAmountAMin: 0, bAmountBMin: 0});
-  const [maxDeleverage, setMaxDeleverage] = useState<number>(0);
-  const [symbol, setSymbol] = useState<string>();
-  const [symbolA, setSymbolA] = useState<string>();
-  const [symbolB, setSymbolB] = useState<string>();
-  const [borrowedA, setBorrowedA] = useState<number>();
-  const [borrowedB, setBorrowedB] = useState<number>();
-  const [exchangeRate, setExchangeRate] = useState<number>(1);
-  const [decimalsA, setDecimalsA] = useState<number>(18);
-  const [decimalsB, setDecimalsB] = useState<number>(18);
-  useRouterCallback((router) => {
-    router.getDeleverageAmounts(uniswapV2PairAddress, val, 1 + slippage / 100).then((data) => setChangeAmounts(data));
-  }, [val, slippage]);
-  useRouterCallback((router) => {
-    // TODO: function getMaxDeleverage which should consider that not 100% may be repayable
-    router.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral).then((data) => setMaxDeleverage(data));
-    router.getSymbol(uniswapV2PairAddress, PoolTokenType.Collateral).then((data) => setSymbol(data));
-    router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setSymbolA(data));
-    router.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setSymbolB(data));
-    router.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setBorrowedA(data));
-    router.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setBorrowedB(data));
-    router.getExchangeRate(uniswapV2PairAddress, PoolTokenType.Collateral).then((data) => setExchangeRate(data));
-    router.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setDecimalsA(data));
-    router.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setDecimalsB(data));
-  });
+  const changeAmounts = useDeleverageAmounts(val, slippage);
+  const maxDeleverage = useDeposited(); // TODO: function getMaxDeleverage which should consider that not 100% may be repayable
+  const symbol = useSymbol(PoolTokenType.Collateral);
+  const symbolA = useSymbol(PoolTokenType.BorrowableA);
+  const symbolB = useSymbol(PoolTokenType.BorrowableB);
+  const decimalsA = useDecimals(PoolTokenType.BorrowableA);
+  const decimalsB = useDecimals(PoolTokenType.BorrowableB);
+  const borrowedA = useBorrowed(PoolTokenType.BorrowableA)
+  const borrowedB = useBorrowed(PoolTokenType.BorrowableB)
+  const exchangeRate = useExchangeRate();
 
   const tokens = decimalToBalance(val / exchangeRate, 18);
-  const amountAMin = decimalToBalance(formatToDecimals(Math.max(changeAmounts.bAmountAMin, 0), decimalsA), decimalsA);
-  const amountBMin = decimalToBalance(formatToDecimals(Math.max(changeAmounts.bAmountBMin, 0), decimalsB), decimalsB);
+  const amountAMin = decimalToBalance(changeAmounts.bAmountAMin, decimalsA);
+  const amountBMin = decimalToBalance(changeAmounts.bAmountBMin, decimalsB);
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens);
   const [deleverageState, deleverage] = useDeleverage(approvalState, tokens, amountAMin, amountBMin, permitData);
   const onDeleverage = async () => {
@@ -77,15 +61,6 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
             suffix={symbol}
             maxTitle={'Available'}
             max={maxDeleverage}
-          />
-          <input 
-            type="range" 
-            className="form-range" 
-            value={val} 
-            step={maxDeleverage / 100} 
-            min={0} 
-            max={maxDeleverage} 
-            onChange={(event) => setVal(parseFloat(event.target.value))} 
           />
           <div className="transaction-recap">
             <Row>

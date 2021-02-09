@@ -7,13 +7,14 @@ import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } fr
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
-import RiskMetrics from "./RiskMetrics";
+import RiskMetrics from "../RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
 import { formatUSD } from "../../utils/format";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useRepay from "../../hooks/useRepay";
+import { useSymbol, useDecimals, useAvailableBalance, useBorrowed } from "../../hooks/useData";
 
 /**
  * Props for the deposit interaction modal.
@@ -31,20 +32,13 @@ export interface RepayInteractionModalProps {
  * @see RepayInteractionModalProps
  */
 export default function RepayInteractionModal({show, toggleShow}: RepayInteractionModalProps) {
-  const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
-  const [symbol, setSymbol] = useState<string>("");
-  const [decimals, setDecimals] = useState<number>();
-  const [availableBalance, setAvailableBalance] = useState<number>(0);
-  const [borrowed, setBorrowed] = useState<number>(0);
-  useRouterCallback((router) => {
-    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
-    router.getDecimals(uniswapV2PairAddress, poolTokenType).then((data) => setDecimals(data));
-    router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((data) => setAvailableBalance(data));
-    router.getBorrowed(uniswapV2PairAddress, poolTokenType).then((data) => setBorrowed(data));
-  });
+  const symbol = useSymbol();
+  const decimals = useDecimals();
+  const availableBalance = useAvailableBalance();
+  const borrowed = useBorrowed();
 
   const amount = decimalToBalance(val, decimals);
   const [approvalState, onApprove,] = useApprove(ApprovalType.UNDERLYING, amount);

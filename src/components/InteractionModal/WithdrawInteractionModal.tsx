@@ -8,13 +8,14 @@ import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import { formatFloat, formatUSD } from "../../utils/format";
-import RiskMetrics from "./RiskMetrics";
+import RiskMetrics from "../RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
 import TransactionSize from "./TransactionRecap/TransactionSize";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useWithdraw from "../../hooks/useWithdraw";
+import { useExchangeRate, useMaxWithdrawable, useSymbol, useDecimals } from "../../hooks/useData";
 
 /**
  * Props for the withdraw interaction modal.
@@ -36,16 +37,10 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
-  const [symbol, setSymbol] = useState<string>("");
-  const [decimals, setDecimals] = useState<number>();
-  const [exchangeRate, setExchangeRate] = useState<number>(1);
-  const [maxWithdrawable, setMaxWithdrawable] = useState<number>(0);
-  useRouterCallback((router) => {
-    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
-    router.getDecimals(uniswapV2PairAddress, poolTokenType).then((data) => setDecimals(data));
-    router.getExchangeRate(uniswapV2PairAddress, poolTokenType).then((data) => setExchangeRate(data));
-    router.getMaxWithdrawable(uniswapV2PairAddress, poolTokenType).then((data) => setMaxWithdrawable(data));
-  });
+  const symbol = useSymbol();
+  const decimals = useDecimals();
+  const exchangeRate = useExchangeRate();
+  const maxWithdrawable = useMaxWithdrawable();
 
   const tokens = decimalToBalance(val / exchangeRate, decimals);
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens);

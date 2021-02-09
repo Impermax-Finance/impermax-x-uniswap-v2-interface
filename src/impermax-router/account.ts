@@ -1,5 +1,5 @@
 import ImpermaxRouter from ".";
-import { Address, PoolTokenType } from "./interfaces";
+import { Address, PoolTokenType, Changes, NO_CHANGES } from "./interfaces";
 
 
 // Available Balance
@@ -13,6 +13,11 @@ export async function getAvailableBalance(this: ImpermaxRouter, uniswapV2PairAdd
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.availableBalance) cache.availableBalance = this.initializeAvailableBalance(uniswapV2PairAddress, poolTokenType);
   return cache.availableBalance;
+}
+export async function getAvailableBalanceUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  const availableBalance = await this.getAvailableBalance(uniswapV2PairAddress, poolTokenType);
+  const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
+  return availableBalance * tokenPrice;
 }
 
 // Deposited
@@ -77,17 +82,11 @@ export async function getEquityUSD(this: ImpermaxRouter, uniswapV2PairAddress: A
 }
 
 // Values
-export async function getValues(
-  this: ImpermaxRouter, 
-  uniswapV2PairAddress: Address, 
-  changeBorrowedA: number, 
-  changeBorrowedB: number, 
-  changeCollateral: number
-) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
+export async function getValues(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
   const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
-  const valueCollateral = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral) + changeCollateral;
-  const amountA = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableA) + changeBorrowedA;
-  const amountB = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableB) + changeBorrowedB;
+  const valueCollateral = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral) + changes.changeCollateral;
+  const amountA = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableA) + changes.changeBorrowedA;
+  const amountB = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableB) + changes.changeBorrowedB;
   const valueA = amountA * priceA;
   const valueB = amountB * priceB;
   return {
@@ -98,14 +97,8 @@ export async function getValues(
 }
 
 // Leverage
-export async function getNewLeverage(
-  this: ImpermaxRouter, 
-  uniswapV2PairAddress: Address, 
-  changeBorrowedA: number, 
-  changeBorrowedB: number, 
-  changeCollateral: number
-) : Promise<number> {
-  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, changeBorrowedA, changeBorrowedB, changeCollateral);
+export async function getNewLeverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<number> {
+  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, changes);
   const valueDebt = valueA + valueB;
   if (valueDebt == 0) return 1;
   const equity = valueCollateral - valueDebt;
@@ -113,18 +106,12 @@ export async function getNewLeverage(
   return valueDebt / equity + 1;
 }
 export async function getLeverage(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  return await this.getNewLeverage(uniswapV2PairAddress, 0, 0, 0);
+  return await this.getNewLeverage(uniswapV2PairAddress, NO_CHANGES);
 }
 
 // Liquidation Threshold
-export async function getNewLiquidationPriceSwings(
-  this: ImpermaxRouter, 
-  uniswapV2PairAddress: Address, 
-  changeBorrowedA: number, 
-  changeBorrowedB: number, 
-  changeCollateral: number
-) : Promise<[number, number]> {
-  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, changeBorrowedA, changeBorrowedB, changeCollateral);
+export async function getNewLiquidationPriceSwings(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<[number, number]> {
+  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, changes);
   if (valueA + valueB == 0) return [Infinity, Infinity];
   const safetyMargin = await this.getSafetyMargin(uniswapV2PairAddress);
   const liquidationIncentive = await this.getLiquidationIncentive(uniswapV2PairAddress);
@@ -136,22 +123,16 @@ export async function getNewLiquidationPriceSwings(
   let priceSwingB = (t / valueB) ** 2;
 	return [priceSwingA, priceSwingB];
 }
-export async function getNewLiquidationPrices(
-  this: ImpermaxRouter, 
-  uniswapV2PairAddress: Address, 
-  changeBorrowedA: number, 
-  changeBorrowedB: number, 
-  changeCollateral: number
-) : Promise<[number, number]> {
+export async function getNewLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<[number, number]> {
   const currentPrice = await this.getTWAPPrice(uniswapV2PairAddress);
-  const [priceSwingA, priceSwingB] = await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, changeBorrowedA, changeBorrowedB, changeCollateral);
+  const [priceSwingA, priceSwingB] = await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, changes);
 	return [currentPrice / priceSwingB, currentPrice * priceSwingA];
 }
 export async function getLiquidationPriceSwings(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
-  return await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, 0, 0, 0);
+  return await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, NO_CHANGES);
 }
 export async function getLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
-  return await this.getNewLiquidationPrices(uniswapV2PairAddress, 0, 0, 0);
+  return await this.getNewLiquidationPrices(uniswapV2PairAddress, NO_CHANGES);
 }
 
 // Max Withdrawable
@@ -159,7 +140,7 @@ export async function getMaxWithdrawable(this: ImpermaxRouter, uniswapV2PairAddr
   const deposited = await this.getDeposited(uniswapV2PairAddress, poolTokenType);
   const availableCash = await this.getTotalBalance(uniswapV2PairAddress, poolTokenType);
   if (poolTokenType != PoolTokenType.Collateral) return Math.min(deposited, availableCash) / this.dust;
-  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, 0, 0, 0);
+  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, NO_CHANGES);
   const safetyMargin = (await this.getSafetyMargin(uniswapV2PairAddress)) * this.uiMargin;
   const liquidationIncentive = await this.getLiquidationIncentive(uniswapV2PairAddress);
   const actualCollateral = valueCollateral / liquidationIncentive;
@@ -171,7 +152,7 @@ export async function getMaxWithdrawable(this: ImpermaxRouter, uniswapV2PairAddr
 // Max Borrowable
 export async function getMaxBorrowable(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const availableCash = await this.getTotalBalance(uniswapV2PairAddress, poolTokenType);
-  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, 0, 0, 0);
+  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, NO_CHANGES);
   const valueBorrowed = poolTokenType == PoolTokenType.BorrowableA ? valueA : valueB;
   const valueOther = poolTokenType == PoolTokenType.BorrowableA ? valueB : valueA;
   const safetyMargin = (await this.getSafetyMargin(uniswapV2PairAddress)) * this.uiMargin;
@@ -192,7 +173,7 @@ export async function getMaxLeverage(this: ImpermaxRouter, uniswapV2PairAddress:
   const price2 = await this.getBorrowablePriceDenomLP(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   const availableCashValue1 = availableCash1 * price1;
   const availableCashValue2 = availableCash2 * price2;
-  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, 0, 0, 0);
+  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, NO_CHANGES);
   const safetyMargin = (await this.getSafetyMargin(uniswapV2PairAddress)) * this.uiMargin;
   const liquidationIncentive = await this.getLiquidationIncentive(uniswapV2PairAddress);
   const actualCollateral = valueCollateral / liquidationIncentive;

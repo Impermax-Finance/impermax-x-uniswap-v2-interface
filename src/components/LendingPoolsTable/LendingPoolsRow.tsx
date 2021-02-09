@@ -7,24 +7,27 @@ import { LendingPoolsCol } from "./LendingPoolsCol";
 import { formatUSD, formatPercentage } from "../../utils/format";
 import { useContext } from "../../contexts/Theme";
 import usePairAddress from "../../hooks/usePairAddress";
+import { useSupplyUSD, useTotalBorrowsUSD, useSupplyAPY, useBorrowAPY, useUnderlyingAddress, useSymbol } from "../../hooks/useData";
 
 /**
  * Component for a single Lending Pool row.
  */
 export default function LendingPoolsRow() {
-  const uniswapV2PairAddress = usePairAddress();
   const { getIconByTokenAddress, getLendingPool } = useUrlGenerator();
-  const [borrowableAData, setBorrowableAData] = useState<BorrowableData>();
-  const [borrowableBData, setBorrowableBData] = useState<BorrowableData>();
 
-  useRouterCallback((router) => {
-    router.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableA).then((data) => setBorrowableAData(data));
-    router.getBorrowableData(uniswapV2PairAddress, PoolTokenType.BorrowableB).then((data) => setBorrowableBData(data));
-  });
-
-  if (!borrowableAData || !borrowableBData) return (<div>
-    Loading
-  </div>);
+  const uniswapV2PairAddress = usePairAddress();
+  const tokenAAddress = useUnderlyingAddress(PoolTokenType.BorrowableA);
+  const tokenBAddress = useUnderlyingAddress(PoolTokenType.BorrowableB);
+  const symbolA = useSymbol(PoolTokenType.BorrowableA);
+  const symbolB = useSymbol(PoolTokenType.BorrowableB);
+  const supplyUSDA = useSupplyUSD(PoolTokenType.BorrowableA);
+  const supplyUSDB = useSupplyUSD(PoolTokenType.BorrowableB);
+  const totalBorrowsUSDA = useTotalBorrowsUSD(PoolTokenType.BorrowableA);
+  const totalBorrowsUSDB = useTotalBorrowsUSD(PoolTokenType.BorrowableB);
+  const supplyAPYA = useSupplyAPY(PoolTokenType.BorrowableA);
+  const supplyAPYB = useSupplyAPY(PoolTokenType.BorrowableB);
+  const borrowAPYA = useBorrowAPY(PoolTokenType.BorrowableA);
+  const borrowAPYB = useBorrowAPY(PoolTokenType.BorrowableB);
 
   return (
     <Link to={getLendingPool(uniswapV2PairAddress)} className="row lending-pools-row">
@@ -32,28 +35,27 @@ export default function LendingPoolsRow() {
         <div className="currency-name">
           <div className="combined">
             <div className="currency-overlapped">
-              <img src={getIconByTokenAddress(borrowableAData.tokenAddress)} />
-              <img src={getIconByTokenAddress(borrowableBData.tokenAddress)} />
+              <img src={getIconByTokenAddress(tokenAAddress)} />
+              <img src={getIconByTokenAddress(tokenBAddress)} />
             </div>
-          {borrowableAData.symbol}/{borrowableBData.symbol}
+          {symbolA}/{symbolB}
           </div>
           <div>
             <div>
-              <img className="currency-icon" src={getIconByTokenAddress(borrowableAData.tokenAddress)} />
-              {borrowableAData.symbol}
+              <img className="currency-icon" src={getIconByTokenAddress(tokenAAddress)} />
+              {symbolA}
             </div>
             <div>
-              <img className="currency-icon" src={getIconByTokenAddress(borrowableBData.tokenAddress)} />
-              {borrowableBData.symbol}
+              <img className="currency-icon" src={getIconByTokenAddress(tokenBAddress)} />
+              {symbolB}
             </div>
           </div>
         </div>
       </div>
-      <LendingPoolsCol valueA={formatUSD(borrowableAData.supplyUSD)} valueB={formatUSD(borrowableBData.supplyUSD)} />
-      <LendingPoolsCol valueA={formatUSD(borrowableAData.totalBorrowsUSD)} valueB={formatUSD(borrowableBData.totalBorrowsUSD)} />
-      <LendingPoolsCol valueA={formatPercentage(borrowableAData.supplyAPY)} valueB={formatPercentage(borrowableBData.supplyAPY)} />
-      <LendingPoolsCol valueA={formatPercentage(borrowableAData.borrowAPY)} valueB={formatPercentage(borrowableBData.borrowAPY)} />
-      {/*<LendingPoolsCol valueA={formatPercentage(borrowableAData.farmingAPY)} valueB={formatPercentage(borrowableBData.farmingAPY)} />*/}
+      <LendingPoolsCol valueA={formatUSD(supplyUSDA)} valueB={formatUSD(supplyUSDB)} />
+      <LendingPoolsCol valueA={formatUSD(totalBorrowsUSDA)} valueB={formatUSD(totalBorrowsUSDB)} />
+      <LendingPoolsCol valueA={formatPercentage(supplyAPYA)} valueB={formatPercentage(supplyAPYB)} />
+      <LendingPoolsCol valueA={formatPercentage(borrowAPYA)} valueB={formatPercentage(borrowAPYB)} />
     </Link>
   );
 }

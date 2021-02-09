@@ -10,12 +10,15 @@ interface InputAmountProps {
   suffix: string;
   maxTitle: string;
   max: number;
+  min?: number;
 }
 
-export default function InputAmount({val, setVal, suffix, maxTitle, max}: InputAmountProps) {
+export default function InputAmount({val, setVal, suffix, maxTitle, max, min}: InputAmountProps) {
   const [stringVal, setStringVal] = useState<string>(val.toString());
   const onUserInput = (input: string) => setStringVal(input);
   const onMax = () => setStringVal(formatFloat(max).toString());
+  const step = max ? Math.pow(10, Math.floor(Math.log10(max)) - 2) : 0;
+  min = min ? min : 0;
   useEffect(() => {
     const newVal = stringVal ? parseFloat(stringVal) : 0;
     if (val === newVal) return; // avoid infinite loop
@@ -27,7 +30,7 @@ export default function InputAmount({val, setVal, suffix, maxTitle, max}: InputA
     setStringVal(newStringVal);
   }, [val]);
 
-  return (
+  return (<>
     <div className="input-amount">
       <InputGroup className="available">
         {maxTitle}: {formatFloat(max)} {suffix}
@@ -42,7 +45,16 @@ export default function InputAmount({val, setVal, suffix, maxTitle, max}: InputA
         </InputGroup.Append>
       </InputGroup>
     </div>
-  );
+    <input 
+      type="range" 
+      className="form-range" 
+      value={val} 
+      step={step} 
+      min={step ? min - min % step + step : 0} 
+      max={step ? max - max % step : 0} 
+      onChange={(event) => setVal(parseFloat(event.target.value))} 
+    />
+  </>);
 }
 
 interface InputAmountMiniProps {

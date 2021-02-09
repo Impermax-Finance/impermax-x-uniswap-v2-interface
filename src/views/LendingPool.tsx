@@ -16,7 +16,7 @@ export default function LendingPool() {
   return (<View>
     <Container className="lending-pool">
       <PairAddressContext.Provider value={uniswapV2PairAddress}>
-        <BorrowablesDetails uniswapV2PairAddress={uniswapV2PairAddress} />
+        <BorrowablesDetails />
         <AccountLendingPool />
       </PairAddressContext.Provider>
     </Container>

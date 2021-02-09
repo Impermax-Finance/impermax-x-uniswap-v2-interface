@@ -16,10 +16,6 @@ import {
   LendingPool,
   PoolTokenType,
   ImpermaxRouterCfg,
-  BorrowableData, 
-  AccountBorrowableData, 
-  AccountCollateralData, 
-  AccountData, 
   Factory,
   SimpleUniswapOracle
 } from "./interfaces";
@@ -30,7 +26,6 @@ import * as utils from "./utils";
 import * as approve from "./approve"
 import * as interactions from "./interactions"
 import * as account from "./account"
-import * as data from "./data"
 import { Networks } from "../utils/connections";
 
 export default class ImpermaxRouter {
@@ -168,6 +163,7 @@ export default class ImpermaxRouter {
   public initializeBorrowed = account.initializeBorrowed;
   public initializeDeposited = account.initializeDeposited;
   public getAvailableBalance = account.getAvailableBalance;
+  public getAvailableBalanceUSD = account.getAvailableBalanceUSD;
   public getBorrowed = account.getBorrowed;
   public getBorrowedUSD = account.getBorrowedUSD;
   public getDeposited = account.getDeposited;
@@ -210,12 +206,4 @@ export default class ImpermaxRouter {
   public leverage = interactions.leverage;
   public getDeleverageAmounts = interactions.getDeleverageAmounts;
   public deleverage = interactions.deleverage;
-  
-  // Data
-  public getBorrowableData = data.getBorrowableData;
-  public getAccountBorrowableData = data.getAccountBorrowableData;
-  public getAccountCollateralData = data.getAccountCollateralData;
-  public getRiskMetrics = data.getRiskMetrics;
-  public getNewRiskMetrics = data.getNewRiskMetrics;
-  public getAccountData = data.getAccountData;
 }

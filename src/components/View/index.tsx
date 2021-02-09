@@ -36,7 +36,6 @@ export default function View({ children }: ViewProps) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Nav className="mr-auto">
             <NavigationBarLink appRoute={HomeRoute} />
-            <NavigationBarLink appRoute={FarmingRoute} />
           </Nav>
           {
             account ? 

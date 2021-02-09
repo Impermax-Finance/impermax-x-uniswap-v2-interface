@@ -6,13 +6,7 @@ import { PoolTokenType } from '../../impermax-router/interfaces';
 import PoolTokenContext from '../../contexts/PoolToken';
 
 
-interface BorrowablesDetailsProps {
-  uniswapV2PairAddress: string;
-}
-
-export default function BorrowablesDetails(props: BorrowablesDetailsProps) {
-  const { uniswapV2PairAddress } = props;
-
+export default function BorrowablesDetails() {
   return (
     <div className="borrowables-details">
       <Row>

@@ -7,7 +7,6 @@ import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } fr
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
-import RiskMetrics from "./RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
 import BorrowAPY from "./TransactionRecap/BorrowAPY";
@@ -15,6 +14,8 @@ import BorrowFee from "./TransactionRecap/BorrowFee";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useBorrow from "../../hooks/useBorrow";
+import { useSymbol, useDecimals, useMaxBorrowable } from "../../hooks/useData";
+import RiskMetrics from "../RiskMetrics";
 
 /**
  * Props for the deposit interaction modal.
@@ -32,18 +33,12 @@ export interface BorrowInteractionModalProps {
  * @see BorrowInteractionModalProps
  */
 export default function BorrowInteractionModal({show, toggleShow}: BorrowInteractionModalProps) {
-  const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
-  const [symbol, setSymbol] = useState<string>("");
-  const [decimals, setDecimals] = useState<number>();
-  const [maxBorrowable, setMaxBorrowable] = useState<number>(0);
-  useRouterCallback((router) => {
-    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
-    router.getDecimals(uniswapV2PairAddress, poolTokenType).then((data) => setDecimals(data));
-    router.getMaxBorrowable(uniswapV2PairAddress, poolTokenType).then((data) => setMaxBorrowable(data));
-  });
+  const symbol = useSymbol();
+  const decimals = useDecimals();
+  const maxBorrowable = useMaxBorrowable();
 
   const amount = decimalToBalance(val, decimals);
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.BORROW, amount);

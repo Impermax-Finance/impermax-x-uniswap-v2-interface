@@ -8,7 +8,7 @@ import { PoolTokenType, ERC20, ApprovalType } from "../../impermax-router/interf
 import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import { formatFloat } from "../../utils/format";
-import RiskMetrics from "./RiskMetrics";
+import RiskMetrics from "../RiskMetrics";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
 import TransactionSize from "./TransactionRecap/TransactionSize";
@@ -17,6 +17,8 @@ import useApprove from "../../hooks/useApprove";
 import { BigNumber } from "ethers";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useDeposit from "../../hooks/useDeposit";
+import useUrlGenerator from "../../hooks/useUrlGenerator";
+import { useDecimals, useUnderlyingAddress, useSymbol, useAvailableBalance, useAvailableBalanceUSD } from "../../hooks/useData";
 
 /**
  * Props for the deposit interaction modal.
@@ -28,24 +30,27 @@ export interface DepositInteractionModalProps {
   toggleShow(s: boolean): void;
 }
 
-/**
- * Styled component for the deposit modal.
- * @param param0 any Props for component
- * @see DepositInteractionModalProps
- */
+function DepositInteractionModalContainer({props, children}: {props: DepositInteractionModalProps, children: any}) {
+  return (
+    <InteractionModal show={props.show} onHide={() => props.toggleShow(false)}>
+      <>
+        <InteractionModalHeader value="Deposit" />
+        <InteractionModalBody>{children}</InteractionModalBody>
+      </>
+    </InteractionModal>
+  );
+}
+
 export default function DepositInteractionModal({show, toggleShow}: DepositInteractionModalProps) {
-  const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
-  const [symbol, setSymbol] = useState<string>("");
-  const [decimals, setDecimals] = useState<number>();
-  const [availableBalance, setAvailableBalance] = useState<number>(0);
-  useRouterCallback((router) => {
-    router.getSymbol(uniswapV2PairAddress, poolTokenType).then((data) => setSymbol(data));
-    router.getDecimals(uniswapV2PairAddress, poolTokenType).then((data) => setDecimals(data));
-    router.getAvailableBalance(uniswapV2PairAddress, poolTokenType).then((data) => setAvailableBalance(data));
-  });
+  const symbol = useSymbol();
+  const decimals = useDecimals();
+  const availableBalance = useAvailableBalance();
+  const availableBalanceUSD = useAvailableBalanceUSD();
+  const tokenAddressA = useUnderlyingAddress(PoolTokenType.BorrowableA);
+  const tokenAddressB = useUnderlyingAddress(PoolTokenType.BorrowableB);
 
   const amount = decimalToBalance(val, decimals);
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.UNDERLYING, amount);
@@ -55,52 +60,48 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
     setVal(0);
   }
 
+  const { getUniswapAddLiquidity } = useUrlGenerator();
+  if (availableBalanceUSD < 1) return (
+    <DepositInteractionModalContainer props={{show, toggleShow}}>
+      You need to hold {symbol} in your wallet in order to deposit it.
+      { poolTokenType == PoolTokenType.Collateral ? (<>
+        <br/>You can obtain it by <a target="_blank" href={getUniswapAddLiquidity(tokenAddressA, tokenAddressB)}>providing liquidity on Uniswap</a>
+      </>) : null }
+    </DepositInteractionModalContainer>
+  );
+
   return (
-    <InteractionModal show={show} onHide={() => toggleShow(false)}>
-      <>
-        <InteractionModalHeader value="Deposit" />
-        <InteractionModalBody>
-          { poolTokenType == PoolTokenType.Collateral ? (
-            <RiskMetrics changeCollateral={val} />
-          ) : (null) }
-          <InputAmount 
-            val={val}
-            setVal={setVal}
-            suffix={symbol}
-            maxTitle={'Available'}
-            max={availableBalance}
+    <DepositInteractionModalContainer props={{show, toggleShow}}>
+      { poolTokenType == PoolTokenType.Collateral ? (
+        <RiskMetrics changeCollateral={val} />
+      ) : (null) }
+      <InputAmount 
+        val={val}
+        setVal={setVal}
+        suffix={symbol}
+        maxTitle={'Available'}
+        max={availableBalance}
+      />
+      <div className="transaction-recap">
+        <TransactionSize amount={val} />
+        <SupplyAPY />
+      </div>
+      <Row className="interaction-row">
+        <Col xs={6}>
+          <InteractionButton 
+            name="Approve"
+            onClick={approvalState === ButtonState.Ready ? onApprove : null}
+            state={approvalState}
           />
-          <input 
-            type="range" 
-            className="form-range" 
-            value={val} 
-            step={availableBalance / 100} 
-            min={0} 
-            max={availableBalance} 
-            onChange={(event) => setVal(parseFloat(event.target.value))} 
+        </Col>
+        <Col xs={6}>
+          <InteractionButton 
+            name="Deposit" 
+            onClick={depositState === ButtonState.Ready ? onDeposit : null} 
+            state={depositState} 
           />
-          <div className="transaction-recap">
-            <TransactionSize amount={val} />
-            <SupplyAPY />
-          </div>
-          <Row className="interaction-row">
-            <Col xs={6}>
-              <InteractionButton 
-                name="Approve"
-                onClick={approvalState === ButtonState.Ready ? onApprove : null}
-                state={approvalState}
-              />
-            </Col>
-            <Col xs={6}>
-              <InteractionButton 
-                name="Deposit" 
-                onClick={depositState === ButtonState.Ready ? onDeposit : null} 
-                state={depositState} 
-              />
-            </Col>
-          </Row>
-        </InteractionModalBody>
-      </>
-    </InteractionModal>
+        </Col>
+      </Row>
+    </DepositInteractionModalContainer>
   );
 }

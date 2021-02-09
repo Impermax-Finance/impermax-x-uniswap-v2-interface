@@ -3,7 +3,7 @@ import useUrlGenerator from "../../hooks/useUrlGenerator";
 import { LanguageContext } from "../../contexts/Language";
 import phrases from './translations';
 import { Row, Col, Button, Card } from "react-bootstrap";
-import { AccountCollateralData } from "../../impermax-router/interfaces";
+import { AccountCollateralData, PoolTokenType } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
 import usePairAddress from "../../hooks/usePairAddress";
 import { useRouterCallback } from "../../hooks/useImpermaxRouter";
@@ -11,41 +11,40 @@ import DepositInteractionModal from "../InteractionModal/DepositInteractionModal
 import LeverageInteractionModal from "../InteractionModal/LeverageInteractionModal";
 import WithdrawInteractionModal from "../InteractionModal/WithdrawInteractionModal";
 import DeleverageInteractionModal from "../InteractionModal/DeleverageInteractionModal";
+import { useUnderlyingAddress, useDeposited, useSymbol, useDepositedUSD } from "../../hooks/useData";
 
 /**
  * Build account lending pool detail rows for LP token currencies.
  * @params AccountLendingPoolLPRowProps
  */
 export default function AccountLendingPoolLPRow() {
-  const uniswapV2PairAddress = usePairAddress();
   const { getIconByTokenAddress, getUniswapAddLiquidity } = useUrlGenerator();
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
 
-  const [data, setData] = useState<AccountCollateralData>();
-  useRouterCallback((router) => {
-    if (!router.account) return setData(null);
-    router.getAccountCollateralData(uniswapV2PairAddress).then((data) => setData(data));
-  });
+  const symbolA = useSymbol(PoolTokenType.BorrowableA);
+  const symbolB = useSymbol(PoolTokenType.BorrowableB);
+  const tokenAAddress = useUnderlyingAddress(PoolTokenType.BorrowableA);
+  const tokenBAddress = useUnderlyingAddress(PoolTokenType.BorrowableB);
+  const deposited = useDeposited();
+  const depositedUSD = useDepositedUSD();
 
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
   const [showLeverageModal, toggleLeverageModal] = useState(false);
   const [showDeleverageModal, toggleDeleverageModal] = useState(false);
 
-  if (!data) return (<>Loading</>);
-
   return (<>
     <Row className="account-lending-pool-row">
       <Col md={3}>
         <Row className="account-lending-pool-name-icon">
           <Col className="token-icon icon-overlapped">
-            <img src={getIconByTokenAddress(data.tokenAAddress)} />
-            <img src={getIconByTokenAddress(data.tokenBAddress)} />
+            <img src={getIconByTokenAddress(tokenAAddress)} />
+            <img src={getIconByTokenAddress(tokenBAddress)} />
           </Col>
           <Col className="token-name">
-            { `${data.symbolA}-${data.symbolB} LP` }
+            { `${symbolA}-${symbolB} LP` }
           </Col>
         </Row>
       </Col>
@@ -53,8 +52,8 @@ export default function AccountLendingPoolLPRow() {
         <InlineAccountTokenInfo
           name={t("Deposited")}
           symbol="LP"
-          value={data.deposited}
-          valueUSD={data.depositedUSD}
+          value={deposited}
+          valueUSD={depositedUSD}
         />
       </Col>
       <Col md={5} className="btn-table">
