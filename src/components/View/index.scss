@@ -1,8 +1,26 @@
 .view {
   .navbar {
-    background-color: black;
+    background-color: #202020;
+    height: 80px;
+    padding: 0 2rem;
+    
     .impermax-brand {
-      width: 2rem;
+      width: 1.75rem;
+    }
+
+    .wallet-connector {
+      height: 36px;
+      color: #fff;
+      padding: 0 1rem;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none !important;
+    }
+    .nav-button-green, .nav-button-green:active {
+      background-color: #009861;
+    }
+    .nav-button-light, .nav-button-light:active {
+      background-color: #3d3d3d;
     }
   }
 }

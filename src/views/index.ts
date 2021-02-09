@@ -1,7 +1,7 @@
 import Home from './Home';
-import Farm from './Farm';
+import LendingPool from './LendingPool';
 
 export {
   Home,
-  Farm
+  LendingPool
 }

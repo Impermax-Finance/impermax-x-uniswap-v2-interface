@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import { Home, Farm } from './views';
+import { Home, LendingPool } from './views';
 
 export interface AppRoute {
   value: string;
@@ -12,9 +12,9 @@ export const HomeRoute = {
   to: '/'
 } as AppRoute;
 
-export const FarmRoute = {
-  value: 'Farm',
-  to: '/farming/:farmID'
+export const LendingPoolRoute = {
+  value: 'LendingPool',
+  to: '/lending-pool/:uniswapV2PairAddress'
 } as AppRoute;
 
 export const FarmingRoute = {
@@ -38,8 +38,8 @@ export default function Routing() {
             <Route path={HomeRoute.to} exact>
               <Home />
             </Route>
-            <Route path={FarmRoute.to}>
-              <Farm />
+            <Route path={LendingPoolRoute.to}>
+              <LendingPool />
             </Route>
           </Switch>
       </Router>

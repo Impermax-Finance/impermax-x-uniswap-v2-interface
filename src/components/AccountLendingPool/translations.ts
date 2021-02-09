@@ -14,13 +14,13 @@ const translations = {
     'ENG': "Current Leverage"
   },
   "Liquidation Prices": {
-    'ENG': "Liquidation Prices"
-  },
-  "Current Price": {
-    'ENG': "Current Price"
+    'ENG': "Liquidation Prices (TWAP)"
   },
   "Deposit": {
     'ENG': "Deposit"
+  },
+  "Deposited": {
+    'ENG': "Deposited"
   },
   "Withdraw": {
     'ENG': "Withdraw"
@@ -28,11 +28,17 @@ const translations = {
   "Leverage": {
     'ENG': "Leverage"
   },
+  "Deleverage": {
+    'ENG': "Deleverage"
+  },
   "Obtain": {
     'ENG': "Obtain"
   },
   "Borrow": {
     'ENG': "Borrow"
+  },
+  "Borrowed": {
+    'ENG': "Borrowed"
   },
   "Repay": {
     'ENG': "Repay"
