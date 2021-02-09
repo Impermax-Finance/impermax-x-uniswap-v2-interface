@@ -20,6 +20,7 @@ function LiquidationPrice({liquidationPrice, TWAPPrice, safetyMargin} : Liquidat
     safetyFactor > riskFactor * LIQ_K ** 0 ? "risk-2" :
     safetyFactor > riskFactor * LIQ_K ** -1 ? "risk-3" :
     safetyFactor > riskFactor * LIQ_K ** -2 ? "risk-4" : "risk-5";
+    
   return (
     <span className={"liquidation-price " + riskClass}>
       {formatFloat(liquidationPrice, 4)}

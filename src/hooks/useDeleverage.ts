@@ -7,35 +7,41 @@ import usePoolToken from './usePoolToken';
 import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
+import { PoolTokenType } from '../impermax-router/interfaces';
 
 
-export default function useWithdraw(approvalState: ButtonState, tokens: BigNumber, permitData: PermitData): [ButtonState, () => Promise<void>] {
+export default function useDeleverage(
+  approvalState: ButtonState,
+  tokens: BigNumber,
+  amountAMin: BigNumber, 
+  amountBMin: BigNumber,
+  permitData: PermitData
+): [ButtonState, () => Promise<void>] {
   const uniswapV2PairAddress = usePairAddress();
-  const poolTokenType = usePoolToken();
   const impermaxRouter = useImpermaxRouter();
   const doUpdate = useDoUpdate();
   const addTransaction = useTransactionAdder();
   const [pending, setPending] = useState<boolean>(false);
   
-  const withdrawState: ButtonState = useMemo(() => {
+  const deleverageState: ButtonState = useMemo(() => {
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
   }, [approvalState, pending]);
 
-  const withdraw = useCallback(async (): Promise<void> => {
-    if (withdrawState !== ButtonState.Ready) return;
+  const deleverage = useCallback(async (): Promise<void> => {
+    if (deleverageState !== ButtonState.Ready) return;
     setPending(true);
     try {
-      const response = await impermaxRouter.withdraw(uniswapV2PairAddress, poolTokenType, tokens, permitData);
-      const symbol = await impermaxRouter.getSymbol(uniswapV2PairAddress, poolTokenType);
-      addTransaction(response, { summary: `Withdraw ${symbol}` });
+      const response = await impermaxRouter.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, permitData);
+      const symbol = await impermaxRouter.getSymbol(uniswapV2PairAddress, PoolTokenType.Collateral);
+      addTransaction(response, { summary: `Deleverage ${symbol}` });
       doUpdate();
     }
     finally {
       setPending(false);
     }
-  }, [approvalState, uniswapV2PairAddress, poolTokenType, addTransaction, tokens, permitData]);
+  }, [uniswapV2PairAddress, addTransaction, tokens, amountAMin, amountBMin, permitData]);
 
-  return [withdrawState, withdraw];
+  return [deleverageState, deleverage];
 }

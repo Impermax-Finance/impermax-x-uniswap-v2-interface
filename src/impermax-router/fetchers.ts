@@ -1,5 +1,6 @@
 import ImpermaxRouter from ".";
 import { Address, PoolTokenType } from "./interfaces";
+import { decimalToBalance } from "../utils/ether-utils";
 
 export function getPoolTokenCache(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);

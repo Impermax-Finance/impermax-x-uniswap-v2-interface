@@ -35,8 +35,3 @@ export function useListedPairs() {
   const { listedPairs } = useContext(NetworkContext);
   return listedPairs;
 }
-
-export function useConvertToMainnet() {
-  const { convertToMainnet } = useContext(NetworkContext);
-  return convertToMainnet;
-}

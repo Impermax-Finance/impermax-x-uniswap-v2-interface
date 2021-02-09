@@ -90,7 +90,7 @@ export async function getValues(
   const amountB = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableB) + changeBorrowedB;
   const valueA = amountA * priceA;
   const valueB = amountB * priceB;
-  return { 
+  return {
     valueCollateral: valueCollateral > 0 ? valueCollateral : 0, 
     valueA: valueA > 0 ? valueA : 0, 
     valueB: valueB > 0 ? valueB : 0,

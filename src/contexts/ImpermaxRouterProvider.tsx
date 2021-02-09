@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import ImpermaxRouter from '../impermax-router';
 import useWeb3 from '../hooks/useWeb3';
-import { useRouterAddress, useWETH, useConvertToMainnet, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId } from '../hooks/useNetwork';
+import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId } from '../hooks/useNetwork';
 
 export interface ImpermaxRouterContextI {
   impermaxRouter?: ImpermaxRouter;
@@ -23,7 +23,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const factoryAddress = useFactoryAddress();
   const simpleUniswapOracleAddress = useSimpleUniswapOracleAddress();
   const WETH = useWETH();
-  const convertToMainnet = useConvertToMainnet();
   const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
   const [routerAccount, setRouterAccount] = useState<string>();
   const [routerUpdate, setRouterUpdate] = useState<number>(0);
@@ -49,7 +48,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         factoryAddress, 
         simpleUniswapOracleAddress, 
         WETH, 
-        convertToMainnet,
         priceInverted
       });
       if (account) {

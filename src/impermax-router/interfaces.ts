@@ -89,6 +89,5 @@ export interface ImpermaxRouterCfg {
   factoryAddress: Address;
   simpleUniswapOracleAddress: Address;
   WETH: Address;
-  convertToMainnet: Function;
   priceInverted: boolean;
 }

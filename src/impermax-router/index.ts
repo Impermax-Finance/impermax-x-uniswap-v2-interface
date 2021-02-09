@@ -44,7 +44,6 @@ export default class ImpermaxRouter {
   simpleUniswapOracle: SimpleUniswapOracle;
   account: Address;
   WETH: Address;
-  convertToMainnet: Function;
   priceInverted: boolean;
   lendingPoolCache: {
     [key in Address]?: {
@@ -83,7 +82,6 @@ export default class ImpermaxRouter {
     this.factory = this.newFactory(cfg.factoryAddress);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
     this.WETH = cfg.WETH;
-    this.convertToMainnet = cfg.convertToMainnet;
     this.priceInverted = cfg.priceInverted;
     this.lendingPoolCache = {};
   }
@@ -210,6 +208,8 @@ export default class ImpermaxRouter {
   public repay = interactions.repay;
   public getLeverageAmounts = interactions.getLeverageAmounts;
   public leverage = interactions.leverage;
+  public getDeleverageAmounts = interactions.getDeleverageAmounts;
+  public deleverage = interactions.deleverage;
   
   // Data
   public getBorrowableData = data.getBorrowableData;

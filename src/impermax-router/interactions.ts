@@ -28,18 +28,18 @@ export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Addres
   }
 }
 
-export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData) {
+export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, tokens: BigNumber, permitData: PermitData) {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
     if (token._address == this.WETH) {
-      await this.router.methods.redeemETH(poolToken._address, amount, this.account, deadline, data).call({from: this.account});
-      return this.router.methods.redeemETH(poolToken._address, amount, this.account, deadline, data).send({from: this.account});
+      await this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).call({from: this.account});
+      return this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).send({from: this.account});
     }
     else {
-      await this.router.methods.redeem(poolToken._address, amount, this.account, deadline, data).call({from: this.account});
-      return this.router.methods.redeem(poolToken._address, amount, this.account, deadline, data).send({from: this.account});
+      await this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).call({from: this.account});
+      return this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).send({from: this.account});
     }
   } catch (e) {
     console.error(e);
@@ -82,23 +82,14 @@ export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address,
 export async function getLeverageAmounts(
   this: ImpermaxRouter, 
   uniswapV2PairAddress: Address, 
-  val: number, 
+  leverage: number,
   slippage: number
 ) : Promise<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number, cAmountMin: number}> {
   const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
   const currentLeverage = await this.getLeverage(uniswapV2PairAddress);
   const collateralValue = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
-  //if (!val) val = currentLeverage;
-  const changeCollateralValue = collateralValue * val / currentLeverage - collateralValue;
+  const changeCollateralValue = collateralValue * leverage / currentLeverage - collateralValue;
   const valueForEach = changeCollateralValue / 2;
-  console.log({
-    bAmountA: valueForEach / priceA,
-    bAmountB: valueForEach / priceB,
-    cAmount: changeCollateralValue,
-    bAmountAMin: valueForEach / priceA / Math.sqrt(slippage),
-    bAmountBMin: valueForEach / priceB / Math.sqrt(slippage),
-    cAmountMin: changeCollateralValue / Math.sqrt(Math.sqrt(slippage)),
-  })
   return {
     bAmountA: valueForEach / priceA,
     bAmountB: valueForEach / priceB,
@@ -125,6 +116,40 @@ export async function leverage(
   try {
     await this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).call({from: this.account});
     return this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).send({from: this.account});
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function getDeleverageAmounts(
+  this: ImpermaxRouter, 
+  uniswapV2PairAddress: Address, 
+  changeCollateralValue: number,
+  slippage: number
+) : Promise<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number}> {
+  const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
+  const valueForEach = changeCollateralValue / 2;
+  return {
+    bAmountA: valueForEach / priceA,
+    bAmountB: valueForEach / priceB,
+    cAmount: changeCollateralValue,
+    bAmountAMin: valueForEach / priceA / Math.sqrt(slippage),
+    bAmountBMin: valueForEach / priceB / Math.sqrt(slippage),
+  };
+}
+export async function deleverage(
+  this: ImpermaxRouter, 
+  uniswapV2PairAddress: Address, 
+  tokens: BigNumber, 
+  amountAMin: BigNumber, 
+  amountBMin: BigNumber,
+  permitData: PermitData
+) {
+  const data = permitData ? permitData.permitData : '0x';
+  const deadline = permitData ? permitData.deadline : this.getDeadline();
+  try {
+    await this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).call({from: this.account});
+    return this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).send({from: this.account});
   } catch (e) {
     console.error(e);
   }

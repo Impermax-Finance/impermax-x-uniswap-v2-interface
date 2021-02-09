@@ -16,12 +16,12 @@ export const NETWORK_URL: NetworkIndex = {
 };
 
 export const ROUTER: NetworkIndex = {
-  [Networks.Ropsten]: '0xA48C6262890A45ef1a523Cf617AA6E816cf4e72A',
+  [Networks.Ropsten]: '0x179b6e60692f012f2DAE218075d77fa087E6f30d',
   [Networks.Mainnet]: ''
 };
 
 export const FACTORY: NetworkIndex = {
-  [Networks.Ropsten]: '0x31bD4a5E8A699978874f42d8A027ee5076A1E73a',
+  [Networks.Ropsten]: '0x28B1fBEeDdE786c33E7aE0eE613F60fEc2Fe57db',
   [Networks.Mainnet]: ''
 };
 
@@ -44,18 +44,8 @@ export const MAINNET_ETH_UNI: Address = '0xd3d2e2692501a5c9ca623199d38826e513033
 export const LISTED_PAIRS: NetworkIndex = {
   [Networks.Ropsten]: [
     ROPSTEN_ETH_DAI,
-    ROPSTEN_ETH_UNI,
+    //ROPSTEN_ETH_UNI,
   ],
   [Networks.Mainnet]: [
   ]
 };
-
-export const ROPSTEN_TO_MAINNET: AddressIndex = {
-  [ROPSTEN_ETH_DAI]: MAINNET_ETH_DAI,
-  [ROPSTEN_ETH_UNI]: MAINNET_ETH_UNI,
-}
-
-export const CONVERT_TO_MAINNET: NetworkIndex = {
-  [Networks.Ropsten]: ROPSTEN_TO_MAINNET,
-  [Networks.Mainnet]: {},
-}

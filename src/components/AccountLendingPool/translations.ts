@@ -28,6 +28,9 @@ const translations = {
   "Leverage": {
     'ENG': "Leverage"
   },
+  "Deleverage": {
+    'ENG': "Deleverage"
+  },
   "Obtain": {
     'ENG': "Obtain"
   },

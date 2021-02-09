@@ -44,7 +44,7 @@ export default function useLeverage(
     finally {
       setPending(false);
     }
-  }, [uniswapV2PairAddress, addTransaction, amountA, amountB, permitDataA, permitDataB]);
+  }, [uniswapV2PairAddress, addTransaction, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB]);
 
   return [leverageState, leverage];
 }

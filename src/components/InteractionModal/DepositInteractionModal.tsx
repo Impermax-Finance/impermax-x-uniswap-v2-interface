@@ -70,6 +70,15 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
             maxTitle={'Available'}
             max={availableBalance}
           />
+          <input 
+            type="range" 
+            className="form-range" 
+            value={val} 
+            step={availableBalance / 100} 
+            min={0} 
+            max={availableBalance} 
+            onChange={(event) => setVal(parseFloat(event.target.value))} 
+          />
           <div className="transaction-recap">
             <TransactionSize amount={val} />
             <SupplyAPY />

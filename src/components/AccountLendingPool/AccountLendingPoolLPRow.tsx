@@ -10,6 +10,7 @@ import { useRouterCallback } from "../../hooks/useImpermaxRouter";
 import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
 import LeverageInteractionModal from "../InteractionModal/LeverageInteractionModal";
 import WithdrawInteractionModal from "../InteractionModal/WithdrawInteractionModal";
+import DeleverageInteractionModal from "../InteractionModal/DeleverageInteractionModal";
 
 /**
  * Build account lending pool detail rows for LP token currencies.
@@ -31,6 +32,7 @@ export default function AccountLendingPoolLPRow() {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
   const [showLeverageModal, toggleLeverageModal] = useState(false);
+  const [showDeleverageModal, toggleDeleverageModal] = useState(false);
 
   if (!data) return (<>Loading</>);
 
@@ -69,11 +71,7 @@ export default function AccountLendingPoolLPRow() {
             <Button className="leverage" variant="primary" onClick={() => toggleLeverageModal(true)}>{t("Leverage")}</Button>
           </Col>
           <Col>
-            <a 
-              className="btn obtain" 
-              target="_blank" 
-              href={getUniswapAddLiquidity(data.tokenAAddress, data.tokenBAddress)}
-            >{t("Obtain")}</a>
+            <Button variant="primary" onClick={() => toggleDeleverageModal(true)}>{t("Deleverage")}</Button>
           </Col>
         </Row>
       </Col>
@@ -89,6 +87,10 @@ export default function AccountLendingPoolLPRow() {
     <LeverageInteractionModal 
       show={showLeverageModal} 
       toggleShow={toggleLeverageModal}
+    />
+    <DeleverageInteractionModal 
+      show={showDeleverageModal} 
+      toggleShow={toggleDeleverageModal}
     />
   </>);
 }
