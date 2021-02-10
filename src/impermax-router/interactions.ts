@@ -85,7 +85,7 @@ export async function getLeverageAmounts(
   leverage: number,
   slippage: number
 ) : Promise<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number, cAmountMin: number}> {
-  const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
+  const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
   const currentLeverage = await this.getLeverage(uniswapV2PairAddress);
   const collateralValue = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
   const changeCollateralValue = collateralValue * leverage / currentLeverage - collateralValue;
@@ -127,7 +127,7 @@ export async function getDeleverageAmounts(
   changeCollateralValue: number,
   slippage: number
 ) : Promise<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number}> {
-  const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
+  const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
   const valueForEach = changeCollateralValue / 2;
   return {
     bAmountA: valueForEach / priceA,
