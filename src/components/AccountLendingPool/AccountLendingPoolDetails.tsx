@@ -1,15 +1,11 @@
-import React, { useContext, useState, useCallback, useEffect } from "react";
+import React, { useContext } from "react";
 import { LanguageContext } from "../../contexts/Language";
 import phrases from './translations';
 import { Row, Col } from "react-bootstrap";
-import { AccountData, PoolTokenType } from "../../impermax-router/interfaces";
-import usePairAddress from "../../hooks/usePairAddress";
-import { useRouterCallback, useTogglePriceInverted, usePriceInverted } from "../../hooks/useImpermaxRouter";
-import { formatUSD, formatFloat, formatLeverage } from "../../utils/format";
-import LiquidationPrices from "../LiquidationPrices";
+import { formatUSD } from "../../utils/format";
 import DetailsRow from "../DetailsRow";
-import CurrentPrice from "../CurrentPrice";
 import { useSymbol, useEquityUSD, useBalanceUSD, useDebtUSD, useCurrentLeverage } from "../../hooks/useData";
+import RiskMetrics from "../RiskMetrics";
 
 
 /**
@@ -33,11 +29,7 @@ export default function AccountLendingPoolDetails() {
         <DetailsRow name={t("Total Debt")} value={formatUSD(debtUSD)} />
       </Col>
       <Col sm={12} md={6}>
-        <DetailsRow name={t("Current Leverage")} value={formatLeverage(currentLeverage)} />
-        <DetailsRow name={t("Liquidation Prices")}>
-          <LiquidationPrices />
-        </DetailsRow>
-        <CurrentPrice />
+        <RiskMetrics />
       </Col>
     </Row>
   </>);

@@ -1,7 +1,6 @@
 import React from "react";
-import './index.scss';
-import { formatToDecimals, formatFloat } from "../../utils/format";
-import { RiskMetrics, Changes } from "../../impermax-router/interfaces";
+import { formatFloat } from "../../utils/format";
+import { Changes } from "../../impermax-router/interfaces";
 import { useTWAPPrice, useSafetyMargin, useLiquidationPrices } from "../../hooks/useData";
 
 const LIQ_K = 1.7;

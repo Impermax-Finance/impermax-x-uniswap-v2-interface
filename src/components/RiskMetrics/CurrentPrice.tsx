@@ -2,11 +2,10 @@ import React, { useContext, useState, useCallback, useEffect } from "react";
 import { LanguageContext } from "../../contexts/Language";
 import phrases from './translations';
 import { Row, Col } from "react-bootstrap";
-import { RiskMetrics, PoolTokenType } from "../../impermax-router/interfaces";
+import { PoolTokenType } from "../../impermax-router/interfaces";
 import { useTogglePriceInverted, usePriceInverted } from "../../hooks/useImpermaxRouter";
 import { formatFloat } from "../../utils/format";
 import { DetailsRowCustom } from "../DetailsRow";
-import "./index.scss";
 import { useSymbol, useTWAPPrice, useMarketPrice } from "../../hooks/useData";
 
 

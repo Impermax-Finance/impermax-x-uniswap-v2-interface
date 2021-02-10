@@ -1,15 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { LanguageContext } from "../../contexts/Language";
 import phrases from './translations';
-import useUrlGenerator from "../../hooks/useUrlGenerator";
-import useImpermaxRouter, { useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { Table } from "react-bootstrap";
 import { formatUSD, formatPercentage } from "../../utils/format";
-import { PoolTokenType, BorrowableData } from "../../impermax-router/interfaces";
 import BorrowableDetailsRow from "./BorrowableDetailsRow";
-import usePairAddress from "../../hooks/usePairAddress";
-import usePoolToken from "../../hooks/usePoolToken";
 import { useSymbol, useName, useUnderlyingAddress, useSupplyUSD, useTotalBorrowsUSD, useUtilizationRate, useSupplyAPY, useBorrowAPY } from "../../hooks/useData";
+import { useTokenIcon } from "../../hooks/useUrlGenerator";
 
 /**
  * Generate the Currency Equity Details card, giving information about the suppy and rates for a particular currency in
@@ -19,7 +15,6 @@ export default function BorrowableDetails() {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
-  const { getIconByTokenAddress } = useUrlGenerator();
 
   const tokenAddress = useUnderlyingAddress();
   const name = useName();
@@ -29,10 +24,11 @@ export default function BorrowableDetails() {
   const utilizationRate = useUtilizationRate();
   const supplyAPY = useSupplyAPY();
   const borrowAPY = useBorrowAPY();
+  const tokenIcon = useTokenIcon();
 
   return (<div className="borrowable-details"> 
     <div className="header">
-      <img className="currency-icon" src={getIconByTokenAddress(tokenAddress)} />
+      <img className="currency-icon" src={tokenIcon} />
       {name} ({symbol})
     </div>
     <Table>

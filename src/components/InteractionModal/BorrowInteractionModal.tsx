@@ -1,11 +1,8 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
-import { useWallet } from "use-wallet";
-import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
-import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import InputAmount from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
@@ -70,18 +67,10 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
           </div>
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton 
-                name="Approve"
-                onClick={approvalState === ButtonState.Ready ? onApprove : null}
-                state={approvalState}
-              />
+              <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
             </Col>
             <Col xs={6}>
-              <InteractionButton 
-                name="Borrow" 
-                onClick={borrowState === ButtonState.Ready ? onBorrow : null} 
-                state={borrowState} 
-              />
+              <InteractionButton name="Deposit" onCall={onBorrow} state={borrowState} />
             </Col>
           </Row>
         </InteractionModalBody>

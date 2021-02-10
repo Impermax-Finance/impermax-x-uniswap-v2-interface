@@ -1,11 +1,8 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState } from "react";
 import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
-import { useWallet } from "use-wallet";
-import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
-import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "../RiskMetrics";
 import InputAmount from "../InputAmount";
@@ -66,18 +63,10 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
           />
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton 
-                name="Approve"
-                onClick={approvalState === ButtonState.Ready ? onApprove : null}
-                state={approvalState}
-              />
+              <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
             </Col>
             <Col xs={6}>
-              <InteractionButton 
-                name="Repay" 
-                onClick={repayState === ButtonState.Ready ? onRepay : null} 
-                state={repayState} 
-              />
+              <InteractionButton name="Repay" onCall={onRepay} state={repayState} />
             </Col>
           </Row>
         </InteractionModalBody>

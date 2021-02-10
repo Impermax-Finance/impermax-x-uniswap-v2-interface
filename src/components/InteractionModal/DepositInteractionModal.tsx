@@ -1,11 +1,8 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState } from "react";
 import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
-import { useWallet } from "use-wallet";
-import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
-import { PoolTokenType, ERC20, ApprovalType } from "../../impermax-router/interfaces";
-import usePairAddress from "../../hooks/usePairAddress";
+import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
 import usePoolToken from "../../hooks/usePoolToken";
 import { formatFloat } from "../../utils/format";
 import RiskMetrics from "../RiskMetrics";
@@ -17,8 +14,8 @@ import useApprove from "../../hooks/useApprove";
 import { BigNumber } from "ethers";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useDeposit from "../../hooks/useDeposit";
-import useUrlGenerator from "../../hooks/useUrlGenerator";
-import { useDecimals, useUnderlyingAddress, useSymbol, useAvailableBalance, useAvailableBalanceUSD } from "../../hooks/useData";
+import { useDecimals, useSymbol, useAvailableBalance, useAvailableBalanceUSD } from "../../hooks/useData";
+import { useAddLiquidityUrl } from "../../hooks/useUrlGenerator";
 
 /**
  * Props for the deposit interaction modal.
@@ -49,8 +46,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   const decimals = useDecimals();
   const availableBalance = useAvailableBalance();
   const availableBalanceUSD = useAvailableBalanceUSD();
-  const tokenAddressA = useUnderlyingAddress(PoolTokenType.BorrowableA);
-  const tokenAddressB = useUnderlyingAddress(PoolTokenType.BorrowableB);
+  const addLiquidityUrl = useAddLiquidityUrl();
 
   const amount = decimalToBalance(val, decimals);
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.UNDERLYING, amount);
@@ -60,12 +56,11 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
     setVal(0);
   }
 
-  const { getUniswapAddLiquidity } = useUrlGenerator();
   if (availableBalanceUSD < 1) return (
     <DepositInteractionModalContainer props={{show, toggleShow}}>
       You need to hold {symbol} in your wallet in order to deposit it.
       { poolTokenType == PoolTokenType.Collateral ? (<>
-        <br/>You can obtain it by <a target="_blank" href={getUniswapAddLiquidity(tokenAddressA, tokenAddressB)}>providing liquidity on Uniswap</a>
+        <br/>You can obtain it by <a target="_blank" href={addLiquidityUrl}>providing liquidity on Uniswap</a>
       </>) : null }
     </DepositInteractionModalContainer>
   );
@@ -88,18 +83,10 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
       </div>
       <Row className="interaction-row">
         <Col xs={6}>
-          <InteractionButton 
-            name="Approve"
-            onClick={approvalState === ButtonState.Ready ? onApprove : null}
-            state={approvalState}
-          />
+          <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
         </Col>
         <Col xs={6}>
-          <InteractionButton 
-            name="Deposit" 
-            onClick={depositState === ButtonState.Ready ? onDeposit : null} 
-            state={depositState} 
-          />
+          <InteractionButton name="Deposit" onCall={onDeposit} state={depositState} />
         </Col>
       </Row>
     </DepositInteractionModalContainer>

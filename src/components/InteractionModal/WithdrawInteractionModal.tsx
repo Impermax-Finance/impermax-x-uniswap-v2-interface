@@ -1,11 +1,8 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState } from "react";
 import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
-import { useWallet } from "use-wallet";
-import useImpermaxRouter, { useDoUpdate, useRouterUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
-import usePairAddress from "../../hooks/usePairAddress";
 import usePoolToken from "../../hooks/usePoolToken";
 import { formatFloat, formatUSD } from "../../utils/format";
 import RiskMetrics from "../RiskMetrics";
@@ -33,7 +30,6 @@ export interface WithdrawInteractionModalProps {
  * @see WithdrawInteractionModalProps
  */
 export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInteractionModalProps) {
-  const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
@@ -70,18 +66,10 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
           </div>
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton 
-                name="Approve"
-                onClick={approvalState === ButtonState.Ready ? onApprove : null}
-                state={approvalState}
-              />
+              <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
             </Col>
             <Col xs={6}>
-              <InteractionButton 
-                name="Withdraw" 
-                onClick={withdrawState === ButtonState.Ready ? onWithdraw : null} 
-                state={withdrawState} 
-              />
+              <InteractionButton name="Withdraw" onCall={onWithdraw} state={withdrawState} />
             </Col>
           </Row>
         </InteractionModalBody>

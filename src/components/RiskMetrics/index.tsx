@@ -2,14 +2,15 @@ import React, { useContext, useState, useCallback, useEffect } from "react";
 import { LanguageContext } from "../../contexts/Language";
 import phrases from './translations';
 import { Row, Col } from "react-bootstrap";
-import { AccountData, RiskMetrics, PoolTokenType } from "../../impermax-router/interfaces";
+import { PoolTokenType } from "../../impermax-router/interfaces";
 import usePairAddress from "../../hooks/usePairAddress";
 import useImpermaxRouter, { useRouterAccount, useRouterUpdate, useDoUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { formatUSD, formatFloat, formatLeverage } from "../../utils/format";
-import LiquidationPrices from "../LiquidationPrices";
 import DetailsRow from "../DetailsRow";
-import CurrentPrice from "../CurrentPrice";
 import { useCurrentLeverage, useSymbol } from "../../hooks/useData";
+import LiquidationPrices from "./LiquidationPrices";
+import CurrentPrice from "./CurrentPrice";
+import "./index.scss";
 
 interface RiskMetricsProps {
   changeBorrowedA?: number;
