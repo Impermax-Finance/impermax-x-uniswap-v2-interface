@@ -45,6 +45,8 @@ export default class ImpermaxRouter {
       lendingPool?: Promise<LendingPool>,
       safetyMargin?: Promise<number>,
       liquidationIncentive?: Promise<number>,
+      reserves?: Promise<[number, number]>,
+      LPTotalSupply?: Promise<number>,
       priceDenomLP?: Promise<[number, number]>,
       marketPrice?: Promise<number>,
       TWAPPrice?: Promise<number>,
@@ -123,8 +125,9 @@ export default class ImpermaxRouter {
   public initializeTotalBalance = fetchers.initializeTotalBalance;
   public initializeSafetyMargin = fetchers.initializeSafetyMargin;
   public initializeLiquidationIncentive = fetchers.initializeLiquidationIncentive;
+  public initializeReserves = fetchers.initializeReserves;
+  public initializeLPTotalSupply = fetchers.initializeLPTotalSupply;
   public initializePriceDenomLP = fetchers.initializePriceDenomLP;
-  public initializeMarketPrice = fetchers.initializeMarketPrice;
   public initializeTWAPPrice = fetchers.initializeTWAPPrice;
   public getName = fetchers.getName;
   public getSymbol = fetchers.getSymbol;
@@ -134,8 +137,11 @@ export default class ImpermaxRouter {
   public getTotalBalanceUSD = fetchers.getTotalBalanceUSD;
   public getSafetyMargin = fetchers.getSafetyMargin;
   public getLiquidationIncentive = fetchers.getLiquidationIncentive;
+  public getReserves = fetchers.getReserves;
+  public getLPTotalSupply = fetchers.getLPTotalSupply;
   public getPriceDenomLP = fetchers.getPriceDenomLP;
   public getBorrowablePriceDenomLP = fetchers.getBorrowablePriceDenomLP;
+  public getMarketPriceDenomLP = fetchers.getMarketPriceDenomLP;
   public getMarketPrice = fetchers.getMarketPrice;
   public getTWAPPrice = fetchers.getTWAPPrice;
 

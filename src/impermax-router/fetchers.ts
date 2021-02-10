@@ -109,13 +109,41 @@ export async function getLiquidationIncentive(this: ImpermaxRouter, uniswapV2Pai
   return cache.liquidationIncentive;
 }
 
+// Reserves
+export async function initializeReserves(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
+  const [,uniswapV2Pair] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+  const { reserve0, reserve1 } = await uniswapV2Pair.methods.getReserves().call();
+  return [
+    await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableA, reserve0),
+    await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableB, reserve1)
+  ];
+}
+export async function getReserves(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
+  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+  if (!cache.reserves) cache.reserves = this.initializeReserves(uniswapV2PairAddress);
+  return cache.reserves;
+}
+
+// LP Total Supply
+export async function initializeLPTotalSupply(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const [,uniswapV2Pair] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+  const totalSupply = await uniswapV2Pair.methods.totalSupply().call();
+  return this.normalize(uniswapV2PairAddress, PoolTokenType.Collateral, totalSupply);
+}
+export async function getLPTotalSupply(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+  if (!cache.LPTotalSupply) cache.LPTotalSupply = this.initializeLPTotalSupply(uniswapV2PairAddress);
+  return cache.LPTotalSupply;
+}
+
 // Price Denom LP
 export async function initializePriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const [collateral,] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const decimalsA = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const decimalsB = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   const { price0, price1 } = await collateral.methods.getPrices().call();
-  return [price0 / Math.pow(10, decimalsA), price1 / Math.pow(10, decimalsB)];
+  return [
+    await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableA, price0),
+    await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableB, price1)
+  ];
 }
 export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
@@ -127,17 +155,19 @@ export async function getBorrowablePriceDenomLP(this: ImpermaxRouter, uniswapV2P
   if (poolTokenType == PoolTokenType.BorrowableA) return priceA;
   return priceB;
 }
+export async function getMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
+  const [reserve0, reserve1] = await this.getReserves(uniswapV2PairAddress);
+  const totalSupply = await this.getLPTotalSupply(uniswapV2PairAddress);
+  return [
+    reserve0 / totalSupply,
+    reserve1 / totalSupply,
+  ];
+}
 
 // Market Price
-export async function initializeMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const [,uniswapV2Pair] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const { reserve0, reserve1 } = await uniswapV2Pair.methods.getReserves().call();
-  return 1 * reserve1 / reserve0;
-}
 export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.marketPrice) cache.marketPrice = this.initializeMarketPrice(uniswapV2PairAddress);
-  return !this.priceInverted ? (await cache.marketPrice) :  1 / (await cache.marketPrice);
+  const [reserve0, reserve1] = await this.getReserves(uniswapV2PairAddress);
+  return this.priceInverted ? 1 * reserve0 / reserve1 : 1 * reserve1 / reserve0;
 }
 
 // TWAP Price

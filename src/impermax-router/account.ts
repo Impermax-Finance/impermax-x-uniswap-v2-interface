@@ -126,7 +126,7 @@ export async function getNewLiquidationPriceSwings(this: ImpermaxRouter, uniswap
 export async function getNewLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<[number, number]> {
   const currentPrice = await this.getTWAPPrice(uniswapV2PairAddress);
   const [priceSwingA, priceSwingB] = await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, changes);
-	return [currentPrice / priceSwingB, currentPrice * priceSwingA];
+	return !this.priceInverted ? [currentPrice / priceSwingB, currentPrice * priceSwingA] : [currentPrice / priceSwingA, currentPrice * priceSwingB];
 }
 export async function getLiquidationPriceSwings(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   return await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, NO_CHANGES);
