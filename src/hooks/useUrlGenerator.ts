@@ -1,24 +1,24 @@
 import { useWETH } from "./useNetwork";
+import usePairAddress from "./usePairAddress";
+import { PoolTokenType } from "../impermax-router/interfaces";
+import usePoolToken from "./usePoolToken";
+import { useUnderlyingAddress } from "./useData";
 
-export interface UrlGenerator {
-  getLendingPool?: Function;
-  getIconByTokenAddress?: Function;
-  getUniswapAddLiquidity?: Function;
+export function useLendingPoolUrl() : string {
+  const uniswapV2PairAddress = usePairAddress();
+  return "/lending-pool/" + uniswapV2PairAddress;
 }
 
-export default function useUrlGenerator() : UrlGenerator {
+export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
+  const tokenAddress = useUnderlyingAddress(poolTokenTypeArg);
+  return tokenAddress ? "/build/assets/icons/" + tokenAddress + ".svg" : "";
+}
+
+export function useAddLiquidityUrl() : string {
   const WETH = useWETH();
-  return {
-    getLendingPool: (address: string) => {
-      return "/lending-pool/" + address;
-    },
-    getIconByTokenAddress: (address: string) => {
-      return address ? "/build/assets/icons/" + address + ".svg" : "";
-    },
-    getUniswapAddLiquidity: (addressA: string, addressB: string) => {
-      if (addressA == WETH) addressA = "ETH";
-      if (addressB == WETH) addressB = "ETH";
-      return "https://app.uniswap.org/#/add/"+addressA+"/"+addressB;
-    },
-  };
+  const tokenAAddress = useUnderlyingAddress(PoolTokenType.BorrowableA);
+  const tokenBAddress = useUnderlyingAddress(PoolTokenType.BorrowableB);
+  const addressA = tokenAAddress == WETH ? "ETH" : tokenAAddress;
+  const addressB = tokenBAddress == WETH ? "ETH" : tokenBAddress;
+  return "https://app.uniswap.org/#/add/"+addressA+"/"+addressB;
 }

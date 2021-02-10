@@ -1,17 +1,12 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState } from "react";
 import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
-import { useWallet } from "use-wallet";
-import useImpermaxRouter, { useDoUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
-import usePairAddress from "../../hooks/usePairAddress";
-import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "../RiskMetrics";
 import { formatFloat, formatToDecimals } from "../../utils/format";
 import InputAmount, { InputAmountMini } from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
-import BorrowFee from "./TransactionRecap/BorrowFee";
 import useDeleverage from "../../hooks/useDeleverage";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
@@ -24,7 +19,6 @@ export interface DeleverageInteractionModalProps {
 }
 
 export default function DeleverageInteractionModal({show, toggleShow}: DeleverageInteractionModalProps) {
-  const uniswapV2PairAddress = usePairAddress();
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
 
@@ -90,18 +84,10 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
           </div>
           <Row className="interaction-row">
             <Col xs={6}>
-              <InteractionButton 
-                name="Approve"
-                onClick={approvalState === ButtonState.Ready ? onApprove : null}
-                state={approvalState}
-              />
+              <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
             </Col>
             <Col xs={6}>
-              <InteractionButton 
-                name="Deleverage" 
-                onClick={deleverageState === ButtonState.Ready ? onDeleverage : null} 
-                state={deleverageState} 
-              />
+              <InteractionButton name="Deleverage" onCall={onDeleverage} state={deleverageState} />
             </Col>
           </Row>
         </InteractionModalBody>

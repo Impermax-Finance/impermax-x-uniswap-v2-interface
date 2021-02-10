@@ -3,8 +3,8 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import Button from 'react-bootstrap/Button';
 import './index.scss';
-import useImpermaxRouter, { useRouterAccount } from '../../hooks/useImpermaxRouter';
-import { AccountData, PoolTokenType } from '../../impermax-router/interfaces';
+import { useRouterAccount } from '../../hooks/useImpermaxRouter';
+import { PoolTokenType } from '../../impermax-router/interfaces';
 import AccountLendingPoolDetails from './AccountLendingPoolDetails';
 import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
 import AccountLendingPoolRow from './AccountLendingPoolRow';
@@ -31,7 +31,7 @@ function AccountLendingPoolContainer({ children }: AccountLendingPoolContainerPr
  * @params AccountLendingPoolProps
  */
 export default function AccountLendingPool() {
-  const { connect, account } = useWallet();
+  const { connect } = useWallet();
   const routerAccount = useRouterAccount();
 
   if (!routerAccount) return (

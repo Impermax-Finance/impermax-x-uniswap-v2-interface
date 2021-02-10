@@ -3,8 +3,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import gql from 'graphql-tag'
 import { Networks } from "./connections";
-import { ROPSTEN_TO_MAINNET } from "./constants";
-import { useConvertToMainnet } from '../hooks/useNetwork';
 
 export interface PairConversionPrices {
   LPPrice: number;
@@ -13,7 +11,6 @@ export interface PairConversionPrices {
 }
 
 export async function getPairConversionPrices(uniswapV2PairAddress: string) : Promise<PairConversionPrices> {
-  //const actualAddress = convertToMainnet(uniswapV2PairAddress);
   const query = gql`{
     pair (id: "${uniswapV2PairAddress}") {
       reserveUSD

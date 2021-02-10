@@ -14,12 +14,12 @@ export enum ButtonState {
 export interface InteractionButtonProps {
   name: string;
   state: ButtonState;
-  onClick?(): void;
+  onCall(): void;
 }
 
-export default function InteractionButton({name, onClick, state}: InteractionButtonProps) {
+export default function InteractionButton({name, onCall, state}: InteractionButtonProps) {
   return (
-    <button onClick={onClick} className={'interaction-button ' + state}>
+    <button onClick={state === ButtonState.Ready ? onCall : null} className={'interaction-button ' + state}>
       {name}
       { state === ButtonState.Pending ? ( <Spinner animation="border" size="sm" /> ) : null }
       { state === ButtonState.Done ? ( <FontAwesomeIcon icon={faCheck} /> ) : null }

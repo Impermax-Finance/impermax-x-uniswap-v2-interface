@@ -1,12 +1,8 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
-import { useWallet } from "use-wallet";
-import useImpermaxRouter, { useDoUpdate, useRouterCallback } from "../../hooks/useImpermaxRouter";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
-import usePairAddress from "../../hooks/usePairAddress";
-import usePoolToken from "../../hooks/usePoolToken";
 import RiskMetrics from "../RiskMetrics";
 import { formatFloat, formatToDecimals } from "../../utils/format";
 import InputAmount, { InputAmountMini } from "../InputAmount";
@@ -100,27 +96,15 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
       </div>
       <Row className="interaction-row">
         <Col xs={6}>
-          <InteractionButton 
-            name={"Approve " + symbolA}
-            onClick={approvalStateA === ButtonState.Ready ? onApproveA : null}
-            state={approvalStateA}
-          />
+          <InteractionButton name={"Approve " + symbolA} onCall={onApproveA} state={approvalStateA} />
         </Col>
         <Col xs={6}>
-          <InteractionButton 
-            name={"Approve " + symbolB}
-            onClick={approvalStateB === ButtonState.Ready ? onApproveB : null}
-            state={approvalStateB}
-          />
+          <InteractionButton name={"Approve " + symbolB} onCall={onApproveB} state={approvalStateB} />
         </Col>
       </Row>
       <Row className="interaction-row">
         <Col>
-          <InteractionButton 
-            name="Leverage" 
-            onClick={leverageState === ButtonState.Ready ? onLeverage : null} 
-            state={leverageState} 
-          />
+          <InteractionButton name="Leverage"  onCall={onLeverage} state={leverageState} />
         </Col>
       </Row>
     </LeverageInteractionModalContainer>

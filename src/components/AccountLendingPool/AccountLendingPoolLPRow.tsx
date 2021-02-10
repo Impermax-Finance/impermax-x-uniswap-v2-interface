@@ -1,34 +1,28 @@
-import React, { useContext, useState, useEffect } from "react";
-import useUrlGenerator from "../../hooks/useUrlGenerator";
+import React, { useContext, useState } from "react";
 import { LanguageContext } from "../../contexts/Language";
 import phrases from './translations';
 import { Row, Col, Button, Card } from "react-bootstrap";
-import { AccountCollateralData, PoolTokenType } from "../../impermax-router/interfaces";
+import { PoolTokenType } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
-import usePairAddress from "../../hooks/usePairAddress";
-import { useRouterCallback } from "../../hooks/useImpermaxRouter";
 import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
 import LeverageInteractionModal from "../InteractionModal/LeverageInteractionModal";
 import WithdrawInteractionModal from "../InteractionModal/WithdrawInteractionModal";
 import DeleverageInteractionModal from "../InteractionModal/DeleverageInteractionModal";
-import { useUnderlyingAddress, useDeposited, useSymbol, useDepositedUSD } from "../../hooks/useData";
+import { useDeposited, useSymbol, useDepositedUSD } from "../../hooks/useData";
+import { useTokenIcon } from "../../hooks/useUrlGenerator";
 
-/**
- * Build account lending pool detail rows for LP token currencies.
- * @params AccountLendingPoolLPRowProps
- */
+
 export default function AccountLendingPoolLPRow() {
-  const { getIconByTokenAddress, getUniswapAddLiquidity } = useUrlGenerator();
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
 
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
-  const tokenAAddress = useUnderlyingAddress(PoolTokenType.BorrowableA);
-  const tokenBAddress = useUnderlyingAddress(PoolTokenType.BorrowableB);
   const deposited = useDeposited();
   const depositedUSD = useDepositedUSD();
+  const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
+  const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
 
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -40,8 +34,8 @@ export default function AccountLendingPoolLPRow() {
       <Col md={3}>
         <Row className="account-lending-pool-name-icon">
           <Col className="token-icon icon-overlapped">
-            <img src={getIconByTokenAddress(tokenAAddress)} />
-            <img src={getIconByTokenAddress(tokenBAddress)} />
+            <img src={tokenIconA} />
+            <img src={tokenIconB} />
           </Col>
           <Col className="token-name">
             { `${symbolA}-${symbolB} LP` }

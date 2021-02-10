@@ -13,6 +13,9 @@ const translations = {
   "New Liquidation Prices": {
     'ENG': "New Liquidation Prices (TWAP)"
   },
+  "TWAP Price": {
+    'ENG': "TWAP Price"
+  },
 } as Dictionary;
 
 export default translations;
