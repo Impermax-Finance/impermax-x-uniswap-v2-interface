@@ -7,6 +7,8 @@ import usePoolToken from './usePoolToken';
 import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
+import { useDecimals, useSymbol, useToNumber } from './useData';
+import { formatFloat } from '../utils/format';
 
 // TODO this should manage deposit error, for example insufficient balance
 
@@ -17,6 +19,10 @@ export default function useDeposit(approvalState: ButtonState, amount: BigNumber
   const doUpdate = useDoUpdate();
   const addTransaction = useTransactionAdder();
   const [pending, setPending] = useState<boolean>(false);
+
+  const val = useToNumber(amount);
+  const symbol = useSymbol();
+  const summary = `Deposit ${formatFloat(val)} ${symbol}`;
   
   const depositState: ButtonState = useMemo(() => {
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
@@ -28,9 +34,9 @@ export default function useDeposit(approvalState: ButtonState, amount: BigNumber
     if (depositState !== ButtonState.Ready) return;
     setPending(true);
     try {
-      const response = await impermaxRouter.deposit(uniswapV2PairAddress, poolTokenType, amount, permitData);
-      const symbol = await impermaxRouter.getSymbol(uniswapV2PairAddress, poolTokenType);
-      addTransaction(response, { summary: `Deposit ${symbol}` });
+      await impermaxRouter.deposit(uniswapV2PairAddress, poolTokenType, amount, permitData, (hash: string) => {
+        addTransaction({ hash }, { summary });
+      });
       doUpdate();
     }
     finally {

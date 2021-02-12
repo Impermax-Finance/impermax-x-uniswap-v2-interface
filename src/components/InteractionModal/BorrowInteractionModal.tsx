@@ -11,7 +11,7 @@ import BorrowFee from "./TransactionRecap/BorrowFee";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useBorrow from "../../hooks/useBorrow";
-import { useSymbol, useDecimals, useMaxBorrowable } from "../../hooks/useData";
+import { useSymbol, useDecimals, useMaxBorrowable, useToBigNumber } from "../../hooks/useData";
 import RiskMetrics from "../RiskMetrics";
 
 /**
@@ -34,10 +34,9 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
-  const decimals = useDecimals();
   const maxBorrowable = useMaxBorrowable();
 
-  const amount = decimalToBalance(val, decimals);
+  const amount = useToBigNumber(val);
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.BORROW, amount);
   const [borrowState, borrow] = useBorrow(approvalState, amount, permitData);
   const onBorrow = async () => {

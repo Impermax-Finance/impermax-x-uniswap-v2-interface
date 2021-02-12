@@ -8,6 +8,8 @@ import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermax
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
 import { PoolTokenType } from '../impermax-router/interfaces';
+import { useToNumber, useSymbol } from './useData';
+import { formatFloat } from '../utils/format';
 
 
 export default function useDeleverage(
@@ -22,6 +24,10 @@ export default function useDeleverage(
   const doUpdate = useDoUpdate();
   const addTransaction = useTransactionAdder();
   const [pending, setPending] = useState<boolean>(false);
+
+  const val = useToNumber(tokens);
+  const symbol = useSymbol();
+  const summary = `Deleverage ${symbol}: withdraw ${formatFloat(val)} ${symbol}`;
   
   const deleverageState: ButtonState = useMemo(() => {
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
@@ -33,9 +39,9 @@ export default function useDeleverage(
     if (deleverageState !== ButtonState.Ready) return;
     setPending(true);
     try {
-      const response = await impermaxRouter.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, permitData);
-      const symbol = await impermaxRouter.getSymbol(uniswapV2PairAddress, PoolTokenType.Collateral);
-      addTransaction(response, { summary: `Deleverage ${symbol}` });
+      await impermaxRouter.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, permitData, (hash: string) => {
+        addTransaction({ hash }, { summary });
+      });
       doUpdate();
     }
     finally {

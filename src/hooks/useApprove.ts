@@ -7,6 +7,7 @@ import usePairAddress from './usePairAddress';
 import usePoolToken from './usePoolToken';
 import useImpermaxRouter, { useRouterCallback } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
+import { useSymbol } from './useData';
 
 const ZERO = ethers.constants.Zero;
 const APPROVE_AMOUNT = ethers.constants.MaxUint256;
@@ -27,6 +28,10 @@ export default function useApprove(approvalType: ApprovalType, amount: BigNumber
   const [permitData, setPermitData] = useState<PermitData>(null);
   const currentAllowance = useAllowance(approvalType, pending, poolTokenType);
 
+  const symbol = useSymbol();
+  const action = approvalType === ApprovalType.BORROW ? 'borrow' : approvalType === ApprovalType.POOL_TOKEN ? 'withdrawal' : 'transfer'
+  const summary = `Approve ${symbol} ${action}`;
+
   const approvalState: ButtonState = useMemo(() => {
     if (!currentAllowance) return ButtonState.Disabled;
     if (amount.eq(ZERO)) return ButtonState.Disabled;
@@ -46,8 +51,9 @@ export default function useApprove(approvalType: ApprovalType, amount: BigNumber
         // Fallback to traditional approve if can't sign
         setPermitData(null);
         try {
-          const response = await impermaxRouter.approve(uniswapV2PairAddress, poolTokenType, approvalType, APPROVE_AMOUNT);
-          addTransaction(response, await impermaxRouter.getApprovalInfo(uniswapV2PairAddress, poolTokenType, approvalType));
+          const response = await impermaxRouter.approve(uniswapV2PairAddress, poolTokenType, approvalType, APPROVE_AMOUNT, (hash: string) => {
+            addTransaction({ hash }, { summary });
+          });
         } catch (err) {
           console.error(err);
         }

@@ -159,8 +159,8 @@ export async function getMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairA
   const [reserve0, reserve1] = await this.getReserves(uniswapV2PairAddress);
   const totalSupply = await this.getLPTotalSupply(uniswapV2PairAddress);
   return [
-    totalSupply / reserve0,
-    totalSupply / reserve1,
+    totalSupply / reserve0 / 2,
+    totalSupply / reserve1 / 2,
   ];
 }
 

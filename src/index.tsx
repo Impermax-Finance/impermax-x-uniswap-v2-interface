@@ -9,6 +9,7 @@ import { useChainId } from './hooks/useNetwork';
 import { ImpermaxRouterProvider } from './contexts/ImpermaxRouterProvider';
 import { Provider } from 'react-redux';
 import store from './state';
+import Updaters from './state/Updaters';
 
 function App() {
   return <div className="app">
@@ -30,6 +31,7 @@ const Contexts: React.FC = ({ children }) => {
           <Theme>
             <UseWalletProvider chainId={useChainId()}>
               <Web3Provider>
+              <Updaters />
                 <ImpermaxRouterProvider>
                   { children }
                 </ImpermaxRouterProvider>

@@ -10,7 +10,7 @@ import InteractionButton, { ButtonState } from "../InteractionButton";
 import useDeleverage from "../../hooks/useDeleverage";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
-import { useSymbol, useDecimals, useDeposited, useBorrowed, useExchangeRate, useDeleverageAmounts } from "../../hooks/useData";
+import { useSymbol, useDecimals, useDeposited, useBorrowed, useExchangeRate, useDeleverageAmounts, useToBigNumber, useToTokens } from "../../hooks/useData";
 
 
 export interface DeleverageInteractionModalProps {
@@ -27,15 +27,12 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
   const symbol = useSymbol(PoolTokenType.Collateral);
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
-  const decimalsA = useDecimals(PoolTokenType.BorrowableA);
-  const decimalsB = useDecimals(PoolTokenType.BorrowableB);
   const borrowedA = useBorrowed(PoolTokenType.BorrowableA)
   const borrowedB = useBorrowed(PoolTokenType.BorrowableB)
-  const exchangeRate = useExchangeRate();
 
-  const tokens = decimalToBalance(val / exchangeRate, 18);
-  const amountAMin = decimalToBalance(changeAmounts.bAmountAMin, decimalsA);
-  const amountBMin = decimalToBalance(changeAmounts.bAmountBMin, decimalsB);
+  const tokens = useToTokens(val);
+  const amountAMin = useToBigNumber(changeAmounts.bAmountAMin, PoolTokenType.BorrowableA);
+  const amountBMin = useToBigNumber(changeAmounts.bAmountBMin, PoolTokenType.BorrowableB);
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens);
   const [deleverageState, deleverage] = useDeleverage(approvalState, tokens, amountAMin, amountBMin, permitData);
   const onDeleverage = async () => {

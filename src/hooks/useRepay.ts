@@ -7,6 +7,8 @@ import usePoolToken from './usePoolToken';
 import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
+import { useToNumber, useSymbol, usefromTokens } from './useData';
+import { formatFloat } from '../utils/format';
 
 
 export default function useRepay(approvalState: ButtonState, amount: BigNumber): [ButtonState, () => Promise<void>] {
@@ -16,6 +18,10 @@ export default function useRepay(approvalState: ButtonState, amount: BigNumber):
   const doUpdate = useDoUpdate();
   const addTransaction = useTransactionAdder();
   const [pending, setPending] = useState<boolean>(false);
+
+  const val = usefromTokens(amount);
+  const symbol = useSymbol();
+  const summary = `Repay ${formatFloat(val)} ${symbol}`;
   
   const repayState: ButtonState = useMemo(() => {
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
@@ -27,9 +33,9 @@ export default function useRepay(approvalState: ButtonState, amount: BigNumber):
     if (repayState !== ButtonState.Ready) return;
     setPending(true);
     try {
-      const response = await impermaxRouter.repay(uniswapV2PairAddress, poolTokenType, amount);
-      const symbol = await impermaxRouter.getSymbol(uniswapV2PairAddress, poolTokenType);
-      addTransaction(response, { summary: `Repay ${symbol}` });
+      await impermaxRouter.repay(uniswapV2PairAddress, poolTokenType, amount, (hash: string) => {
+        addTransaction({ hash }, { summary });
+      });
       doUpdate();
     }
     finally {

@@ -12,7 +12,7 @@ import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useLeverage from "../../hooks/useLeverage";
 import { BigNumber } from "ethers";
-import { useSymbol, useDecimals, useDepositedUSD, useDeadline, useMaxLeverage, useCurrentLeverage, useLeverageAmounts } from "../../hooks/useData";
+import { useSymbol, useDecimals, useDepositedUSD, useDeadline, useMaxLeverage, useCurrentLeverage, useLeverageAmounts, useToBigNumber } from "../../hooks/useData";
 
 
 export interface LeverageInteractionModalProps {
@@ -40,8 +40,6 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const maxLeverage = useMaxLeverage();
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
-  const decimalsA = useDecimals(PoolTokenType.BorrowableA);
-  const decimalsB = useDecimals(PoolTokenType.BorrowableB);
   const depositedUSD = useDepositedUSD();
   const deadline = useDeadline();
   
@@ -49,10 +47,10 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
     setVal(Math.ceil(minLeverage * 1000) / 1000);
   }, [minLeverage]);
 
-  const amountA = decimalToBalance(changeAmounts.bAmountA, decimalsA);
-  const amountB = decimalToBalance(changeAmounts.bAmountB, decimalsB);
-  const amountAMin = decimalToBalance(changeAmounts.bAmountAMin, decimalsA);
-  const amountBMin = decimalToBalance(changeAmounts.bAmountBMin, decimalsB);
+  const amountA = useToBigNumber(changeAmounts.bAmountA, PoolTokenType.BorrowableA);
+  const amountB = useToBigNumber(changeAmounts.bAmountB, PoolTokenType.BorrowableB);
+  const amountAMin = useToBigNumber(changeAmounts.bAmountAMin, PoolTokenType.BorrowableA);
+  const amountBMin = useToBigNumber(changeAmounts.bAmountBMin, PoolTokenType.BorrowableB);
   const [approvalStateA, onApproveA, permitDataA] = useApprove(ApprovalType.BORROW, amountA, PoolTokenType.BorrowableA, deadline);
   const [approvalStateB, onApproveB, permitDataB] = useApprove(ApprovalType.BORROW, amountB, PoolTokenType.BorrowableB, deadline);
   const [leverageState, onLeverage] = useLeverage(approvalStateA, approvalStateB, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB);

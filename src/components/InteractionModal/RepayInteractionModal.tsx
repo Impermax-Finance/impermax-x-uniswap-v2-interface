@@ -11,7 +11,7 @@ import { formatUSD } from "../../utils/format";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useRepay from "../../hooks/useRepay";
-import { useSymbol, useDecimals, useAvailableBalance, useBorrowed } from "../../hooks/useData";
+import { useSymbol, useDecimals, useAvailableBalance, useBorrowed, useToBigNumber } from "../../hooks/useData";
 
 /**
  * Props for the deposit interaction modal.
@@ -33,11 +33,10 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
-  const decimals = useDecimals();
   const availableBalance = useAvailableBalance();
   const borrowed = useBorrowed();
 
-  const amount = decimalToBalance(val, decimals);
+  const amount = useToBigNumber(val);
   const [approvalState, onApprove,] = useApprove(ApprovalType.UNDERLYING, amount);
   const [repayState, repay] = useRepay(approvalState, amount);
   const onRepay = async () => {

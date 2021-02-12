@@ -9,7 +9,7 @@ import { TransactionDetails } from './reducer';
 
 // helper that can take a ethers library transaction response and add it to the list of transactions
 export function useTransactionAdder(): (
-  response: {transactionHash: string},
+  response: {hash: string},
   customData?: { summary?: string; approval?: { tokenAddress: string; spender: string } },
 ) => void {
   const { chainId, account } = useWallet();
@@ -17,7 +17,7 @@ export function useTransactionAdder(): (
 
   return useCallback(
     (
-      response: {transactionHash: string},
+      response: {hash: string},
       {
         summary,
         approval,
@@ -26,11 +26,11 @@ export function useTransactionAdder(): (
       if (!account) return;
       if (!chainId) return;
 
-      const { transactionHash } = response;
-      if (!transactionHash) {
+      const { hash } = response;
+      if (!hash) {
         throw Error('No transaction hash found.');
       }
-      dispatch(addTransaction({ hash: transactionHash, from: account, chainId, approval, summary }));
+      dispatch(addTransaction({ hash, from: account, chainId, approval, summary }));
     },
     [dispatch, chainId, account],
   );
@@ -53,11 +53,11 @@ export function useIsTransactionPending(transactionHash?: string): boolean {
 }
 
 /**
- * Returns whether a transaction happened in the last day (86400 seconds * 1000 milliseconds / second)
+ * Returns whether a transaction happened in the last 7 days
  * @param tx to check for recency
  */
 export function isTransactionRecent(tx: TransactionDetails): boolean {
-  return new Date().getTime() - tx.addedTime < 86_400_000;
+  return new Date().getTime() - tx.addedTime < 7 * 24 * 3600 * 1000;
 }
 
 // returns whether a token has a pending approval transaction

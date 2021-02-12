@@ -6,74 +6,82 @@ import { BigNumber, ethers } from "ethers";
 import BN from "bn.js";
 import { PermitData } from "../hooks/useApprove";
 
-export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData) {
+export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData, onTransactionHash: Function) {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
+  let send;
   try {
     if (token._address == this.WETH) {
       await this.router.methods.mintETH(poolToken._address, this.account, deadline).call({from: this.account, value: amount});
-      return this.router.methods.mintETH(poolToken._address, this.account, deadline).send({from: this.account, value: amount});
+      send = this.router.methods.mintETH(poolToken._address, this.account, deadline).send({from: this.account, value: amount});
     }
     if (poolTokenType == PoolTokenType.Collateral) {
       await this.router.methods.mintCollateral(poolToken._address, amount, this.account, deadline, data).call({from: this.account});
-      return this.router.methods.mintCollateral(poolToken._address, amount, this.account, deadline, data).send({from: this.account});
+      send = this.router.methods.mintCollateral(poolToken._address, amount, this.account, deadline, data).send({from: this.account});
     }
     else {
       await this.router.methods.mint(poolToken._address, amount, this.account, deadline).call({from: this.account});
-      return this.router.methods.mint(poolToken._address, amount, this.account, deadline).send({from: this.account});
+      send = this.router.methods.mint(poolToken._address, amount, this.account, deadline).send({from: this.account});
     }
+    return send.on('transactionHash', onTransactionHash);
   } catch (e) {
     console.error(e);
   }
 }
 
-export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, tokens: BigNumber, permitData: PermitData) {
+export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, tokens: BigNumber, permitData: PermitData, onTransactionHash: Function) {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
+  let send;
   try {
     if (token._address == this.WETH) {
       await this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).call({from: this.account});
-      return this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).send({from: this.account});
+      send = this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).send({from: this.account});
     }
     else {
       await this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).call({from: this.account});
-      return this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).send({from: this.account});
+      send = this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).send({from: this.account});
     }
+    return send.on('transactionHash', onTransactionHash);
   } catch (e) {
     console.error(e);
   }
 }
 
-export async function borrow(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData) {
+export async function borrow(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData, onTransactionHash: Function) {
   const [borrowable, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
+  let send;
   try {
     if (token._address == this.WETH) {
       await this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).call({from: this.account});
-      return this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).send({from: this.account});
+      send = this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).send({from: this.account});
     } else {
       await this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).call({from: this.account});
-      return this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).send({from: this.account});
+      send = this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).send({from: this.account});
     }
+    return send.on('transactionHash', onTransactionHash);
   } catch (e) {
     console.error(e);
   }
 }
 
-export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber) {
+export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, onTransactionHash: Function) {
   const [borrowable, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const deadline = this.getDeadline();
+  let send;
   try {
     if (token._address == this.WETH) {
       await this.router.methods.repayETH(borrowable._address, this.account, deadline).call({from: this.account, value: amount});
-      return this.router.methods.repayETH(borrowable._address, this.account, deadline).send({from: this.account, value: amount});
+      send = this.router.methods.repayETH(borrowable._address, this.account, deadline).send({from: this.account, value: amount});
     } else {
       await this.router.methods.repay(borrowable._address, amount, this.account, deadline).call({from: this.account});
-      return this.router.methods.repay(borrowable._address, amount, this.account, deadline).send({from: this.account});
+      send = this.router.methods.repay(borrowable._address, amount, this.account, deadline).send({from: this.account});
     }
+    return send.on('transactionHash', onTransactionHash);
   } catch (e) {
     console.error(e);
   }
@@ -107,7 +115,8 @@ export async function leverage(
   amountAMin: BigNumber, 
   amountBMin: BigNumber,
   permitDataA: PermitData, 
-  permitDataB: PermitData
+  permitDataB: PermitData, 
+  onTransactionHash: Function
 ) {
   const dataA = permitDataA ? permitDataA.permitData : '0x';
   const dataB = permitDataB ? permitDataB.permitData : '0x';
@@ -115,7 +124,8 @@ export async function leverage(
   const deadline = permitDataA ? permitDataA.deadline : permitDataB ? permitDataB.deadline : this.getDeadline();
   try {
     await this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).call({from: this.account});
-    return this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).send({from: this.account});
+    const send = this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).send({from: this.account});
+    return send.on('transactionHash', onTransactionHash);
   } catch (e) {
     console.error(e);
   }
@@ -143,13 +153,15 @@ export async function deleverage(
   tokens: BigNumber, 
   amountAMin: BigNumber, 
   amountBMin: BigNumber,
-  permitData: PermitData
+  permitData: PermitData, 
+  onTransactionHash: Function
 ) {
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
     await this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).call({from: this.account});
-    return this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).send({from: this.account});
+    const send = this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).send({from: this.account});
+    return send.on('transactionHash', onTransactionHash);
   } catch (e) {
     console.error(e);
   }

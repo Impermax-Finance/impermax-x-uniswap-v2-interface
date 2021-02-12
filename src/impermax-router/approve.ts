@@ -45,12 +45,14 @@ export async function getAllowance(this: ImpermaxRouter, uniswapV2PairAddress: A
   return BigNumber.from(allowance);
 }
 
-export async function approve(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, approvalType: ApprovalType, amount: BigNumber) {
+export async function approve(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, approvalType: ApprovalType, amount: BigNumber, onTransactionHash: Function) {
   const {owner, spender} = this.getOwnerSpender();
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  if (approvalType == ApprovalType.POOL_TOKEN) return poolToken.methods.approve(spender, amount).send({from: owner});
-  if (approvalType == ApprovalType.UNDERLYING) return token.methods.approve(spender, amount).send({from: owner});
-  if (approvalType == ApprovalType.BORROW) return poolToken.methods.borrowApprove(spender, amount).send({from: owner});
+  let send;
+  if (approvalType == ApprovalType.POOL_TOKEN) send = poolToken.methods.approve(spender, amount).send({from: owner});
+  if (approvalType == ApprovalType.UNDERLYING) send = token.methods.approve(spender, amount).send({from: owner});
+  if (approvalType == ApprovalType.BORROW) send = poolToken.methods.borrowApprove(spender, amount).send({from: owner});
+  return send.on('transactionHash', onTransactionHash);
 }
 
 export async function getPermitData(
@@ -110,31 +112,4 @@ export async function getPermitData(
       callBack({permitData, deadline, amount});
     }
   );
-}
-
-export async function getApprovalInfo(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, approvalType: ApprovalType) : Promise<object> {
-  const {owner, spender} = this.getOwnerSpender();
-  const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  const symbol = await this.getSymbol(uniswapV2PairAddress, poolTokenType);
-  if (approvalType == ApprovalType.POOL_TOKEN) return {
-    summary: `Approve Pool Token ${symbol}`,
-    approval: {
-      tokenAddress: poolToken.address,
-      spender: spender,
-    }
-  };
-  if (approvalType == ApprovalType.UNDERLYING) return {
-    summary: `Approve Token ${symbol}`,
-    approval: {
-      tokenAddress: token.address,
-      spender: spender,
-    }
-  };
-  if (approvalType == ApprovalType.BORROW) return {
-    summary: `Approve Borrow ${symbol}`,
-    approval: {
-      tokenAddress: poolToken.address,
-      spender: spender,
-    }
-  };
 }
