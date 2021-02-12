@@ -14,7 +14,7 @@ import useApprove from "../../hooks/useApprove";
 import { BigNumber } from "ethers";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useDeposit from "../../hooks/useDeposit";
-import { useDecimals, useSymbol, useAvailableBalance, useAvailableBalanceUSD } from "../../hooks/useData";
+import { useDecimals, useSymbol, useAvailableBalance, useAvailableBalanceUSD, useToBigNumber } from "../../hooks/useData";
 import { useAddLiquidityUrl } from "../../hooks/useUrlGenerator";
 
 /**
@@ -43,12 +43,11 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
-  const decimals = useDecimals();
   const availableBalance = useAvailableBalance();
   const availableBalanceUSD = useAvailableBalanceUSD();
   const addLiquidityUrl = useAddLiquidityUrl();
 
-  const amount = decimalToBalance(val, decimals);
+  const amount = useToBigNumber(val);
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.UNDERLYING, amount);
   const [depositState, deposit] = useDeposit(approvalState, amount, permitData);
   const onDeposit = async () => {

@@ -201,7 +201,6 @@ export default class ImpermaxRouter {
   public approve = approve.approve;
   public getAllowance = approve.getAllowance;
   public getPermitData = approve.getPermitData;
-  public getApprovalInfo = approve.getApprovalInfo;
 
   // Interactions
   public deposit = interactions.deposit;

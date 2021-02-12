@@ -12,7 +12,7 @@ import TransactionSize from "./TransactionRecap/TransactionSize";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useWithdraw from "../../hooks/useWithdraw";
-import { useExchangeRate, useMaxWithdrawable, useSymbol, useDecimals } from "../../hooks/useData";
+import { useExchangeRate, useMaxWithdrawable, useSymbol, useDecimals, useToTokens } from "../../hooks/useData";
 
 /**
  * Props for the withdraw interaction modal.
@@ -34,11 +34,9 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
-  const decimals = useDecimals();
-  const exchangeRate = useExchangeRate();
   const maxWithdrawable = useMaxWithdrawable();
 
-  const tokens = decimalToBalance(val / exchangeRate, decimals);
+  const tokens = useToTokens(val);
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens);
   const [withdrawState, withdraw] = useWithdraw(approvalState, tokens, permitData);
   const onWithdraw = async () => {

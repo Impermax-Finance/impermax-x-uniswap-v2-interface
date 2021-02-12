@@ -7,6 +7,8 @@ import usePoolToken from './usePoolToken';
 import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
+import { useToNumber, useSymbol } from './useData';
+import { formatFloat } from '../utils/format';
 
 
 export default function useBorrow(approvalState: ButtonState, amount: BigNumber, permitData: PermitData): [ButtonState, () => Promise<void>] {
@@ -16,6 +18,10 @@ export default function useBorrow(approvalState: ButtonState, amount: BigNumber,
   const doUpdate = useDoUpdate();
   const addTransaction = useTransactionAdder();
   const [pending, setPending] = useState<boolean>(false);
+
+  const val = useToNumber(amount);
+  const symbol = useSymbol();
+  const summary = `Borrow ${formatFloat(val)} ${symbol}`;
   
   const borrowState: ButtonState = useMemo(() => {
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
@@ -27,9 +33,9 @@ export default function useBorrow(approvalState: ButtonState, amount: BigNumber,
     if (borrowState !== ButtonState.Ready) return;
     setPending(true);
     try {
-      const response = await impermaxRouter.borrow(uniswapV2PairAddress, poolTokenType, amount, permitData);
-      const symbol = await impermaxRouter.getSymbol(uniswapV2PairAddress, poolTokenType);
-      addTransaction(response, { summary: `Borrow ${symbol}` });
+      await impermaxRouter.borrow(uniswapV2PairAddress, poolTokenType, amount, permitData, (hash: string) => {
+        addTransaction({ hash }, { summary });
+      });
       doUpdate();
     }
     finally {

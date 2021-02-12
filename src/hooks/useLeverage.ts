@@ -8,6 +8,8 @@ import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermax
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
 import { PoolTokenType } from '../impermax-router/interfaces';
+import { useToNumber, useSymbol } from './useData';
+import { formatFloat } from '../utils/format';
 
 
 export default function useLeverage(
@@ -25,6 +27,13 @@ export default function useLeverage(
   const doUpdate = useDoUpdate();
   const addTransaction = useTransactionAdder();
   const [pending, setPending] = useState<boolean>(false);
+
+  const valA = useToNumber(amountA, PoolTokenType.BorrowableA);
+  const valB = useToNumber(amountB, PoolTokenType.BorrowableB);
+  const symbol = useSymbol();
+  const symbolA = useSymbol(PoolTokenType.BorrowableA);
+  const symbolB = useSymbol(PoolTokenType.BorrowableB);
+  const summary = `Leverage ${symbol}: borrow ${formatFloat(valA)} ${symbolA} and  ${formatFloat(valB)} ${symbolB}`;
   
   const leverageState: ButtonState = useMemo(() => {
     if (approvalStateA != ButtonState.Done || approvalStateB != ButtonState.Done) return ButtonState.Disabled;
@@ -36,9 +45,9 @@ export default function useLeverage(
     if (leverageState !== ButtonState.Ready) return;
     setPending(true);
     try {
-      const response = await impermaxRouter.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB);
-      const symbol = await impermaxRouter.getSymbol(uniswapV2PairAddress, PoolTokenType.Collateral);
-      addTransaction(response, { summary: `Leverage ${symbol}` });
+      await impermaxRouter.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB, (hash: string) => {
+        addTransaction({ hash }, { summary });
+      });
       doUpdate();
     }
     finally {

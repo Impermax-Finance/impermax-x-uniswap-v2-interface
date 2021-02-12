@@ -8,10 +8,10 @@ const translations = {
     'ENG': "New Leverage"
   }, 
   "Liquidation Prices": {
-    'ENG': "Liquidation Prices (TWAP)"
+    'ENG': "Liquidation Prices"
   },
   "New Liquidation Prices": {
-    'ENG': "New Liquidation Prices (TWAP)"
+    'ENG': "New Liquidation Prices"
   },
   "TWAP Price": {
     'ENG': "TWAP Price"

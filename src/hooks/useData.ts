@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouterCallback } from "./useImpermaxRouter";
 import { stringify } from "querystring";
 import { BigNumber } from "ethers";
+import { decimalToBalance } from "../utils/ether-utils";
 
 export function useToken(poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
@@ -246,4 +247,26 @@ export function useDeadline() : BigNumber {
   const [deadline, setDeadline] = useState<BigNumber>();
   useRouterCallback(async (router) => setDeadline( router.getDeadline() ));
   return deadline;
+}
+
+export function useToBigNumber(val: number, poolTokenTypeArg?: PoolTokenType) : BigNumber {
+  const decimals = useDecimals(poolTokenTypeArg);
+  return decimalToBalance(val, decimals);
+}
+
+export function useToNumber(amount: BigNumber, poolTokenTypeArg?: PoolTokenType) : number {
+  const decimals = useDecimals(poolTokenTypeArg);
+  return parseFloat(amount.toString()) / Math.pow(10, decimals);
+}
+
+export function useToTokens(val: number, poolTokenTypeArg?: PoolTokenType) : BigNumber {
+  const decimals = useDecimals(poolTokenTypeArg);
+  const exchangeRate = useExchangeRate(poolTokenTypeArg);
+  return decimalToBalance(val / exchangeRate, decimals);
+}
+
+export function usefromTokens(amount: BigNumber, poolTokenTypeArg?: PoolTokenType) : number {
+  const decimals = useDecimals(poolTokenTypeArg);
+  const exchangeRate = useExchangeRate(poolTokenTypeArg);
+  return parseFloat(amount.toString()) * exchangeRate / Math.pow(10, decimals);
 }
