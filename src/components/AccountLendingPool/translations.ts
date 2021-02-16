@@ -25,6 +25,12 @@ const translations = {
   "Withdraw": {
     'ENG': "Withdraw"
   },
+  "Supply": {
+    'ENG': "Supply"
+  },
+  "Supplied": {
+    'ENG': "Supplied"
+  },
   "Leverage": {
     'ENG': "Leverage"
   },

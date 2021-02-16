@@ -37,8 +37,9 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
   const maxBorrowable = useMaxBorrowable();
 
   const amount = useToBigNumber(val);
-  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.BORROW, amount);
-  const [borrowState, borrow] = useBorrow(approvalState, amount, permitData);
+  const invalidInput = val > maxBorrowable;
+  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.BORROW, amount, invalidInput);
+  const [borrowState, borrow] = useBorrow(approvalState, amount, invalidInput, permitData);
   const onBorrow = async () => {
     await borrow();
     setVal(0);

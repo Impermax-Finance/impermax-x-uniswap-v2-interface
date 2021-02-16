@@ -41,9 +41,8 @@ export async function getDepositedUSD(this: ImpermaxRouter, uniswapV2PairAddress
 // Borrowed
 export async function initializeBorrowed(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const [borrowable,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  const exchangeRate = await this.getExchangeRate(uniswapV2PairAddress, poolTokenType);
   const balance = await borrowable.methods.borrowBalance(this.account).call();
-  const storedAmount = (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) * exchangeRate;
+  const storedAmount = await this.normalize(uniswapV2PairAddress, poolTokenType, balance);
   const accrualTimestamp = await this.getAccrualTimestamp(uniswapV2PairAddress, poolTokenType);
   const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
   return storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
@@ -185,4 +184,17 @@ export async function getMaxLeverage(this: ImpermaxRouter, uniswapV2PairAddress:
   const equity = valueCollateral - valueDebt;
   if (equity == 0) return 1;
   return (valueDebt + additionalValueBorrowablePerSide * 2) / equity + 1;
+}
+
+// Max Deleverage
+export async function getMaxDeleverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, slippage: number) : Promise<number> {
+  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, NO_CHANGES);
+  const minRepayPerSide = valueCollateral / 2 / Math.sqrt(slippage);
+  if ( minRepayPerSide >= valueA && minRepayPerSide >= valueB ) {
+    return this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
+  }
+  if ( minRepayPerSide * 2 < valueA + valueB ) {
+    return 0;
+  }
+  return Math.min(valueA, valueB) * 2 * Math.sqrt(slippage);
 }

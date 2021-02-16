@@ -11,7 +11,7 @@ import { useToNumber, useSymbol } from './useData';
 import { formatFloat } from '../utils/format';
 
 
-export default function useBorrow(approvalState: ButtonState, amount: BigNumber, permitData: PermitData): [ButtonState, () => Promise<void>] {
+export default function useBorrow(approvalState: ButtonState, amount: BigNumber, invalidInput: boolean, permitData: PermitData): [ButtonState, () => Promise<void>] {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const impermaxRouter = useImpermaxRouter();
@@ -24,6 +24,7 @@ export default function useBorrow(approvalState: ButtonState, amount: BigNumber,
   const summary = `Borrow ${formatFloat(val)} ${symbol}`;
   
   const borrowState: ButtonState = useMemo(() => {
+    if (invalidInput) return ButtonState.Disabled;
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;

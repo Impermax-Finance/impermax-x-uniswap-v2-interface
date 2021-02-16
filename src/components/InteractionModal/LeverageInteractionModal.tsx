@@ -51,9 +51,10 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const amountB = useToBigNumber(changeAmounts.bAmountB, PoolTokenType.BorrowableB);
   const amountAMin = useToBigNumber(changeAmounts.bAmountAMin, PoolTokenType.BorrowableA);
   const amountBMin = useToBigNumber(changeAmounts.bAmountBMin, PoolTokenType.BorrowableB);
-  const [approvalStateA, onApproveA, permitDataA] = useApprove(ApprovalType.BORROW, amountA, PoolTokenType.BorrowableA, deadline);
-  const [approvalStateB, onApproveB, permitDataB] = useApprove(ApprovalType.BORROW, amountB, PoolTokenType.BorrowableB, deadline);
-  const [leverageState, onLeverage] = useLeverage(approvalStateA, approvalStateB, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB);
+  const invalidInput = val < minLeverage || val > maxLeverage;
+  const [approvalStateA, onApproveA, permitDataA] = useApprove(ApprovalType.BORROW, amountA, invalidInput, PoolTokenType.BorrowableA, deadline);
+  const [approvalStateB, onApproveB, permitDataB] = useApprove(ApprovalType.BORROW, amountB, invalidInput, PoolTokenType.BorrowableB, deadline);
+  const [leverageState, onLeverage] = useLeverage(approvalStateA, approvalStateB, invalidInput, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB);
 
   if (depositedUSD < 1) return (
     <LeverageInteractionModalContainer props={{show, toggleShow}}>

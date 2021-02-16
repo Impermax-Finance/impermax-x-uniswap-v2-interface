@@ -15,7 +15,7 @@ export default function TransactionSize({amount}: TransactionSizeProps) {
   if (poolTokenType != PoolTokenType.Collateral) return null;
 
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
-  const symbolB = useSymbol(PoolTokenType.BorrowableA);
+  const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const [tokenPriceA, tokenPriceB] = usePriceDenomLP();
 
   return (

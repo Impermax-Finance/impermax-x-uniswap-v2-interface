@@ -37,8 +37,9 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
   const borrowed = useBorrowed();
 
   const amount = useToBigNumber(val);
-  const [approvalState, onApprove,] = useApprove(ApprovalType.UNDERLYING, amount);
-  const [repayState, repay] = useRepay(approvalState, amount);
+  const invalidInput = val > Math.min(availableBalance, borrowed);
+  const [approvalState, onApprove,] = useApprove(ApprovalType.UNDERLYING, amount, invalidInput);
+  const [repayState, repay] = useRepay(approvalState, amount, invalidInput);
   const onRepay = async () => {
     await repay();
     setVal(0);

@@ -11,7 +11,7 @@ import { useToNumber, useSymbol, usefromTokens } from './useData';
 import { formatFloat } from '../utils/format';
 
 
-export default function useRepay(approvalState: ButtonState, amount: BigNumber): [ButtonState, () => Promise<void>] {
+export default function useRepay(approvalState: ButtonState, amount: BigNumber, invalidInput: boolean): [ButtonState, () => Promise<void>] {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const impermaxRouter = useImpermaxRouter();
@@ -24,6 +24,7 @@ export default function useRepay(approvalState: ButtonState, amount: BigNumber):
   const summary = `Repay ${formatFloat(val)} ${symbol}`;
   
   const repayState: ButtonState = useMemo(() => {
+    if (invalidInput) return ButtonState.Disabled;
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;

@@ -10,7 +10,7 @@ import InteractionButton, { ButtonState } from "../InteractionButton";
 import useDeleverage from "../../hooks/useDeleverage";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
-import { useSymbol, useDecimals, useDeposited, useBorrowed, useExchangeRate, useDeleverageAmounts, useToBigNumber, useToTokens } from "../../hooks/useData";
+import { useSymbol, useDecimals, useDeposited, useBorrowed, useExchangeRate, useDeleverageAmounts, useToBigNumber, useToTokens, useMaxDeleverage } from "../../hooks/useData";
 
 
 export interface DeleverageInteractionModalProps {
@@ -23,7 +23,7 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
   const [slippage, setSlippage] = useState<number>(2);
 
   const changeAmounts = useDeleverageAmounts(val, slippage);
-  const maxDeleverage = useDeposited(); // TODO: function getMaxDeleverage which should consider that not 100% may be repayable
+  const maxDeleverage = useMaxDeleverage(slippage);
   const symbol = useSymbol(PoolTokenType.Collateral);
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
@@ -31,10 +31,11 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
   const borrowedB = useBorrowed(PoolTokenType.BorrowableB)
 
   const tokens = useToTokens(val);
+  const invalidInput = val > maxDeleverage;
   const amountAMin = useToBigNumber(changeAmounts.bAmountAMin, PoolTokenType.BorrowableA);
   const amountBMin = useToBigNumber(changeAmounts.bAmountBMin, PoolTokenType.BorrowableB);
-  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens);
-  const [deleverageState, deleverage] = useDeleverage(approvalState, tokens, amountAMin, amountBMin, permitData);
+  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens, invalidInput);
+  const [deleverageState, deleverage] = useDeleverage(approvalState, invalidInput, tokens, amountAMin, amountBMin, permitData);
   const onDeleverage = async () => {
     await deleverage();
     setVal(0);

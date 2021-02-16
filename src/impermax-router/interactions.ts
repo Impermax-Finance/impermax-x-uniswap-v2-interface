@@ -102,9 +102,9 @@ export async function getLeverageAmounts(
     bAmountA: valueForEach / priceA,
     bAmountB: valueForEach / priceB,
     cAmount: changeCollateralValue,
-    bAmountAMin: valueForEach / priceA / Math.sqrt(slippage),
-    bAmountBMin: valueForEach / priceB / Math.sqrt(slippage),
-    cAmountMin: changeCollateralValue / Math.sqrt(Math.sqrt(slippage)),
+    bAmountAMin: valueForEach / priceA / slippage,
+    bAmountBMin: valueForEach / priceB / slippage,
+    cAmountMin: changeCollateralValue / Math.sqrt(slippage),
   };
 }
 export async function leverage(
