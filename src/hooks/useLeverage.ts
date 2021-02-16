@@ -15,6 +15,7 @@ import { formatFloat } from '../utils/format';
 export default function useLeverage(
   approvalStateA: ButtonState, 
   approvalStateB: ButtonState, 
+  invalidInput: boolean,
   amountA: BigNumber, 
   amountB: BigNumber,
   amountAMin: BigNumber, 
@@ -36,6 +37,7 @@ export default function useLeverage(
   const summary = `Leverage ${symbol}: borrow ${formatFloat(valA)} ${symbolA} and  ${formatFloat(valB)} ${symbolB}`;
   
   const leverageState: ButtonState = useMemo(() => {
+    if (invalidInput) return ButtonState.Disabled;
     if (approvalStateA != ButtonState.Done || approvalStateB != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;

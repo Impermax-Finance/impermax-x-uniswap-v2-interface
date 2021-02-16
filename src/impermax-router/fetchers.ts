@@ -140,9 +140,11 @@ export async function getLPTotalSupply(this: ImpermaxRouter, uniswapV2PairAddres
 export async function initializePriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const [collateral,] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
   const { price0, price1 } = await collateral.methods.getPrices().call();
+  const decimalsA = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const decimalsB = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   return [
-    await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableA, price0),
-    await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableB, price1)
+    price0 / 1e18 / 1e18 * Math.pow(10, decimalsA),
+    price1 / 1e18 / 1e18 * Math.pow(10, decimalsB)
   ];
 }
 export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
@@ -173,7 +175,9 @@ export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress:
 // TWAP Price
 export async function initializeTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
   const { price } = await this.simpleUniswapOracle.methods.getResult(uniswapV2PairAddress).call();
-  return price / 2**112;
+  const decimalsA = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const decimalsB = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+  return price / 2**112 * Math.pow(10, decimalsA) / Math.pow(10, decimalsB);
 }
 export async function getTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);

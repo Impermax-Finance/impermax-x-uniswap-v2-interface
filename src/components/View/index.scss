@@ -22,5 +22,11 @@
     .nav-button-light, .nav-button-light:active {
       background-color: #3d3d3d;
     }
+
+    .connected-wallet .spinner-border {
+      position: relative;
+      margin-left: 3px;
+      bottom: 1px;
+    }
   }
 }

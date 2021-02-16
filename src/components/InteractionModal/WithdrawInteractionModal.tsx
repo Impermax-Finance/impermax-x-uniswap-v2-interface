@@ -37,8 +37,9 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
   const maxWithdrawable = useMaxWithdrawable();
 
   const tokens = useToTokens(val);
-  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens);
-  const [withdrawState, withdraw] = useWithdraw(approvalState, tokens, permitData);
+  const invalidInput = val > maxWithdrawable;
+  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens, invalidInput);
+  const [withdrawState, withdraw] = useWithdraw(approvalState, tokens, invalidInput, permitData);
   const onWithdraw = async () => {
     await withdraw();
     setVal(0);

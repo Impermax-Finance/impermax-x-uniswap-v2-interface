@@ -69,6 +69,22 @@
             background: #05c881;
           }
         }
+
+        .transaction-row {
+          font-size: 0.9375rem;
+          margin: 5px 0;
+          a {
+            color: #202020;
+          }
+          a:hover {
+            color: #606060;
+          }
+          .spinner-border {
+            position: relative;
+            margin-left: 5px;
+            bottom: 1px;
+          }
+        }
       }
     }
 

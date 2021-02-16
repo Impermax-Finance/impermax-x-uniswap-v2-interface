@@ -14,6 +14,7 @@ import { formatFloat } from '../utils/format';
 
 export default function useDeleverage(
   approvalState: ButtonState,
+  invalidInput: boolean, 
   tokens: BigNumber,
   amountAMin: BigNumber, 
   amountBMin: BigNumber,
@@ -30,6 +31,7 @@ export default function useDeleverage(
   const summary = `Deleverage ${symbol}: withdraw ${formatFloat(val)} ${symbol}`;
   
   const deleverageState: ButtonState = useMemo(() => {
+    if (invalidInput) return ButtonState.Disabled;
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;

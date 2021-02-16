@@ -28,10 +28,11 @@ export interface DepositInteractionModalProps {
 }
 
 function DepositInteractionModalContainer({props, children}: {props: DepositInteractionModalProps, children: any}) {
+  const poolTokenType = usePoolToken();
   return (
     <InteractionModal show={props.show} onHide={() => props.toggleShow(false)}>
       <>
-        <InteractionModalHeader value="Deposit" />
+        <InteractionModalHeader value={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} />
         <InteractionModalBody>{children}</InteractionModalBody>
       </>
     </InteractionModal>
@@ -48,8 +49,9 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   const addLiquidityUrl = useAddLiquidityUrl();
 
   const amount = useToBigNumber(val);
-  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.UNDERLYING, amount);
-  const [depositState, deposit] = useDeposit(approvalState, amount, permitData);
+  const invalidInput = val > availableBalance;
+  const [approvalState, onApprove, permitData] = useApprove(ApprovalType.UNDERLYING, amount, invalidInput);
+  const [depositState, deposit] = useDeposit(approvalState, amount, invalidInput, permitData);
   const onDeposit = async () => {
     await deposit();
     setVal(0);
@@ -85,7 +87,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
           <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
         </Col>
         <Col xs={6}>
-          <InteractionButton name="Deposit" onCall={onDeposit} state={depositState} />
+          <InteractionButton name={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} onCall={onDeposit} state={depositState} />
         </Col>
       </Row>
     </DepositInteractionModalContainer>

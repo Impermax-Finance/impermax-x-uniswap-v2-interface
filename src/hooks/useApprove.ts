@@ -19,7 +19,7 @@ export interface PermitData {
 }
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
-export default function useApprove(approvalType: ApprovalType, amount: BigNumber, poolTokenTypeArg?: PoolTokenType, deadline?: BigNumber): [ButtonState, () => Promise<void>, PermitData] {
+export default function useApprove(approvalType: ApprovalType, amount: BigNumber, invalidInput: boolean,  poolTokenTypeArg?: PoolTokenType, deadline?: BigNumber): [ButtonState, () => Promise<void>, PermitData] {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : usePoolToken();
   const impermaxRouter = useImpermaxRouter();
@@ -33,6 +33,7 @@ export default function useApprove(approvalType: ApprovalType, amount: BigNumber
   const summary = `Approve ${symbol} ${action}`;
 
   const approvalState: ButtonState = useMemo(() => {
+    if (invalidInput) return ButtonState.Disabled;
     if (!currentAllowance) return ButtonState.Disabled;
     if (amount.eq(ZERO)) return ButtonState.Disabled;
     return currentAllowance.lt(amount) && (permitData === null || !permitData.amount.eq(amount))

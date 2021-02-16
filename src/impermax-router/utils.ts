@@ -23,20 +23,24 @@ export async function initializePairConversionPricesRopsten(this: ImpermaxRouter
   const ETHPrice = 1 / (await this.getMarketPrice(ROPSTEN_ETH_DAI));
   const totalSupply = await uniswapV2Pair.methods.totalSupply().call();
   const { reserve0, reserve1 } = await uniswapV2Pair.methods.getReserves().call();
-  if (uniswapV2PairAddress == ROPSTEN_ETH_DAI) {
-    const ETHReserves = reserve1;
+  const [,tokenA] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  if (tokenA._address === this.WETH) {
+    const ETHReserves = reserve0;
+    const decimals = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+    const otherPrice = ETHPrice * reserve0 / reserve1 * Math.pow(10, decimals) / 1e18;
     return {
       LPPrice: 2 * ETHReserves / totalSupply * ETHPrice,
-      tokenAPrice: 1,
-      tokenBPrice: ETHPrice,
+      tokenAPrice: ETHPrice,
+      tokenBPrice: otherPrice,
     };
   }
-  if (uniswapV2PairAddress == ROPSTEN_ETH_UNI) {
+  else {
     const ETHReserves = reserve1;
-    const UNIPrice = ETHPrice * reserve1 / reserve0;
+    const decimals = await this.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+    const otherPrice = ETHPrice * reserve1 / reserve0 * Math.pow(10, decimals) / 1e18;
     return {
       LPPrice: 2 * ETHReserves / totalSupply * ETHPrice,
-      tokenAPrice: UNIPrice,
+      tokenAPrice: otherPrice,
       tokenBPrice: ETHPrice,
     };
   }

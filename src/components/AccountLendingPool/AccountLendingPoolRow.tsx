@@ -43,7 +43,7 @@ export default function AccountLendingPoolRow() {
       </Col>
       <Col md={4} className="inline-account-token-info-container">
         <InlineAccountTokenInfo
-          name={t("Deposited")}
+          name={t("Supplied")}
           symbol={symbol}
           value={deposited}
           valueUSD={depositedUSD}
@@ -58,7 +58,7 @@ export default function AccountLendingPoolRow() {
       <Col md={5} className="btn-table">
         <Row>
           <Col>
-            <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
+            <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Supply")}</Button>
           </Col>
           <Col>
             <Button variant="primary" onClick={() => toggleWithdrawModal(true)}>{t("Withdraw")}</Button>

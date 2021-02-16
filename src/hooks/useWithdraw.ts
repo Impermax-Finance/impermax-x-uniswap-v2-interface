@@ -11,7 +11,7 @@ import { useToNumber, useSymbol, usefromTokens } from './useData';
 import { formatFloat } from '../utils/format';
 
 
-export default function useWithdraw(approvalState: ButtonState, tokens: BigNumber, permitData: PermitData): [ButtonState, () => Promise<void>] {
+export default function useWithdraw(approvalState: ButtonState, tokens: BigNumber, invalidInput: boolean, permitData: PermitData): [ButtonState, () => Promise<void>] {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const impermaxRouter = useImpermaxRouter();
@@ -24,6 +24,7 @@ export default function useWithdraw(approvalState: ButtonState, tokens: BigNumbe
   const summary = `Withdraw ${formatFloat(val)} ${symbol}`;
   
   const withdrawState: ButtonState = useMemo(() => {
+    if (invalidInput) return ButtonState.Disabled;
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;

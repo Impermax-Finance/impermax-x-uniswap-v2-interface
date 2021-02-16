@@ -1,3 +1,8 @@
+function formatSmallNumber(n: number, significant: number = 6) {
+    const decimals = - Math.floor(Math.log10(n));
+    return "0." + "0".repeat(decimals-1) + (n * Math.pow(10, decimals)).toString().replace(".", "").substring(0, significant);
+}
+
 /*
  * Return the number floored to a certain amount of significant digits
  */
@@ -5,7 +10,7 @@ export function formatFloat(n: number, significant: number = 6) : string {
   if (n == Infinity) return "∞";
   if (!n) return '0';
   if (n >= 10 ** (significant-1)) return Math.floor(n).toString();
-  if (n < 1e-6) return '0';
+  if (n < 1e-6) return formatSmallNumber(n, significant);
   const rounded = parseFloat(n.toPrecision(significant));
   if (rounded <= n) return rounded.toString();
   const decimals = rounded.toPrecision(significant).split('.')[1].length;

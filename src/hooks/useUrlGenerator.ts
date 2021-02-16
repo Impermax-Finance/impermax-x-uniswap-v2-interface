@@ -1,4 +1,4 @@
-import { useWETH } from "./useNetwork";
+import { useWETH, useChainId } from "./useNetwork";
 import usePairAddress from "./usePairAddress";
 import { PoolTokenType } from "../impermax-router/interfaces";
 import usePoolToken from "./usePoolToken";
@@ -21,4 +21,10 @@ export function useAddLiquidityUrl() : string {
   const addressA = tokenAAddress == WETH ? "ETH" : tokenAAddress;
   const addressB = tokenBAddress == WETH ? "ETH" : tokenBAddress;
   return "https://app.uniswap.org/#/add/"+addressA+"/"+addressB;
+}
+
+export function useTransactionUrl(hash: string) : string {
+  const chainId = useChainId();
+  const subdomain = chainId == 3 ? 'ropsten.' : ''
+  return "https://" + subdomain + "etherscan.io/tx/" + hash;
 }

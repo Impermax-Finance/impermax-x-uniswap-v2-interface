@@ -10,9 +10,8 @@ import { PermitData } from './useApprove';
 import { useDecimals, useSymbol, useToNumber } from './useData';
 import { formatFloat } from '../utils/format';
 
-// TODO this should manage deposit error, for example insufficient balance
 
-export default function useDeposit(approvalState: ButtonState, amount: BigNumber, permitData: PermitData): [ButtonState, () => Promise<void>] {
+export default function useDeposit(approvalState: ButtonState, amount: BigNumber, invalidInput: boolean, permitData: PermitData): [ButtonState, () => Promise<void>] {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenType = usePoolToken();
   const impermaxRouter = useImpermaxRouter();
@@ -25,6 +24,7 @@ export default function useDeposit(approvalState: ButtonState, amount: BigNumber
   const summary = `Deposit ${formatFloat(val)} ${symbol}`;
   
   const depositState: ButtonState = useMemo(() => {
+    if (invalidInput) return ButtonState.Disabled;
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
