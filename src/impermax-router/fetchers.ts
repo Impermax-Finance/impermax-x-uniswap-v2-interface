@@ -165,6 +165,11 @@ export async function getMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairA
     totalSupply / reserve1 / 2,
   ];
 }
+export async function getBorrowableMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
+  if (poolTokenType == PoolTokenType.BorrowableA) return priceA;
+  return priceB;
+}
 
 // Market Price
 export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
@@ -183,4 +188,22 @@ export async function getTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: A
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.TWAPPrice) cache.TWAPPrice = this.initializeTWAPPrice(uniswapV2PairAddress);
   return !this.priceInverted ? (await cache.TWAPPrice) :  1 / (await cache.TWAPPrice);
+}
+
+
+export async function getBorrowEvent(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Array<object>> {
+  const [borrowable,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  return await borrowable.getPastEvents("Borrow", { fromBlock: 0 });
+}
+export async function getBorrowerList(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<Array<string>> {
+  const eventsA = await this.getBorrowEvent(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const eventsB = await this.getBorrowEvent(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+  return eventsA.concat(eventsB)
+    .map((event: any) => event.returnValues.borrower)
+    .filter((value: string, index: number, self: Array<string>) => self.indexOf(value) === index);
+}
+export async function getAccountLiquidity(this: ImpermaxRouter, uniswapV2PairAddress: Address, account: string) : Promise<[number, number]> {
+  const [collateral,] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+  const {liquidity, shortfall} = await collateral.methods.accountLiquidity(account).call();
+  return [liquidity / 1e18, shortfall / 1e18];
 }

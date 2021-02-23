@@ -5,6 +5,7 @@ import { TokenKind } from "graphql";
 import { BigNumber, ethers } from "ethers";
 import BN from "bn.js";
 import { PermitData } from "../hooks/useApprove";
+import { impermanentLoss } from "../utils";
 
 export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData, onTransactionHash: Function) {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
@@ -94,9 +95,13 @@ export async function getLeverageAmounts(
   slippage: number
 ) : Promise<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number, cAmountMin: number}> {
   const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
+  // This function must use the market price, but the account leverage is calculated with the TWAP, so we need an adjustFactor
+  const [priceATWAP,priceBTWAP] = await this.getPriceDenomLP(uniswapV2PairAddress);
+  const diff = priceA > priceATWAP ? priceA / priceATWAP : priceATWAP / priceA;
+  const adjustFactor = Math.pow(impermanentLoss(diff**2), leverage);
   const currentLeverage = await this.getLeverage(uniswapV2PairAddress);
   const collateralValue = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const changeCollateralValue = collateralValue * leverage / currentLeverage - collateralValue;
+  const changeCollateralValue = (collateralValue * leverage / currentLeverage - collateralValue) * adjustFactor;
   const valueForEach = changeCollateralValue / 2;
   return {
     bAmountA: valueForEach / priceA,

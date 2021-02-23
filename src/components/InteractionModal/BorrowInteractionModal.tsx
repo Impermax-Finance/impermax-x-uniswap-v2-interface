@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
@@ -11,7 +11,7 @@ import BorrowFee from "./TransactionRecap/BorrowFee";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useBorrow from "../../hooks/useBorrow";
-import { useSymbol, useDecimals, useMaxBorrowable, useToBigNumber } from "../../hooks/useData";
+import { useSymbol, useDecimals, useMaxBorrowable, useToBigNumber, useBorrowerList } from "../../hooks/useData";
 import RiskMetrics from "../RiskMetrics";
 
 /**
@@ -70,7 +70,7 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
               <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
             </Col>
             <Col xs={6}>
-              <InteractionButton name="Deposit" onCall={onBorrow} state={borrowState} />
+              <InteractionButton name="Borrow" onCall={onBorrow} state={borrowState} />
             </Col>
           </Row>
         </InteractionModalBody>

@@ -65,7 +65,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   return (
     <LeverageInteractionModalContainer props={{show, toggleShow}}>
       <RiskMetrics changeBorrowedA={changeAmounts.bAmountA} changeBorrowedB={changeAmounts.bAmountB} changeCollateral={changeAmounts.cAmount} />
-      <InputAmount 
+      <InputAmount
         val={val}
         setVal={setVal}
         suffix={'x'}

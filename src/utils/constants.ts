@@ -16,17 +16,17 @@ export const NETWORK_URL: NetworkIndex = {
 };
 
 export const ROUTER: NetworkIndex = {
-  [Networks.Ropsten]: '0x179b6e60692f012f2DAE218075d77fa087E6f30d',
+  [Networks.Ropsten]: '0xbFf4acF789297A8507Eb7493AE18EB2C3A3A9632',
   [Networks.Mainnet]: ''
 };
 
 export const FACTORY: NetworkIndex = {
-  [Networks.Ropsten]: '0x28B1fBEeDdE786c33E7aE0eE613F60fEc2Fe57db',
+  [Networks.Ropsten]: '0x3fdB4b27e1b4be9b27514C643a8Baef95Cf9b549',
   [Networks.Mainnet]: ''
 };
 
 export const SIMPLE_UNISWAP_ORACLE: NetworkIndex = {
-  [Networks.Ropsten]: '0x3c010c718A40838DD2FA83d8C83B24C304F068Cd',
+  [Networks.Ropsten]: '0xc53bb18028feA1B413057e2b2474F9838c465Fc3',
   [Networks.Mainnet]: ''
 };
 

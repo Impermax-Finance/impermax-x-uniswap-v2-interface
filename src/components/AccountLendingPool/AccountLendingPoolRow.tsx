@@ -8,7 +8,7 @@ import DepositInteractionModal from "../InteractionModal/DepositInteractionModal
 import BorrowInteractionModal from "../InteractionModal/BorrowInteractionModal";
 import RepayInteractionModal from "../InteractionModal/RepayInteractionModal";
 import WithdrawInteractionModal from "../InteractionModal/WithdrawInteractionModal";
-import { useBorrowed, useSymbol, useDeposited, useDepositedUSD, useBorrowedUSD } from "../../hooks/useData";
+import { useBorrowed, useSymbol, useDeposited, useDepositedUSD, useBorrowedUSD, useBorrowerList } from "../../hooks/useData";
 import { useTokenIcon } from "../../hooks/useUrlGenerator";
 
 
