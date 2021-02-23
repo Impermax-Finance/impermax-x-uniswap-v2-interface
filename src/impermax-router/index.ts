@@ -73,7 +73,7 @@ export default class ImpermaxRouter {
   constructor(cfg: ImpermaxRouterCfg) {
     this.web3 = cfg.web3;
     this.chainId = cfg.chainId;
-    this.uiMargin = 1.05;
+    this.uiMargin = 1.1;
     this.dust = 1.000001;
     this.router = this.newRouter(cfg.routerAddress);
     this.factory = this.newFactory(cfg.factoryAddress);
@@ -142,9 +142,13 @@ export default class ImpermaxRouter {
   public getPriceDenomLP = fetchers.getPriceDenomLP;
   public getBorrowablePriceDenomLP = fetchers.getBorrowablePriceDenomLP;
   public getMarketPriceDenomLP = fetchers.getMarketPriceDenomLP;
+  public getBorrowableMarketPriceDenomLP = fetchers.getBorrowableMarketPriceDenomLP;
   public getMarketPrice = fetchers.getMarketPrice;
   public getTWAPPrice = fetchers.getTWAPPrice;
-
+  public getBorrowEvent = fetchers.getBorrowEvent;
+  public getBorrowerList = fetchers.getBorrowerList;
+  public getAccountLiquidity = fetchers.getAccountLiquidity;
+  
   // Borrowable Fetchers
   public initializeReserveFactor = borrowableFetchers.initializeReserveFactor;
   public initializeAccrualTimestamp = borrowableFetchers.initializeAccrualTimestamp;
@@ -177,7 +181,9 @@ export default class ImpermaxRouter {
   public getBalanceUSD = account.getBalanceUSD;
   public getDebtUSD = account.getDebtUSD;
   public getEquityUSD = account.getEquityUSD;
+  public getValuesFromPrice = account.getValuesFromPrice;
   public getValues = account.getValues;
+  public getMarketValues = account.getMarketValues;
   public getNewLeverage = account.getNewLeverage;
   public getNewLiquidationPriceSwings = account.getNewLiquidationPriceSwings;
   public getNewLiquidationPrices = account.getNewLiquidationPrices;

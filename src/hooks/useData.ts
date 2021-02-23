@@ -198,6 +198,25 @@ export function useEquityUSD() : number {
   return equityUSD;
 }
 
+export function useBorrowerList() : Array<string> {
+  const uniswapV2PairAddress = usePairAddress();
+  const [borrowerList, setBorrowerList] = useState<Array<string>>([]);
+  useRouterCallback(async (router) => setBorrowerList( await router.getBorrowerList(uniswapV2PairAddress) ));
+  return borrowerList;
+}
+
+export function useLiquidatableAccounts() : Array<string> {
+  const uniswapV2PairAddress = usePairAddress();
+  const borrowerList = useBorrowerList();
+  useRouterCallback(async (router) => {
+    borrowerList.forEach(async (borrower: string) => {
+      const [liquidity, shortfall] = await router.getAccountLiquidity(uniswapV2PairAddress, borrower);
+      console.log(borrower, liquidity, shortfall);
+    })
+  }, [borrowerList]);
+  return [];
+}
+
 export function useMaxWithdrawable(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [maxWithdrawable, setMaxWithdrawable] = useState<number>(0);
