@@ -6,6 +6,7 @@ import { Networks, chainDetailsMap } from '../utils/connections';
 import { NETWORK_URL, WETH, ROUTER, LISTED_PAIRS, Address, FACTORY, SIMPLE_UNISWAP_ORACLE } from '../utils/constants';
 
 export interface NetworkI {
+  networkName: string;
   chainId: number;
   networkUrl: string;
   WETH: Address;
@@ -18,6 +19,7 @@ export interface NetworkI {
 const NETWORK = process.env.NETWORK as Networks;
 
 const context : NetworkI = {
+  networkName: NETWORK,
   chainId: chainDetailsMap[process.env.NETWORK as Networks].networkId,
   networkUrl: NETWORK_URL[NETWORK],
   WETH: WETH[NETWORK],

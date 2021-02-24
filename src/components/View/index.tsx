@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
 import { HomeRoute, FarmingRoute } from '../../Routing';
@@ -7,6 +7,7 @@ import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import { ConnectedWalletButtonComponent } from './ConnectedWalletButtonComponent';
 import { TransactionDetails } from '../../state/transactions/reducer';
+import { useNetworkName } from '../../hooks/useNetwork';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ interface ViewProps {
  * @param param0 ViewProps
  */
 export default function View({ children }: ViewProps) {
-  const { account, connect } = useWallet();
+  const { account, connect, status, error } = useWallet();
   const onConnect = () => {
     try {
       localStorage.removeItem("signOut");
@@ -26,6 +27,9 @@ export default function View({ children }: ViewProps) {
       console.log(error)
     }
   };
+
+  const wrongNetwork = status == 'error' && error && error.toString().indexOf("ChainUnsupportedError") >= 0;
+  const networkName = useNetworkName();
   
   return (
     <div className="view">
@@ -45,6 +49,13 @@ export default function View({ children }: ViewProps) {
           }
         </Container>
       </Navbar>
+      { wrongNetwork ? (
+        <div className="wrong-network">
+          <div className="container">
+            You're connected to the wrong network. Please connect to the supported network: {networkName}
+          </div>
+        </div>
+      ) : null }
       {children}
     </div>
   );
