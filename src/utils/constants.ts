@@ -45,7 +45,7 @@ export const MAINNET_ETH_UNI: Address = '0xd3d2e2692501a5c9ca623199d38826e513033
 export const LISTED_PAIRS: NetworkIndex = {
   [Networks.Ropsten]: [
     ROPSTEN_ETH_DAI,
-    //ROPSTEN_ETH_UNI,
+    ROPSTEN_ETH_UNI,
     //ROPSTEN_ETH_USDC,
   ],
   [Networks.Mainnet]: [

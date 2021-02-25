@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody, InteractionModalContainer } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
@@ -45,32 +45,33 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
     setVal(0);
   }
 
+  if (borrowed === 0) return (
+    <InteractionModalContainer title="Repay" show={show} toggleShow={toggleShow}><>
+      You haven't borrowed any {symbol} yet.
+    </></InteractionModalContainer>
+  );
+
   return (
-    <InteractionModal show={show} onHide={() => toggleShow(false)}>
-      <>
-        <InteractionModalHeader value="Repay" />
-        <InteractionModalBody>
-          <RiskMetrics
-            changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? -val : 0}
-            changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? -val : 0}
-          />
-          <InputAmount 
-            val={val}
-            setVal={setVal}
-            suffix={symbol}
-            maxTitle={'Available'}
-            max={Math.min(availableBalance, borrowed)}
-          />
-          <Row className="interaction-row">
-            <Col xs={6}>
-              <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
-            </Col>
-            <Col xs={6}>
-              <InteractionButton name="Repay" onCall={onRepay} state={repayState} />
-            </Col>
-          </Row>
-        </InteractionModalBody>
-      </>
-    </InteractionModal>
+    <InteractionModalContainer title="Repay" show={show} toggleShow={toggleShow}><>
+      <RiskMetrics
+        changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? -val : 0}
+        changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? -val : 0}
+      />
+      <InputAmount 
+        val={val}
+        setVal={setVal}
+        suffix={symbol}
+        maxTitle={'Available'}
+        max={Math.min(availableBalance, borrowed)}
+      />
+      <Row className="interaction-row">
+        <Col xs={6}>
+          <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
+        </Col>
+        <Col xs={6}>
+          <InteractionButton name="Repay" onCall={onRepay} state={repayState} />
+        </Col>
+      </Row>
+    </></InteractionModalContainer>
   );
 }

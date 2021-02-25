@@ -29,15 +29,33 @@ const StyledModal = styled(Modal)`
 interface InteractionModalProps {
   children: ReactElement;
   show: boolean;
-  onHide: Function;
+  toggleShow: Function;
 }
 
 export default function InteractionModal(props: InteractionModalProps) {
-  const { show, children, onHide} = props;
+  const { show, children, toggleShow} = props;
   return (<StyledModal
     show={show}
-    onHide={onHide}
+    onHide={() => toggleShow(false)}
   >
     {children}
   </StyledModal>);
+}
+
+interface InteractionModalContainerProps {
+  title: string;
+  children: ReactElement;
+  show: boolean;
+  toggleShow: Function;
+}
+
+export function InteractionModalContainer({title, show, toggleShow, children}: InteractionModalContainerProps) {
+  return (
+    <InteractionModal show={show} toggleShow={toggleShow}>
+      <>
+        <InteractionModalHeader value={title} />
+        <InteractionModalBody>{children}</InteractionModalBody>
+      </>
+    </InteractionModal>
+  );
 }

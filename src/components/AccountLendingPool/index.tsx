@@ -31,13 +31,13 @@ function AccountLendingPoolContainer({ children }: AccountLendingPoolContainerPr
  * @params AccountLendingPoolProps
  */
 export default function AccountLendingPool() {
-  const { connect } = useWallet();
+  const { connect, account } = useWallet();
   const routerAccount = useRouterAccount();
 
-  if (!routerAccount) return (
+  if (!account || !routerAccount) return (
     <AccountLendingPoolContainer>
       <div className="text-center py-5">
-        <Button onClick={() => {connect('injected')}}>Connect to use the App</Button>
+        <Button onClick={() => {connect('injected')}} className="button-green">Connect to use the App</Button>
       </div>
     </AccountLendingPoolContainer>
   );

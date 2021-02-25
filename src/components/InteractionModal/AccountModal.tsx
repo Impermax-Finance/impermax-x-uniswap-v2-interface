@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody, InteractionModalContainer } from ".";
 import { InputGroup, Button, FormControl, Row, Col, Spinner } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
@@ -44,27 +44,22 @@ export interface AccountModalProps {
 
 export default function AccountModal({show, toggleShow, pending, confirmed}: AccountModalProps) {
   return (
-    <InteractionModal show={show} onHide={() => toggleShow(false)}>
-      <>
-        <InteractionModalHeader value="Transactions" />
-        <InteractionModalBody>
-          { pending.length > 0 ? (
-            <div>{ 
-              pending.map((tx: TransactionDetails, key: any) => <Transaction tx={tx} key={key} pending={true} />)
-            }</div>
-          ) : null }
-          { confirmed.length > 0 ? (
-            <div>{ 
-              confirmed
-                .slice(0, MAX_TRANSACTION_HISTORY)
-                .map((tx: TransactionDetails, key: any) => <Transaction tx={tx} key={key} />)
-            }</div>
-          ) : null }
-          { pending.length == 0 && confirmed.length == 0 ? (
-            <div>You have no recent transaction</div>
-          ) : null }
-        </InteractionModalBody>
-      </>
-    </InteractionModal>
+    <InteractionModalContainer title="Transactions" show={show} toggleShow={toggleShow}><>
+      { pending.length > 0 ? (
+        <div>{ 
+          pending.map((tx: TransactionDetails, key: any) => <Transaction tx={tx} key={key} pending={true} />)
+        }</div>
+      ) : null }
+      { confirmed.length > 0 ? (
+        <div>{ 
+          confirmed
+            .slice(0, MAX_TRANSACTION_HISTORY)
+            .map((tx: TransactionDetails, key: any) => <Transaction tx={tx} key={key} />)
+        }</div>
+      ) : null }
+      { pending.length == 0 && confirmed.length == 0 ? (
+        <div>You have no recent transaction</div>
+      ) : null }
+    </></InteractionModalContainer>
   );
 }

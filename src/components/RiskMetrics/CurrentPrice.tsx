@@ -7,6 +7,7 @@ import { useTogglePriceInverted, usePriceInverted } from "../../hooks/useImperma
 import { formatFloat } from "../../utils/format";
 import { DetailsRowCustom } from "../DetailsRow";
 import { useSymbol, useTWAPPrice, useMarketPrice } from "../../hooks/useData";
+import QuestionHelper from "../QuestionHelper";
 
 
 /**
@@ -28,8 +29,8 @@ export default function CurrentPrice() {
 
   return (
     <DetailsRowCustom>
-      <div className="name">{t("TWAP Price")} ({pair}) <i className="invert-price" onClick={() => togglePriceInverted()}></i> </div>
-      <div className="value">{formatFloat(TWAPPrice, 4)} (current: {formatFloat(marketPrice, 4)})</div>
+      <div className="name">{t("TWAP Price")} ({pair}) <QuestionHelper text={"The TWAP (Time Weighted Average Price) and the current market price on Uniswap"} /></div>
+      <div className="value">{formatFloat(TWAPPrice, 4)} (current: {formatFloat(marketPrice, 4)}) <i className="invert-price" onClick={() => togglePriceInverted()}></i></div>
     </DetailsRowCustom>
   );
 }

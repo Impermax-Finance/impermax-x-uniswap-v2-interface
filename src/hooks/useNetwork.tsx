@@ -1,6 +1,11 @@
 import { useContext } from 'react';
 import { NetworkContext } from '../contexts/Network';
 
+export function useNetworkName() {
+  const { networkName } = useContext(NetworkContext);
+  return networkName;
+}
+
 export function useChainId() {
   const { chainId } = useContext(NetworkContext);
   return chainId;
