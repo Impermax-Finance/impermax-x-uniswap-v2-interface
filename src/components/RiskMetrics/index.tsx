@@ -35,7 +35,7 @@ export default function RiskMetrics({changeBorrowedA, changeBorrowedB, changeCol
   const currentLeverage = useCurrentLeverage();
   const newLeverage = useCurrentLeverage(changes);
 
-  const leverageExplanation = "Calculated as: LP Token Value / (LP Token Value - Debt)";
+  const leverageExplanation = "Calculated as: Total Collateral / LP Equity";
   const liquidationExplanation = "If the price crosses these boundaries, your account will become liquidatable";
 
   return (<div>

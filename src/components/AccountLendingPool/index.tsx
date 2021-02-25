@@ -5,15 +5,20 @@ import Button from 'react-bootstrap/Button';
 import './index.scss';
 import { useRouterAccount } from '../../hooks/useImpermaxRouter';
 import { PoolTokenType } from '../../impermax-router/interfaces';
-import AccountLendingPoolDetails from './AccountLendingPoolDetails';
+import AccountLendingPoolDetails from './AccountLendingPoolDetailsLeverage';
 import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
-import AccountLendingPoolRow from './AccountLendingPoolRow';
+import AccountLendingPoolRow from './AccountLendingPoolBorrowRow';
 import PairAddressContext from '../../contexts/PairAddress';
 import PoolTokenContext from '../../contexts/PoolToken';
-import usePairAddress from '../../hooks/usePairAddress';
 import AccountLendingPoolPageSelector from './AccountLendingPoolPageSelector';
+import AccountLendingPoolSupplyRow from './AccountLendingPoolSupplyRow';
+import AccountLendingPoolBorrowRow from './AccountLendingPoolBorrowRow';
+import AccountLendingPoolDetailsLeverage from './AccountLendingPoolDetailsLeverage';
+import AccountLendingPoolDetailsEarnInterest from './AccountLendingPoolDetailsEarnInterest';
+import { useDepositedUSD, useSuppliedUSD } from '../../hooks/useData';
 
 export enum AccountLendingPoolPage {
+  UNINITIALIZED,
   LEVERAGE,
   EARN_INTEREST,
 }
@@ -48,25 +53,38 @@ export default function AccountLendingPool() {
     </AccountLendingPoolContainer>
   );
 
-  const [pageSelected, setPageSelected] = useState<AccountLendingPoolPage>(AccountLendingPoolPage.LEVERAGE);
-
+  const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
+  const suppliedUSD = useSuppliedUSD();
+  const [pageSelected, setPageSelected] = useState<AccountLendingPoolPage>(AccountLendingPoolPage.UNINITIALIZED);
+  const actualPageSelected = pageSelected === AccountLendingPoolPage.UNINITIALIZED 
+    ? collateralUSD > 0 || suppliedUSD === 0 
+      ? AccountLendingPoolPage.LEVERAGE
+      : AccountLendingPoolPage.EARN_INTEREST
+    : pageSelected;
+    
   return (
     <AccountLendingPoolContainer>
-      <AccountLendingPoolPageSelector pageSelected={pageSelected} setPageSelected={setPageSelected} />
-      { pageSelected === AccountLendingPoolPage.LEVERAGE ? (<>
-        <AccountLendingPoolDetails />
+      <AccountLendingPoolPageSelector pageSelected={actualPageSelected} setPageSelected={setPageSelected} />
+      { actualPageSelected === AccountLendingPoolPage.LEVERAGE ? (<>
+        <AccountLendingPoolDetailsLeverage />
         <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
           <AccountLendingPoolLPRow />
         </PoolTokenContext.Provider>
         <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
-          <AccountLendingPoolRow />
+          <AccountLendingPoolBorrowRow />
         </PoolTokenContext.Provider>
         <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
-          <AccountLendingPoolRow />
+          <AccountLendingPoolBorrowRow />
         </PoolTokenContext.Provider>
-      </>) : (
-        <>Ciao</>
-      ) }
+      </>) : (<>
+        <AccountLendingPoolDetailsEarnInterest />
+        <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
+          <AccountLendingPoolSupplyRow />
+        </PoolTokenContext.Provider>
+        <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
+          <AccountLendingPoolSupplyRow />
+        </PoolTokenContext.Provider>
+      </>) }
     </AccountLendingPoolContainer>
   );
 }

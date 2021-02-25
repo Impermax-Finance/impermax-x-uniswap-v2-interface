@@ -1,11 +1,11 @@
 import { Dictionary } from '../../utils/languages'
 
 const translations = {
-  "Account Equity": {
-    'ENG': "Account Equity"
+  "LP Equity": {
+    'ENG': "LP Equity"
   },
-  "Total Balance": {
-    'ENG': "Total Balance"
+  "Total Collateral": {
+    'ENG': "Total Collateral"
   },
   "Total Debt": {
     'ENG': "Total Debt"
@@ -48,6 +48,18 @@ const translations = {
   },
   "Repay": {
     'ENG': "Repay"
+  },
+  "Total Supplied": {
+    'ENG': "Total Supplied"
+  },
+  "Supply APY": {
+    'ENG': "Account APY"
+  },
+  "Expected monthly profit": {
+    'ENG': "Expected monthly profit"
+  },
+  "Expected yearly profit": {
+    'ENG': "Expected yearly profit"
   },
 } as Dictionary;
 
