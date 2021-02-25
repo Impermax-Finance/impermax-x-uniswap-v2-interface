@@ -8,8 +8,9 @@ import DepositInteractionModal from "../InteractionModal/DepositInteractionModal
 import LeverageInteractionModal from "../InteractionModal/LeverageInteractionModal";
 import WithdrawInteractionModal from "../InteractionModal/WithdrawInteractionModal";
 import DeleverageInteractionModal from "../InteractionModal/DeleverageInteractionModal";
-import { useDeposited, useSymbol, useDepositedUSD, useLiquidatableAccounts } from "../../hooks/useData";
+import { useDeposited, useSymbol, useDepositedUSD, useLiquidatableAccounts, useMaxWithdrawable, useMaxDeleverage } from "../../hooks/useData";
 import { useTokenIcon } from "../../hooks/useUrlGenerator";
+import DisabledButtonHelper from "../DisabledButtonHelper";
 
 
 export default function AccountLendingPoolLPRow() {
@@ -17,8 +18,7 @@ export default function AccountLendingPoolLPRow() {
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
 
-  const symbolA = useSymbol(PoolTokenType.BorrowableA);
-  const symbolB = useSymbol(PoolTokenType.BorrowableB);
+  const symbol = useSymbol();
   const deposited = useDeposited();
   const depositedUSD = useDepositedUSD();
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
@@ -29,6 +29,12 @@ export default function AccountLendingPoolLPRow() {
   const [showLeverageModal, toggleLeverageModal] = useState(false);
   const [showDeleverageModal, toggleDeleverageModal] = useState(false);
 
+  const maxWithdrawable = useMaxWithdrawable();
+  const maxDeleverage = useMaxDeleverage(0);
+  const withdrawDisabledInfo = `You haven't deposited any ${symbol} yet.`;
+  const leverageDisabledInfo = `You need to deposit the ${symbol} LP first in order to leverage it.`;
+  const deleverageDisabledInfo = `You need to open a leveraged position in order to deleverage it.`;  
+
   return (<>
     <Row className="account-lending-pool-row">
       <Col md={3}>
@@ -38,7 +44,7 @@ export default function AccountLendingPoolLPRow() {
             <img src={tokenIconB} />
           </Col>
           <Col className="token-name">
-            { `${symbolA}-${symbolB} LP` }
+            { `${symbol} LP` }
           </Col>
         </Row>
       </Col>
@@ -56,15 +62,27 @@ export default function AccountLendingPoolLPRow() {
             <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
           </Col>
           <Col>
-            <Button variant="primary" onClick={() => toggleWithdrawModal(true)}>{t("Withdraw")}</Button>
+            { maxWithdrawable > 0 ? (
+              <Button variant="primary" onClick={() => toggleWithdrawModal(true)}>{t("Withdraw")}</Button>
+            ) : (
+              <DisabledButtonHelper text={withdrawDisabledInfo}>{t("Withdraw")}</DisabledButtonHelper>
+            ) }
           </Col>
         </Row>
         <Row>
           <Col>
-            <Button className="leverage" variant="primary" onClick={() => toggleLeverageModal(true)}>{t("Leverage")}</Button>
+            { depositedUSD > 0 ? (
+              <Button variant="primary" onClick={() => toggleLeverageModal(true)}>{t("Leverage")}</Button>
+            ) : (
+              <DisabledButtonHelper text={leverageDisabledInfo}>{t("Leverage")}</DisabledButtonHelper>
+            ) }
           </Col>
           <Col>
-            <Button variant="primary" onClick={() => toggleDeleverageModal(true)}>{t("Deleverage")}</Button>
+            { maxDeleverage > 0 ? (
+              <Button variant="primary" onClick={() => toggleDeleverageModal(true)}>{t("Deleverage")}</Button>
+            ) : (
+              <DisabledButtonHelper text={deleverageDisabledInfo}>{t("Deleverage")}</DisabledButtonHelper>
+            ) }
           </Col>
         </Row>
       </Col>

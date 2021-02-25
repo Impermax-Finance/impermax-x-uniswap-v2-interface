@@ -6,6 +6,10 @@
     padding: 0 1rem;
   }
 
+  .account-lending-pool-page-selector {
+    display: none;
+  }
+
   .account-lending-pool-details {
     margin: 0;
     padding: 1rem 0;
@@ -70,9 +74,10 @@
         flex: 1;
         padding: 0.5rem 0;
         .btn {
-          width: 120px;
-          height: 34px;
-          line-height: 34px;
+          width: 130px;
+          height: 38px;
+          line-height: 38px;
+          border-radius: 0.375rem;
           background-color: #202020;
           color: #fff;
           border: none;

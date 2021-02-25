@@ -8,8 +8,10 @@ import DepositInteractionModal from "../InteractionModal/DepositInteractionModal
 import BorrowInteractionModal from "../InteractionModal/BorrowInteractionModal";
 import RepayInteractionModal from "../InteractionModal/RepayInteractionModal";
 import WithdrawInteractionModal from "../InteractionModal/WithdrawInteractionModal";
-import { useBorrowed, useSymbol, useDeposited, useDepositedUSD, useBorrowedUSD, useBorrowerList } from "../../hooks/useData";
+import { useBorrowed, useSymbol, useDeposited, useDepositedUSD, useBorrowedUSD, useBorrowerList, useMaxBorrowable, useMaxWithdrawable } from "../../hooks/useData";
 import { useTokenIcon } from "../../hooks/useUrlGenerator";
+import DisabledButtonHelper from "../DisabledButtonHelper";
+import { text } from "@fortawesome/fontawesome-svg-core";
 
 
 export default function AccountLendingPoolRow() {
@@ -18,6 +20,7 @@ export default function AccountLendingPoolRow() {
   const t = (s: string) => (phrases[s][language]);
 
   const symbol = useSymbol();
+  const symbolLP = useSymbol(PoolTokenType.Collateral);
   const deposited = useDeposited();
   const depositedUSD = useDepositedUSD();
   const borrowed = useBorrowed();
@@ -28,6 +31,12 @@ export default function AccountLendingPoolRow() {
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepaywModal] = useState(false);
+
+  const maxWithdrawable = useMaxWithdrawable();
+  const withdrawDisabledInfo = `You haven't supplied any ${symbol} yet.`;
+  const maxBorrowable = useMaxBorrowable();
+  const borrowDisabledInfo = `You need to deposit ${symbolLP} as collateral in order to be able to borrow ${symbol}.`;
+  const repayuDisabledInfo = `You haven't borrowed any ${symbol} yet.`;
 
   return (<>
     <Row className="account-lending-pool-row">
@@ -61,15 +70,27 @@ export default function AccountLendingPoolRow() {
             <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Supply")}</Button>
           </Col>
           <Col>
-            <Button variant="primary" onClick={() => toggleWithdrawModal(true)}>{t("Withdraw")}</Button>
+            { maxWithdrawable > 0 ? (
+              <Button variant="primary" onClick={() => toggleWithdrawModal(true)}>{t("Withdraw")}</Button>
+            ) : (
+              <DisabledButtonHelper text={withdrawDisabledInfo}>{t("Withdraw")}</DisabledButtonHelper>
+            ) }
           </Col>
         </Row>
         <Row>
           <Col>
-            <Button variant="primary" onClick={() => toggleBorrowModal(true)}>{t("Borrow")}</Button>
+            { maxBorrowable > 0 ? (
+              <Button variant="primary" onClick={() => toggleBorrowModal(true)}>{t("Borrow")}</Button>
+            ) : (
+              <DisabledButtonHelper text={borrowDisabledInfo}>{t("Borrow")}</DisabledButtonHelper>
+            ) }
           </Col>
           <Col>
-            <Button variant="primary" onClick={() => toggleRepaywModal(true)}>{t("Repay")}</Button>
+            { borrowed > 0 ? (
+              <Button variant="primary" onClick={() => toggleRepaywModal(true)}>{t("Repay")}</Button>
+            ) : (
+              <DisabledButtonHelper text={repayuDisabledInfo}>{t("Repay")}</DisabledButtonHelper>
+            ) }
           </Col>
         </Row>
       </Col>

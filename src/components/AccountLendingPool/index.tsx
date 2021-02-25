@@ -11,6 +11,12 @@ import AccountLendingPoolRow from './AccountLendingPoolRow';
 import PairAddressContext from '../../contexts/PairAddress';
 import PoolTokenContext from '../../contexts/PoolToken';
 import usePairAddress from '../../hooks/usePairAddress';
+import AccountLendingPoolPageSelector from './AccountLendingPoolPageSelector';
+
+export enum AccountLendingPoolPage {
+  LEVERAGE,
+  EARN_INTEREST,
+}
 
 interface AccountLendingPoolContainerProps {
   children: any;
@@ -42,18 +48,25 @@ export default function AccountLendingPool() {
     </AccountLendingPoolContainer>
   );
 
+  const [pageSelected, setPageSelected] = useState<AccountLendingPoolPage>(AccountLendingPoolPage.LEVERAGE);
+
   return (
     <AccountLendingPoolContainer>
-      <AccountLendingPoolDetails />
-      <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
-        <AccountLendingPoolLPRow />
-      </PoolTokenContext.Provider>
-      <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
-        <AccountLendingPoolRow />
-      </PoolTokenContext.Provider>
-      <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
-        <AccountLendingPoolRow />
-      </PoolTokenContext.Provider>
+      <AccountLendingPoolPageSelector pageSelected={pageSelected} setPageSelected={setPageSelected} />
+      { pageSelected === AccountLendingPoolPage.LEVERAGE ? (<>
+        <AccountLendingPoolDetails />
+        <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
+          <AccountLendingPoolLPRow />
+        </PoolTokenContext.Provider>
+        <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
+          <AccountLendingPoolRow />
+        </PoolTokenContext.Provider>
+        <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
+          <AccountLendingPoolRow />
+        </PoolTokenContext.Provider>
+      </>) : (
+        <>Ciao</>
+      ) }
     </AccountLendingPoolContainer>
   );
 }
