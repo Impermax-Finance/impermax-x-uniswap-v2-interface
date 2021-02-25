@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody, InteractionModalContainer } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
@@ -18,17 +18,6 @@ import { useSymbol, useDecimals, useDepositedUSD, useDeadline, useMaxLeverage, u
 export interface LeverageInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
-}
-
-function LeverageInteractionModalContainer({props, children}: {props: LeverageInteractionModalProps, children: any}) {
-  return (
-    <InteractionModal show={props.show} onHide={() => props.toggleShow(false)}>
-      <>
-        <InteractionModalHeader value="Leverage" />
-        <InteractionModalBody>{children}</InteractionModalBody>
-      </>
-    </InteractionModal>
-  );
 }
 
 export default function LeverageInteractionModal({show, toggleShow}: LeverageInteractionModalProps) {
@@ -57,55 +46,57 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const [leverageState, onLeverage] = useLeverage(approvalStateA, approvalStateB, invalidInput, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB);
 
   if (depositedUSD < 1) return (
-    <LeverageInteractionModalContainer props={{show, toggleShow}}>
+    <InteractionModalContainer title="Leverage" show={show} toggleShow={toggleShow}><>
       You need to deposit the {symbolA}-{symbolB} LP first in order to leverage it.
-    </LeverageInteractionModalContainer>
+    </></InteractionModalContainer>
   );
 
   return (
-    <LeverageInteractionModalContainer props={{show, toggleShow}}>
-      <RiskMetrics changeBorrowedA={changeAmounts.bAmountA} changeBorrowedB={changeAmounts.bAmountB} changeCollateral={changeAmounts.cAmount} />
-      <InputAmount
-        val={val}
-        setVal={setVal}
-        suffix={'x'}
-        maxTitle={'Max leverage'}
-        max={maxLeverage}
-        min={minLeverage}
-      />
-      <div className="transaction-recap">
-        <Row>
-          <Col xs={6} style={{lineHeight: '30px'}}>Max slippage:</Col>
-          <Col xs={6} className="text-right"><InputAmountMini val={slippage} setVal={setSlippage} suffix={'%'} /></Col>
+    <InteractionModalContainer title="Leverage" show={show} toggleShow={toggleShow}>
+      <>
+        <RiskMetrics changeBorrowedA={changeAmounts.bAmountA} changeBorrowedB={changeAmounts.bAmountB} changeCollateral={changeAmounts.cAmount} />
+        <InputAmount
+          val={val}
+          setVal={setVal}
+          suffix={'x'}
+          maxTitle={'Max leverage'}
+          max={maxLeverage}
+          min={minLeverage}
+        />
+        <div className="transaction-recap">
+          <Row>
+            <Col xs={6} style={{lineHeight: '30px'}}>Max slippage:</Col>
+            <Col xs={6} className="text-right"><InputAmountMini val={slippage} setVal={setSlippage} suffix={'%'} /></Col>
+          </Row>
+          <Row>
+            <Col xs={6}>You will borrow at most:</Col>
+            <Col xs={6} className="text-right">{formatFloat(changeAmounts.bAmountA)} {symbolA}</Col>
+          </Row>
+          <Row>
+            <Col xs={6}>You will borrow at most:</Col>
+            <Col xs={6} className="text-right">{formatFloat(changeAmounts.bAmountB)} {symbolB}</Col>
+          </Row>
+          <BorrowFee amount={changeAmounts.bAmountA} symbol={symbolA} />
+          <BorrowFee amount={changeAmounts.bAmountB} symbol={symbolB} />
+          <Row>
+            <Col xs={6}>You will get at least:</Col>
+            <Col xs={6} className="text-right">{formatFloat(changeAmounts.cAmountMin)} {symbolA}-{symbolB}</Col>
+          </Row>
+        </div>
+        <Row className="interaction-row">
+          <Col xs={6}>
+            <InteractionButton name={"Approve " + symbolA} onCall={onApproveA} state={approvalStateA} />
+          </Col>
+          <Col xs={6}>
+            <InteractionButton name={"Approve " + symbolB} onCall={onApproveB} state={approvalStateB} />
+          </Col>
         </Row>
-        <Row>
-          <Col xs={6}>You will borrow at most:</Col>
-          <Col xs={6} className="text-right">{formatFloat(changeAmounts.bAmountA)} {symbolA}</Col>
+        <Row className="interaction-row">
+          <Col>
+            <InteractionButton name="Leverage"  onCall={onLeverage} state={leverageState} />
+          </Col>
         </Row>
-        <Row>
-          <Col xs={6}>You will borrow at most:</Col>
-          <Col xs={6} className="text-right">{formatFloat(changeAmounts.bAmountB)} {symbolB}</Col>
-        </Row>
-        <BorrowFee amount={changeAmounts.bAmountA} symbol={symbolA} />
-        <BorrowFee amount={changeAmounts.bAmountB} symbol={symbolB} />
-        <Row>
-          <Col xs={6}>You will get at least:</Col>
-          <Col xs={6} className="text-right">{formatFloat(changeAmounts.cAmountMin)} {symbolA}-{symbolB}</Col>
-        </Row>
-      </div>
-      <Row className="interaction-row">
-        <Col xs={6}>
-          <InteractionButton name={"Approve " + symbolA} onCall={onApproveA} state={approvalStateA} />
-        </Col>
-        <Col xs={6}>
-          <InteractionButton name={"Approve " + symbolB} onCall={onApproveB} state={approvalStateB} />
-        </Col>
-      </Row>
-      <Row className="interaction-row">
-        <Col>
-          <InteractionButton name="Leverage"  onCall={onLeverage} state={leverageState} />
-        </Col>
-      </Row>
-    </LeverageInteractionModalContainer>
+      </>
+    </InteractionModalContainer>
   );
 }

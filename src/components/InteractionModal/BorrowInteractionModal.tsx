@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody, InteractionModalContainer } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
@@ -34,6 +34,7 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
+  const symbolLP = useSymbol(PoolTokenType.Collateral);
   const maxBorrowable = useMaxBorrowable();
 
   const amount = useToBigNumber(val);
@@ -45,36 +46,37 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
     setVal(0);
   }
 
+  if (maxBorrowable === 0) return (
+    <InteractionModalContainer title="Borrow" show={show} toggleShow={toggleShow}><>
+      You need to deposit {symbolLP} as collateral in order to be able to borrow {symbol}.
+    </></InteractionModalContainer>
+  );
+
   return (
-    <InteractionModal show={show} onHide={() => toggleShow(false)}>
-      <>
-        <InteractionModalHeader value="Borrow" />
-        <InteractionModalBody>
-          <RiskMetrics
-            changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? val : 0}
-            changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? val : 0}
-          />
-          <InputAmount 
-            val={val}
-            setVal={setVal}
-            suffix={symbol}
-            maxTitle={'Available'}
-            max={maxBorrowable}
-          />
-          <div className="transaction-recap">
-            <BorrowFee amount={val} symbol={symbol} />
-            <BorrowAPY />
-          </div>
-          <Row className="interaction-row">
-            <Col xs={6}>
-              <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
-            </Col>
-            <Col xs={6}>
-              <InteractionButton name="Borrow" onCall={onBorrow} state={borrowState} />
-            </Col>
-          </Row>
-        </InteractionModalBody>
-      </>
-    </InteractionModal>
+    <InteractionModalContainer title="Borrow" show={show} toggleShow={toggleShow}><>
+      <RiskMetrics
+        changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? val : 0}
+        changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? val : 0}
+      />
+      <InputAmount 
+        val={val}
+        setVal={setVal}
+        suffix={symbol}
+        maxTitle={'Available'}
+        max={maxBorrowable}
+      />
+      <div className="transaction-recap">
+        <BorrowFee amount={val} symbol={symbol} />
+        <BorrowAPY />
+      </div>
+      <Row className="interaction-row">
+        <Col xs={6}>
+          <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
+        </Col>
+        <Col xs={6}>
+          <InteractionButton name="Borrow" onCall={onBorrow} state={borrowState} />
+        </Col>
+      </Row>
+    </></InteractionModalContainer>
   );
 }

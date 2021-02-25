@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody, InteractionModalContainer } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
@@ -45,34 +45,35 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
     setVal(0);
   }
 
+  if (maxWithdrawable === 0) return (
+    <InteractionModalContainer title="Withdraw" show={show} toggleShow={toggleShow}><>
+      You haven't deposited any {symbol} yet.
+    </></InteractionModalContainer>
+  );
+
   return (
-    <InteractionModal show={show} onHide={() => toggleShow(false)}>
-      <>
-        <InteractionModalHeader value="Withdraw" />
-        <InteractionModalBody>
-          { poolTokenType == PoolTokenType.Collateral ? (
-            <RiskMetrics changeCollateral={-val} />
-          ) : (null) }
-          <InputAmount 
-            val={val}
-            setVal={setVal}
-            suffix={symbol}
-            maxTitle={'Available'}
-            max={maxWithdrawable}
-          />
-          <div className="transaction-recap">
-            <TransactionSize amount={val} />
-          </div>
-          <Row className="interaction-row">
-            <Col xs={6}>
-              <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
-            </Col>
-            <Col xs={6}>
-              <InteractionButton name="Withdraw" onCall={onWithdraw} state={withdrawState} />
-            </Col>
-          </Row>
-        </InteractionModalBody>
-      </>
-    </InteractionModal>
+    <InteractionModalContainer title="Withdraw" show={show} toggleShow={toggleShow}><>
+      { poolTokenType == PoolTokenType.Collateral ? (
+        <RiskMetrics changeCollateral={-val} />
+      ) : (null) }
+      <InputAmount 
+        val={val}
+        setVal={setVal}
+        suffix={symbol}
+        maxTitle={'Available'}
+        max={maxWithdrawable}
+      />
+      <div className="transaction-recap">
+        <TransactionSize amount={val} />
+      </div>
+      <Row className="interaction-row">
+        <Col xs={6}>
+          <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
+        </Col>
+        <Col xs={6}>
+          <InteractionButton name="Withdraw" onCall={onWithdraw} state={withdrawState} />
+        </Col>
+      </Row>
+    </></InteractionModalContainer>
   );
 }

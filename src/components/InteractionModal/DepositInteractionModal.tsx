@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody, InteractionModalContainer } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
@@ -27,18 +27,6 @@ export interface DepositInteractionModalProps {
   toggleShow(s: boolean): void;
 }
 
-function DepositInteractionModalContainer({props, children}: {props: DepositInteractionModalProps, children: any}) {
-  const poolTokenType = usePoolToken();
-  return (
-    <InteractionModal show={props.show} onHide={() => props.toggleShow(false)}>
-      <>
-        <InteractionModalHeader value={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} />
-        <InteractionModalBody>{children}</InteractionModalBody>
-      </>
-    </InteractionModal>
-  );
-}
-
 export default function DepositInteractionModal({show, toggleShow}: DepositInteractionModalProps) {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -58,16 +46,16 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   }
 
   if (availableBalanceUSD < 1) return (
-    <DepositInteractionModalContainer props={{show, toggleShow}}>
+    <InteractionModalContainer title={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} show={show} toggleShow={toggleShow}><>
       You need to hold {symbol} in your wallet in order to deposit it.
       { poolTokenType == PoolTokenType.Collateral ? (<>
         <br/>You can obtain it by <a target="_blank" href={addLiquidityUrl}>providing liquidity on Uniswap</a>
       </>) : null }
-    </DepositInteractionModalContainer>
+    </></InteractionModalContainer>
   );
 
   return (
-    <DepositInteractionModalContainer props={{show, toggleShow}}>
+    <InteractionModalContainer title={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} show={show} toggleShow={toggleShow}><>
       { poolTokenType == PoolTokenType.Collateral ? (
         <RiskMetrics changeCollateral={val} />
       ) : (null) }
@@ -90,6 +78,6 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
           <InteractionButton name={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} onCall={onDeposit} state={depositState} />
         </Col>
       </Row>
-    </DepositInteractionModalContainer>
+    </></InteractionModalContainer>
   );
 }

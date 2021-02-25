@@ -35,26 +35,29 @@ export default function RiskMetrics({changeBorrowedA, changeBorrowedB, changeCol
   const currentLeverage = useCurrentLeverage();
   const newLeverage = useCurrentLeverage(changes);
 
+  const leverageExplanation = "Calculated as: LP Token Value / (LP Token Value - Debt)";
+  const liquidationExplanation = "If the price crosses these boundaries, your account will become liquidatable";
+
   return (<div>
     { changes ? (
-      <DetailsRow name={t("New Leverage")}>
+      <DetailsRow name={t("New Leverage")} explanation={leverageExplanation}>
         {formatLeverage(currentLeverage)}
         <i className="change-arrow" />
         {formatLeverage(newLeverage)}
       </DetailsRow>
     ) : (
-      <DetailsRow name={t("Current Leverage")}>
+      <DetailsRow name={t("Current Leverage")} explanation={leverageExplanation}>
         {formatLeverage(currentLeverage)}
       </DetailsRow>
     ) }
     { changes ? (
-      <DetailsRow name={t("New Liquidation Prices")}>
+      <DetailsRow name={t("New Liquidation Prices")} explanation={liquidationExplanation}>
         <LiquidationPrices /> 
         <i className="change-arrow" /> 
         <LiquidationPrices changes={changes} />
       </DetailsRow>
     ) : (
-      <DetailsRow name={t("Liquidation Prices")}>
+      <DetailsRow name={t("Liquidation Prices")} explanation={liquidationExplanation}>
         <LiquidationPrices /> 
       </DetailsRow>
     ) }

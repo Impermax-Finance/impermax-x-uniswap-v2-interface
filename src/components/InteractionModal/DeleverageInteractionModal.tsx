@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import InteractionModal, { InteractionModalHeader, InteractionModalBody } from ".";
+import InteractionModal, { InteractionModalHeader, InteractionModalBody, InteractionModalContainer } from ".";
 import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
@@ -41,55 +41,56 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
     setVal(0);
   }
 
+  if (maxDeleverage === 0) return (
+    <InteractionModalContainer title="Deleverage" show={show} toggleShow={toggleShow}><>
+      You need to open a leveraged position in order to deleverage it.
+    </></InteractionModalContainer>
+  );
+
   return (
-    <InteractionModal show={show} onHide={() => toggleShow(false)}>
-      <>
-        <InteractionModalHeader value="Leverage" />
-        <InteractionModalBody>
-          <RiskMetrics changeBorrowedA={-changeAmounts.bAmountA} changeBorrowedB={-changeAmounts.bAmountB} changeCollateral={-changeAmounts.cAmount} />
-          <InputAmount 
-            val={val}
-            setVal={setVal}
-            suffix={symbol}
-            maxTitle={'Available'}
-            max={maxDeleverage}
-          />
-          <div className="transaction-recap">
-            <Row>
-              <Col xs={6} style={{lineHeight: '30px'}}>Max slippage:</Col>
-              <Col xs={6} className="text-right"><InputAmountMini val={slippage} setVal={setSlippage} suffix={'%'} /></Col>
-            </Row>
-            <Row>
-              <Col xs={6}>You will withdraw:</Col>
-              <Col xs={6} className="text-right">{formatFloat(changeAmounts.cAmount)} {symbol}</Col>
-            </Row>
-            <Row>
-              <Col xs={6}>You will repay at least:</Col>
-              <Col xs={6} className="text-right">{formatFloat(Math.min(changeAmounts.bAmountAMin, borrowedA))} {symbolA}</Col>
-            </Row>
-            <Row>
-              <Col xs={6}>You will repay at least:</Col>
-              <Col xs={6} className="text-right">{formatFloat(Math.min(changeAmounts.bAmountBMin, borrowedB))} {symbolB}</Col>
-            </Row>
-            <Row>
-              <Col xs={6}>You will receive at least:</Col>
-              <Col xs={6} className="text-right">{formatFloat(changeAmounts.bAmountAMin > borrowedA ? changeAmounts.bAmountAMin - borrowedA : 0)} {symbolA}</Col>
-            </Row>
-            <Row>
-              <Col xs={6}>You will receive at least:</Col>
-              <Col xs={6} className="text-right">{formatFloat(changeAmounts.bAmountBMin > borrowedB ? changeAmounts.bAmountBMin - borrowedB : 0)} {symbolB}</Col>
-            </Row>
-          </div>
-          <Row className="interaction-row">
-            <Col xs={6}>
-              <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
-            </Col>
-            <Col xs={6}>
-              <InteractionButton name="Deleverage" onCall={onDeleverage} state={deleverageState} />
-            </Col>
-          </Row>
-        </InteractionModalBody>
-      </>
-    </InteractionModal>
+    <InteractionModalContainer title="Deleverage" show={show} toggleShow={toggleShow}><>
+      <RiskMetrics changeBorrowedA={-changeAmounts.bAmountA} changeBorrowedB={-changeAmounts.bAmountB} changeCollateral={-changeAmounts.cAmount} />
+      <InputAmount 
+        val={val}
+        setVal={setVal}
+        suffix={symbol}
+        maxTitle={'Available'}
+        max={maxDeleverage}
+      />
+      <div className="transaction-recap">
+        <Row>
+          <Col xs={6} style={{lineHeight: '30px'}}>Max slippage:</Col>
+          <Col xs={6} className="text-right"><InputAmountMini val={slippage} setVal={setSlippage} suffix={'%'} /></Col>
+        </Row>
+        <Row>
+          <Col xs={6}>You will withdraw:</Col>
+          <Col xs={6} className="text-right">{formatFloat(changeAmounts.cAmount)} {symbol}</Col>
+        </Row>
+        <Row>
+          <Col xs={6}>You will repay at least:</Col>
+          <Col xs={6} className="text-right">{formatFloat(Math.min(changeAmounts.bAmountAMin, borrowedA))} {symbolA}</Col>
+        </Row>
+        <Row>
+          <Col xs={6}>You will repay at least:</Col>
+          <Col xs={6} className="text-right">{formatFloat(Math.min(changeAmounts.bAmountBMin, borrowedB))} {symbolB}</Col>
+        </Row>
+        <Row>
+          <Col xs={6}>You will receive at least:</Col>
+          <Col xs={6} className="text-right">{formatFloat(changeAmounts.bAmountAMin > borrowedA ? changeAmounts.bAmountAMin - borrowedA : 0)} {symbolA}</Col>
+        </Row>
+        <Row>
+          <Col xs={6}>You will receive at least:</Col>
+          <Col xs={6} className="text-right">{formatFloat(changeAmounts.bAmountBMin > borrowedB ? changeAmounts.bAmountBMin - borrowedB : 0)} {symbolB}</Col>
+        </Row>
+      </div>
+      <Row className="interaction-row">
+        <Col xs={6}>
+          <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
+        </Col>
+        <Col xs={6}>
+          <InteractionButton name="Deleverage" onCall={onDeleverage} state={deleverageState} />
+        </Col>
+      </Row>
+    </></InteractionModalContainer>
   );
 }
