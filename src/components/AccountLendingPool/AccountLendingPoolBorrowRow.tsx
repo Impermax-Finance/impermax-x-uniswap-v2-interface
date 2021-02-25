@@ -4,30 +4,31 @@ import phrases from './translations';
 import { Row, Col, Button, Card } from "react-bootstrap";
 import { PoolTokenType } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
-import DepositInteractionModal from "../InteractionModal/DepositInteractionModal";
-import BorrowInteractionModal from "../InteractionModal/BorrowInteractionModal";
 import RepayInteractionModal from "../InteractionModal/RepayInteractionModal";
-import WithdrawInteractionModal from "../InteractionModal/WithdrawInteractionModal";
-import { useBorrowed, useSymbol, useDeposited, useDepositedUSD, useBorrowedUSD, useBorrowerList } from "../../hooks/useData";
+import { useBorrowed, useSymbol, useBorrowedUSD, useBorrowerList, useMaxBorrowable, useMaxWithdrawable } from "../../hooks/useData";
 import { useTokenIcon } from "../../hooks/useUrlGenerator";
+import DisabledButtonHelper from "../DisabledButtonHelper";
+import { text } from "@fortawesome/fontawesome-svg-core";
+import BorrowInteractionModal from "../InteractionModal/BorrowInteractionModal";
 
 
-export default function AccountLendingPoolRow() {
+export default function AccountLendingPoolBorrowRow() {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
 
   const symbol = useSymbol();
-  const deposited = useDeposited();
-  const depositedUSD = useDepositedUSD();
+  const symbolLP = useSymbol(PoolTokenType.Collateral);
   const borrowed = useBorrowed();
   const borrowedUSD = useBorrowedUSD();
   const tokenIcon = useTokenIcon();
 
-  const [showDepositModal, toggleDepositModal] = useState(false);
-  const [showWithdrawModal, toggleWithdrawModal] = useState(false);
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepaywModal] = useState(false);
+
+  const maxBorrowable = useMaxBorrowable();
+  const borrowDisabledInfo = `You need to deposit ${symbolLP} as collateral in order to be able to borrow ${symbol}.`;
+  const repayuDisabledInfo = `You haven't borrowed any ${symbol} yet.`;
 
   return (<>
     <Row className="account-lending-pool-row">
@@ -43,12 +44,6 @@ export default function AccountLendingPoolRow() {
       </Col>
       <Col md={4} className="inline-account-token-info-container">
         <InlineAccountTokenInfo
-          name={t("Supplied")}
-          symbol={symbol}
-          value={deposited}
-          valueUSD={depositedUSD}
-        />
-        <InlineAccountTokenInfo
           name={t("Borrowed")}
           symbol={symbol}
           value={borrowed}
@@ -58,30 +53,22 @@ export default function AccountLendingPoolRow() {
       <Col md={5} className="btn-table">
         <Row>
           <Col>
-            <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Supply")}</Button>
+            { maxBorrowable > 0 ? (
+              <Button variant="primary" onClick={() => toggleBorrowModal(true)}>{t("Borrow")}</Button>
+            ) : (
+              <DisabledButtonHelper text={borrowDisabledInfo}>{t("Borrow")}</DisabledButtonHelper>
+            ) }
           </Col>
           <Col>
-            <Button variant="primary" onClick={() => toggleWithdrawModal(true)}>{t("Withdraw")}</Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Button variant="primary" onClick={() => toggleBorrowModal(true)}>{t("Borrow")}</Button>
-          </Col>
-          <Col>
-            <Button variant="primary" onClick={() => toggleRepaywModal(true)}>{t("Repay")}</Button>
+            { borrowed > 0 ? (
+              <Button variant="primary" onClick={() => toggleRepaywModal(true)}>{t("Repay")}</Button>
+            ) : (
+              <DisabledButtonHelper text={repayuDisabledInfo}>{t("Repay")}</DisabledButtonHelper>
+            ) }
           </Col>
         </Row>
       </Col>
     </Row>
-    <DepositInteractionModal 
-      show={showDepositModal} 
-      toggleShow={toggleDepositModal}
-    />
-    <WithdrawInteractionModal 
-      show={showWithdrawModal} 
-      toggleShow={toggleWithdrawModal}
-    />
     <BorrowInteractionModal 
       show={showBorrowModal} 
       toggleShow={toggleBorrowModal}

@@ -184,6 +184,13 @@ export function useBalanceUSD() : number {
   return balanceUSD;
 }
 
+export function useSuppliedUSD() : number {
+  const uniswapV2PairAddress = usePairAddress();
+  const [suppliedUSD, setSuppliedUSD] = useState<number>(0);
+  useRouterCallback(async (router) => setSuppliedUSD( await router.getSuppliedUSD(uniswapV2PairAddress) ));
+  return suppliedUSD;
+}
+
 export function useDebtUSD() : number {
   const uniswapV2PairAddress = usePairAddress();
   const [debtUSD, setDebtUSD] = useState<number>(0);
@@ -196,6 +203,20 @@ export function useEquityUSD() : number {
   const [equityUSD, setEquityUSD] = useState<number>(0);
   useRouterCallback(async (router) => setEquityUSD( await router.getEquityUSD(uniswapV2PairAddress) ));
   return equityUSD;
+}
+
+export function useLPEquityUSD() : number {
+  const uniswapV2PairAddress = usePairAddress();
+  const [LPEquityUSD, setLPEquityUSD] = useState<number>(0);
+  useRouterCallback(async (router) => setLPEquityUSD( await router.getLPEquityUSD(uniswapV2PairAddress) ));
+  return LPEquityUSD;
+}
+
+export function useAccountAPY() : number {
+  const uniswapV2PairAddress = usePairAddress();
+  const [accountAPY, setAccountAPY] = useState<number>(0);
+  useRouterCallback(async (router) => setAccountAPY( await router.getAccountAPY(uniswapV2PairAddress) ));
+  return accountAPY;
 }
 
 export function useBorrowerList() : Array<string> {

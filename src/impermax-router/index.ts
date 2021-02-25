@@ -179,8 +179,11 @@ export default class ImpermaxRouter {
   public getDeposited = account.getDeposited;
   public getDepositedUSD = account.getDepositedUSD;
   public getBalanceUSD = account.getBalanceUSD;
+  public getSuppliedUSD = account.getSuppliedUSD;
   public getDebtUSD = account.getDebtUSD;
   public getEquityUSD = account.getEquityUSD;
+  public getLPEquityUSD = account.getLPEquityUSD;
+  public getAccountAPY = account.getAccountAPY;
   public getValuesFromPrice = account.getValuesFromPrice;
   public getValues = account.getValues;
   public getMarketValues = account.getMarketValues;

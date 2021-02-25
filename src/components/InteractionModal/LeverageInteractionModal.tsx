@@ -27,6 +27,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const changeAmounts = useLeverageAmounts(val, slippage);
   const minLeverage = useCurrentLeverage();
   const maxLeverage = useMaxLeverage();
+  const symbol = useSymbol();
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const depositedUSD = useDepositedUSD();
@@ -47,7 +48,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
 
   if (depositedUSD < 1) return (
     <InteractionModalContainer title="Leverage" show={show} toggleShow={toggleShow}><>
-      You need to deposit the {symbolA}-{symbolB} LP first in order to leverage it.
+      You need to deposit the {symbol} LP first in order to leverage it.
     </></InteractionModalContainer>
   );
 
@@ -80,7 +81,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
           <BorrowFee amount={changeAmounts.bAmountB} symbol={symbolB} />
           <Row>
             <Col xs={6}>You will get at least:</Col>
-            <Col xs={6} className="text-right">{formatFloat(changeAmounts.cAmountMin)} {symbolA}-{symbolB}</Col>
+            <Col xs={6} className="text-right">{formatFloat(changeAmounts.cAmountMin)} {symbol}</Col>
           </Row>
         </div>
         <Row className="interaction-row">
