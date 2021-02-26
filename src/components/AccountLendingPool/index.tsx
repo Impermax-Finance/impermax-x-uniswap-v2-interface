@@ -45,14 +45,6 @@ export default function AccountLendingPool() {
   const { connect, account } = useWallet();
   const routerAccount = useRouterAccount();
 
-  if (!account || !routerAccount) return (
-    <AccountLendingPoolContainer>
-      <div className="text-center py-5">
-        <Button onClick={() => {connect('injected')}} className="button-green">Connect to use the App</Button>
-      </div>
-    </AccountLendingPoolContainer>
-  );
-
   const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
   const suppliedUSD = useSuppliedUSD();
   const [pageSelected, setPageSelected] = useState<AccountLendingPoolPage>(AccountLendingPoolPage.UNINITIALIZED);
@@ -61,6 +53,14 @@ export default function AccountLendingPool() {
       ? AccountLendingPoolPage.LEVERAGE
       : AccountLendingPoolPage.EARN_INTEREST
     : pageSelected;
+
+  if (!account || !routerAccount) return (
+    <AccountLendingPoolContainer>
+      <div className="text-center py-5">
+        <Button onClick={() => {connect('injected')}} className="button-green">Connect to use the App</Button>
+      </div>
+    </AccountLendingPoolContainer>
+  );
     
   return (
     <AccountLendingPoolContainer>

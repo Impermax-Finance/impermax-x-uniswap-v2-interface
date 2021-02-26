@@ -8,13 +8,10 @@
 }
 
 .invert-price {
-  width: 13px;
-  height: 13px;
-  background-image: url(invert-price.svg);
-  background-size: contain;
-  display: inline-block;
-  vertical-align: bottom;
+  width: 14px;
+  height: 14px;
   margin-left: 3px;
   margin-bottom: 1px;
   cursor: pointer;
+  color: #586267;
 }

@@ -10,9 +10,9 @@ export default function AccountLendingPoolPageSelector({pageSelected, setPageSel
   return (
     <div className="account-lending-pool-page-selector">
       { pageSelected === AccountLendingPoolPage.LEVERAGE ? (
-        <div className="selected">Leverage</div>
+        <div className="selected">Leverage LP</div>
       ) : (
-        <div onClick={() => setPageSelected(AccountLendingPoolPage.LEVERAGE) }>Leverage</div>
+        <div onClick={() => setPageSelected(AccountLendingPoolPage.LEVERAGE) }>Leverage LP</div>
       ) }
       { pageSelected === AccountLendingPoolPage.EARN_INTEREST ? (
         <div className="selected">Earn Interest</div>
