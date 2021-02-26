@@ -49,11 +49,11 @@ const translations = {
   "Repay": {
     'ENG': "Repay"
   },
-  "Total Supplied": {
-    'ENG': "Total Supplied"
+  "Supply Balance": {
+    'ENG': "Supply Balance"
   },
-  "Supply APY": {
-    'ENG': "Account APY"
+  "Net APY": {
+    'ENG': "Net APY"
   },
   "Expected monthly profit": {
     'ENG': "Expected monthly profit"

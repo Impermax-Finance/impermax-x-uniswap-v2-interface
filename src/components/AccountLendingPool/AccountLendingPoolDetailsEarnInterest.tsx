@@ -22,12 +22,10 @@ export default function AccountLendingPoolDetailsEarnInterest() {
   return (<>
     <Row className="account-lending-pool-details">
       <Col sm={12} md={6}>
-        <DetailsRow name={t("Total Supplied")} value={formatUSD(suppliedUSD)} />
-        <DetailsRow name={t("Supply APY")} value={formatPercentage(accountAPY)} />
+        <DetailsRow name={t("Supply Balance")} value={formatUSD(suppliedUSD)} />
       </Col>
       <Col sm={12} md={6}>
-        <DetailsRow name={t("Expected monthly profit")} value={formatUSD(suppliedUSD * accountAPY / 12)} />
-        <DetailsRow name={t("Expected yearly profit")} value={formatUSD(suppliedUSD * accountAPY)} />
+        <DetailsRow name={t("Net APY")} value={formatPercentage(accountAPY)} />
       </Col>
     </Row>
   </>);
