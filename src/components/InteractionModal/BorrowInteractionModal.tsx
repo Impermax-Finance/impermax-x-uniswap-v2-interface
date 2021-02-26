@@ -46,12 +46,6 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
     setVal(0);
   }
 
-  if (maxBorrowable === 0) return (
-    <InteractionModalContainer title="Borrow" show={show} toggleShow={toggleShow}><>
-      You need to deposit {symbolLP} as collateral in order to be able to borrow {symbol}.
-    </></InteractionModalContainer>
-  );
-
   return (
     <InteractionModalContainer title="Borrow" show={show} toggleShow={toggleShow}><>
       <RiskMetrics
