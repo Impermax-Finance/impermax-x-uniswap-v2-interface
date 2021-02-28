@@ -1,13 +1,15 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
-import { HomeRoute, FarmingRoute } from '../../Routing';
+import { HomeRoute, FarmingRoute, RisksRoute } from '../../Routing';
 
 import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import { ConnectedWalletButtonComponent } from './ConnectedWalletButtonComponent';
 import { TransactionDetails } from '../../state/transactions/reducer';
 import { useNetworkName } from '../../hooks/useNetwork';
+import Countdown from '../Countdown';
+import useInterval from 'use-interval';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -30,6 +32,15 @@ export default function View({ children }: ViewProps) {
 
   const wrongNetwork = status == 'error' && error && error.toString().indexOf("ChainUnsupportedError") >= 0;
   const networkName = useNetworkName();
+
+  const LAUNCH_TIMESTAMP = 1614614400;
+  const [time, setTime] = useState<number>(0);
+  useInterval(() => {
+    setTime(Math.floor((new Date()).getTime() / 1000));
+  }, 1000, true);
+  if (networkName === 'mainnet' && time < LAUNCH_TIMESTAMP) return (
+    <Countdown time_diff={LAUNCH_TIMESTAMP - time} />
+  );
   
   return (
     <div className="view">
@@ -41,6 +52,7 @@ export default function View({ children }: ViewProps) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Nav className="mr-auto">
             <NavigationBarLink appRoute={HomeRoute} />
+            <NavigationBarLink appRoute={RisksRoute} />
           </Nav>
           {
             account ? 
@@ -57,6 +69,15 @@ export default function View({ children }: ViewProps) {
         </div>
       ) : null }
       {children}
+      <div className="footer container">
+        <a href="https://impermax.finance/" target="_blank">Website</a>
+        <a href="https://twitter.com/ImpermaxFinance" target="_blank">Twitter</a>
+        <a href="https://t.me/ImpermaxFinance" target="_blank">Telegram</a>
+        <a href="https://discord.gg/XN739EgG4X" target="_blank">Discord</a>
+        <a href="https://impermax.medium.com/" target="_blank">Medium</a>
+        <a href="https://www.reddit.com/r/ImpermaxFinance/" target="_blank">Reddit</a>
+        <a href="https://github.com/Impermax-Finance" target="_blank">Github</a>
+      </div>
     </div>
   );
 }

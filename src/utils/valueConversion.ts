@@ -12,7 +12,7 @@ export interface PairConversionPrices {
 
 export async function getPairConversionPrices(uniswapV2PairAddress: string) : Promise<PairConversionPrices> {
   const query = gql`{
-    pair (id: "${uniswapV2PairAddress}") {
+    pair (id: "${uniswapV2PairAddress.toLowerCase()}") {
       reserveUSD
       reserve0
       reserve1

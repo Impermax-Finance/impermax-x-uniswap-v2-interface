@@ -11,7 +11,7 @@ export function useLendingPoolUrl() : string {
 
 export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   const tokenAddress = useUnderlyingAddress(poolTokenTypeArg);
-  return tokenAddress ? "/build/assets/icons/" + tokenAddress + ".svg" : "";
+  return tokenAddress ? "/build/assets/icons/" + tokenAddress + ".png" : "";
 }
 
 export function useAddLiquidityUrl() : string {

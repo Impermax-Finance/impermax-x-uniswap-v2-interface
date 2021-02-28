@@ -35,7 +35,7 @@ export function formatUSD(n: number) : string {
   while (n >= 1000) {
     const lastThreeCypher = (1000 + n % 1000).toString().substr(1, 4);
     result = ',' + lastThreeCypher + result;
-    n = Math.round(n / 1000);
+    n = Math.floor(n / 1000);
   }
   result = n.toString() + result;
   return "$" + result;
