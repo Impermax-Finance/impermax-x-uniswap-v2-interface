@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import { Home, LendingPool } from './views';
+import { Home, LendingPool, Risks } from './views';
 
 export interface AppRoute {
   value: string;
@@ -22,8 +22,14 @@ export const FarmingRoute = {
   to: '/farming'
 } as AppRoute;
 
+export const RisksRoute = {
+  value: 'Risks',
+  to: '/risks'
+} as AppRoute;
+
 export enum AppRoutes {
   HomeRoute,
+  RisksRoute,
   FarmingRoute
 }
 
@@ -40,6 +46,9 @@ export default function Routing() {
             </Route>
             <Route path={LendingPoolRoute.to}>
               <LendingPool />
+            </Route>
+            <Route path={RisksRoute.to}>
+              <Risks />
             </Route>
           </Switch>
       </Router>

@@ -17,7 +17,7 @@ export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Addres
       await this.router.methods.mintETH(poolToken._address, this.account, deadline).call({from: this.account, value: amount});
       send = this.router.methods.mintETH(poolToken._address, this.account, deadline).send({from: this.account, value: amount});
     }
-    if (poolTokenType == PoolTokenType.Collateral) {
+    else if (poolTokenType == PoolTokenType.Collateral) {
       await this.router.methods.mintCollateral(poolToken._address, amount, this.account, deadline, data).call({from: this.account});
       send = this.router.methods.mintCollateral(poolToken._address, amount, this.account, deadline, data).send({from: this.account});
     }

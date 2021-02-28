@@ -76,6 +76,13 @@ export function useUnderlyingAddress(poolTokenTypeArg?: PoolTokenType) : string 
   return tokenAddress;
 }
 
+export function useTotalBalanceUSD(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [totalBalanceUSD, setTotalBalanceUSD] = useState<number>(0);
+  useRouterCallback(async (router) => setTotalBalanceUSD( await router.getTotalBalanceUSD(uniswapV2PairAddress, poolTokenType) ));
+  return totalBalanceUSD;
+}
+
 export function useSupplyUSD(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [supplyUSD, setSupplyUSD] = useState<number>(0);

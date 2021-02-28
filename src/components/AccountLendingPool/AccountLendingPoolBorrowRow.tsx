@@ -5,7 +5,7 @@ import { Row, Col, Button, Card } from "react-bootstrap";
 import { PoolTokenType } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
 import RepayInteractionModal from "../InteractionModal/RepayInteractionModal";
-import { useBorrowed, useSymbol, useBorrowedUSD, useBorrowerList, useMaxBorrowable, useMaxWithdrawable } from "../../hooks/useData";
+import { useBorrowed, useSymbol, useBorrowedUSD, useBorrowerList, useMaxBorrowable, useMaxWithdrawable, useDepositedUSD } from "../../hooks/useData";
 import { useTokenIcon } from "../../hooks/useUrlGenerator";
 import DisabledButtonHelper from "../DisabledButtonHelper";
 import { text } from "@fortawesome/fontawesome-svg-core";
@@ -26,8 +26,11 @@ export default function AccountLendingPoolBorrowRow() {
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepaywModal] = useState(false);
 
+  const depositedUSD = useDepositedUSD(PoolTokenType.Collateral);
   const maxBorrowable = useMaxBorrowable();
-  const borrowDisabledInfo = `You need to deposit ${symbolLP} as collateral in order to be able to borrow ${symbol}.`;
+  const borrowDisabledInfo = depositedUSD === 0 
+    ? `You need to deposit ${symbolLP} as collateral in order to be able to borrow ${symbol}.`
+    : `Insufficient ${symbol} has been supplied in order to borrow.`;
   const repayuDisabledInfo = `You haven't borrowed any ${symbol} yet.`;
 
   return (<>
