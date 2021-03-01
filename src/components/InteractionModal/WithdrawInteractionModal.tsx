@@ -43,6 +43,7 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
   const onWithdraw = async () => {
     await withdraw();
     setVal(0);
+    toggleShow(false);
   }
 
   if (maxWithdrawable === 0) return (

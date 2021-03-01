@@ -43,6 +43,7 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
   const onRepay = async () => {
     await repay();
     setVal(0);
+    toggleShow(false);
   }
 
   if (borrowed === 0) return (
