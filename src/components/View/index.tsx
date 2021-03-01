@@ -32,15 +32,6 @@ export default function View({ children }: ViewProps) {
 
   const wrongNetwork = status == 'error' && error && error.toString().indexOf("ChainUnsupportedError") >= 0;
   const networkName = useNetworkName();
-
-  const LAUNCH_TIMESTAMP = 1614614400;
-  const [time, setTime] = useState<number>(0);
-  useInterval(() => {
-    setTime(Math.floor((new Date()).getTime() / 1000));
-  }, 1000, true);
-  if (networkName === 'mainnet' && time < LAUNCH_TIMESTAMP) return (
-    <Countdown time_diff={LAUNCH_TIMESTAMP - time} />
-  );
   
   return (
     <div className="view">
