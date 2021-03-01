@@ -19,8 +19,8 @@ const Web3Provider: React.FC = ({ children }) => {
   useEffect(() => {
     if (ethereum) setWeb3(new Web3(ethereum));
     else {
-      const defaultProvider = new Web3.providers.WebsocketProvider( networkUrl );
-      setWeb3(new Web3(defaultProvider));
+      //const defaultProvider = new Web3.providers.WebsocketProvider( networkUrl );
+      //setWeb3(new Web3(defaultProvider));
       connect("injected");
     }
   }, [ethereum]);
