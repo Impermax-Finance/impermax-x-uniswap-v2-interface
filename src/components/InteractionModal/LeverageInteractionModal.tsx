@@ -34,7 +34,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const deadline = useDeadline();
   
   useEffect(() => {
-    setVal(Math.ceil(minLeverage * 1000) / 1000);
+    if (val === 0) setVal(Math.ceil(minLeverage * 1000) / 1000);
   }, [minLeverage]);
 
   const amountA = useToBigNumber(changeAmounts.bAmountA, PoolTokenType.BorrowableA);
@@ -44,7 +44,11 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const invalidInput = val < minLeverage || val > maxLeverage;
   const [approvalStateA, onApproveA, permitDataA] = useApprove(ApprovalType.BORROW, amountA, invalidInput, PoolTokenType.BorrowableA, deadline);
   const [approvalStateB, onApproveB, permitDataB] = useApprove(ApprovalType.BORROW, amountB, invalidInput, PoolTokenType.BorrowableB, deadline);
-  const [leverageState, onLeverage] = useLeverage(approvalStateA, approvalStateB, invalidInput, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB);
+  const [leverageState, leverage] = useLeverage(approvalStateA, approvalStateB, invalidInput, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB);
+  const onLeverage = async () => {
+    await leverage();
+    toggleShow(false);
+  }
 
   if (depositedUSD < 1) return (
     <InteractionModalContainer title="Leverage" show={show} toggleShow={toggleShow}><>

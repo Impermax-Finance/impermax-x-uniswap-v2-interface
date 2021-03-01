@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
-import { HomeRoute, FarmingRoute, RisksRoute } from '../../Routing';
+import { HomeRoute, FarmingRoute, RisksRoute, UserGuideRoute } from '../../Routing';
 
 import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
@@ -52,7 +52,8 @@ export default function View({ children }: ViewProps) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Nav className="mr-auto">
             <NavigationBarLink appRoute={HomeRoute} />
-            <NavigationBarLink appRoute={RisksRoute} />
+            <NavigationBarLink appRoute={UserGuideRoute} target="_blank"  />
+            { networkName === 'mainnet' ? (<NavigationBarLink appRoute={RisksRoute} />) : null }
           </Nav>
           {
             account ? 

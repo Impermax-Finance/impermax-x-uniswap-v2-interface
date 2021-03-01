@@ -39,6 +39,7 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
   const onDeleverage = async () => {
     await deleverage();
     setVal(0);
+    toggleShow(false);
   }
 
   if (maxDeleverage === 0) return (

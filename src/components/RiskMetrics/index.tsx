@@ -16,12 +16,13 @@ interface RiskMetricsProps {
   changeBorrowedA?: number;
   changeBorrowedB?: number;
   changeCollateral?: number;
+  hideIfNull?: boolean;
 }
 
 /**
  * Generates lending pool aggregate details.
  */
-export default function RiskMetrics({changeBorrowedA, changeBorrowedB, changeCollateral} : RiskMetricsProps) {
+export default function RiskMetrics({changeBorrowedA, changeBorrowedB, changeCollateral, hideIfNull} : RiskMetricsProps) {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
@@ -37,6 +38,8 @@ export default function RiskMetrics({changeBorrowedA, changeBorrowedB, changeCol
 
   const leverageExplanation = "Calculated as: Total Collateral / LP Equity";
   const liquidationExplanation = "If the price crosses these boundaries, your account will become liquidatable";
+
+  if(hideIfNull && currentLeverage === 1) return null;
 
   return (<div>
     { changes ? (

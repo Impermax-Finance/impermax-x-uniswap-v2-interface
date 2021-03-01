@@ -43,6 +43,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   const onDeposit = async () => {
     await deposit();
     setVal(0);
+    toggleShow(false);
   }
 
   if (availableBalanceUSD < 1) return (
@@ -57,7 +58,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
   return (
     <InteractionModalContainer title={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} show={show} toggleShow={toggleShow}><>
       { poolTokenType == PoolTokenType.Collateral ? (
-        <RiskMetrics changeCollateral={val} />
+        <RiskMetrics changeCollateral={val} hideIfNull={true} />
       ) : (null) }
       <InputAmount 
         val={val}

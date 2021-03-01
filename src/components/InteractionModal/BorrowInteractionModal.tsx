@@ -44,6 +44,7 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
   const onBorrow = async () => {
     await borrow();
     setVal(0);
+    toggleShow(false);
   }
 
   return (

@@ -27,10 +27,16 @@ export const RisksRoute = {
   to: '/risks'
 } as AppRoute;
 
+export const UserGuideRoute = {
+  value: 'User Guide',
+  to: '/user-guide'
+} as AppRoute;
+
 export enum AppRoutes {
   HomeRoute,
   RisksRoute,
-  FarmingRoute
+  FarmingRoute,
+  UserGuideRoute
 }
 
 /**
@@ -50,6 +56,10 @@ export default function Routing() {
             <Route path={RisksRoute.to}>
               <Risks />
             </Route>
+            <Route path={UserGuideRoute.to} component={() : any => { 
+              window.location.href = 'https://docs.google.com/document/d/1_lSfEVrD693W7teFvuXyI6XVJj9P4A6XhqaX9Pz6V58/edit?usp=sharing'; 
+              return null;
+            }} />
           </Switch>
       </Router>
     </div>
