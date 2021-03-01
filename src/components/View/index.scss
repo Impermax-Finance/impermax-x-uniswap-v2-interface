@@ -30,10 +30,15 @@
     }
   }
 
-  .wrong-network {
+  .wrong-network, .not-connected {
     line-height: 40px;
-    background: #ca294b;
     color: #fff;
+  }
+  .wrong-network {
+    background: #ca294b;
+  }
+  .not-connected {
+    background: #057dd1;
   }
 
   .footer {

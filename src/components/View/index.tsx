@@ -32,6 +32,9 @@ export default function View({ children }: ViewProps) {
 
   const wrongNetwork = status == 'error' && error && error.toString().indexOf("ChainUnsupportedError") >= 0;
   const networkName = useNetworkName();
+  const connected = status == 'connected';
+
+  console.log(connected)
   
   return (
     <div className="view">
@@ -53,14 +56,23 @@ export default function View({ children }: ViewProps) {
           }
         </Container>
       </Navbar>
-      { wrongNetwork ? (
-        <div className="wrong-network">
-          <div className="container">
-            You're connected to the wrong network. Please connect to the supported network: {networkName}
-          </div>
-        </div>
-      ) : null }
-      {children}
+      { connected ? (<>{children}</>) : (<>
+        { 
+          wrongNetwork ? (
+            <div className="wrong-network">
+              <div className="container">
+                You're connected to the wrong network. Please connect to the supported network: {networkName}
+              </div>
+            </div>
+          ) : (
+            <div className="not-connected">
+              <div className="container">
+                Please connect with Metamask or another web3 provider
+              </div>
+            </div>
+          ) 
+        }
+      </>) }
       <div className="footer container">
         <a href="https://impermax.finance/" target="_blank">Website</a>
         <a href="https://twitter.com/ImpermaxFinance" target="_blank">Twitter</a>
