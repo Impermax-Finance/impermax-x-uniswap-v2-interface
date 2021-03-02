@@ -16,8 +16,8 @@ const translations = {
   "Borrow APY": {
     'ENG': "Borrow APY"
   },
-  "Farming APY": {
-    'ENG': "Farming APY"
+  "Leveraged LP APY": {
+    'ENG': "Leveraged LP APY"
   },
 } as Dictionary;
 

@@ -4,7 +4,7 @@ import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
 import RiskMetrics from "../RiskMetrics";
-import { formatFloat, formatToDecimals } from "../../utils/format";
+import { formatFloat, formatToDecimals, formatPercentage } from "../../utils/format";
 import InputAmount, { InputAmountMini } from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
 import BorrowFee from "./TransactionRecap/BorrowFee";
@@ -12,7 +12,7 @@ import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useLeverage from "../../hooks/useLeverage";
 import { BigNumber } from "ethers";
-import { useSymbol, useDecimals, useDepositedUSD, useDeadline, useMaxLeverage, useCurrentLeverage, useLeverageAmounts, useToBigNumber } from "../../hooks/useData";
+import { useSymbol, useDecimals, useDepositedUSD, useDeadline, useMaxLeverage, useCurrentLeverage, useLeverageAmounts, useToBigNumber, useUniswapAPY, useBorrowAPY } from "../../hooks/useData";
 
 
 export interface LeverageInteractionModalProps {
@@ -32,6 +32,11 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const depositedUSD = useDepositedUSD();
   const deadline = useDeadline();
+  const borrowAPYA = useBorrowAPY(PoolTokenType.BorrowableA);
+  const borrowAPYB = useBorrowAPY(PoolTokenType.BorrowableB);
+  const uniAPY = useUniswapAPY();
+  const averageAPY = (borrowAPYA + borrowAPYB) / 2;
+  const leveragedAPY = uniAPY ? uniAPY * val - averageAPY * (val - 1) : 0;
   
   useEffect(() => {
     if (val === 0) setVal(Math.ceil(minLeverage * 1000) / 1000);
@@ -86,6 +91,10 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
           <Row>
             <Col xs={6}>You will get at least:</Col>
             <Col xs={6} className="text-right">{formatFloat(changeAmounts.cAmountMin)} {symbol}</Col>
+          </Row>
+          <Row>
+            <Col xs={6}>Estimated APY:</Col>
+            <Col xs={6} className="text-right leveraged-apy">{formatPercentage(leveragedAPY)}</Col>
           </Row>
         </div>
         <Row className="interaction-row">

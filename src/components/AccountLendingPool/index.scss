@@ -8,19 +8,22 @@
 
   .account-lending-pool-page-selector {
     display: flex;
-    padding: 2px 20px;
+    background: #f5f6f7;
     > * {
       padding: 10px 40px;
-      width: 50%;
+      width: 100%;
       text-align: center;
       font-size: 1.1875rem;
       cursor: pointer;
       font-weight: bold;
-      border-bottom: 1px solid #eee;
+      color: #88898a;
+      border: 1px solid #ddd;
     }
     > .selected {
-      border-bottom: 3px solid #02c47c;
+      border-top: 3px solid #02c47c;
       color: #02c47c;
+      background: #fff;
+      border-bottom: 0;
     }
   }
 

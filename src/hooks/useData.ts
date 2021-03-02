@@ -1,11 +1,12 @@
 import { PoolTokenType, Changes } from "../impermax-router/interfaces";
 import usePoolToken from "./usePoolToken";
 import usePairAddress from "./usePairAddress";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouterCallback } from "./useImpermaxRouter";
 import { stringify } from "querystring";
 import { BigNumber } from "ethers";
 import { decimalToBalance } from "../utils/ether-utils";
+import { getUniswapAPY, getWeeklyUniswapAPY } from "../utils/uniswapApy";
 
 export function useToken(poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
@@ -116,6 +117,13 @@ export function useBorrowAPY(poolTokenTypeArg?: PoolTokenType) : number {
   const [borrowAPY, setBorrowAPY] = useState<number>(0);
   useRouterCallback(async (router) => setBorrowAPY( await router.getBorrowAPY(uniswapV2PairAddress, poolTokenType) ));
   return borrowAPY;
+}
+
+export function useUniswapAPY() : number {
+  const uniswapV2PairAddress = usePairAddress();
+  const [uniswapAPY, setUniswapAPY] = useState<number>(0);
+  useRouterCallback(async (router) => setUniswapAPY( await router.getUniswapAPY(uniswapV2PairAddress) ));
+  return uniswapAPY;
 }
 
 export function useDeposited(poolTokenTypeArg?: PoolTokenType) : number {
