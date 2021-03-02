@@ -5,8 +5,10 @@ import { LendingPoolsCol } from "./LendingPoolsCol";
 import { formatUSD, formatPercentage } from "../../utils/format";
 import { useContext } from "../../contexts/Theme";
 import usePairAddress from "../../hooks/usePairAddress";
-import { useSupplyUSD, useTotalBorrowsUSD, useSupplyAPY, useBorrowAPY, useSymbol } from "../../hooks/useData";
+import { useSupplyUSD, useTotalBorrowsUSD, useSupplyAPY, useBorrowAPY, useSymbol, useUniswapAPY } from "../../hooks/useData";
 import { useTokenIcon, useLendingPoolUrl } from "../../hooks/useUrlGenerator";
+
+const LEVERAGE = 5;
 
 /**
  * Component for a single Lending Pool row.
@@ -26,6 +28,9 @@ export default function LendingPoolsRow() {
   const lendingPoolUrl = useLendingPoolUrl();
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
+  const uniAPY = useUniswapAPY();
+  const averageAPY = (borrowAPYA + borrowAPYB) / 2;
+  const leveragedAPY = uniAPY ? uniAPY * LEVERAGE - averageAPY * (LEVERAGE - 1) : 0;
 
   return (
     <Link to={lendingPoolUrl} className="row lending-pools-row">
@@ -54,6 +59,9 @@ export default function LendingPoolsRow() {
       <LendingPoolsCol valueA={formatUSD(totalBorrowsUSDA)} valueB={formatUSD(totalBorrowsUSDB)} />
       <LendingPoolsCol valueA={formatPercentage(supplyAPYA)} valueB={formatPercentage(supplyAPYB)} />
       <LendingPoolsCol valueA={formatPercentage(borrowAPYA)} valueB={formatPercentage(borrowAPYB)} />
+      <div className="col-2 leveraged-apy">
+        <div>{ formatPercentage(leveragedAPY) }</div>
+      </div>
     </Link>
   );
 }

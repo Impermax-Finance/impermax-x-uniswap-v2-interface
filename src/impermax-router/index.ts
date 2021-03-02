@@ -51,6 +51,7 @@ export default class ImpermaxRouter {
       marketPrice?: Promise<number>,
       TWAPPrice?: Promise<number>,
       pairConversionPrices?: Promise<PairConversionPrices>,
+      uniswapApy?: Promise<number>,
       poolToken?: {
         [key in PoolTokenType]?: {
           name?: Promise<string>,
@@ -205,6 +206,7 @@ export default class ImpermaxRouter {
   public initializePairConversionPricesRopsten = utils.initializePairConversionPricesRopsten;
   public getPairConversionPricesInternal = utils.getPairConversionPricesInternal;
   public getTokenPrice = utils.getTokenPrice;
+  public getUniswapAPY = utils.getUniswapAPY;
 
   // Approve
   public getOwnerSpender = approve.getOwnerSpender;

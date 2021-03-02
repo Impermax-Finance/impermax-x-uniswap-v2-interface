@@ -3,6 +3,7 @@ import { Address, PoolTokenType } from "./interfaces";
 import { BigNumber } from "ethers";
 import { PairConversionPrices, getPairConversionPrices } from "../utils/valueConversion";
 import { ROPSTEN_ETH_DAI, ROPSTEN_ETH_UNI } from "../utils/constants";
+import { getWeeklyUniswapAPY } from "../utils/uniswapApy";
 
 export async function normalize(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: number) : Promise<number> {
   const decimals = await this.getDecimals(uniswapV2PairAddress, poolTokenType);
@@ -58,4 +59,10 @@ export async function getTokenPrice(this: ImpermaxRouter, uniswapV2PairAddress: 
   if (poolTokenType == PoolTokenType.BorrowableA) return pairConversionPrices.tokenAPrice;
   if (poolTokenType == PoolTokenType.BorrowableB) return pairConversionPrices.tokenBPrice;
   return pairConversionPrices.LPPrice;
+}
+
+export async function getUniswapAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
+  if (!cache.uniswapApy) cache.uniswapApy = getWeeklyUniswapAPY(uniswapV2PairAddress);
+  return cache.uniswapApy;
 }

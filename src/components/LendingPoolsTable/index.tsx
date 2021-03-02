@@ -5,6 +5,7 @@ import './index.scss';
 import { useListedPairs } from '../../hooks/useNetwork';
 import LendingPoolsRow from './LendingPoolsRow';
 import PairAddressContext from '../../contexts/PairAddress';
+import QuestionHelper from '../QuestionHelper';
 
 /**
  * Generate a searchable lending pools table.
@@ -22,7 +23,7 @@ export function LendingPoolsTable() {
       <div className="col">{t("Total Borrowed")}</div>
       <div className="col">{t("Supply APY")}</div>
       <div className="col">{t("Borrow APY")}</div>
-      {/*<div className="col">{t("Farming APY")}</div>*/}
+      <div className="col-2 text-center">{t("Leveraged LP APY")} <QuestionHelper placement="left" text={"Based on last 7 days trading fees assuming a 5x leverage"} /></div>
     </div>
     {listedPairs.map((pair: string, key: any) => {
       return (

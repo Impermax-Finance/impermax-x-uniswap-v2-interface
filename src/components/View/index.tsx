@@ -33,8 +33,6 @@ export default function View({ children }: ViewProps) {
   const wrongNetwork = status == 'error' && error && error.toString().indexOf("ChainUnsupportedError") >= 0;
   const networkName = useNetworkName();
   const connected = status == 'connected';
-
-  console.log(connected)
   
   return (
     <div className="view">
