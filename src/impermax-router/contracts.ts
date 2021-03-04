@@ -1,6 +1,7 @@
 import ImpermaxRouter from "."
 import { Address, LendingPool, PoolTokenType, Contract } from "./interfaces";
 import { decimalToBalance } from "../utils/ether-utils";
+import { getMonthlyWeightedAPY, getWeeklyUniswapAPY } from "../utils/uniswapApy";
 
 export async function initializeLendingPool(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<LendingPool> {
   const lPool = await this.router.methods.getLendingPool(uniswapV2PairAddress).call();
