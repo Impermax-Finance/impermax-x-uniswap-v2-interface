@@ -42,6 +42,7 @@ export const ROPSTEN_ETH_USDC: Address = '0x681A4164703351d6AceBA9D7038b573b444d
 export const MAINNET_ETH_WBTC: Address = '0xBb2b8038a1640196FbE3e38816F3e67Cba72D940';
 export const MAINNET_ETH_USDC: Address = '0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc';
 export const MAINNET_USDT_USDC: Address = '0x3041CbD36888bECc7bbCBc0045E3B1f144466f5f';
+export const MAINNET_DUCK_ETH: Address = '0xc5Ed7350E0FB3f780c756bA7d5d8539dc242a414';
 
 export const LISTED_PAIRS: NetworkIndex = {
   [Networks.Ropsten]: [
@@ -53,5 +54,6 @@ export const LISTED_PAIRS: NetworkIndex = {
     MAINNET_ETH_WBTC,
     MAINNET_ETH_USDC,
     MAINNET_USDT_USDC,
+    MAINNET_DUCK_ETH,
   ]
 };
