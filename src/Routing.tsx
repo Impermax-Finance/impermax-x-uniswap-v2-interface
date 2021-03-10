@@ -57,7 +57,7 @@ export default function Routing() {
               <Risks />
             </Route>
             <Route path={UserGuideRoute.to} component={() : any => { 
-              window.location.href = 'https://docs.google.com/document/d/1_lSfEVrD693W7teFvuXyI6XVJj9P4A6XhqaX9Pz6V58/edit?usp=sharing'; 
+              window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf'; 
               return null;
             }} />
           </Switch>
