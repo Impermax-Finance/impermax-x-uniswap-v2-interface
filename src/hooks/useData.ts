@@ -119,6 +119,16 @@ export function useBorrowAPY(poolTokenTypeArg?: PoolTokenType) : number {
   return borrowAPY;
 }
 
+export function useNextBorrowAPY(borrowAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [nextBorrowAPY, setNextBorrowAPY] = useState<number>(0);
+  useRouterCallback(
+    async (router) => setNextBorrowAPY( await router.getNextBorrowAPY(uniswapV2PairAddress, poolTokenType, borrowAmount) ),
+    [borrowAmount]
+  );
+  return nextBorrowAPY;
+}
+
 export function useUniswapAPY() : number {
   const uniswapV2PairAddress = usePairAddress();
   const [uniswapAPY, setUniswapAPY] = useState<number>(0);

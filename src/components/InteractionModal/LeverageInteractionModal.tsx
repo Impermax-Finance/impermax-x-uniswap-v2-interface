@@ -12,7 +12,7 @@ import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useLeverage from "../../hooks/useLeverage";
 import { BigNumber } from "ethers";
-import { useSymbol, useDecimals, useDepositedUSD, useDeadline, useMaxLeverage, useCurrentLeverage, useLeverageAmounts, useToBigNumber, useUniswapAPY, useBorrowAPY } from "../../hooks/useData";
+import { useSymbol, useDecimals, useDepositedUSD, useDeadline, useMaxLeverage, useCurrentLeverage, useLeverageAmounts, useToBigNumber, useUniswapAPY, useBorrowAPY, useNextBorrowAPY } from "../../hooks/useData";
 
 
 export interface LeverageInteractionModalProps {
@@ -32,11 +32,6 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const depositedUSD = useDepositedUSD();
   const deadline = useDeadline();
-  const borrowAPYA = useBorrowAPY(PoolTokenType.BorrowableA);
-  const borrowAPYB = useBorrowAPY(PoolTokenType.BorrowableB);
-  const uniAPY = useUniswapAPY();
-  const averageAPY = (borrowAPYA + borrowAPYB) / 2;
-  const leveragedAPY = uniAPY ? uniAPY * val - averageAPY * (val - 1) : 0;
   
   useEffect(() => {
     if (val === 0) setVal(Math.ceil(minLeverage * 1000) / 1000);
@@ -54,6 +49,12 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
     await leverage();
     toggleShow(false);
   }
+  
+  const nextBorrowAPYA = useNextBorrowAPY(changeAmounts.bAmountA, PoolTokenType.BorrowableA);
+  const nextBorrowAPYB = useNextBorrowAPY(changeAmounts.bAmountB, PoolTokenType.BorrowableB);
+  const uniAPY = useUniswapAPY();
+  const averageAPY = (nextBorrowAPYA + nextBorrowAPYB) / 2;
+  const leveragedAPY = uniAPY ? uniAPY * val - averageAPY * (val - 1) : 0;
 
   if (depositedUSD < 1) return (
     <InteractionModalContainer title="Leverage" show={show} toggleShow={toggleShow}><>

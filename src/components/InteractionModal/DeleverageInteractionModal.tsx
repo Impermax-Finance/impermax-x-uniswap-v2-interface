@@ -4,13 +4,13 @@ import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
 import NumericalInput from "../NumericalInput";
 import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
 import RiskMetrics from "../RiskMetrics";
-import { formatFloat, formatToDecimals } from "../../utils/format";
+import { formatFloat, formatToDecimals, formatPercentage } from "../../utils/format";
 import InputAmount, { InputAmountMini } from "../InputAmount";
 import InteractionButton, { ButtonState } from "../InteractionButton";
 import useDeleverage from "../../hooks/useDeleverage";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
-import { useSymbol, useDecimals, useDeposited, useBorrowed, useExchangeRate, useDeleverageAmounts, useToBigNumber, useToTokens, useMaxDeleverage } from "../../hooks/useData";
+import { useSymbol, useDecimals, useDeposited, useBorrowed, useExchangeRate, useDeleverageAmounts, useToBigNumber, useToTokens, useMaxDeleverage, useNextBorrowAPY, useUniswapAPY, useCurrentLeverage } from "../../hooks/useData";
 
 
 export interface DeleverageInteractionModalProps {
@@ -41,6 +41,18 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
     setVal(0);
     toggleShow(false);
   }
+  
+  const changes = -changeAmounts.bAmountA || -changeAmounts.bAmountB || -changeAmounts.cAmount ? {
+    changeBorrowedA: -changeAmounts.bAmountA ? -changeAmounts.bAmountA : 0, 
+    changeBorrowedB: -changeAmounts.bAmountB ? -changeAmounts.bAmountB : 0, 
+    changeCollateral: -changeAmounts.cAmount ? -changeAmounts.cAmount : 0,
+  } : null;
+  const newLeverage = useCurrentLeverage(changes);
+  const nextBorrowAPYA = useNextBorrowAPY(-changeAmounts.bAmountA, PoolTokenType.BorrowableA);
+  const nextBorrowAPYB = useNextBorrowAPY(-changeAmounts.bAmountB, PoolTokenType.BorrowableB);
+  const uniAPY = useUniswapAPY();
+  const averageAPY = (nextBorrowAPYA + nextBorrowAPYB) / 2;
+  const leveragedAPY = uniAPY ? uniAPY * newLeverage - averageAPY * (newLeverage - 1) : 0;
 
   if (maxDeleverage === 0) return (
     <InteractionModalContainer title="Deleverage" show={show} toggleShow={toggleShow}><>
@@ -82,6 +94,10 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
         <Row>
           <Col xs={6}>You will receive at least:</Col>
           <Col xs={6} className="text-right">{formatFloat(changeAmounts.bAmountBMin > borrowedB ? changeAmounts.bAmountBMin - borrowedB : 0)} {symbolB}</Col>
+        </Row>
+        <Row>
+          <Col xs={6}>Estimated APY:</Col>
+          <Col xs={6} className="text-right leveraged-apy">{formatPercentage(leveragedAPY)}</Col>
         </Row>
       </div>
       <Row className="interaction-row">
