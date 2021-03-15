@@ -1,5 +1,6 @@
 import ImpermaxRouter from ".";
 import { Address, PoolTokenType } from "./interfaces";
+import { BigNumber } from "ethers";
 
 
 // Reserve Factor
@@ -12,6 +13,30 @@ export async function getReserveFactor(this: ImpermaxRouter, uniswapV2PairAddres
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.reserveFactor) cache.reserveFactor = this.initializeReserveFactor(uniswapV2PairAddress, poolTokenType);
   return cache.reserveFactor;
+}
+
+// Kink Borrow Rate
+export async function initializeKinkBorrowRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  const [borrowable,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  const kinkBorrowRate = await borrowable.methods.kinkBorrowRate().call();
+  return kinkBorrowRate / 1e18;
+}
+export async function getKinkBorrowRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
+  if (!cache.kinkBorrowRate) cache.kinkBorrowRate = this.initializeKinkBorrowRate(uniswapV2PairAddress, poolTokenType);
+  return cache.kinkBorrowRate;
+}
+
+// Kink Utilization Rate
+export async function initializeKinkUtilizationRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  const [borrowable,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  const kinkUtilizationRate = await borrowable.methods.kinkUtilizationRate().call();
+  return kinkUtilizationRate / 1e18;
+}
+export async function getKinkUtilizationRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
+  if (!cache.kinkUtilizationRate) cache.kinkUtilizationRate = this.initializeKinkUtilizationRate(uniswapV2PairAddress, poolTokenType);
+  return cache.kinkUtilizationRate;
 }
 
 // Accrue Timestamp
@@ -62,6 +87,19 @@ export async function getBorrowRate(this: ImpermaxRouter, uniswapV2PairAddress: 
 }
 export async function getBorrowAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
+  return this.toAPY(borrowRate);
+}
+export async function getNextBorrowRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
+  const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
+  const supply = await this.getSupply(uniswapV2PairAddress, poolTokenType);
+  const utilizationRate = (borrowAmount + totalBorrows) / supply;
+  const kinkBorrowRate = await this.getKinkBorrowRate(uniswapV2PairAddress, poolTokenType);
+  const kinkUtilizationRate = await this.getKinkUtilizationRate(uniswapV2PairAddress, poolTokenType);
+  if (utilizationRate < kinkUtilizationRate) return utilizationRate / kinkUtilizationRate * kinkBorrowRate;
+  return ((utilizationRate - kinkUtilizationRate) / (1 - kinkUtilizationRate) * 4 + 1) * kinkBorrowRate;
+}
+export async function getNextBorrowAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
+  const borrowRate = await this.getNextBorrowRate(uniswapV2PairAddress, poolTokenType, borrowAmount);
   return this.toAPY(borrowRate);
 }
 
