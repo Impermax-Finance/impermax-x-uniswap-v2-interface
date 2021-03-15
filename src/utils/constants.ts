@@ -30,6 +30,11 @@ export const SIMPLE_UNISWAP_ORACLE: NetworkIndex = {
   [Networks.Mainnet]: '0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D',
 };
 
+export const IMX: NetworkIndex = {
+  [Networks.Ropsten]: '0xa813AFf9082fd8856Ba6F087982881A4C55Ef451',
+  [Networks.Mainnet]: '',
+};
+
 export const WETH: NetworkIndex = {
   [Networks.Ropsten]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
   [Networks.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
