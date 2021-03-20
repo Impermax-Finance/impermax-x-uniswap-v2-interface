@@ -16,11 +16,13 @@ import AccountLendingPoolBorrowRow from './AccountLendingPoolBorrowRow';
 import AccountLendingPoolDetailsLeverage from './AccountLendingPoolDetailsLeverage';
 import AccountLendingPoolDetailsEarnInterest from './AccountLendingPoolDetailsEarnInterest';
 import { useDepositedUSD, useSuppliedUSD } from '../../hooks/useData';
+import AccountLendingPoolFarming from './AccountLendingPoolFarming';
 
 export enum AccountLendingPoolPage {
   UNINITIALIZED,
   LEVERAGE,
   EARN_INTEREST,
+  FARMING,
 }
 
 interface AccountLendingPoolContainerProps {
@@ -65,7 +67,7 @@ export default function AccountLendingPool() {
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector pageSelected={actualPageSelected} setPageSelected={setPageSelected} />
-      { actualPageSelected === AccountLendingPoolPage.LEVERAGE ? (<>
+      { actualPageSelected === AccountLendingPoolPage.LEVERAGE && (<>
         <AccountLendingPoolDetailsLeverage />
         <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
           <AccountLendingPoolLPRow />
@@ -76,7 +78,8 @@ export default function AccountLendingPool() {
         <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
           <AccountLendingPoolBorrowRow />
         </PoolTokenContext.Provider>
-      </>) : (<>
+      </>) }
+      { actualPageSelected === AccountLendingPoolPage.EARN_INTEREST && (<>
         <AccountLendingPoolDetailsEarnInterest />
         <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
           <AccountLendingPoolSupplyRow />
@@ -84,6 +87,9 @@ export default function AccountLendingPool() {
         <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
           <AccountLendingPoolSupplyRow />
         </PoolTokenContext.Provider>
+      </>) }
+      { actualPageSelected === AccountLendingPoolPage.FARMING && (<>
+        <AccountLendingPoolFarming />
       </>) }
     </AccountLendingPoolContainer>
   );

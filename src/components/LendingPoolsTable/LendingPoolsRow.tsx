@@ -5,7 +5,7 @@ import { LendingPoolsCol } from "./LendingPoolsCol";
 import { formatUSD, formatPercentage } from "../../utils/format";
 import { useContext } from "../../contexts/Theme";
 import usePairAddress from "../../hooks/usePairAddress";
-import { useSupplyUSD, useTotalBorrowsUSD, useSupplyAPY, useBorrowAPY, useSymbol, useUniswapAPY } from "../../hooks/useData";
+import { useSupplyUSD, useTotalBorrowsUSD, useSupplyAPY, useBorrowAPY, useSymbol, useUniswapAPY, useFarmingAPY } from "../../hooks/useData";
 import { useTokenIcon, useLendingPoolUrl } from "../../hooks/useUrlGenerator";
 
 const LEVERAGE = 5;
@@ -25,11 +25,13 @@ export default function LendingPoolsRow() {
   const supplyAPYB = useSupplyAPY(PoolTokenType.BorrowableB);
   const borrowAPYA = useBorrowAPY(PoolTokenType.BorrowableA);
   const borrowAPYB = useBorrowAPY(PoolTokenType.BorrowableB);
+  const farmingPoolAPYA = useFarmingAPY(PoolTokenType.BorrowableA);
+  const farmingPoolAPYB = useFarmingAPY(PoolTokenType.BorrowableB);
   const lendingPoolUrl = useLendingPoolUrl();
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
   const uniAPY = useUniswapAPY();
-  const averageAPY = (borrowAPYA + borrowAPYB) / 2;
+  const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniAPY ? uniAPY * LEVERAGE - averageAPY * (LEVERAGE - 1) : 0;
 
   return (

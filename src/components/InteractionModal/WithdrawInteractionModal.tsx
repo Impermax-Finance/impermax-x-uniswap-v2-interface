@@ -54,9 +54,7 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
 
   return (
     <InteractionModalContainer title="Withdraw" show={show} toggleShow={toggleShow}><>
-      { poolTokenType == PoolTokenType.Collateral ? (
-        <RiskMetrics changeCollateral={-val} />
-      ) : (null) }
+      { poolTokenType == PoolTokenType.Collateral && (<RiskMetrics changeCollateral={-val} />) }
       <InputAmount 
         val={val}
         setVal={setVal}

@@ -69,6 +69,7 @@
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
     "https-browserify": "^1.0.0",
+    "node-fetch": "^2.6.1",
     "node-sass": "^4.14.1",
     "os-browserify": "^0.3.0",
     "pm2": "^4.5.0",

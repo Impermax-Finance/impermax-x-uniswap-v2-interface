@@ -9,6 +9,10 @@ import BorrowableJSON from '../abis/contracts/IBorrowable.json';
 import CollateralSON from '../abis/contracts/ICollateral.json';
 import FactoryJSON from '../abis/contracts/IFactory.json';
 import SimpleUniswapOracleJSON from '../abis/contracts/ISimpleUniswapOracle.json';
+import MerkleDistributorJSON from '../abis/contracts/IMerkleDistributor.json';
+import FarmingPoolJSON from '../abis/contracts/IFarmingPool.json';
+import ClaimAggregatorJSON from '../abis/contracts/ClaimAggregator.json';
+import ClaimableJSON from '../abis/contracts/IClaimable.json';
 import { getPairConversionPrices, PairConversionPrices } from "../utils/valueConversion";
 import {
   Router,
@@ -17,7 +21,12 @@ import {
   PoolTokenType,
   ImpermaxRouterCfg,
   Factory,
-  SimpleUniswapOracle
+  SimpleUniswapOracle,
+  AirdropData,
+  MerkleDistributor,
+  ClaimAggregator,
+  ClaimEvent,
+  Claimable
 } from "./interfaces";
 import * as contracts from "./contracts";
 import * as fetchers from "./fetchers";
@@ -26,6 +35,7 @@ import * as utils from "./utils";
 import * as approve from "./approve"
 import * as interactions from "./interactions"
 import * as account from "./account"
+import * as imx from "./imx"
 import { Networks } from "../utils/connections";
 
 export default class ImpermaxRouter {
@@ -37,8 +47,12 @@ export default class ImpermaxRouter {
   router: Router;
   factory: Factory;
   simpleUniswapOracle: SimpleUniswapOracle;
+  merkleDistributor: MerkleDistributor;
+  claimAggregator: ClaimAggregator;
   account: Address;
+  IMX: Address;
   WETH: Address;
+  airdropUrl: string;
   priceInverted: boolean;
   lendingPoolCache: {
     [key in Address]?: {
@@ -52,6 +66,8 @@ export default class ImpermaxRouter {
       TWAPPrice?: Promise<number>,
       pairConversionPrices?: Promise<PairConversionPrices>,
       uniswapApy?: Promise<number>,
+      availableReward?: Promise<number>,
+      claimHistory?: Promise<ClaimEvent[]>,
       poolToken?: {
         [key in PoolTokenType]?: {
           name?: Promise<string>,
@@ -68,8 +84,19 @@ export default class ImpermaxRouter {
           availableBalance?: Promise<number>,
           deposited?: Promise<number>,
           borrowed?: Promise<number>,
+          rewardSpeed?: Promise<number>,
+          farmingShares?: Promise<number>,
         }
       },
+    }
+  };
+  imxCache: {
+    airdropData?: AirdropData,
+  };
+  claimableCache: {
+    [key in Address]?: {
+      contract?: Claimable,
+      availableClaimable?: number,
     }
   };
 
@@ -81,9 +108,15 @@ export default class ImpermaxRouter {
     this.router = this.newRouter(cfg.routerAddress);
     this.factory = this.newFactory(cfg.factoryAddress);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
+    this.merkleDistributor = this.newMerkleDistributor(cfg.merkleDistributorAddress);
+    this.claimAggregator = this.newClaimAggregator(cfg.claimAggregatorAddress);
+    this.IMX = cfg.IMX;
     this.WETH = cfg.WETH;
+    this.airdropUrl = cfg.airdropUrl;
     this.priceInverted = cfg.priceInverted;
     this.lendingPoolCache = {};
+    this.imxCache = {};
+    this.claimableCache = {};
   }
 
   newRouter(address: Address) { return new this.web3.eth.Contract(Router01JSON.abi, address) }
@@ -93,6 +126,10 @@ export default class ImpermaxRouter {
   newERC20(address: Address) { return new this.web3.eth.Contract(ERC20JSON.abi, address) }
   newCollateral(address: Address) { return new this.web3.eth.Contract(CollateralSON.abi, address) }
   newBorrowable(address: Address) { return new this.web3.eth.Contract(BorrowableJSON.abi, address) }
+  newMerkleDistributor(address: Address) { return new this.web3.eth.Contract(MerkleDistributorJSON.abi, address) }
+  newFarmingPool(address: Address) { return new this.web3.eth.Contract(FarmingPoolJSON.abi, address) }
+  newClaimAggregator(address: Address) { return new this.web3.eth.Contract(ClaimAggregatorJSON.abi, address) }
+  newClaimable(address: Address) { return new this.web3.eth.Contract(ClaimableJSON.abi, address) }
 
   async unlockWallet(web3: any, account: Address) {
     this.web3 = web3;
@@ -105,6 +142,8 @@ export default class ImpermaxRouter {
 
   cleanCache() {
     this.lendingPoolCache = {};
+    this.imxCache = {};
+    this.claimableCache = {};
   }
 
   setPriceInverted(priceInverted: boolean) {
@@ -113,9 +152,15 @@ export default class ImpermaxRouter {
 
   // Contracts
   public initializeLendingPool = contracts.initializeLendingPool;
+  public initializeClaimable = contracts.initializeClaimable;
   public getLendingPoolCache = contracts.getLendingPoolCache;
+  public getClaimableCache = contracts.getClaimableCache;
   public getLendingPool = contracts.getLendingPool;
   public getContracts = contracts.getContracts;
+  public getPoolToken = contracts.getPoolToken;
+  public getToken = contracts.getToken;
+  public getFarmingPool = contracts.getFarmingPool;
+  public getClaimable = contracts.getClaimable;
   public getPoolTokenAddress = contracts.getPoolTokenAddress;
   public getTokenAddress = contracts.getTokenAddress;
   
@@ -176,6 +221,8 @@ export default class ImpermaxRouter {
   public getUtilizationRate = borrowableFetchers.getUtilizationRate;
   public getSupplyRate = borrowableFetchers.getSupplyRate;
   public getSupplyAPY = borrowableFetchers.getSupplyAPY;
+  public getNextSupplyRate = borrowableFetchers.getNextSupplyRate;
+  public getNextSupplyAPY = borrowableFetchers.getNextSupplyAPY;
 
   // Account
   public initializeAvailableBalance = account.initializeAvailableBalance;
@@ -206,6 +253,24 @@ export default class ImpermaxRouter {
   public getMaxBorrowable = account.getMaxBorrowable;
   public getMaxLeverage = account.getMaxLeverage;
   public getMaxDeleverage = account.getMaxDeleverage;
+
+  // IMX
+  public initializeAirdropData = imx.initializeAirdropData;
+  public initializeRewardSpeed = imx.initializeRewardSpeed;
+  public initializeFarmingShares = imx.initializeFarmingShares
+  public initializeAvailableReward = imx.initializeAvailableReward;
+  public initializeClaimHistory = imx.initializeClaimHistory;
+  public initializeAvailableClaimable = imx.initializeAvailableClaimable;
+  public getImxPrice = imx.getImxPrice;
+  public getAirdropData = imx.getAirdropData;
+  public hasClaimableAirdrop = imx.hasClaimableAirdrop;
+  public getRewardSpeed = imx.getRewardSpeed;
+  public getFarmingShares = imx.getFarmingShares;
+  public getAvailableReward = imx.getAvailableReward;
+  public getFarmingAPY = imx.getFarmingAPY;
+  public getNextFarmingAPY = imx.getNextFarmingAPY;
+  public getClaimHistory = imx.getClaimHistory;
+  public getAvailableClaimable = imx.getAvailableClaimable;
   
   // Utils
   public normalize = utils.normalize;
@@ -231,4 +296,8 @@ export default class ImpermaxRouter {
   public leverage = interactions.leverage;
   public getDeleverageAmounts = interactions.getDeleverageAmounts;
   public deleverage = interactions.deleverage;
+  public claimAirdrop = interactions.claimAirdrop;
+  public trackBorrows = interactions.trackBorrows;
+  public claims = interactions.claims;
+  public claimDistributor = interactions.claimDistributor;
 }

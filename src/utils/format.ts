@@ -27,9 +27,9 @@ export function formatPercentage(n: number, decimals: number = 2) : string {
   return formatToDecimals(n * 100, decimals) + "%";
 }
 
-export function formatUSD(n: number) : string {
-  if (!n) return "$0";
-  if (n < 1000) return "$" + formatToDecimals(n, 2);
+export function formatAmount(n: number) : string {
+  if (!n || n === Infinity) return "0";
+  if (n < 1000) return formatToDecimals(n, 2);
   n = Math.round(n);
   let result = "";
   while (n >= 1000) {
@@ -37,8 +37,11 @@ export function formatUSD(n: number) : string {
     result = ',' + lastThreeCypher + result;
     n = Math.floor(n / 1000);
   }
-  result = n.toString() + result;
-  return "$" + result;
+  return n.toString() + result;
+}
+
+export function formatUSD(n: number) : string {
+  return "$" + formatAmount(n);
 }
 
 export function formatLeverage(n: number) : string {

@@ -62,6 +62,7 @@ export async function getTokenPrice(this: ImpermaxRouter, uniswapV2PairAddress: 
 }
 
 export async function getUniswapAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+  if (this.chainId == 3) return 0.2;
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.uniswapApy) cache.uniswapApy = getWeeklyUniswapAPY(uniswapV2PairAddress);
   return cache.uniswapApy;

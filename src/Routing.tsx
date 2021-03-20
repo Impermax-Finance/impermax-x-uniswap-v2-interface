@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import { Home, LendingPool, Risks } from './views';
+import { Home, LendingPool, Risks, Claim } from './views';
 
 export interface AppRoute {
   value: string;
@@ -17,14 +17,14 @@ export const LendingPoolRoute = {
   to: '/lending-pool/:uniswapV2PairAddress'
 } as AppRoute;
 
-export const FarmingRoute = {
-  value: 'Farming',
-  to: '/farming'
-} as AppRoute;
-
 export const RisksRoute = {
   value: 'Risks',
   to: '/risks'
+} as AppRoute;
+
+export const ClaimRoute = {
+  value: 'Claim',
+  to: '/claim'
 } as AppRoute;
 
 export const UserGuideRoute = {
@@ -35,8 +35,8 @@ export const UserGuideRoute = {
 export enum AppRoutes {
   HomeRoute,
   RisksRoute,
-  FarmingRoute,
-  UserGuideRoute
+  ClaimRoute,
+  UserGuideRoute,
 }
 
 /**
@@ -52,6 +52,9 @@ export default function Routing() {
             </Route>
             <Route path={LendingPoolRoute.to}>
               <LendingPool />
+            </Route>
+            <Route path={ClaimRoute.to}>
+              <Claim />
             </Route>
             <Route path={RisksRoute.to}>
               <Risks />

@@ -1,4 +1,4 @@
-import { PoolTokenType, Changes } from "../impermax-router/interfaces";
+import { PoolTokenType, Changes, AirdropData, ClaimEvent, Address } from "../impermax-router/interfaces";
 import usePoolToken from "./usePoolToken";
 import usePairAddress from "./usePairAddress";
 import { useState, useCallback, useEffect } from "react";
@@ -47,6 +47,13 @@ export function useSafetyMargin() : number {
   const [safetyMargin, setSafetyMargin] = useState<number>(1);
   useRouterCallback(async (router) => setSafetyMargin( await router.getSafetyMargin(uniswapV2PairAddress) ));
   return safetyMargin;
+}
+
+export function useImxPrice() : number {
+  const uniswapV2PairAddress = usePairAddress();
+  const [imxPrice, setImxPrice] = useState<number>(null);
+  useRouterCallback(async (router) => setImxPrice( await router.getImxPrice() ));
+  return imxPrice;
 }
 
 export function useMarketPrice() : number {
@@ -119,6 +126,37 @@ export function useBorrowAPY(poolTokenTypeArg?: PoolTokenType) : number {
   return borrowAPY;
 }
 
+export function useUniswapAPY() : number {
+  const uniswapV2PairAddress = usePairAddress();
+  const [uniswapAPY, setUniswapAPY] = useState<number>(0);
+  useRouterCallback(async (router) => setUniswapAPY( await router.getUniswapAPY(uniswapV2PairAddress) ));
+  return uniswapAPY;
+}
+
+export function useFarmingAPY(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [farmingAPY, setFarmingAPY] = useState<number>(0);
+  useRouterCallback(async (router) => setFarmingAPY( await router.getFarmingAPY(uniswapV2PairAddress, poolTokenType) ));
+  return farmingAPY;
+}
+
+export function useHasFarming(poolTokenTypeArg?: PoolTokenType) : boolean {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [farmingPool, setFarmingPool] = useState<number>(0);
+  useRouterCallback(async (router) => setFarmingPool( await router.getFarmingPool(uniswapV2PairAddress, poolTokenType) ));
+  return farmingPool ? true : false;
+}
+
+export function useNextSupplyAPY(supplyAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [nextSupplyAPY, setNextSupplyAPY] = useState<number>(0);
+  useRouterCallback(
+    async (router) => setNextSupplyAPY( await router.getNextSupplyAPY(uniswapV2PairAddress, poolTokenType, supplyAmount) ),
+    [supplyAmount]
+  );
+  return nextSupplyAPY;
+}
+
 export function useNextBorrowAPY(borrowAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [nextBorrowAPY, setNextBorrowAPY] = useState<number>(0);
@@ -129,11 +167,35 @@ export function useNextBorrowAPY(borrowAmount: number, poolTokenTypeArg?: PoolTo
   return nextBorrowAPY;
 }
 
-export function useUniswapAPY() : number {
+export function useNextFarmingAPY(borrowAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [nextFarmingAPY, setNextFarmingAPY] = useState<number>(0);
+  useRouterCallback(
+    async (router) => setNextFarmingAPY( await router.getNextFarmingAPY(uniswapV2PairAddress, poolTokenType, borrowAmount) ),
+    [borrowAmount]
+  );
+  return nextFarmingAPY;
+}
+
+export function useRewardSpeed(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [rewardSpeed, setRewardSpeed] = useState<number>(0);
+  useRouterCallback(async (router) => setRewardSpeed( await router.getRewardSpeed(uniswapV2PairAddress, poolTokenType) ));
+  return rewardSpeed;
+}
+
+export function useFarmingShares(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [farmingShares, setFarmingShares] = useState<number>(0);
+  useRouterCallback(async (router) => setFarmingShares( await router.getFarmingShares(uniswapV2PairAddress, poolTokenType) ));
+  return farmingShares;
+}
+
+export function useAvailableReward() : number {
   const uniswapV2PairAddress = usePairAddress();
-  const [uniswapAPY, setUniswapAPY] = useState<number>(0);
-  useRouterCallback(async (router) => setUniswapAPY( await router.getUniswapAPY(uniswapV2PairAddress) ));
-  return uniswapAPY;
+  const [availableReward, setAvailableReward] = useState<number>(0);
+  useRouterCallback(async (router) => setAvailableReward( await router.getAvailableReward(uniswapV2PairAddress) ));
+  return availableReward;
 }
 
 export function useDeposited(poolTokenTypeArg?: PoolTokenType) : number {
@@ -261,6 +323,31 @@ export function useLiquidatableAccounts() : Array<string> {
     })
   }, [borrowerList]);
   return [];
+}
+
+export function useClaimHistory() : ClaimEvent[] {
+  const uniswapV2PairAddress = usePairAddress();
+  const [claimHistory, setClaimHistory] = useState<ClaimEvent[]>([]);
+  useRouterCallback(async (router) => setClaimHistory( await router.getClaimHistory(uniswapV2PairAddress) ));
+  return claimHistory;
+}
+
+export function useAirdropData() : AirdropData {
+  const [airdropData, setAirdropData] = useState<AirdropData>();
+  useRouterCallback(async (router) => setAirdropData( await router.getAirdropData() ));
+  return airdropData;
+}
+
+export function useHasClaimableAirdrop() : boolean {
+  const [hasClaimableAirdrop, setHasClaimableAirdrop] = useState<boolean>(false);
+  useRouterCallback(async (router) => setHasClaimableAirdrop( await router.hasClaimableAirdrop() ));
+  return hasClaimableAirdrop;
+}
+
+export function useAvailableClaimable(claimableAddress: Address) : number {
+  const [availableClaimable, setAvailableClaimable] = useState<number>();
+  useRouterCallback(async (router) => setAvailableClaimable( await router.getAvailableClaimable(claimableAddress) ));
+  return availableClaimable;
 }
 
 export function useMaxWithdrawable(poolTokenTypeArg?: PoolTokenType) : number {

@@ -140,3 +140,17 @@ export async function getSupplyAPY(this: ImpermaxRouter, uniswapV2PairAddress: A
   const supplyRate = await this.getSupplyRate(uniswapV2PairAddress, poolTokenType);
   return this.toAPY(supplyRate);
 }
+export async function getNextSupplyRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, supplyAmount: number) : Promise<number> {
+  const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
+  const supply = await this.getSupply(uniswapV2PairAddress, poolTokenType);
+  const utilizationRate = totalBorrows / (supply + supplyAmount);
+  const kinkBorrowRate = await this.getKinkBorrowRate(uniswapV2PairAddress, poolTokenType);
+  const kinkUtilizationRate = await this.getKinkUtilizationRate(uniswapV2PairAddress, poolTokenType);
+  const reserveFactor = await this.getReserveFactor(uniswapV2PairAddress, poolTokenType);
+  if (utilizationRate < kinkUtilizationRate) return utilizationRate / kinkUtilizationRate * kinkBorrowRate * utilizationRate * (1 - reserveFactor);
+  return ((utilizationRate - kinkUtilizationRate) / (1 - kinkUtilizationRate) * 4 + 1) * kinkBorrowRate * utilizationRate * (1 - reserveFactor);
+}
+export async function getNextSupplyAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, supplyAmount: number) : Promise<number> {
+  const supplyRate = await this.getNextSupplyRate(uniswapV2PairAddress, poolTokenType, supplyAmount);
+  return this.toAPY(supplyRate);
+}

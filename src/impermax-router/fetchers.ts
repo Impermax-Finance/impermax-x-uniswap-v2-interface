@@ -192,10 +192,10 @@ export async function getTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: A
 
 
 export async function getBorrowEvent(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Array<object>> {
-  const [borrowable,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  const borrowable = await this.getPoolToken(uniswapV2PairAddress, poolTokenType);
   return await borrowable.getPastEvents("Borrow", { fromBlock: 0 });
 }
-export async function getBorrowerList(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<Array<string>> {
+export async function getBorrowerList(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<string[]> {
   const eventsA = await this.getBorrowEvent(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const eventsB = await this.getBorrowEvent(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   return eventsA.concat(eventsB)
@@ -203,7 +203,7 @@ export async function getBorrowerList(this: ImpermaxRouter, uniswapV2PairAddress
     .filter((value: string, index: number, self: Array<string>) => self.indexOf(value) === index);
 }
 export async function getAccountLiquidity(this: ImpermaxRouter, uniswapV2PairAddress: Address, account: string) : Promise<[number, number]> {
-  const [collateral,] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
+  const collateral = await this.getPoolToken(uniswapV2PairAddress, PoolTokenType.Collateral);
   const {liquidity, shortfall} = await collateral.methods.accountLiquidity(account).call();
   return [liquidity / 1e18, shortfall / 1e18];
 }

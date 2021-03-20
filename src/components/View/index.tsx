@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
-import { HomeRoute, FarmingRoute, RisksRoute, UserGuideRoute } from '../../Routing';
+import { HomeRoute, RisksRoute, UserGuideRoute, ClaimRoute } from '../../Routing';
 
 import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
@@ -10,6 +10,8 @@ import { TransactionDetails } from '../../state/transactions/reducer';
 import { useNetworkName } from '../../hooks/useNetwork';
 import Countdown from '../Countdown';
 import useInterval from 'use-interval';
+import { useHasClaimableAirdrop, useAirdropData, useToNumber } from '../../hooks/useData';
+import { ClaimAirdrop } from './ClaimAirdrop';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -33,6 +35,8 @@ export default function View({ children }: ViewProps) {
   const wrongNetwork = status == 'error' && error && error.toString().indexOf("ChainUnsupportedError") >= 0;
   const networkName = useNetworkName();
   const connected = status == 'connected';
+
+  const hasClaimableAirdrop = useHasClaimableAirdrop();
   
   return (
     <div className="view">
@@ -44,9 +48,11 @@ export default function View({ children }: ViewProps) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Nav className="mr-auto">
             <NavigationBarLink appRoute={HomeRoute} />
-            <NavigationBarLink appRoute={UserGuideRoute} target="_blank"  />
-            { networkName === 'mainnet' ? (<NavigationBarLink appRoute={RisksRoute} />) : null }
+            <NavigationBarLink appRoute={UserGuideRoute} target="_blank" />
+            { networkName === 'mainnet' && (<NavigationBarLink appRoute={RisksRoute} />) }
+            <NavigationBarLink appRoute={ClaimRoute} />
           </Nav>
+          { hasClaimableAirdrop && (<ClaimAirdrop/>) }
           {
             account ? 
               <ConnectedWalletButtonComponent account={account}  /> :

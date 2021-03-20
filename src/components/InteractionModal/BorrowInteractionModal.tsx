@@ -13,6 +13,7 @@ import useApprove from "../../hooks/useApprove";
 import useBorrow from "../../hooks/useBorrow";
 import { useSymbol, useDecimals, useMaxBorrowable, useToBigNumber, useBorrowerList } from "../../hooks/useData";
 import RiskMetrics from "../RiskMetrics";
+import FarmingAPY from "./TransactionRecap/FarmingAPY";
 
 /**
  * Props for the deposit interaction modal.
@@ -62,7 +63,8 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
       />
       <div className="transaction-recap">
         <BorrowFee amount={val} symbol={symbol} />
-        <BorrowAPY />
+        <BorrowAPY amount={val} />
+        <FarmingAPY amount={val} />
       </div>
       <Row className="interaction-row">
         <Col xs={6}>

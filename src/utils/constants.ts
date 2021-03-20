@@ -6,8 +6,9 @@ export type NetworkIndex = {
 
 export type Address = string;
 
-export type AddressIndex = {
-  [key in Address]: any
+export type DistributorDetails = {
+  claimableAddress: Address,
+  name: string,
 }
 
 export const NETWORK_URL: NetworkIndex = {
@@ -38,6 +39,28 @@ export const IMX: NetworkIndex = {
 export const WETH: NetworkIndex = {
   [Networks.Ropsten]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
   [Networks.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+};
+
+export const CLAIM_AGGREGATOR: NetworkIndex = {
+  [Networks.Ropsten]: '0x8DFF9cEA94a03Ad4b84b7CA3aEECEF295b05Eeb5',
+  [Networks.Mainnet]: '',
+};
+
+export const MERKLE_DISTRIBUTOR: NetworkIndex = {
+  [Networks.Ropsten]: '0x1F0DFee1f932fDA1e95aa82f588F2828c3F192bd',
+  [Networks.Mainnet]: '',
+};
+
+export const AIRDROP_URL: NetworkIndex = {
+  [Networks.Ropsten]: 'https://shiny-union-6fc6.impermax.workers.dev',
+  [Networks.Mainnet]: '',
+};
+
+export const DISTRIBUTORS: NetworkIndex = {
+  [Networks.Ropsten]: [
+    { claimableAddress: "0x59db24c7FD730D7e5a7425cAa2Ad6961c77919A0", name: "Private Sale" },
+  ],
+  [Networks.Mainnet]: '',
 };
 
 export const ROPSTEN_ETH_DAI: Address = '0x1c5DEe94a34D795f9EEeF830B68B80e44868d316';

@@ -4,7 +4,7 @@ import phrases from './translations';
 import { Table } from "react-bootstrap";
 import { formatUSD, formatPercentage } from "../../utils/format";
 import BorrowableDetailsRow from "./BorrowableDetailsRow";
-import { useSymbol, useName, useUnderlyingAddress, useSupplyUSD, useTotalBorrowsUSD, useUtilizationRate, useSupplyAPY, useBorrowAPY } from "../../hooks/useData";
+import { useSymbol, useName, useUnderlyingAddress, useSupplyUSD, useTotalBorrowsUSD, useUtilizationRate, useSupplyAPY, useBorrowAPY, useFarmingAPY, useHasFarming } from "../../hooks/useData";
 import { useTokenIcon } from "../../hooks/useUrlGenerator";
 
 /**
@@ -24,6 +24,8 @@ export default function BorrowableDetails() {
   const utilizationRate = useUtilizationRate();
   const supplyAPY = useSupplyAPY();
   const borrowAPY = useBorrowAPY();
+  const hasFarming = useHasFarming();
+  const farmingAPY = useFarmingAPY();
   const tokenIcon = useTokenIcon();
 
   return (<div className="borrowable-details"> 
@@ -38,6 +40,7 @@ export default function BorrowableDetails() {
         <BorrowableDetailsRow name={t("Utilization Rate")} value={formatPercentage(utilizationRate)} />
         <BorrowableDetailsRow name={t("Supply APY")} value={formatPercentage(supplyAPY)} />
         <BorrowableDetailsRow name={t("Borrow APY")} value={formatPercentage(borrowAPY)} />
+        { hasFarming && (<BorrowableDetailsRow name={t("Farming APY")} value={formatPercentage(farmingAPY)} />) }
       </tbody>  
     </Table>
   </div>);

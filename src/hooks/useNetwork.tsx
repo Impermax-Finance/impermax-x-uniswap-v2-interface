@@ -16,6 +16,11 @@ export function useNetworkUrl() {
   return networkUrl;
 }
 
+export function useIMX() {
+  const { IMX } = useContext(NetworkContext);
+  return IMX;
+}
+
 export function useWETH() {
   const { WETH } = useContext(NetworkContext);
   return WETH;
@@ -36,7 +41,27 @@ export function useSimpleUniswapOracleAddress() {
   return simpleUniswapOracleAddress;
 }
 
+export function useMerkleDistributorAddress() {
+  const { merkleDistributorAddress } = useContext(NetworkContext);
+  return merkleDistributorAddress;
+}
+
+export function useClaimAggregatorAddress() {
+  const { claimAggregatorAddress } = useContext(NetworkContext);
+  return claimAggregatorAddress;
+}
+
+export function useAirdropUrl() {
+  const { airdropUrl } = useContext(NetworkContext);
+  return airdropUrl;
+}
+
 export function useListedPairs() {
   const { listedPairs } = useContext(NetworkContext);
   return listedPairs;
+}
+
+export function useDistributors() {
+  const { distributors } = useContext(NetworkContext);
+  return distributors;
 }

@@ -23,8 +23,13 @@ export function useAddLiquidityUrl() : string {
   return "https://app.uniswap.org/#/add/"+addressA+"/"+addressB;
 }
 
-export function useTransactionUrl(hash: string) : string {
+export function useTransactionUrlGenerator() : (hash: string) => string {
   const chainId = useChainId();
   const subdomain = chainId == 3 ? 'ropsten.' : ''
-  return "https://" + subdomain + "etherscan.io/tx/" + hash;
+  return (hash: string) => "https://" + subdomain + "etherscan.io/tx/" + hash;
+}
+
+export function useTransactionUrl(hash: string) : string {
+  const generator = useTransactionUrlGenerator();
+  return generator(hash);
 }

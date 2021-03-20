@@ -1,4 +1,5 @@
 import { Networks } from "../utils/connections";
+import { BigNumber } from "ethers";
 
 export type Address = string;
 export type Contract = any;
@@ -9,6 +10,10 @@ export type ERC20 = Contract;
 export type UniswapV2Pair = Contract;
 export type Borrowable = Contract;
 export type Collateral = Contract;
+export type MerkleDistributor = Contract;
+export type FarmingPool = Contract;
+export type ClaimAggregator = Contract;
+export type Claimable = Contract;
 
 export type LendingPool = {
   uniswapV2Pair: UniswapV2Pair,
@@ -17,6 +22,8 @@ export type LendingPool = {
   collateral: Collateral,
   borrowableA: Borrowable,
   borrowableB: Borrowable,
+  farmingPoolA: FarmingPool,
+  farmingPoolB: FarmingPool,
 }
 
 export enum PoolTokenType {
@@ -48,6 +55,21 @@ export interface ImpermaxRouterCfg {
   routerAddress: Address;
   factoryAddress: Address;
   simpleUniswapOracleAddress: Address;
+  merkleDistributorAddress: Address;
+  claimAggregatorAddress: Address;
+  IMX: Address;
   WETH: Address;
+  airdropUrl: string;
   priceInverted: boolean;
+}
+
+export interface AirdropData {
+  index: number;
+  amount: BigNumber;
+  proof: Array<string>;
+}
+
+export interface ClaimEvent {
+  amount: number;
+  transactionHash: string;
 }

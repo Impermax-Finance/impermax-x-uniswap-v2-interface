@@ -1,11 +1,12 @@
 import ImpermaxRouter from ".";
-import { Address, PoolTokenType } from "./interfaces";
+import { Address, PoolTokenType, AirdropData } from "./interfaces";
 import { decimalToBalance } from "../utils/ether-utils";
 import { TokenKind } from "graphql";
 import { BigNumber, ethers } from "ethers";
 import BN from "bn.js";
 import { PermitData } from "../hooks/useApprove";
 import { impermanentLoss } from "../utils";
+import { DistributorDetails } from "../utils/constants";
 
 export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData, onTransactionHash: Function) {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
@@ -166,6 +167,63 @@ export async function deleverage(
   try {
     await this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).call({from: this.account});
     const send = this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).send({from: this.account});
+    return send.on('transactionHash', onTransactionHash);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function claimAirdrop(this: ImpermaxRouter, airdropData: AirdropData, onTransactionHash: Function) {
+  try {
+    await this.merkleDistributor.methods.claim(airdropData.index, this.account, airdropData.amount, airdropData.proof).call({from: this.account});
+    const send = this.merkleDistributor.methods.claim(airdropData.index, this.account, airdropData.amount, airdropData.proof).send({from: this.account});
+    return send.on('transactionHash', onTransactionHash);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function trackBorrows(this: ImpermaxRouter, uniswapV2PairAddress: Address, onTransactionHash: Function) {
+  const toTrack = [];
+  const borrowableA = await this.getPoolToken(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const borrowableB = await this.getPoolToken(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+  const borrowedA = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const borrowedB = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+  const sharesA = await this.getFarmingShares(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const sharesB = await this.getFarmingShares(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+  if (borrowedA > 0 && sharesA === 0) toTrack.push(borrowableA._address);
+  if (borrowedB > 0 && sharesB === 0) toTrack.push(borrowableB._address);
+  try {
+    await this.claimAggregator.methods.trackBorrows(this.account, toTrack).call({from: this.account});      
+    const send = this.claimAggregator.methods.trackBorrows(this.account, toTrack).send({from: this.account});
+    return send.on('transactionHash', onTransactionHash);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function claims(this: ImpermaxRouter, uniswapV2PairAddress: Address, onTransactionHash: Function) {
+  const toClaim = [];
+  const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+  const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+  const claimAmountA = await farmingPoolA.methods.claim().call({from: this.account}) / 1e18;
+  const claimAmountB = await farmingPoolB.methods.claim().call({from: this.account}) / 1e18;
+  if (claimAmountA * 1 > 0) toClaim.push(farmingPoolA._address);
+  if (claimAmountB * 1 > 0) toClaim.push(farmingPoolB._address);
+  try {
+    await this.claimAggregator.methods.claims(this.account, toClaim).call({from: this.account});      
+    const send = this.claimAggregator.methods.claims(this.account, toClaim).send({from: this.account});  
+    return send.on('transactionHash', onTransactionHash);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function claimDistributor(this: ImpermaxRouter, distributorDetails: DistributorDetails, onTransactionHash: Function) {
+  const claimable = await this.getClaimable(distributorDetails.claimableAddress);
+  try {
+    await claimable.methods.claim().call({from: this.account});
+    const send = claimable.methods.claim().send({from: this.account});
     return send.on('transactionHash', onTransactionHash);
   } catch (e) {
     console.error(e);

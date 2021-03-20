@@ -10,7 +10,7 @@ import InteractionButton, { ButtonState } from "../InteractionButton";
 import useDeleverage from "../../hooks/useDeleverage";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
-import { useSymbol, useDecimals, useDeposited, useBorrowed, useExchangeRate, useDeleverageAmounts, useToBigNumber, useToTokens, useMaxDeleverage, useNextBorrowAPY, useUniswapAPY, useCurrentLeverage } from "../../hooks/useData";
+import { useSymbol, useDecimals, useDeposited, useBorrowed, useExchangeRate, useDeleverageAmounts, useToBigNumber, useToTokens, useMaxDeleverage, useNextBorrowAPY, useUniswapAPY, useCurrentLeverage, useNextFarmingAPY } from "../../hooks/useData";
 
 
 export interface DeleverageInteractionModalProps {
@@ -48,10 +48,12 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
     changeCollateral: -changeAmounts.cAmount ? -changeAmounts.cAmount : 0,
   } : null;
   const newLeverage = useCurrentLeverage(changes);
-  const nextBorrowAPYA = useNextBorrowAPY(-changeAmounts.bAmountA, PoolTokenType.BorrowableA);
-  const nextBorrowAPYB = useNextBorrowAPY(-changeAmounts.bAmountB, PoolTokenType.BorrowableB);
+  const borrowAPYA = useNextBorrowAPY(-changeAmounts.bAmountA, PoolTokenType.BorrowableA);
+  const borrowAPYB = useNextBorrowAPY(-changeAmounts.bAmountB, PoolTokenType.BorrowableB);
+  const farmingPoolAPYA = useNextFarmingAPY(-changeAmounts.bAmountA, PoolTokenType.BorrowableA);
+  const farmingPoolAPYB = useNextFarmingAPY(-changeAmounts.bAmountB, PoolTokenType.BorrowableB);
   const uniAPY = useUniswapAPY();
-  const averageAPY = (nextBorrowAPYA + nextBorrowAPYB) / 2;
+  const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniAPY ? uniAPY * newLeverage - averageAPY * (newLeverage - 1) : 0;
 
   if (maxDeleverage === 0) return (

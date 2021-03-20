@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import ImpermaxRouter from '../impermax-router';
 import useWeb3 from '../hooks/useWeb3';
-import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId } from '../hooks/useNetwork';
+import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId, useAirdropUrl, useIMX, useMerkleDistributorAddress, useClaimAggregatorAddress } from '../hooks/useNetwork';
 
 export interface ImpermaxRouterContextI {
   impermaxRouter?: ImpermaxRouter;
@@ -22,7 +22,11 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const routerAddress = useRouterAddress();
   const factoryAddress = useFactoryAddress();
   const simpleUniswapOracleAddress = useSimpleUniswapOracleAddress();
+  const merkleDistributorAddress = useMerkleDistributorAddress();
+  const claimAggregatorAddress = useClaimAggregatorAddress();
   const WETH = useWETH();
+  const IMX = useIMX();
+  const airdropUrl = useAirdropUrl();
   const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
   const [routerAccount, setRouterAccount] = useState<string>();
   const [routerUpdate, setRouterUpdate] = useState<number>(0);
@@ -47,7 +51,11 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         routerAddress, 
         factoryAddress, 
         simpleUniswapOracleAddress, 
+        merkleDistributorAddress,
+        claimAggregatorAddress,
         WETH, 
+        IMX,
+        airdropUrl,
         priceInverted
       });
       if (account) {
