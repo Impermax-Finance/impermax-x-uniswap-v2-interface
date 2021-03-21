@@ -58,12 +58,6 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniAPY ? uniAPY * val - averageAPY * (val - 1) : 0;
 
-  if (depositedUSD < 1) return (
-    <InteractionModalContainer title="Leverage" show={show} toggleShow={toggleShow}><>
-      You need to deposit the {symbol} LP first in order to leverage it.
-    </></InteractionModalContainer>
-  );
-
   return (
     <InteractionModalContainer title="Leverage" show={show} toggleShow={toggleShow}>
       <>

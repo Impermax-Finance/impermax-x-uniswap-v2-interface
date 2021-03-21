@@ -175,7 +175,7 @@ export async function getMaxWithdrawable(this: ImpermaxRouter, uniswapV2PairAddr
   const actualCollateral = valueCollateral / liquidationIncentive;
   const maxWithdrawable1 = (actualCollateral - (valueA + valueB * safetyMargin) / Math.sqrt(safetyMargin)) * liquidationIncentive;
   const maxWithdrawable2 = (actualCollateral - (valueB + valueA * safetyMargin) / Math.sqrt(safetyMargin)) * liquidationIncentive;
-  return Math.min(deposited, availableCash, maxWithdrawable1, maxWithdrawable2) / this.dust;
+  return Math.max(0, Math.min(deposited, availableCash, maxWithdrawable1, maxWithdrawable2) / this.dust);
 }
 
 // Max Borrowable
@@ -191,7 +191,7 @@ export async function getMaxBorrowable(this: ImpermaxRouter, uniswapV2PairAddres
   const totalValueBorrowable2 = (actualCollateral / Math.sqrt(safetyMargin) - valueOther) * safetyMargin;
   const maxValueBorrowable = Math.min(totalValueBorrowable1, totalValueBorrowable2) - valueBorrowed;
   const price = await this.getBorrowablePriceDenomLP(uniswapV2PairAddress, poolTokenType);
-  return Math.min(availableCash, maxValueBorrowable / price);
+  return Math.max(0, Math.min(availableCash, maxValueBorrowable / price));
 }
 
 // Max Leverage

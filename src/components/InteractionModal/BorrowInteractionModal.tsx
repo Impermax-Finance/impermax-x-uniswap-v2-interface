@@ -47,7 +47,7 @@ export default function BorrowInteractionModal({show, toggleShow}: BorrowInterac
     setVal(0);
     toggleShow(false);
   }
-
+  
   return (
     <InteractionModalContainer title="Borrow" show={show} toggleShow={toggleShow}><>
       <RiskMetrics

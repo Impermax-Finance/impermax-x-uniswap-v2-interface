@@ -56,12 +56,6 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniAPY ? uniAPY * newLeverage - averageAPY * (newLeverage - 1) : 0;
 
-  if (maxDeleverage === 0) return (
-    <InteractionModalContainer title="Deleverage" show={show} toggleShow={toggleShow}><>
-      You need to open a leveraged position in order to deleverage it.
-    </></InteractionModalContainer>
-  );
-
   return (
     <InteractionModalContainer title="Deleverage" show={show} toggleShow={toggleShow}><>
       <RiskMetrics changeBorrowedA={-changeAmounts.bAmountA} changeBorrowedB={-changeAmounts.bAmountB} changeCollateral={-changeAmounts.cAmount} />

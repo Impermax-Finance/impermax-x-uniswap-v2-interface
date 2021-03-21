@@ -62,7 +62,7 @@ export default function AccountLendingPoolLPRow() {
             <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
           </Col>
           <Col>
-            { maxWithdrawable > 0 ? (
+            { depositedUSD > 0 ? (
               <Button variant="primary" onClick={() => toggleWithdrawModal(true)}>{t("Withdraw")}</Button>
             ) : (
               <DisabledButtonHelper text={withdrawDisabledInfo}>{t("Withdraw")}</DisabledButtonHelper>
