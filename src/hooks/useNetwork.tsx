@@ -11,6 +11,11 @@ export function useChainId() {
   return chainId;
 }
 
+export function useImpermaxSubgraphUrl() {
+  const { impermaxSubgraphUrl } = useContext(NetworkContext);
+  return impermaxSubgraphUrl;
+}
+
 export function useNetworkUrl() {
   const { networkUrl } = useContext(NetworkContext);
   return networkUrl;
@@ -19,6 +24,11 @@ export function useNetworkUrl() {
 export function useIMX() {
   const { IMX } = useContext(NetworkContext);
   return IMX;
+}
+
+export function useIMXPair() {
+  const { IMX_PAIR } = useContext(NetworkContext);
+  return IMX_PAIR;
 }
 
 export function useWETH() {
@@ -54,11 +64,6 @@ export function useClaimAggregatorAddress() {
 export function useAirdropUrl() {
   const { airdropUrl } = useContext(NetworkContext);
   return airdropUrl;
-}
-
-export function useListedPairs() {
-  const { listedPairs } = useContext(NetworkContext);
-  return listedPairs;
 }
 
 export function useDistributors() {

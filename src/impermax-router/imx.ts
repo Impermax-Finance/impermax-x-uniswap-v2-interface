@@ -3,12 +3,6 @@ import { Address, AirdropData, PoolTokenType, ClaimEvent } from "./interfaces";
 import { decimalToBalance } from "../utils/ether-utils";
 import { BigNumber } from "ethers";
 
-// IMX Price
-export async function getImxPrice(this: ImpermaxRouter) : Promise<number> {
-  if (this.chainId == 3) return 0.1;
-  return 0.1; // TODO dynamic IMX price
-}
-
 // Airdrop Data
 export async function initializeAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
   try {
@@ -20,7 +14,7 @@ export async function initializeAirdropData(this: ImpermaxRouter) : Promise<Aird
       if (!isClaimed) return data;
     }
   }
-  catch { }
+  catch {}
   return {
     index: -1,
     amount: null,
@@ -38,27 +32,6 @@ export async function hasClaimableAirdrop(this: ImpermaxRouter) : Promise<boolea
   return false;
 }
 
-// Reward Speed (IMX per second)
-export async function initializeRewardSpeed(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const farmingPool = await this.getFarmingPool(uniswapV2PairAddress, poolTokenType);
-  if (!farmingPool) return 0;
-  const segmentLength = await farmingPool.methods.segmentLength().call();
-  const epochBegin = await farmingPool.methods.epochBegin().call();
-  const epochAmount = await farmingPool.methods.epochAmount().call();
-  const epochEnd = epochBegin + segmentLength;
-  const timestamp = (new Date()).getTime() / 1000;
-  if (timestamp > epochEnd) {
-    // How to manage better this case? Maybe check shares on distributor
-    return 0;
-  }
-  return epochAmount / 1e18 / segmentLength;
-}
-export async function getRewardSpeed(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
-  if (!cache.rewardSpeed) cache.rewardSpeed = this.initializeRewardSpeed(uniswapV2PairAddress, poolTokenType);
-  return cache.rewardSpeed;
-}
-
 // Farming Shares
 export async function initializeFarmingShares(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const farmingPool = await this.getFarmingPool(uniswapV2PairAddress, poolTokenType);
@@ -70,19 +43,6 @@ export async function getFarmingShares(this: ImpermaxRouter, uniswapV2PairAddres
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.farmingShares) cache.farmingShares = this.initializeFarmingShares(uniswapV2PairAddress, poolTokenType);
   return cache.farmingShares;
-}
-
-// Farming
-export async function getFarmingAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const imxPrice = await this.getImxPrice();
-  const rewardSpeed = await this.getRewardSpeed(uniswapV2PairAddress, poolTokenType);
-  const totalBorrowedUSD = await this.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType);
-  return this.toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
-}
-export async function getNextFarmingAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
-  const farmingAPY = await this.getFarmingAPY(uniswapV2PairAddress, poolTokenType);
-  const totalBorrowed = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
-  return farmingAPY * totalBorrowed / (totalBorrowed + borrowAmount);
 }
 
 // Available Reward

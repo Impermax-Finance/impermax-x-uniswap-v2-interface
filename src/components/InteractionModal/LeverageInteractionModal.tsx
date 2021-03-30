@@ -56,7 +56,7 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const farmingPoolAPYB = useNextFarmingAPY(changeAmounts.bAmountB, PoolTokenType.BorrowableB);
   const uniAPY = useUniswapAPY();
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
-  const leveragedAPY = uniAPY ? uniAPY * val - averageAPY * (val - 1) : 0;
+  const leveragedAPY = uniAPY * val - averageAPY * (val - 1);
 
   return (
     <InteractionModalContainer title="Leverage" show={show} toggleShow={toggleShow}>

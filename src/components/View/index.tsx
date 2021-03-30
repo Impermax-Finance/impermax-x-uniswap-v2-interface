@@ -60,23 +60,21 @@ export default function View({ children }: ViewProps) {
           }
         </Container>
       </Navbar>
-      { connected ? (<>{children}</>) : (<>
-        { 
-          wrongNetwork ? (
-            <div className="wrong-network">
-              <div className="container">
-                You're connected to the wrong network. Please connect to the supported network: {networkName}
-              </div>
-            </div>
-          ) : (
-            <div className="not-connected">
-              <div className="container">
-                Please connect with Metamask or another web3 provider
-              </div>
-            </div>
-          ) 
-        }
-      </>) }
+      { !connected && wrongNetwork && (
+        <div className="wrong-network">
+          <div className="container">
+            You're connected to the wrong network. Please connect to the supported network: { networkName }
+          </div>
+        </div>
+      )}
+      { !connected && !wrongNetwork && (
+        <div className="not-connected">
+          <div className="container">
+            Please connect with Metamask or another web3 provider
+          </div>
+        </div>
+      )}
+      { children }
       <div className="footer container">
         <a href="https://impermax.finance/" target="_blank">Website</a>
         <a href="https://twitter.com/ImpermaxFinance" target="_blank">Twitter</a>

@@ -2,7 +2,8 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import ImpermaxRouter from '../impermax-router';
 import useWeb3 from '../hooks/useWeb3';
-import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId, useAirdropUrl, useIMX, useMerkleDistributorAddress, useClaimAggregatorAddress } from '../hooks/useNetwork';
+import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId, useAirdropUrl, useIMX, useMerkleDistributorAddress, useClaimAggregatorAddress, useImpermaxSubgraphUrl } from '../hooks/useNetwork';
+import useSubgraph from '../hooks/useSubgraph';
 
 export interface ImpermaxRouterContextI {
   impermaxRouter?: ImpermaxRouter;
@@ -19,6 +20,7 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const { account } = useWallet();
   const web3 = useWeb3();
   const chainId = useChainId();
+  const subgraph = useSubgraph();
   const routerAddress = useRouterAddress();
   const factoryAddress = useFactoryAddress();
   const simpleUniswapOracleAddress = useSimpleUniswapOracleAddress();
@@ -34,6 +36,7 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const doUpdate = () => {
     if (!impermaxRouter) return;
     impermaxRouter.cleanCache();
+    impermaxRouter.subgraph.cleanCache();
     setRouterUpdate(routerUpdate+1);
   };
   const togglePriceInverted = () => {
@@ -46,6 +49,7 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     if(!web3) return;
     if (!impermaxRouter) {
       const impermaxRouter = new ImpermaxRouter({
+        subgraph,
         web3, 
         chainId,
         routerAddress, 

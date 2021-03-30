@@ -13,7 +13,6 @@ import MerkleDistributorJSON from '../abis/contracts/IMerkleDistributor.json';
 import FarmingPoolJSON from '../abis/contracts/IFarmingPool.json';
 import ClaimAggregatorJSON from '../abis/contracts/ClaimAggregator.json';
 import ClaimableJSON from '../abis/contracts/IClaimable.json';
-import { getPairConversionPrices, PairConversionPrices } from "../utils/valueConversion";
 import {
   Router,
   Address,
@@ -26,24 +25,25 @@ import {
   MerkleDistributor,
   ClaimAggregator,
   ClaimEvent,
-  Claimable
+  Claimable,
+  LendingPoolData
 } from "./interfaces";
 import * as contracts from "./contracts";
 import * as fetchers from "./fetchers";
-import * as borrowableFetchers from "./borrowableFetchers";
 import * as utils from "./utils";
 import * as approve from "./approve"
 import * as interactions from "./interactions"
 import * as account from "./account"
 import * as imx from "./imx"
 import { Networks } from "../utils/connections";
+import Subgraph from "../subgraph";
 
 export default class ImpermaxRouter {
+  subgraph: Subgraph;
   web3: any;
   chainId: number;
   uiMargin: number;
   dust: number;
-  library: any;
   router: Router;
   factory: Factory;
   simpleUniswapOracle: SimpleUniswapOracle;
@@ -57,30 +57,16 @@ export default class ImpermaxRouter {
   lendingPoolCache: {
     [key in Address]?: {
       lendingPool?: Promise<LendingPool>,
-      safetyMargin?: Promise<number>,
-      liquidationIncentive?: Promise<number>,
       reserves?: Promise<[number, number]>,
       LPTotalSupply?: Promise<number>,
-      priceDenomLP?: Promise<[number, number]>,
       marketPrice?: Promise<number>,
+      priceDenomLP?: Promise<[number, number]>,
       TWAPPrice?: Promise<number>,
-      pairConversionPrices?: Promise<PairConversionPrices>,
-      uniswapApy?: Promise<number>,
       availableReward?: Promise<number>,
       claimHistory?: Promise<ClaimEvent[]>,
       poolToken?: {
         [key in PoolTokenType]?: {
-          name?: Promise<string>,
-          symbol?: Promise<string>,
-          decimals?: Promise<number>,
           exchangeRate?: Promise<number>,
-          totalBalance?: Promise<number>,
-          totalBorrows?: Promise<number>,
-          borrowRate?: Promise<number>,
-          reserveFactor?: Promise<number>, 
-          kinkBorrowRate?: Promise<number>,
-          kinkUtilizationRate?: Promise<number>,
-          accrualTimestamp?: Promise<number>,
           availableBalance?: Promise<number>,
           deposited?: Promise<number>,
           borrowed?: Promise<number>,
@@ -101,6 +87,7 @@ export default class ImpermaxRouter {
   };
 
   constructor(cfg: ImpermaxRouterCfg) {
+    this.subgraph = cfg.subgraph;
     this.web3 = cfg.web3;
     this.chainId = cfg.chainId;
     this.uiMargin = 1.1;
@@ -166,25 +153,10 @@ export default class ImpermaxRouter {
   
   // Fetchers
   public getPoolTokenCache = fetchers.getPoolTokenCache;
-  public initializeName = fetchers.initializeName;
-  public initializeSymbol = fetchers.initializeSymbol;
-  public initializeDecimals = fetchers.initializeDecimals;
-  public initializeExchangeRate = fetchers.initializeExchangeRate;
-  public initializeTotalBalance = fetchers.initializeTotalBalance;
-  public initializeSafetyMargin = fetchers.initializeSafetyMargin;
-  public initializeLiquidationIncentive = fetchers.initializeLiquidationIncentive;
   public initializeReserves = fetchers.initializeReserves;
   public initializeLPTotalSupply = fetchers.initializeLPTotalSupply;
   public initializePriceDenomLP = fetchers.initializePriceDenomLP;
   public initializeTWAPPrice = fetchers.initializeTWAPPrice;
-  public getName = fetchers.getName;
-  public getSymbol = fetchers.getSymbol;
-  public getDecimals = fetchers.getDecimals;
-  public getExchangeRate = fetchers.getExchangeRate;
-  public getTotalBalance = fetchers.getTotalBalance;
-  public getTotalBalanceUSD = fetchers.getTotalBalanceUSD;
-  public getSafetyMargin = fetchers.getSafetyMargin;
-  public getLiquidationIncentive = fetchers.getLiquidationIncentive;
   public getReserves = fetchers.getReserves;
   public getLPTotalSupply = fetchers.getLPTotalSupply;
   public getPriceDenomLP = fetchers.getPriceDenomLP;
@@ -193,41 +165,13 @@ export default class ImpermaxRouter {
   public getBorrowableMarketPriceDenomLP = fetchers.getBorrowableMarketPriceDenomLP;
   public getMarketPrice = fetchers.getMarketPrice;
   public getTWAPPrice = fetchers.getTWAPPrice;
-  public getBorrowEvent = fetchers.getBorrowEvent;
-  public getBorrowerList = fetchers.getBorrowerList;
-  public getAccountLiquidity = fetchers.getAccountLiquidity;
-  
-  // Borrowable Fetchers
-  public initializeReserveFactor = borrowableFetchers.initializeReserveFactor;
-  public initializeKinkBorrowRate = borrowableFetchers.initializeKinkBorrowRate;
-  public initializeKinkUtilizationRate = borrowableFetchers.initializeKinkUtilizationRate;
-  public initializeAccrualTimestamp = borrowableFetchers.initializeAccrualTimestamp;
-  public initializeBorrowRate = borrowableFetchers.initializeBorrowRate;
-  public initializeTotalBorrows = borrowableFetchers.initializeTotalBorrows;
-  public getReserveFactor = borrowableFetchers.getReserveFactor;
-  public getKinkBorrowRate = borrowableFetchers.getKinkBorrowRate;
-  public getKinkUtilizationRate = borrowableFetchers.getKinkUtilizationRate;
-  public getAccrualTimestamp = borrowableFetchers.getAccrualTimestamp;
-  public getTotalBorrows = borrowableFetchers.getTotalBorrows;
-  public getCurrentTotalBorrows = borrowableFetchers.getCurrentTotalBorrows;
-  public getTotalBorrowsUSD = borrowableFetchers.getTotalBorrowsUSD;
-  public getBorrowRate = borrowableFetchers.getBorrowRate;
-  public getBorrowAPY = borrowableFetchers.getBorrowAPY;
-  public getNextBorrowRate = borrowableFetchers.getNextBorrowRate;
-  public getNextBorrowAPY = borrowableFetchers.getNextBorrowAPY;
-  public getSupply = borrowableFetchers.getSupply;
-  public getCurrentSupply = borrowableFetchers.getCurrentSupply;
-  public getSupplyUSD = borrowableFetchers.getSupplyUSD;
-  public getUtilizationRate = borrowableFetchers.getUtilizationRate;
-  public getSupplyRate = borrowableFetchers.getSupplyRate;
-  public getSupplyAPY = borrowableFetchers.getSupplyAPY;
-  public getNextSupplyRate = borrowableFetchers.getNextSupplyRate;
-  public getNextSupplyAPY = borrowableFetchers.getNextSupplyAPY;
 
   // Account
+  public initializeExchangeRate = account.initializeExchangeRate;
   public initializeAvailableBalance = account.initializeAvailableBalance;
   public initializeBorrowed = account.initializeBorrowed;
   public initializeDeposited = account.initializeDeposited;
+  public getExchangeRate = account.getExchangeRate;
   public getAvailableBalance = account.getAvailableBalance;
   public getAvailableBalanceUSD = account.getAvailableBalanceUSD;
   public getBorrowed = account.getBorrowed;
@@ -256,19 +200,14 @@ export default class ImpermaxRouter {
 
   // IMX
   public initializeAirdropData = imx.initializeAirdropData;
-  public initializeRewardSpeed = imx.initializeRewardSpeed;
   public initializeFarmingShares = imx.initializeFarmingShares
   public initializeAvailableReward = imx.initializeAvailableReward;
   public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
-  public getImxPrice = imx.getImxPrice;
   public getAirdropData = imx.getAirdropData;
   public hasClaimableAirdrop = imx.hasClaimableAirdrop;
-  public getRewardSpeed = imx.getRewardSpeed;
   public getFarmingShares = imx.getFarmingShares;
   public getAvailableReward = imx.getAvailableReward;
-  public getFarmingAPY = imx.getFarmingAPY;
-  public getNextFarmingAPY = imx.getNextFarmingAPY;
   public getClaimHistory = imx.getClaimHistory;
   public getAvailableClaimable = imx.getAvailableClaimable;
   
@@ -276,10 +215,6 @@ export default class ImpermaxRouter {
   public normalize = utils.normalize;
   public getDeadline = utils.getDeadline;
   public toAPY = utils.toAPY;
-  public initializePairConversionPricesRopsten = utils.initializePairConversionPricesRopsten;
-  public getPairConversionPricesInternal = utils.getPairConversionPricesInternal;
-  public getTokenPrice = utils.getTokenPrice;
-  public getUniswapAPY = utils.getUniswapAPY;
 
   // Approve
   public getOwnerSpender = approve.getOwnerSpender;

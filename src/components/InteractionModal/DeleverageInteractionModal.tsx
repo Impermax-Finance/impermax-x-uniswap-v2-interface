@@ -54,7 +54,7 @@ export default function DeleverageInteractionModal({show, toggleShow}: Deleverag
   const farmingPoolAPYB = useNextFarmingAPY(-changeAmounts.bAmountB, PoolTokenType.BorrowableB);
   const uniAPY = useUniswapAPY();
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
-  const leveragedAPY = uniAPY ? uniAPY * newLeverage - averageAPY * (newLeverage - 1) : 0;
+  const leveragedAPY = uniAPY * newLeverage - averageAPY * (newLeverage - 1);
 
   return (
     <InteractionModalContainer title="Deleverage" show={show} toggleShow={toggleShow}><>

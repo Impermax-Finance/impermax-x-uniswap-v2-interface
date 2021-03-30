@@ -11,7 +11,7 @@ import BorrowFee from "./TransactionRecap/BorrowFee";
 import { decimalToBalance } from "../../utils/ether-utils";
 import useApprove from "../../hooks/useApprove";
 import useBorrow from "../../hooks/useBorrow";
-import { useSymbol, useDecimals, useMaxBorrowable, useToBigNumber, useBorrowerList } from "../../hooks/useData";
+import { useSymbol, useDecimals, useMaxBorrowable, useToBigNumber } from "../../hooks/useData";
 import RiskMetrics from "../RiskMetrics";
 import FarmingAPY from "./TransactionRecap/FarmingAPY";
 

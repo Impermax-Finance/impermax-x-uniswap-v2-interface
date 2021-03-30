@@ -3,6 +3,7 @@ import usePairAddress from "./usePairAddress";
 import { PoolTokenType } from "../impermax-router/interfaces";
 import usePoolToken from "./usePoolToken";
 import { useUnderlyingAddress } from "./useData";
+import Web3 from "web3";
 
 export function useLendingPoolUrl() : string {
   const uniswapV2PairAddress = usePairAddress();
@@ -11,7 +12,9 @@ export function useLendingPoolUrl() : string {
 
 export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   const tokenAddress = useUnderlyingAddress(poolTokenTypeArg);
-  return tokenAddress ? "/build/assets/icons/" + tokenAddress + ".png" : "";
+  if (!tokenAddress) return "";
+  const convertedAddress = Web3.utils.toChecksumAddress(tokenAddress);
+  return tokenAddress ? "/build/assets/icons/" + convertedAddress + ".png" : "";
 }
 
 export function useAddLiquidityUrl() : string {

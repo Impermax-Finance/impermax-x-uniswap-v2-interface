@@ -1,7 +1,6 @@
 import React from "react";
 import { PoolTokenType } from "../../impermax-router/interfaces";
 import { Link } from "react-router-dom";
-import { LendingPoolsCol } from "./LendingPoolsCol";
 import { formatUSD, formatPercentage } from "../../utils/format";
 import { useContext } from "../../contexts/Theme";
 import usePairAddress from "../../hooks/usePairAddress";
@@ -32,11 +31,11 @@ export default function LendingPoolsRow() {
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
   const uniAPY = useUniswapAPY();
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
-  const leveragedAPY = uniAPY ? uniAPY * LEVERAGE - averageAPY * (LEVERAGE - 1) : 0;
+  const leveragedAPY = uniAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
 
   return (
     <Link to={lendingPoolUrl} className="row lending-pools-row">
-      <div className="col-4">
+      <div className="col-7 col-md-5 col-lg-4">
         <div className="currency-name">
           <div className="combined">
             <div className="currency-overlapped">
@@ -45,7 +44,7 @@ export default function LendingPoolsRow() {
             </div>
           {symbolA}/{symbolB}
           </div>
-          <div>
+          <div className="d-none d-md-block">
             <div>
               <img className="currency-icon" src={tokenIconA} />
               {symbolA}
@@ -57,11 +56,23 @@ export default function LendingPoolsRow() {
           </div>
         </div>
       </div>
-      <LendingPoolsCol valueA={formatUSD(supplyUSDA)} valueB={formatUSD(supplyUSDB)} />
-      <LendingPoolsCol valueA={formatUSD(totalBorrowsUSDA)} valueB={formatUSD(totalBorrowsUSDB)} />
-      <LendingPoolsCol valueA={formatPercentage(supplyAPYA)} valueB={formatPercentage(supplyAPYB)} />
-      <LendingPoolsCol valueA={formatPercentage(borrowAPYA)} valueB={formatPercentage(borrowAPYB)} />
-      <div className="col-2 leveraged-apy">
+      <div className="col d-none d-md-block">
+        <div>{formatUSD(supplyUSDA)}</div>
+        <div>{formatUSD(supplyUSDB)}</div>
+      </div>
+      <div className="col d-none d-md-block">
+        <div>{formatUSD(totalBorrowsUSDA)}</div>
+        <div>{formatUSD(totalBorrowsUSDB)}</div>
+      </div>
+      <div className="col d-none d-lg-block">
+        <div>{formatPercentage(supplyAPYA)}</div>
+        <div>{formatPercentage(supplyAPYB)}</div>
+      </div>
+      <div className="col d-none d-lg-block">
+        <div>{formatPercentage(borrowAPYA)}</div>
+        <div>{formatPercentage(borrowAPYB)}</div>
+      </div>
+      <div className="col-5 col-md-3 col-lg-2 leveraged-apy">
         <div>{ formatPercentage(leveragedAPY) }</div>
       </div>
     </Link>
