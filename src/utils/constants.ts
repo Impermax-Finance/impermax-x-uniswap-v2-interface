@@ -6,9 +6,15 @@ export type NetworkIndex = {
 
 export type Address = string;
 
-export type AddressIndex = {
-  [key in Address]: any
+export type DistributorDetails = {
+  claimableAddress: Address,
+  name: string,
 }
+
+export const IMPERMAX_SUBGRAPH_URL: NetworkIndex = {
+  [Networks.Ropsten]: 'https://api.thegraph.com/subgraphs/name/impermax-finance/impermax-x-uniswap-v2-ropsten',
+  [Networks.Mainnet]: 'https://api.thegraph.com/subgraphs/name/impermax-finance/impermax-x-uniswap-v2',
+};
 
 export const NETWORK_URL: NetworkIndex = {
   [Networks.Ropsten]: 'wss://ropsten.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158',
@@ -17,7 +23,7 @@ export const NETWORK_URL: NetworkIndex = {
 
 export const ROUTER: NetworkIndex = {
   [Networks.Ropsten]: '0xbFf4acF789297A8507Eb7493AE18EB2C3A3A9632',
-  [Networks.Mainnet]: '0x3271CC175577465691E48196955e09d638Fa05D5',
+  [Networks.Mainnet]: '0x5e169082fff23cee6766062b96051a78c543127d',
 };
 
 export const FACTORY: NetworkIndex = {
@@ -30,11 +36,43 @@ export const SIMPLE_UNISWAP_ORACLE: NetworkIndex = {
   [Networks.Mainnet]: '0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D',
 };
 
+export const IMX: NetworkIndex = {
+  [Networks.Ropsten]: '0xa813AFf9082fd8856Ba6F087982881A4C55Ef451',
+  [Networks.Mainnet]: '',
+};
+export const IMX_PAIR: NetworkIndex = {
+  [Networks.Ropsten]: '0x0Efc0766F46E1AD825CE18F54F0793dd6814a947',
+  [Networks.Mainnet]: '',
+};
+
 export const WETH: NetworkIndex = {
   [Networks.Ropsten]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
   [Networks.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
 };
 
+export const CLAIM_AGGREGATOR: NetworkIndex = {
+  [Networks.Ropsten]: '0x8DFF9cEA94a03Ad4b84b7CA3aEECEF295b05Eeb5',
+  [Networks.Mainnet]: '',
+};
+
+export const MERKLE_DISTRIBUTOR: NetworkIndex = {
+  [Networks.Ropsten]: '0x1F0DFee1f932fDA1e95aa82f588F2828c3F192bd',
+  [Networks.Mainnet]: '',
+};
+
+export const AIRDROP_URL: NetworkIndex = {
+  [Networks.Ropsten]: 'https://shiny-union-6fc6.impermax.workers.dev',
+  [Networks.Mainnet]: '',
+};
+
+export const DISTRIBUTORS: NetworkIndex = {
+  [Networks.Ropsten]: [
+    { claimableAddress: "0x59db24c7FD730D7e5a7425cAa2Ad6961c77919A0", name: "Private Sale" },
+  ],
+  [Networks.Mainnet]: '',
+};
+
+/*export const ROPSTEN_ETH_IMX: Address = '0x0Efc0766F46E1AD825CE18F54F0793dd6814a947';
 export const ROPSTEN_ETH_DAI: Address = '0x1c5DEe94a34D795f9EEeF830B68B80e44868d316';
 export const ROPSTEN_ETH_UNI: Address = '0x4E99615101cCBB83A462dC4DE2bc1362EF1365e5';
 export const ROPSTEN_ETH_USDC: Address = '0x681A4164703351d6AceBA9D7038b573b444d3353';
@@ -46,6 +84,7 @@ export const MAINNET_DUCK_ETH: Address = '0xc5Ed7350E0FB3f780c756bA7d5d8539dc242
 
 export const LISTED_PAIRS: NetworkIndex = {
   [Networks.Ropsten]: [
+    ROPSTEN_ETH_IMX,
     ROPSTEN_ETH_DAI,
     ROPSTEN_ETH_UNI,
     //ROPSTEN_ETH_USDC,
@@ -56,4 +95,4 @@ export const LISTED_PAIRS: NetworkIndex = {
     MAINNET_USDT_USDC,
     MAINNET_DUCK_ETH,
   ]
-};
+};*/

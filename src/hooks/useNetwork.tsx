@@ -11,9 +11,24 @@ export function useChainId() {
   return chainId;
 }
 
+export function useImpermaxSubgraphUrl() {
+  const { impermaxSubgraphUrl } = useContext(NetworkContext);
+  return impermaxSubgraphUrl;
+}
+
 export function useNetworkUrl() {
   const { networkUrl } = useContext(NetworkContext);
   return networkUrl;
+}
+
+export function useIMX() {
+  const { IMX } = useContext(NetworkContext);
+  return IMX;
+}
+
+export function useIMXPair() {
+  const { IMX_PAIR } = useContext(NetworkContext);
+  return IMX_PAIR;
 }
 
 export function useWETH() {
@@ -36,7 +51,22 @@ export function useSimpleUniswapOracleAddress() {
   return simpleUniswapOracleAddress;
 }
 
-export function useListedPairs() {
-  const { listedPairs } = useContext(NetworkContext);
-  return listedPairs;
+export function useMerkleDistributorAddress() {
+  const { merkleDistributorAddress } = useContext(NetworkContext);
+  return merkleDistributorAddress;
+}
+
+export function useClaimAggregatorAddress() {
+  const { claimAggregatorAddress } = useContext(NetworkContext);
+  return claimAggregatorAddress;
+}
+
+export function useAirdropUrl() {
+  const { airdropUrl } = useContext(NetworkContext);
+  return airdropUrl;
+}
+
+export function useDistributors() {
+  const { distributors } = useContext(NetworkContext);
+  return distributors;
 }

@@ -19,14 +19,16 @@
       color: #88898a;
       border: 1px solid #ddd;
     }
+    > *:hover {
+      background: #f9fafb;
+    }
     > .selected {
       border-top: 3px solid #02c47c;
       color: #02c47c;
-      background: #fff;
+      background: #fff !important;
       border-bottom: 0;
     }
   }
-
 
   .account-lending-pool-details {
     margin: 0;
@@ -34,6 +36,41 @@
   }
   .account-lending-pool-details > * {
     padding: 0 1.5rem;
+  }
+
+  .account-lending-pool-farming {
+    padding: 2rem;
+    .info {
+      text-align: center;
+      background: #d1e6ee82;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 2px solid #75abc0;
+      color: #007baa;
+    }
+    .activate-imx-reward {
+      margin: 0 auto;
+      width: 250px;
+      margin-top: 2rem;
+    }
+  }
+
+  .account-lending-pool-claim {
+    .col-reward-rate {
+      padding: 20px 30px;
+      line-height: 45px;
+    }
+    .col-claim-reward {
+      padding: 20px 30px;
+      .interaction-button {
+        height: 45px;
+        width: 250px;
+      }
+    }
+  }
+
+  .claim-history {
+    padding: 1rem;
   }
 
   .account-lending-pool-row {

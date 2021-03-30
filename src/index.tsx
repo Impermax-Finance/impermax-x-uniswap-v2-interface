@@ -10,6 +10,7 @@ import { ImpermaxRouterProvider } from './contexts/ImpermaxRouterProvider';
 import { Provider } from 'react-redux';
 import store from './state';
 import Updaters from './state/Updaters';
+import { SubgraphProvider } from './contexts/SubgraphProvider';
 
 function App() {
   return <div className="app">
@@ -32,9 +33,11 @@ const Contexts: React.FC = ({ children }) => {
             <UseWalletProvider chainId={useChainId()}>
               <Web3Provider>
               <Updaters />
-                <ImpermaxRouterProvider>
-                  { children }
-                </ImpermaxRouterProvider>
+                <SubgraphProvider>
+                  <ImpermaxRouterProvider>
+                    { children }
+                  </ImpermaxRouterProvider>
+                </SubgraphProvider>
               </Web3Provider>
             </UseWalletProvider>
           </Theme>

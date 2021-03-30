@@ -1,0 +1,15 @@
+.overall-stats {
+  margin-top: 2rem;
+  .row {
+    margin: 0;
+  }
+  .col {
+    padding: 20px;
+    .name {
+      font-size: 1.25rem;
+    }
+    .value {
+      font-size: 1.875rem;
+    }
+  }
+}

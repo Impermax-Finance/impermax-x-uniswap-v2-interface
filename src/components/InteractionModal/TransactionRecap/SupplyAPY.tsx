@@ -3,14 +3,14 @@ import { Row, Col } from "react-bootstrap";
 import { PoolTokenType } from "../../../impermax-router/interfaces";
 import usePoolToken from "../../../hooks/usePoolToken";
 import { formatPercentage } from "../../../utils/format";
-import { useSupplyAPY } from "../../../hooks/useData";
+import { useSupplyAPY, useNextSupplyAPY } from "../../../hooks/useData";
 
 
-export default function SupplyAPY() {
+export default function SupplyAPY({ amount }: { amount: number }) {
   const poolTokenType = usePoolToken();
   if (poolTokenType == PoolTokenType.Collateral) return null;
   
-  const supplyAPY = useSupplyAPY()
+  const supplyAPY = useNextSupplyAPY(amount)
 
   return (
     <Row>

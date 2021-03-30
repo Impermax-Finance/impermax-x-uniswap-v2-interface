@@ -28,6 +28,24 @@
       margin-left: 3px;
       bottom: 1px;
     }
+
+    .claim-button, .claim-button:focus, .claim-button:active {
+      height: 38px;
+      line-height: 100%;
+      margin-right: 15px;
+      border-radius: 50px;
+      font-weight: bold;
+      background: #ffffff;
+      border: 3px solid #00b675;
+      color: #00b675;
+      box-shadow: none;
+      .spinner-border {
+        margin-left: 8px;
+        position: relative;
+        bottom: 1px;
+      }
+    }
+    
   }
 
   .wrong-network, .not-connected {

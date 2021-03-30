@@ -57,9 +57,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
 
   return (
     <InteractionModalContainer title={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} show={show} toggleShow={toggleShow}><>
-      { poolTokenType == PoolTokenType.Collateral ? (
-        <RiskMetrics changeCollateral={val} hideIfNull={true} />
-      ) : (null) }
+      { poolTokenType == PoolTokenType.Collateral && (<RiskMetrics changeCollateral={val} hideIfNull={true} />) }
       <InputAmount 
         val={val}
         setVal={setVal}
@@ -69,7 +67,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
       />
       <div className="transaction-recap">
         <TransactionSize amount={val} />
-        <SupplyAPY />
+        <SupplyAPY amount={val} />
       </div>
       <Row className="interaction-row">
         <Col xs={6}>

@@ -46,12 +46,6 @@ export default function RepayInteractionModal({show, toggleShow}: RepayInteracti
     toggleShow(false);
   }
 
-  if (borrowed === 0) return (
-    <InteractionModalContainer title="Repay" show={show} toggleShow={toggleShow}><>
-      You haven't borrowed any {symbol} yet.
-    </></InteractionModalContainer>
-  );
-
   return (
     <InteractionModalContainer title="Repay" show={show} toggleShow={toggleShow}><>
       <RiskMetrics

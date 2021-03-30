@@ -1,4 +1,4 @@
-import { PoolTokenType, Changes } from "../impermax-router/interfaces";
+import { PoolTokenType, Changes, AirdropData, ClaimEvent, Address } from "../impermax-router/interfaces";
 import usePoolToken from "./usePoolToken";
 import usePairAddress from "./usePairAddress";
 import { useState, useCallback, useEffect } from "react";
@@ -6,7 +6,8 @@ import { useRouterCallback } from "./useImpermaxRouter";
 import { stringify } from "querystring";
 import { BigNumber } from "ethers";
 import { decimalToBalance } from "../utils/ether-utils";
-import { getUniswapAPY, getWeeklyUniswapAPY } from "../utils/uniswapApy";
+import { useSubgraphCallback } from "./useSubgraph";
+import { getTotalValueSupplied, getTotalValueBorrowed } from "../subgraph/cacheData";
 
 export function useToken(poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
@@ -14,24 +15,30 @@ export function useToken(poolTokenTypeArg?: PoolTokenType) {
   return { uniswapV2PairAddress, poolTokenType };
 }
 
+export function usePairList() : Address[] {
+  const [pairList, setPairList] = useState<Address[]>();
+  useSubgraphCallback(async (subgraph) => setPairList( await subgraph.getPairList() ));
+  return pairList;
+}
+
 export function useDecimals(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [decimals, setDecimals] = useState<number>();
-  useRouterCallback(async (router) => setDecimals( await router.getDecimals(uniswapV2PairAddress, poolTokenType) ));
+  useSubgraphCallback(async (subgraph) => setDecimals( await subgraph.getDecimals(uniswapV2PairAddress, poolTokenType) ));
   return decimals;
 }
 
 export function useSymbol(poolTokenTypeArg?: PoolTokenType) : string {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [symbol, setSymbol] = useState<string>("");
-  useRouterCallback(async (router) => setSymbol( await router.getSymbol(uniswapV2PairAddress, poolTokenType) ));
+  useSubgraphCallback(async (subgraph) => setSymbol( await subgraph.getSymbol(uniswapV2PairAddress, poolTokenType) ));
   return symbol;
 }
 
 export function useName(poolTokenTypeArg?: PoolTokenType) : string {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [name, setName] = useState<string>("");
-  useRouterCallback(async (router) => setName( await router.getName(uniswapV2PairAddress, poolTokenType) ));
+  useSubgraphCallback(async (subgraph) => setName( await subgraph.getName(uniswapV2PairAddress, poolTokenType) ));
   return name;
 }
 
@@ -45,8 +52,15 @@ export function useExchangeRate(poolTokenTypeArg?: PoolTokenType) : number {
 export function useSafetyMargin() : number {
   const uniswapV2PairAddress = usePairAddress();
   const [safetyMargin, setSafetyMargin] = useState<number>(1);
-  useRouterCallback(async (router) => setSafetyMargin( await router.getSafetyMargin(uniswapV2PairAddress) ));
+  useSubgraphCallback(async (subgraph) => setSafetyMargin( await subgraph.getSafetyMargin(uniswapV2PairAddress) ));
   return safetyMargin;
+}
+
+export function useImxPrice() : number {
+  const uniswapV2PairAddress = usePairAddress();
+  const [imxPrice, setImxPrice] = useState<number>(null);
+  useSubgraphCallback(async (subgraph) => setImxPrice( await subgraph.getImxPrice() ));
+  return imxPrice;
 }
 
 export function useMarketPrice() : number {
@@ -73,67 +87,140 @@ export function usePriceDenomLP() : [number, number] {
 export function useUnderlyingAddress(poolTokenTypeArg?: PoolTokenType) : string {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [tokenAddress, setTokenAddress] = useState<string>("");
-  useRouterCallback(async (router) => setTokenAddress( (await router.getContracts(uniswapV2PairAddress, poolTokenType))[1]._address ));
+  useSubgraphCallback(async (subgraph) => setTokenAddress( await subgraph.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType) ));
   return tokenAddress;
 }
 
 export function useTotalBalanceUSD(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [totalBalanceUSD, setTotalBalanceUSD] = useState<number>(0);
-  useRouterCallback(async (router) => setTotalBalanceUSD( await router.getTotalBalanceUSD(uniswapV2PairAddress, poolTokenType) ));
+  useSubgraphCallback(async (subgraph) => setTotalBalanceUSD( await subgraph.getTotalBalanceUSD(uniswapV2PairAddress, poolTokenType) ));
   return totalBalanceUSD;
 }
 
 export function useSupplyUSD(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [supplyUSD, setSupplyUSD] = useState<number>(0);
-  useRouterCallback(async (router) => setSupplyUSD( await router.getSupplyUSD(uniswapV2PairAddress, poolTokenType) ));
+  useSubgraphCallback(async (subgraph) => setSupplyUSD( await subgraph.getSupplyUSD(uniswapV2PairAddress, poolTokenType) ));
   return supplyUSD;
 }
 
 export function useTotalBorrowsUSD(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [totalBorrowsUSD, setTotalBorrowsUSD] = useState<number>(0);
-  useRouterCallback(async (router) => setTotalBorrowsUSD( await router.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType) ));
+  useSubgraphCallback(async (subgraph) => setTotalBorrowsUSD( await subgraph.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType) ));
   return totalBorrowsUSD;
 }
 
 export function useUtilizationRate(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [utilizationRate, setUtilizationRate] = useState<number>(0);
-  useRouterCallback(async (router) => setUtilizationRate( await router.getUtilizationRate(uniswapV2PairAddress, poolTokenType) ));
+  useSubgraphCallback(async (subgraph) => setUtilizationRate( await subgraph.getUtilizationRate(uniswapV2PairAddress, poolTokenType) ));
   return utilizationRate;
 }
 
 export function useSupplyAPY(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [supplyAPY, setSupplyAPY] = useState<number>(0);
-  useRouterCallback(async (router) => setSupplyAPY( await router.getSupplyAPY(uniswapV2PairAddress, poolTokenType) ));
+  useSubgraphCallback(async (subgraph) => setSupplyAPY( await subgraph.getSupplyAPY(uniswapV2PairAddress, poolTokenType) ));
   return supplyAPY;
 }
 
 export function useBorrowAPY(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [borrowAPY, setBorrowAPY] = useState<number>(0);
-  useRouterCallback(async (router) => setBorrowAPY( await router.getBorrowAPY(uniswapV2PairAddress, poolTokenType) ));
+  useSubgraphCallback(async (subgraph) => setBorrowAPY( await subgraph.getBorrowAPY(uniswapV2PairAddress, poolTokenType) ));
   return borrowAPY;
-}
-
-export function useNextBorrowAPY(borrowAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [nextBorrowAPY, setNextBorrowAPY] = useState<number>(0);
-  useRouterCallback(
-    async (router) => setNextBorrowAPY( await router.getNextBorrowAPY(uniswapV2PairAddress, poolTokenType, borrowAmount) ),
-    [borrowAmount]
-  );
-  return nextBorrowAPY;
 }
 
 export function useUniswapAPY() : number {
   const uniswapV2PairAddress = usePairAddress();
   const [uniswapAPY, setUniswapAPY] = useState<number>(0);
-  useRouterCallback(async (router) => setUniswapAPY( await router.getUniswapAPY(uniswapV2PairAddress) ));
+  useSubgraphCallback(async (subgraph) => setUniswapAPY( await subgraph.getUniswapAPY(uniswapV2PairAddress) ));
   return uniswapAPY;
+}
+
+export function useTotalValueLocked() : number {
+  const [totalValueLocked, setTotalValueLocked] = useState<number>(0);
+  useSubgraphCallback(async (subgraph) => setTotalValueLocked( await subgraph.getTotalValueLocked() ));
+  return totalValueLocked;
+}
+
+export function useTotalValueSupplied() : number {
+  const [totalValueSupplied, setTotalValueSupplied] = useState<number>(0);
+  useSubgraphCallback(async (subgraph) => setTotalValueSupplied( await subgraph.getTotalValueSupplied() ));
+  return totalValueSupplied;
+}
+
+export function useTotalValueBorrowed() : number {
+  const [totalValueBorrowed, setTotalValueBorrowed] = useState<number>(0);
+  useSubgraphCallback(async (subgraph) => setTotalValueBorrowed( await subgraph.getTotalValueBorrowed() ));
+  return totalValueBorrowed;
+}
+
+export function useFarmingAPY(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [farmingAPY, setFarmingAPY] = useState<number>(0);
+  useSubgraphCallback(async (subgraph) => setFarmingAPY( await subgraph.getFarmingAPY(uniswapV2PairAddress, poolTokenType) ));
+  return farmingAPY;
+}
+
+export function useHasFarming(poolTokenTypeArg?: PoolTokenType) : boolean {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [farmingPool, setFarmingPool] = useState<number>(0);
+  useRouterCallback(async (router) => setFarmingPool( await router.getFarmingPool(uniswapV2PairAddress, poolTokenType) ));
+  return farmingPool ? true : false;
+}
+
+export function useNextSupplyAPY(supplyAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [nextSupplyAPY, setNextSupplyAPY] = useState<number>(0);
+  useSubgraphCallback(
+    async (subgraph) => setNextSupplyAPY( await subgraph.getNextSupplyAPY(uniswapV2PairAddress, poolTokenType, supplyAmount) ),
+    [supplyAmount]
+  );
+  return nextSupplyAPY;
+}
+
+export function useNextBorrowAPY(borrowAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [nextBorrowAPY, setNextBorrowAPY] = useState<number>(0);
+  useSubgraphCallback(
+    async (subgraph) => setNextBorrowAPY( await subgraph.getNextBorrowAPY(uniswapV2PairAddress, poolTokenType, borrowAmount) ),
+    [borrowAmount]
+  );
+  return nextBorrowAPY;
+}
+
+export function useNextFarmingAPY(borrowAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [nextFarmingAPY, setNextFarmingAPY] = useState<number>(0);
+  useSubgraphCallback(
+    async (subgraph) => setNextFarmingAPY( await subgraph.getNextFarmingAPY(uniswapV2PairAddress, poolTokenType, borrowAmount) ),
+    [borrowAmount]
+  );
+  return nextFarmingAPY;
+}
+
+export function useRewardSpeed(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [rewardSpeed, setRewardSpeed] = useState<number>(0);
+  useSubgraphCallback(async (subgraph) => setRewardSpeed( await subgraph.getRewardSpeed(uniswapV2PairAddress, poolTokenType) ));
+  return rewardSpeed;
+}
+
+export function useFarmingShares(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [farmingShares, setFarmingShares] = useState<number>(0);
+  useRouterCallback(async (router) => setFarmingShares( await router.getFarmingShares(uniswapV2PairAddress, poolTokenType) ));
+  return farmingShares;
+}
+
+export function useAvailableReward() : number {
+  const uniswapV2PairAddress = usePairAddress();
+  const [availableReward, setAvailableReward] = useState<number>(0);
+  useRouterCallback(async (router) => setAvailableReward( await router.getAvailableReward(uniswapV2PairAddress) ));
+  return availableReward;
 }
 
 export function useDeposited(poolTokenTypeArg?: PoolTokenType) : number {
@@ -244,23 +331,29 @@ export function useAccountAPY() : number {
   return accountAPY;
 }
 
-export function useBorrowerList() : Array<string> {
+export function useClaimHistory() : ClaimEvent[] {
   const uniswapV2PairAddress = usePairAddress();
-  const [borrowerList, setBorrowerList] = useState<Array<string>>([]);
-  useRouterCallback(async (router) => setBorrowerList( await router.getBorrowerList(uniswapV2PairAddress) ));
-  return borrowerList;
+  const [claimHistory, setClaimHistory] = useState<ClaimEvent[]>([]);
+  useRouterCallback(async (router) => setClaimHistory( await router.getClaimHistory(uniswapV2PairAddress) ));
+  return claimHistory;
 }
 
-export function useLiquidatableAccounts() : Array<string> {
-  const uniswapV2PairAddress = usePairAddress();
-  const borrowerList = useBorrowerList();
-  useRouterCallback(async (router) => {
-    borrowerList.forEach(async (borrower: string) => {
-      const [liquidity, shortfall] = await router.getAccountLiquidity(uniswapV2PairAddress, borrower);
-      console.log(borrower, liquidity, shortfall);
-    })
-  }, [borrowerList]);
-  return [];
+export function useAirdropData() : AirdropData {
+  const [airdropData, setAirdropData] = useState<AirdropData>();
+  useRouterCallback(async (router) => setAirdropData( await router.getAirdropData() ));
+  return airdropData;
+}
+
+export function useHasClaimableAirdrop() : boolean {
+  const [hasClaimableAirdrop, setHasClaimableAirdrop] = useState<boolean>(false);
+  useRouterCallback(async (router) => setHasClaimableAirdrop( await router.hasClaimableAirdrop() ));
+  return hasClaimableAirdrop;
+}
+
+export function useAvailableClaimable(claimableAddress: Address) : number {
+  const [availableClaimable, setAvailableClaimable] = useState<number>();
+  useRouterCallback(async (router) => setAvailableClaimable( await router.getAvailableClaimable(claimableAddress) ));
+  return availableClaimable;
 }
 
 export function useMaxWithdrawable(poolTokenTypeArg?: PoolTokenType) : number {

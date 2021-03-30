@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
-import { HomeRoute, FarmingRoute, RisksRoute, UserGuideRoute } from '../../Routing';
+import { HomeRoute, RisksRoute, UserGuideRoute, ClaimRoute } from '../../Routing';
 
 import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
@@ -10,6 +10,8 @@ import { TransactionDetails } from '../../state/transactions/reducer';
 import { useNetworkName } from '../../hooks/useNetwork';
 import Countdown from '../Countdown';
 import useInterval from 'use-interval';
+import { useHasClaimableAirdrop, useAirdropData, useToNumber } from '../../hooks/useData';
+import { ClaimAirdrop } from './ClaimAirdrop';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -33,6 +35,8 @@ export default function View({ children }: ViewProps) {
   const wrongNetwork = status == 'error' && error && error.toString().indexOf("ChainUnsupportedError") >= 0;
   const networkName = useNetworkName();
   const connected = status == 'connected';
+
+  const hasClaimableAirdrop = useHasClaimableAirdrop();
   
   return (
     <div className="view">
@@ -44,9 +48,11 @@ export default function View({ children }: ViewProps) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Nav className="mr-auto">
             <NavigationBarLink appRoute={HomeRoute} />
-            <NavigationBarLink appRoute={UserGuideRoute} target="_blank"  />
-            { networkName === 'mainnet' ? (<NavigationBarLink appRoute={RisksRoute} />) : null }
+            <NavigationBarLink appRoute={UserGuideRoute} target="_blank" />
+            { networkName === 'mainnet' && (<NavigationBarLink appRoute={RisksRoute} />) }
+            <NavigationBarLink appRoute={ClaimRoute} />
           </Nav>
+          { hasClaimableAirdrop && (<ClaimAirdrop/>) }
           {
             account ? 
               <ConnectedWalletButtonComponent account={account}  /> :
@@ -54,23 +60,21 @@ export default function View({ children }: ViewProps) {
           }
         </Container>
       </Navbar>
-      { connected ? (<>{children}</>) : (<>
-        { 
-          wrongNetwork ? (
-            <div className="wrong-network">
-              <div className="container">
-                You're connected to the wrong network. Please connect to the supported network: {networkName}
-              </div>
-            </div>
-          ) : (
-            <div className="not-connected">
-              <div className="container">
-                Please connect with Metamask or another web3 provider
-              </div>
-            </div>
-          ) 
-        }
-      </>) }
+      { !connected && wrongNetwork && (
+        <div className="wrong-network">
+          <div className="container">
+            You're connected to the wrong network. Please connect to the supported network: { networkName }
+          </div>
+        </div>
+      )}
+      { !connected && !wrongNetwork && (
+        <div className="not-connected">
+          <div className="container">
+            Please connect with Metamask or another web3 provider
+          </div>
+        </div>
+      )}
+      { children }
       <div className="footer container">
         <a href="https://impermax.finance/" target="_blank">Website</a>
         <a href="https://twitter.com/ImpermaxFinance" target="_blank">Twitter</a>

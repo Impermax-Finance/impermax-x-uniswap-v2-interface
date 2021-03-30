@@ -20,18 +20,15 @@ export default function AccountLendingPoolBorrowRow() {
   const symbol = useSymbol();
   const symbolLP = useSymbol(PoolTokenType.Collateral);
   const borrowed = useBorrowed();
+  const depositedUSD = useDepositedUSD(PoolTokenType.Collateral);
   const borrowedUSD = useBorrowedUSD();
   const tokenIcon = useTokenIcon();
 
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepaywModal] = useState(false);
 
-  const depositedUSD = useDepositedUSD(PoolTokenType.Collateral);
-  const maxBorrowable = useMaxBorrowable();
-  const borrowDisabledInfo = depositedUSD === 0 
-    ? `You need to deposit ${symbolLP} as collateral in order to be able to borrow ${symbol}.`
-    : `Insufficient ${symbol} has been supplied in order to borrow.`;
-  const repayuDisabledInfo = `You haven't borrowed any ${symbol} yet.`;
+  const borrowDisabledInfo = `You need to deposit ${symbolLP} as collateral in order to be able to borrow ${symbol}.`;
+  const repayDisabledInfo = `You haven't borrowed any ${symbol} yet.`;
 
   return (<>
     <Row className="account-lending-pool-row">
@@ -56,7 +53,7 @@ export default function AccountLendingPoolBorrowRow() {
       <Col md={5} className="btn-table">
         <Row>
           <Col>
-            { maxBorrowable > 0 ? (
+            { depositedUSD > 0 ? (
               <Button variant="primary" onClick={() => toggleBorrowModal(true)}>{t("Borrow")}</Button>
             ) : (
               <DisabledButtonHelper text={borrowDisabledInfo}>{t("Borrow")}</DisabledButtonHelper>
@@ -66,7 +63,7 @@ export default function AccountLendingPoolBorrowRow() {
             { borrowed > 0 ? (
               <Button variant="primary" onClick={() => toggleRepaywModal(true)}>{t("Repay")}</Button>
             ) : (
-              <DisabledButtonHelper text={repayuDisabledInfo}>{t("Repay")}</DisabledButtonHelper>
+              <DisabledButtonHelper text={repayDisabledInfo}>{t("Repay")}</DisabledButtonHelper>
             ) }
           </Col>
         </Row>

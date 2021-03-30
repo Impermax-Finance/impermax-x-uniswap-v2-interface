@@ -16,6 +16,9 @@ const translations = {
   "Borrow APY": {
     'ENG': "Borrow APY"
   },
+  "Farming APY": {
+    'ENG': "Farming APY"
+  },
 } as Dictionary;
 
 export default translations;

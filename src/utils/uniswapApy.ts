@@ -1,4 +1,4 @@
-import { ApolloClient } from 'apollo-client'
+/*import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
 import gql from 'graphql-tag'
@@ -31,7 +31,7 @@ export async function getUniswapAPY(uniswapV2PairAddress: string, seconds: numbe
   const timestamp = Math.floor((new Date).getTime() / 1000);
   const blockNumber = await getBlockByTimestamp(timestamp - seconds);
   const query = gql`{
-    pairs ( block: {number: ${blockNumber}} where: { id: "${uniswapV2PairAddress.toLowerCase()}"} ) {
+    pairs ( block: {number: ${blockNumber}} where: { id_in: ["${uniswapV2PairAddress.toLowerCase()}"]} ) {
       volumeUSD
     }
     pair (id: "${uniswapV2PairAddress.toLowerCase()}") {
@@ -121,4 +121,4 @@ export async function getMonthlyWeightedAPY(uniswapV2PairAddress: string) : Prom
   const yearlyVolume = volumeUSD * SECONDS_IN_YEAR / seconds;
   const yearlyFee = yearlyVolume * UNISWAP_FEE;
   return yearlyFee / reserveUSD;
-}
+}*/

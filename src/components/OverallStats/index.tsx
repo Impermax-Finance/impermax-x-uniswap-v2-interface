@@ -3,27 +3,34 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
-import { LanguageContext } from '../../contexts/Language';
-import { LendingPoolsTable } from './../LendingPoolsTable';
+import { useTotalValueLocked, useTotalValueSupplied, useTotalValueBorrowed } from '../../hooks/useData';
+import { formatUSD } from '../../utils/format';
 import './index.scss';
 
 /**
  * Creates a searchable list of Lending Pools.
  */
 export default function OverallStats() {
-  return(<div className='overall-stats'>
-    <Container>
+  const totalValueLocked = useTotalValueLocked();
+  const totalValueSupplied = useTotalValueSupplied();
+  const totalValueBorrowed = useTotalValueBorrowed();
+
+  return(<Container className="overall-stats">
+    <Card>
       <Row>
-        <Col sm={6}>
-          Total value locked: 
+        <Col xs={12} md={4} className="col">
+          <div className="name">Total value locked:</div>
+          <div className="value">{ formatUSD(totalValueLocked) }</div>
         </Col>
-        <Col sm={6}>
-          Total borrowed: 
+        <Col xs={12} md={4} className="col">
+          <div className="name">Total supplied:</div>
+          <div className="value">{ formatUSD(totalValueSupplied) }</div>
+        </Col>
+        <Col xs={12} md={4} className="col">
+          <div className="name">Total borrowed:</div>
+          <div className="value">{ formatUSD(totalValueBorrowed) }</div>
         </Col>
       </Row>
-    </Container>
-  </div>);
+    </Card>
+  </Container>);
 }

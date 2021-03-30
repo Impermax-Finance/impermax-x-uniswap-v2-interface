@@ -37,9 +37,7 @@ export function ConnectedWalletButtonComponent({ account } : ConnectedWalletButt
   return (<>
     <div className="connected-wallet" onClick={() => toggleAccountModal(true)}>
       <Button className="wallet-connector nav-button-light">Transactions 
-        { pending.length > 0 ? (
-          <Spinner animation="border" size="sm" />
-        ) : null }
+        { pending.length > 0 && (<Spinner animation="border" size="sm" />) }
       </Button>
       <Button className="wallet-connector nav-button-green">{ shortenAddress(account) }</Button>
     </div>

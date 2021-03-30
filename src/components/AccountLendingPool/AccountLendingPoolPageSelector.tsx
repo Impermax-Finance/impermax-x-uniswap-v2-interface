@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AccountLendingPoolPage } from ".";
+import { PoolTokenType } from "../../impermax-router/interfaces";
+import { useFarmingAPY, useHasFarming } from "../../hooks/useData";
 
 export interface AccountLendingPoolPageSelectorProps {
   pageSelected: AccountLendingPoolPage;
@@ -7,6 +9,8 @@ export interface AccountLendingPoolPageSelectorProps {
 }
 
 export default function AccountLendingPoolPageSelector({pageSelected, setPageSelected}: AccountLendingPoolPageSelectorProps) {
+  const hasFarmingA = useHasFarming(PoolTokenType.BorrowableA);
+  const hasFarmingB = useHasFarming(PoolTokenType.BorrowableA);
   return (
     <div className="account-lending-pool-page-selector">
       { pageSelected === AccountLendingPoolPage.LEVERAGE ? (
@@ -19,6 +23,13 @@ export default function AccountLendingPoolPageSelector({pageSelected, setPageSel
       ) : (
          <div onClick={() => setPageSelected(AccountLendingPoolPage.EARN_INTEREST) }>Lending</div>
      ) }
+     { (hasFarmingA || hasFarmingB) && (<>
+      { pageSelected === AccountLendingPoolPage.FARMING ? (
+        <div className="selected">IMX Farming</div>
+      ) : (
+         <div onClick={() => setPageSelected(AccountLendingPoolPage.FARMING) }>IMX Farming</div>
+      ) }
+     </>)}
     </div>
   );
 }
