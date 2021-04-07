@@ -244,13 +244,15 @@ export async function getRewardSpeed(this: Subgraph, uniswapV2PairAddress: Addre
 
 // Farming
 export async function getFarmingAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const imxPrice = await this.getImxPrice();
-  const rewardSpeed = await this.getRewardSpeed(uniswapV2PairAddress, poolTokenType);
-  const totalBorrowedUSD = await this.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType);
-  return this.toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
+  return this.getNextFarmingAPY(uniswapV2PairAddress, poolTokenType, 0);
 }
 export async function getNextFarmingAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
-  const farmingAPY = await this.getFarmingAPY(uniswapV2PairAddress, poolTokenType);
-  const totalBorrowed = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
-  return farmingAPY * totalBorrowed / (totalBorrowed + borrowAmount);
+  const imxPrice = await this.getImxPrice();
+  const rewardSpeed = await this.getRewardSpeed(uniswapV2PairAddress, poolTokenType);
+  const currentBorrowedUSD = await this.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType);
+  const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
+  const additionalBorrowsUSD = borrowAmount * tokenPrice;
+  const totalBorrowedUSD = currentBorrowedUSD + additionalBorrowsUSD;
+  if (totalBorrowedUSD === 0) return 0;
+  return this.toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
 }

@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import ImpermaxRouter from '../impermax-router';
 import useWeb3 from '../hooks/useWeb3';
-import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId, useAirdropUrl, useIMX, useMerkleDistributorAddress, useClaimAggregatorAddress, useImpermaxSubgraphUrl } from '../hooks/useNetwork';
+import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId, useAirdropUrl, useIMX, useMerkleDistributorAddress, useClaimAggregatorAddress, useImpermaxSubgraphUrl, useUniswapV2FactoryAddress } from '../hooks/useNetwork';
 import useSubgraph from '../hooks/useSubgraph';
 
 export interface ImpermaxRouterContextI {
@@ -23,6 +23,7 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const subgraph = useSubgraph();
   const routerAddress = useRouterAddress();
   const factoryAddress = useFactoryAddress();
+  const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
   const simpleUniswapOracleAddress = useSimpleUniswapOracleAddress();
   const merkleDistributorAddress = useMerkleDistributorAddress();
   const claimAggregatorAddress = useClaimAggregatorAddress();
@@ -54,6 +55,7 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         chainId,
         routerAddress, 
         factoryAddress, 
+        uniswapV2FactoryAddress,
         simpleUniswapOracleAddress, 
         merkleDistributorAddress,
         claimAggregatorAddress,

@@ -8,6 +8,7 @@ import { Container } from 'react-bootstrap';
 import PairAddressContext from '../contexts/PairAddress';
 import { useDoUpdate } from '../hooks/useImpermaxRouter';
 import useInterval from 'use-interval';
+import LendingPoolPage from '../components/LendingPoolPage';
 
 /**
  * LendingPool page view.
@@ -21,8 +22,7 @@ export default function LendingPool() {
   return (<View>
     <Container className="lending-pool">
       <PairAddressContext.Provider value={uniswapV2PairAddress}>
-        <BorrowablesDetails />
-        <AccountLendingPool />
+        <LendingPoolPage />
       </PairAddressContext.Provider>
     </Container>
   </View>);

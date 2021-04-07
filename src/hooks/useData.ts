@@ -8,6 +8,7 @@ import { BigNumber } from "ethers";
 import { decimalToBalance } from "../utils/ether-utils";
 import { useSubgraphCallback } from "./useSubgraph";
 import { getTotalValueSupplied, getTotalValueBorrowed } from "../subgraph/cacheData";
+import { InputAddressState } from "../views/CreateNewPair";
 
 export function useToken(poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
@@ -68,6 +69,13 @@ export function useMarketPrice() : number {
   const [marketPrice, setMarketPrice] = useState<number>(null);
   useRouterCallback(async (router) => setMarketPrice( await router.getMarketPrice(uniswapV2PairAddress) ));
   return marketPrice;
+}
+
+export function useOracleIsInitialized() : boolean {
+  const uniswapV2PairAddress = usePairAddress();
+  const [oracleIsInitialied, setOracleIsInitialized] = useState<boolean>(true);
+  useRouterCallback(async (router) => setOracleIsInitialized( await router.getTWAPPrice(uniswapV2PairAddress) !== 0 ));
+  return oracleIsInitialied;
 }
 
 export function useTWAPPrice() : number {
@@ -214,6 +222,51 @@ export function useFarmingShares(poolTokenTypeArg?: PoolTokenType) : number {
   const [farmingShares, setFarmingShares] = useState<number>(0);
   useRouterCallback(async (router) => setFarmingShares( await router.getFarmingShares(uniswapV2PairAddress, poolTokenType) ));
   return farmingShares;
+}
+
+export function useIsValidPair(uniswapV2PairAddress: Address) : InputAddressState {
+  const [inputAddressState, setInputAddressState] = useState<InputAddressState>(InputAddressState.INVALID_ADDRESS);
+  const [toCheckUniswapV2PairAddress, setToCheckUniswapV2PairAddress] = useState<string>();
+  useEffect(() => {
+    if (!/^0x[a-fA-F0-9]{40}$/g.test(uniswapV2PairAddress)) {
+      setInputAddressState(InputAddressState.INVALID_ADDRESS);
+      setToCheckUniswapV2PairAddress("");
+    }
+    else {
+      setInputAddressState(InputAddressState.LOADING);
+      setToCheckUniswapV2PairAddress(uniswapV2PairAddress);
+    }
+  }, [uniswapV2PairAddress]);
+  useRouterCallback(async (router) => {
+    const isValidPair = await router.isValidPair(toCheckUniswapV2PairAddress);
+    if (isValidPair) setInputAddressState(InputAddressState.VALID);
+    else setInputAddressState(InputAddressState.INVALID_PAIR);
+  }, [toCheckUniswapV2PairAddress]);
+  return inputAddressState;
+}
+
+export function usePairSymbols(uniswapV2PairAddress: Address) : {symbol0: string, symbol1: string} {
+  const [pairSymbols, setPairSymbols] = useState<{symbol0: string, symbol1: string}>({symbol0: "", symbol1: ""});
+  useRouterCallback(async (router) => {
+    setPairSymbols( await router.getPairSymbols(uniswapV2PairAddress) )
+  }, [uniswapV2PairAddress]);
+  return pairSymbols;
+}
+
+export function useIsPoolTokenCreated(uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, updater: number = 0) : boolean {
+  const [isPoolTokenCreated, setIsPoolTokenCreated] = useState<boolean>(false);
+  useRouterCallback(async (router) => {
+    setIsPoolTokenCreated( await router.isPoolTokenCreated(uniswapV2PairAddress, poolTokenType) )
+  }, [uniswapV2PairAddress, updater]);
+  return isPoolTokenCreated;
+}
+
+export function useIsPairInitialized(uniswapV2PairAddress: Address, updater: number = 0) : boolean {
+  const [isPairInitialized, setIsPairInitialized] = useState<boolean>(false);
+  useRouterCallback(async (router) => {
+    setIsPairInitialized( await router.isPairInitialized(uniswapV2PairAddress) )
+  }, [uniswapV2PairAddress, updater]);
+  return isPairInitialized;
 }
 
 export function useAvailableReward() : number {

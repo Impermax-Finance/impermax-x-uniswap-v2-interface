@@ -9,7 +9,7 @@ import OverallStats from '../components/OverallStats';
 export default function Home() {
   return (<View>
       <div className="home">
-        {<OverallStats />}
+        <OverallStats />
         <LendingPoolsSearch />
       </div>
     </View>

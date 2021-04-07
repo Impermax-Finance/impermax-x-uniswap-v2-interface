@@ -14,7 +14,13 @@ export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   const tokenAddress = useUnderlyingAddress(poolTokenTypeArg);
   if (!tokenAddress) return "";
   const convertedAddress = Web3.utils.toChecksumAddress(tokenAddress);
-  return tokenAddress ? "/build/assets/icons/" + convertedAddress + ".png" : "";
+  try{
+    require(`../assets/icons/${convertedAddress}.png`);
+    return `/build/assets/icons/${convertedAddress}.png`;
+  }
+  catch {
+    return "/build/assets/default.png";
+  }
 }
 
 export function useAddLiquidityUrl() : string {

@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
-import { HomeRoute, RisksRoute, UserGuideRoute, ClaimRoute } from '../../Routing';
+import { HomeRoute, RisksRoute, UserGuideRoute, ClaimRoute, CreateNewPairRoute } from '../../Routing';
 
 import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
@@ -50,12 +50,13 @@ export default function View({ children }: ViewProps) {
             <NavigationBarLink appRoute={HomeRoute} />
             <NavigationBarLink appRoute={UserGuideRoute} target="_blank" />
             { networkName === 'mainnet' && (<NavigationBarLink appRoute={RisksRoute} />) }
-            <NavigationBarLink appRoute={ClaimRoute} />
+            {/*<NavigationBarLink appRoute={ClaimRoute} />*/}
+            {<NavigationBarLink appRoute={CreateNewPairRoute} />}
           </Nav>
           { hasClaimableAirdrop && (<ClaimAirdrop/>) }
           {
             account ? 
-              <ConnectedWalletButtonComponent account={account}  /> :
+              <ConnectedWalletButtonComponent account={account} /> :
               <Button className="wallet-connector nav-button-green" onClick={onConnect}>Connect Wallet</Button>
           }
         </Container>

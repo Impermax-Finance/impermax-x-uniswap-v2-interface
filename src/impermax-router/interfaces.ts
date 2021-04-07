@@ -9,6 +9,7 @@ export type Factory = Contract;
 export type SimpleUniswapOracle = Contract;
 export type ERC20 = Contract;
 export type UniswapV2Pair = Contract;
+export type UniswapV2Factory = Contract;
 export type Borrowable = Contract;
 export type Collateral = Contract;
 export type MerkleDistributor = Contract;
@@ -56,6 +57,7 @@ export interface ImpermaxRouterCfg {
   chainId: number;
   routerAddress: Address;
   factoryAddress: Address;
+  uniswapV2FactoryAddress: Address;
   simpleUniswapOracleAddress: Address;
   merkleDistributorAddress: Address;
   claimAggregatorAddress: Address;

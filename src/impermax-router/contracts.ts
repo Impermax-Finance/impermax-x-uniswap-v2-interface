@@ -1,7 +1,6 @@
 import ImpermaxRouter from "."
 import { Address, LendingPool, PoolTokenType, Contract, FarmingPool, Claimable } from "./interfaces";
 import { decimalToBalance } from "../utils/ether-utils";
-import { getMonthlyWeightedAPY, getWeeklyUniswapAPY } from "../utils/uniswapApy";
 
 
 export function getLendingPoolCache(this: ImpermaxRouter, uniswapV2PairAddress: Address) {

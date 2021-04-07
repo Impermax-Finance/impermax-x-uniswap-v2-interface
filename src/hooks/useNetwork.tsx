@@ -46,6 +46,11 @@ export function useFactoryAddress() {
   return factoryAddress;
 }
 
+export function useUniswapV2FactoryAddress() {
+  const { uniswapV2FactoryAddress } = useContext(NetworkContext);
+  return uniswapV2FactoryAddress;
+}
+
 export function useSimpleUniswapOracleAddress() {
   const { simpleUniswapOracleAddress } = useContext(NetworkContext);
   return simpleUniswapOracleAddress;

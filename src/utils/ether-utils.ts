@@ -11,3 +11,7 @@ export function decimalToBalance(d: string | number, decimals = 18): BigNumber {
   const s = formatToDecimals(Math.max(n, 0), decimals);
   return parseUnits(s, decimals);
 }
+
+export function address(n: number): string {
+	return `0x${n.toString(16).padStart(40, '0')}`;
+}

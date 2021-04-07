@@ -8,22 +8,18 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import { LanguageContext } from '../../contexts/Language';
 import { LendingPoolsTable } from './../LendingPoolsTable';
-import phrases from './translations';
 import './index.scss';
+import { CreateNewPairRoute } from '../../Routing';
 
 export function SearchForm() {
-  const languages = useContext(LanguageContext);
-  const language = languages.state.selected;
-
-  const t = (s: string) => (phrases[s][language]);
-
   return (<InputGroup>
-    <FormControl
-       placeholder={t("Search Uniswap V2 LP Token")}
-    />
+    <FormControl placeholder="Search pair by name or address" />
     <InputGroup.Append>
       <Button variant="primary">Search</Button>
     </InputGroup.Append>
+    <a href={CreateNewPairRoute.to}>
+      <Button>{CreateNewPairRoute.value}</Button>
+    </a>
   </InputGroup>);
 }
 

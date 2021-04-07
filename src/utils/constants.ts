@@ -31,6 +31,11 @@ export const FACTORY: NetworkIndex = {
   [Networks.Mainnet]: '0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B',
 };
 
+export const UNISWAP_V2_FACTORY: NetworkIndex = {
+  [Networks.Ropsten]: '0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f',
+  [Networks.Mainnet]: '0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f',
+};
+
 export const SIMPLE_UNISWAP_ORACLE: NetworkIndex = {
   [Networks.Ropsten]: '0xc53bb18028feA1B413057e2b2474F9838c465Fc3',
   [Networks.Mainnet]: '0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D',

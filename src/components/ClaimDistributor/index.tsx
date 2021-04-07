@@ -12,7 +12,7 @@ export default function ClaimDistributor({ distributor }: { distributor: Distrib
   const availableClaimable = useAvailableClaimable(distributor.claimableAddress);
   const [claimDistributorState, onClaimDistributor] = useClaimDistributor(distributor);
 
-  if (availableClaimable === 0) return (null);
+  if (!availableClaimable) return (null);
 
   return (
     <div className="claim-distributor">
