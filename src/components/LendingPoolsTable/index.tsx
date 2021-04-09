@@ -7,6 +7,7 @@ import PairAddressContext from '../../contexts/PairAddress';
 import QuestionHelper from '../QuestionHelper';
 import { usePairList } from '../../hooks/useData';
 import { Spinner } from 'react-bootstrap';
+import { useWallet } from 'use-wallet';
 
 /**
  * Generate a searchable lending pools table.

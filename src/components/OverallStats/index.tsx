@@ -6,15 +6,15 @@ import Container from 'react-bootstrap/Container';
 import { useTotalValueLocked, useTotalValueSupplied, useTotalValueBorrowed } from '../../hooks/useData';
 import { formatUSD } from '../../utils/format';
 import './index.scss';
+import { useAccountTotalValueLocked, useAccountTotalValueSupplied, useAccountTotalValueBorrowed } from '../../hooks/useAccountData';
 
-/**
- * Creates a searchable list of Lending Pools.
- */
-export default function OverallStats() {
-  const totalValueLocked = useTotalValueLocked();
-  const totalValueSupplied = useTotalValueSupplied();
-  const totalValueBorrowed = useTotalValueBorrowed();
+interface OverallStatsInternalProps {
+  totalValueLocked: number;
+  totalValueSupplied: number;
+  totalValueBorrowed: number;
+}
 
+function OverallStatsInternal({totalValueLocked, totalValueSupplied, totalValueBorrowed} : OverallStatsInternalProps) {
   return(<Container className="overall-stats">
     <Card>
       <Row>
@@ -33,4 +33,28 @@ export default function OverallStats() {
       </Row>
     </Card>
   </Container>);
+}
+
+export default function OverallStats() {
+  const totalValueLocked = useTotalValueLocked();
+  const totalValueSupplied = useTotalValueSupplied();
+  const totalValueBorrowed = useTotalValueBorrowed();
+
+  return (<OverallStatsInternal 
+    totalValueLocked={totalValueLocked} 
+    totalValueSupplied={totalValueSupplied} 
+    totalValueBorrowed={totalValueBorrowed} 
+  />);
+}
+
+export function AccountOverallStats() {
+  const totalValueLocked = useAccountTotalValueLocked();
+  const totalValueSupplied = useAccountTotalValueSupplied();
+  const totalValueBorrowed = useAccountTotalValueBorrowed();
+
+  return (<OverallStatsInternal 
+    totalValueLocked={totalValueLocked} 
+    totalValueSupplied={totalValueSupplied} 
+    totalValueBorrowed={totalValueBorrowed} 
+  />);
 }

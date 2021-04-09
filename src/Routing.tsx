@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import { Home, LendingPool, Risks, Claim, CreateNewPair } from './views';
+import { Home, LendingPool, Risks, Claim, CreateNewPair, Account } from './views';
 
 export interface AppRoute {
   value: string;
@@ -15,6 +15,11 @@ export const HomeRoute = {
 export const LendingPoolRoute = {
   value: 'LendingPool',
   to: '/lending-pool/:uniswapV2PairAddress'
+} as AppRoute;
+
+export const AccountRoute = {
+  value: 'AccountRoute',
+  to: '/account/:account'
 } as AppRoute;
 
 export const CreateNewPairRoute = {
@@ -44,6 +49,7 @@ export enum AppRoutes {
   RisksRoute,
   ClaimRoute,
   UserGuideRoute,
+  AccountRoute,
 }
 
 /**
@@ -62,6 +68,9 @@ export default function Routing() {
             </Route>
             <Route path={LendingPoolRoute.to}>
               <LendingPool />
+            </Route>
+            <Route path={AccountRoute.to}>
+              <Account />
             </Route>
             <Route path={ClaimRoute.to}>
               <Claim />

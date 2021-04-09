@@ -4,10 +4,16 @@ import { PoolTokenType } from "../impermax-router/interfaces";
 import usePoolToken from "./usePoolToken";
 import { useUnderlyingAddress } from "./useData";
 import Web3 from "web3";
+import { useWallet } from "use-wallet";
 
 export function useLendingPoolUrl() : string {
   const uniswapV2PairAddress = usePairAddress();
   return "/lending-pool/" + uniswapV2PairAddress;
+}
+
+export function useThisAccountUrl() : string {
+  const { account } = useWallet();
+  return "/account/" + account;
 }
 
 export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {

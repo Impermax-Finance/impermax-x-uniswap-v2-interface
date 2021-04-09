@@ -5,7 +5,7 @@ import { Row, Col, Button, Card } from "react-bootstrap";
 import { PoolTokenType } from "../../impermax-router/interfaces";
 import InlineAccountTokenInfo from "./InlineAccountTokenInfo";
 import RepayInteractionModal from "../InteractionModal/RepayInteractionModal";
-import { useBorrowed, useSymbol, useBorrowedUSD, useBorrowerList, useMaxBorrowable, useMaxWithdrawable, useDepositedUSD } from "../../hooks/useData";
+import { useBorrowed, useSymbol, useBorrowedUSD, useMaxBorrowable, useMaxWithdrawable, useDepositedUSD } from "../../hooks/useData";
 import { useTokenIcon } from "../../hooks/useUrlGenerator";
 import DisabledButtonHelper from "../DisabledButtonHelper";
 import { text } from "@fortawesome/fontawesome-svg-core";

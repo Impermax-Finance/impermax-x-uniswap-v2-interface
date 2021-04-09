@@ -76,7 +76,9 @@ export interface BorrowableData {
   reserveFactor: string,
   kinkBorrowRate: string,
   kinkUtilizationRate: string,
+  borrowIndex: string,
   accrualTimestamp: string,
+  exchangeRate: string,
   totalBalanceUSD: string,
   farmingPool: FarmingPoolData,
 }
@@ -86,6 +88,7 @@ export interface CollateralData {
   totalBalance: string,
   safetyMargin: string,
   liquidationIncentive: string,
+  exchangeRate: string,
   totalBalanceUSD: string,
 }
 
@@ -120,6 +123,46 @@ export interface LendingPoolData {
   [PoolTokenType.BorrowableA]: BorrowableData,
   [PoolTokenType.BorrowableB]: BorrowableData,
   pair: PairData,
+}
+
+export interface CollateralPosition {
+  balance: string,
+  collateral: {
+    lendingPool: {
+      id: Address,
+    }
+  }
+}
+
+export interface SupplyPosition {
+  balance: string,
+  borrowable: {
+    underlying: {
+      id: Address
+    },
+    lendingPool: {
+      id: Address,
+    }
+  }
+}
+
+export interface BorrowPosition {
+  borrowBalance: string,
+  borrowIndex: string,
+  borrowable: {
+    underlying: {
+      id: Address
+    },
+    lendingPool: {
+      id: Address,
+    }
+  }
+}
+
+export interface UserData {
+  collateralPositions: { [key in Address]: CollateralPosition },
+  supplyPositions: { [key in Address]: { [key in PoolTokenType]?: SupplyPosition } },
+  borrowPositions: { [key in Address]: { [key in PoolTokenType]?: BorrowPosition } },
 }
 
 export interface TvlData {

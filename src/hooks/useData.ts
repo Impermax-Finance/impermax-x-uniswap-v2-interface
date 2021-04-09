@@ -1,6 +1,7 @@
 import { PoolTokenType, Changes, AirdropData, ClaimEvent, Address } from "../impermax-router/interfaces";
 import usePoolToken from "./usePoolToken";
 import usePairAddress from "./usePairAddress";
+import { useWallet } from 'use-wallet';
 import { useState, useCallback, useEffect } from "react";
 import { useRouterCallback } from "./useImpermaxRouter";
 import { stringify } from "querystring";
@@ -9,6 +10,7 @@ import { decimalToBalance } from "../utils/ether-utils";
 import { useSubgraphCallback } from "./useSubgraph";
 import { getTotalValueSupplied, getTotalValueBorrowed } from "../subgraph/cacheData";
 import { InputAddressState } from "../views/CreateNewPair";
+import useAccount from "./useAccount";
 
 export function useToken(poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
@@ -50,6 +52,20 @@ export function useExchangeRate(poolTokenTypeArg?: PoolTokenType) : number {
   return exchangeRate;
 }
 
+export function useStoredExchangeRate(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [storedExchangeRate, setStoredExchangeRate] = useState<number>(1);
+  useSubgraphCallback(async (subgraph) => setStoredExchangeRate( await subgraph.getExchangeRate(uniswapV2PairAddress, poolTokenType) ));
+  return storedExchangeRate;
+}
+
+export function useStoredBorrowIndex(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [storedBorrowIndex, setStoredBorrowIndex] = useState<number>(1);
+  useSubgraphCallback(async (subgraph) => setStoredBorrowIndex( await subgraph.getBorrowIndex(uniswapV2PairAddress, poolTokenType) ));
+  return storedBorrowIndex;
+}
+
 export function useSafetyMargin() : number {
   const uniswapV2PairAddress = usePairAddress();
   const [safetyMargin, setSafetyMargin] = useState<number>(1);
@@ -57,8 +73,14 @@ export function useSafetyMargin() : number {
   return safetyMargin;
 }
 
+export function useTokenPrice(poolTokenTypeArg?: PoolTokenType) : number {
+  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
+  const [tokenPrice, setTokenPrice] = useState<number>(null);
+  useSubgraphCallback(async (subgraph) => setTokenPrice( await subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType) ));
+  return tokenPrice;
+}
+
 export function useImxPrice() : number {
-  const uniswapV2PairAddress = usePairAddress();
   const [imxPrice, setImxPrice] = useState<number>(null);
   useSubgraphCallback(async (subgraph) => setImxPrice( await subgraph.getImxPrice() ));
   return imxPrice;
