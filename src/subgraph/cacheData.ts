@@ -67,10 +67,10 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
   return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).underlying.derivedUSD);
 }
 export async function getImxPrice(this: Subgraph) : Promise<number> {
-  if (!this.IMXPair) return 0;
-  const AAddress = await this.getUnderlyingAddress(this.IMXPair, PoolTokenType.BorrowableA);
+  const IMXPair = this.getPairAddress(this.WETH, this.IMX);
+  const AAddress = await this.getUnderlyingAddress(IMXPair, PoolTokenType.BorrowableA);
   const poolTokenType = AAddress.toLowerCase() === this.IMX.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
-  return this.getTokenPrice(this.IMXPair, poolTokenType);
+  return this.getTokenPrice(IMXPair, poolTokenType);
 }
 
 // Total balance

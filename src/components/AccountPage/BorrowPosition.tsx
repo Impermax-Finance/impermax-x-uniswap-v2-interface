@@ -31,12 +31,12 @@ export default function BorrowPosition() {
     </Col>
     <Col className="borrow-balance-details">
       <Row>
-        <Col className="details-name">
+        <Col className="details-name d-none d-md-block">
           <div>LP Balance</div>
           <div>{symbolA} Borrowed</div>
           <div>{symbolB} Borrowed</div>
         </Col>
-        <Col className="details-value">
+        <Col className="details-value d-none d-md-block">
           <div>+{formatUSD(collateralValue)}</div>
           <div>-{formatUSD(borrowedValueA)}</div>
           <div>-{formatUSD(borrowedValueB)}</div>

@@ -42,11 +42,7 @@ export const SIMPLE_UNISWAP_ORACLE: NetworkIndex = {
 };
 
 export const IMX: NetworkIndex = {
-  [Networks.Ropsten]: '0xa813AFf9082fd8856Ba6F087982881A4C55Ef451',
-  [Networks.Mainnet]: '',
-};
-export const IMX_PAIR: NetworkIndex = {
-  [Networks.Ropsten]: '0x0Efc0766F46E1AD825CE18F54F0793dd6814a947',
+  [Networks.Ropsten]: '0x6659a9c5cd313974343e30b4fdffd95bd4b4dcd2',
   [Networks.Mainnet]: '',
 };
 
@@ -56,23 +52,26 @@ export const WETH: NetworkIndex = {
 };
 
 export const CLAIM_AGGREGATOR: NetworkIndex = {
-  [Networks.Ropsten]: '0x8DFF9cEA94a03Ad4b84b7CA3aEECEF295b05Eeb5',
+  [Networks.Ropsten]: '0x2078270ae9956f1298f8bfd8be43306bbd4ab551',
   [Networks.Mainnet]: '',
 };
 
 export const MERKLE_DISTRIBUTOR: NetworkIndex = {
-  [Networks.Ropsten]: '0x1F0DFee1f932fDA1e95aa82f588F2828c3F192bd',
+  [Networks.Ropsten]: '0x3039c26f9126833baca8edbf61c761cd909f461f',
   [Networks.Mainnet]: '',
 };
 
 export const AIRDROP_URL: NetworkIndex = {
-  [Networks.Ropsten]: 'https://shiny-union-6fc6.impermax.workers.dev',
+  [Networks.Ropsten]: 'https://wispy-truth-7af9.impermax.workers.dev',
   [Networks.Mainnet]: '',
 };
 
 export const DISTRIBUTORS: NetworkIndex = {
   [Networks.Ropsten]: [
-    { claimableAddress: "0x59db24c7FD730D7e5a7425cAa2Ad6961c77919A0", name: "Private Sale" },
+    { claimableAddress: "0x9192b53fe173025733beb33467d730a4e6bb7f36", name: "Private Sale" },
+    { claimableAddress: "0xb9f3413e206f1d658d4dafb233873dde56cf94fc", name: "Advisor Allocation" },
+    { claimableAddress: "0x175608ea84b38d7df7a4358cf679eccb49b8203c", name: "Protocol Growth And Development" },
+    { claimableAddress: "0x8ab3567aba5151a3ab4c1aff2fc9192178ded78d", name: "Core Contributor" },
   ],
   [Networks.Mainnet]: '',
 };

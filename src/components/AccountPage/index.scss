@@ -45,7 +45,10 @@
 
     .borrow-balance-details {
       flex-grow: 1;
-      min-width: 480px;
+      min-width: 180px;
+      @media only screen and (min-width: 768px) {
+        min-width: 480px;
+      }
       > .row > div > div {
         width: 100%;
       }
@@ -67,15 +70,15 @@
 
     .supply-balance-details {
       flex-grow: 1;
-      min-width: 270px;
+      min-width: 300px;
       > .row > div > div {
         width: 100%;
       }
       .details-amount {
-        min-width: 150px;
+        min-width: 180px;
       }
       .details-value {
-        min-width: 100px;
+        min-width: 120px;
         text-align: right;
       }
     }

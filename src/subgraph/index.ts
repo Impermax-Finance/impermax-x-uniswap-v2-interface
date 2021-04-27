@@ -10,8 +10,8 @@ export interface SubgraphCfg {
   impermaxSubgraphUrl: string;
   chainId: number;
   IMX: Address;
-  IMXPair: Address;
   WETH: Address;
+  uniswapV2FactoryAddress: Address;
 }
 
 export default class Subgraph {
@@ -20,8 +20,8 @@ export default class Subgraph {
   blocklyticsSubgraphUrl: string;
   chainId: number;
   IMX: Address;
-  IMXPair: Address;
   WETH: Address;
+  uniswapV2FactoryAddress: Address;
   lendingPoolsData: Promise<{
     [key in Address]?: LendingPoolData
   }>;
@@ -36,8 +36,8 @@ export default class Subgraph {
     this.blocklyticsSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks';
     this.chainId = cfg.chainId;
     this.IMX = cfg.IMX;
-    this.IMXPair = cfg.IMXPair;
     this.WETH = cfg.WETH;
+    this.uniswapV2FactoryAddress = cfg.uniswapV2FactoryAddress;
     this.usersData = {};
   }
 
@@ -120,4 +120,5 @@ export default class Subgraph {
 
   // Utils
   public toAPY = utils.toAPY;
+  public getPairAddress = utils.getPairAddress;
 }

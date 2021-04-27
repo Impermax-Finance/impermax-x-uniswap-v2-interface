@@ -20,7 +20,7 @@ export default function SupplyPosition() {
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
 
   return (<Row className="position">
-    <Col className="currency-name">
+    <Col className="currency-name d-none d-sm-block">
       <div className="combined">
         <div className="currency-overlapped">
           <img src={tokenIconA} />

@@ -54,9 +54,10 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
   const borrowAPYB = useNextBorrowAPY(changeAmounts.bAmountB, PoolTokenType.BorrowableB);
   const farmingPoolAPYA = useNextFarmingAPY(changeAmounts.bAmountA, PoolTokenType.BorrowableA);
   const farmingPoolAPYB = useNextFarmingAPY(changeAmounts.bAmountB, PoolTokenType.BorrowableB);
-  const uniAPY = useUniswapAPY();
-  const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
-  const leveragedAPY = uniAPY * val - averageAPY * (val - 1);
+  const uniAPY = useUniswapAPY() * val;
+  const borrowAPY = (borrowAPYA + borrowAPYB) / 2 * (val - 1);
+  const farmingPoolAPY = (farmingPoolAPYA + farmingPoolAPYB) / 2 * (val - 1);
+  const leveragedAPY = uniAPY + farmingPoolAPY - borrowAPY;
 
   return (
     <InteractionModalContainer title="Leverage" show={show} toggleShow={toggleShow}>
@@ -88,6 +89,18 @@ export default function LeverageInteractionModal({show, toggleShow}: LeverageInt
           <Row>
             <Col xs={6}>You will get at least:</Col>
             <Col xs={6} className="text-right">{formatFloat(changeAmounts.cAmountMin)} {symbol}</Col>
+          </Row>
+          <Row>
+            <Col xs={6}>Trading fees APY:</Col>
+            <Col xs={6} className="text-right">+{formatPercentage(uniAPY)}</Col>
+          </Row>
+          { (farmingPoolAPY > 0) && (<Row>
+            <Col xs={6}>Farming APY:</Col>
+            <Col xs={6} className="text-right">+{formatPercentage(farmingPoolAPY)}</Col>
+          </Row>) }
+          <Row>
+            <Col xs={6}>Borrow APY:</Col>
+            <Col xs={6} className="text-right">-{formatPercentage(borrowAPY)}</Col>
           </Row>
           <Row>
             <Col xs={6}>Estimated APY:</Col>

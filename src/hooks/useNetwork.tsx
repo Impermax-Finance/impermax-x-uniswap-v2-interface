@@ -26,11 +26,6 @@ export function useIMX() {
   return IMX;
 }
 
-export function useIMXPair() {
-  const { IMX_PAIR } = useContext(NetworkContext);
-  return IMX_PAIR;
-}
-
 export function useWETH() {
   const { WETH } = useContext(NetworkContext);
   return WETH;

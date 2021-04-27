@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import Subgraph from '../subgraph';
-import { useChainId, useImpermaxSubgraphUrl, useWETH, useIMX, useIMXPair } from '../hooks/useNetwork';
+import { useChainId, useImpermaxSubgraphUrl, useWETH, useIMX, useUniswapV2FactoryAddress } from '../hooks/useNetwork';
 
 export interface SubgraphContextI {
   subgraph?: Subgraph;
@@ -14,14 +14,14 @@ export const SubgraphProvider: React.FC = ({ children }) => {
   const impermaxSubgraphUrl = useImpermaxSubgraphUrl();
   const WETH = useWETH();
   const IMX = useIMX();
-  const IMXPair = useIMXPair();
+  const uniswapV2FactoryAddress = useUniswapV2FactoryAddress()
 
   const subgraph = new Subgraph({
     impermaxSubgraphUrl,
     chainId,
     WETH, 
     IMX,
-    IMXPair,
+    uniswapV2FactoryAddress,
   });
 
   return <SubgraphContext.Provider value={{ 
