@@ -51,10 +51,10 @@ export default function AccountLendingPoolFarming() {
   // if is farming, show to reward accumulated and show a button to claim it
   return (<>
     <Row className="account-lending-pool-claim">
-      <Col md={8} className="col-reward-rate">
+      {/*<Col md={8} className="col-reward-rate">
         You are currently earning { formatAmount(userRewardPerMonth) } IMX ({ formatUSD(userRewardPerMonth * imxPrice) }) per month.
-      </Col>
-      <Col md={4} className="col-claim-reward">
+      </Col>*/}
+      <Col md={12} className="col-claim-reward">
         <InteractionButton name={"Claim " + formatAmount(availableReward) + " IMX"} onCall={onClaims} state={claimsState} />  
       </Col>
     </Row>

@@ -68,6 +68,7 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
 }
 export async function getImxPrice(this: Subgraph) : Promise<number> {
   const IMXPair = this.getPairAddress(this.WETH, this.IMX);
+  console.log(IMXPair);
   const AAddress = await this.getUnderlyingAddress(IMXPair, PoolTokenType.BorrowableA);
   const poolTokenType = AAddress.toLowerCase() === this.IMX.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
   return this.getTokenPrice(IMXPair, poolTokenType);

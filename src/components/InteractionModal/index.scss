@@ -108,3 +108,13 @@
 
   }
 }
+
+.clear-all-transactions {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #00ac6e;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}

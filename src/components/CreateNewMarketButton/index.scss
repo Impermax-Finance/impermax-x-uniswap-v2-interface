@@ -1,0 +1,14 @@
+.create-new-market {
+  margin-top: 2rem;
+
+  .row {
+    flex-direction: row-reverse;
+    margin: 0;
+
+    .btn, .btn:active {
+      background-color: #00b675;
+      border: none;
+      box-shadow: none !important;
+    }
+  }
+}

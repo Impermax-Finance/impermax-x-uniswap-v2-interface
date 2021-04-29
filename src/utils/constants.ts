@@ -43,7 +43,7 @@ export const SIMPLE_UNISWAP_ORACLE: NetworkIndex = {
 
 export const IMX: NetworkIndex = {
   [Networks.Ropsten]: '0x6659a9c5cd313974343e30b4fdffd95bd4b4dcd2',
-  [Networks.Mainnet]: '',
+  [Networks.Mainnet]: '0x7b35ce522cb72e4077baeb96cb923a5529764a00',
 };
 
 export const WETH: NetworkIndex = {
@@ -53,17 +53,17 @@ export const WETH: NetworkIndex = {
 
 export const CLAIM_AGGREGATOR: NetworkIndex = {
   [Networks.Ropsten]: '0x2078270ae9956f1298f8bfd8be43306bbd4ab551',
-  [Networks.Mainnet]: '',
+  [Networks.Mainnet]: '0x5287cac629be59997602b4177cb4420165264b69',
 };
 
 export const MERKLE_DISTRIBUTOR: NetworkIndex = {
   [Networks.Ropsten]: '0x3039c26f9126833baca8edbf61c761cd909f461f',
-  [Networks.Mainnet]: '',
+  [Networks.Mainnet]: '0x2011b5d4d5287cc9d3462b4e8af0e4daf29e3c1d',
 };
 
 export const AIRDROP_URL: NetworkIndex = {
   [Networks.Ropsten]: 'https://wispy-truth-7af9.impermax.workers.dev',
-  [Networks.Mainnet]: '',
+  [Networks.Mainnet]: 'https://old-feather-0b99.impermax.workers.dev',
 };
 
 export const DISTRIBUTORS: NetworkIndex = {
@@ -73,7 +73,12 @@ export const DISTRIBUTORS: NetworkIndex = {
     { claimableAddress: "0x175608ea84b38d7df7a4358cf679eccb49b8203c", name: "Protocol Growth And Development" },
     { claimableAddress: "0x8ab3567aba5151a3ab4c1aff2fc9192178ded78d", name: "Core Contributor" },
   ],
-  [Networks.Mainnet]: '',
+  [Networks.Mainnet]: [
+    { claimableAddress: "0x434547433e383c505e76f22f4174d7ba68b7686c", name: "Private Sale" },
+    { claimableAddress: "0x0f528f19521fde0140668b9eb14025054bfec29e", name: "Advisor Allocation" },
+    { claimableAddress: "0x34c8f7a53e10c17fddf7ee5048c097569d99de59", name: "Protocol Growth And Development" },
+    { claimableAddress: "0x87da8bab9fbd09593f2368dc2f6fac3f80c2a845", name: "Core Contributor" },
+  ],
 };
 
 /*export const ROPSTEN_ETH_IMX: Address = '0x0Efc0766F46E1AD825CE18F54F0793dd6814a947';

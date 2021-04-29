@@ -7,6 +7,7 @@ import useAccount from "../../hooks/useAccount";
 import { useSuppliedAmount, useSuppliedValue } from "../../hooks/useAccountData";
 import { useSymbol } from "../../hooks/useData";
 import { Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 
 export default function SupplyPosition() {
@@ -18,8 +19,9 @@ export default function SupplyPosition() {
   const suppliedValueB = useSuppliedValue(PoolTokenType.BorrowableB);
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
+  const lendingPoolUrl = useLendingPoolUrl();
 
-  return (<Row className="position">
+  return (<Link to={lendingPoolUrl} className="position row">
     <Col className="currency-name d-none d-sm-block">
       <div className="combined">
         <div className="currency-overlapped">
@@ -45,5 +47,5 @@ export default function SupplyPosition() {
         </Col>
       </Row>
     </Col>
-  </Row>);
+  </Link>);
 }

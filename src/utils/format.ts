@@ -9,7 +9,7 @@ function formatSmallNumber(n: number, significant: number = 6) {
 export function formatFloat(n: number, significant: number = 6) : string {
   if (n == Infinity) return "Infinity"; //return "∞";
   if (!n) return '0';
-  if (n >= 10 ** (significant-1)) return Math.floor(n).toString();
+  if (n * 1.000001 >= 10 ** (significant-1)) return Math.floor(n).toString();
   if (n < 1e-6) return formatSmallNumber(n, significant);
   const rounded = parseFloat(n.toPrecision(significant));
   if (rounded <= n) return rounded.toString();

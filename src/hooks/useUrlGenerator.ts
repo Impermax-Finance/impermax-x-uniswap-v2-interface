@@ -13,6 +13,7 @@ export function useLendingPoolUrl() : string {
 
 export function useThisAccountUrl() : string {
   const { account } = useWallet();
+  if (!account) return null;
   return "/account/" + account;
 }
 

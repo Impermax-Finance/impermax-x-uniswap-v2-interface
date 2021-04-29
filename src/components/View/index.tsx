@@ -12,6 +12,7 @@ import Countdown from '../Countdown';
 import useInterval from 'use-interval';
 import { useHasClaimableAirdrop, useAirdropData, useToNumber } from '../../hooks/useData';
 import { ClaimAirdrop } from './ClaimAirdrop';
+import { useThisAccountUrl } from '../../hooks/useUrlGenerator';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -37,21 +38,25 @@ export default function View({ children }: ViewProps) {
   const connected = status == 'connected';
 
   const hasClaimableAirdrop = useHasClaimableAirdrop();
+  const accountUrl = useThisAccountUrl();
   
   return (
     <div className="view">
       <Navbar>
         <Container>
           <Navbar.Brand>
-            <img className='impermax-brand' src="/build/assets/impermax.png" />
+            <a href="https://impermax.finance/" target="_blank">
+              <img className='impermax-brand' src="/build/assets/impermax.png" />
+            </a>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Nav className="mr-auto">
             <NavigationBarLink appRoute={HomeRoute} />
+            { accountUrl && (<NavigationBarLink appRoute={{value: "Dashboard", to: accountUrl}} />) }
             <NavigationBarLink appRoute={UserGuideRoute} target="_blank" />
             { networkName === 'mainnet' && (<NavigationBarLink appRoute={RisksRoute} />) }
             {/*<NavigationBarLink appRoute={ClaimRoute} />*/}
-            {<NavigationBarLink appRoute={CreateNewPairRoute} />}
+            {/*<NavigationBarLink appRoute={CreateNewPairRoute} />*/}
           </Nav>
           { hasClaimableAirdrop && (<ClaimAirdrop/>) }
           {

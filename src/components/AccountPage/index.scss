@@ -13,6 +13,12 @@
     border-bottom: 1px solid #e3e6e8;
     margin: 0;
     padding: 0.5rem 0;
+    color: #202020;
+    text-decoration: none;
+
+    &.position:hover {
+      background-color: #f8f9fa;
+    }
 
     .currency-name {
       display: flex;
@@ -23,6 +29,7 @@
         display: flex;
         align-items: center;
         font-size: 1.125rem;
+        line-height: 48px;
         .currency-overlapped > img {
           width: 2rem;
           position: relative;

@@ -8,7 +8,7 @@ export interface AppRoute {
 }
 
 export const HomeRoute = {
-  value: 'Home',
+  value: 'Markets',
   to: '/'
 } as AppRoute;
 
