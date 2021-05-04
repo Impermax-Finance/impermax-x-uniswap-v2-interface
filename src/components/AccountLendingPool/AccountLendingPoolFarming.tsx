@@ -33,38 +33,34 @@ export default function AccountLendingPoolFarming() {
   const [trackBorrowsState, onTrackBorrows] = useTrackBorrows();
   const [claimsState, onClaims] = useClaims();
 
+  // if is farming, show to reward accumulated and show a button to claim it
+  if (availableReward > 0 || (borrowedA > 1 && farmingSharesA > 0) && (borrowedB > 1 && farmingSharesB > 0))
+    return (<>
+      <Row className="account-lending-pool-claim">
+        <Col md={12} className="col-claim-reward">
+          <InteractionButton name={"Claim " + formatAmount(availableReward) + " IMX"} onCall={onClaims} state={claimsState} />  
+        </Col>
+      </Row>
+      <div className="claim-history">
+        <b>Claims history</b>
+        {claimHistory.map((claimEvent: ClaimEvent, key: any) => {
+          return (<div key={key}>
+            <a href={ urlGenerator(claimEvent.transactionHash) } target="_blank">Claim { formatAmount(claimEvent.amount) } IMX</a>
+          </div>)
+        })}
+      </div>
+    </>);
+
   // if doesn't have anything borrowed, tell the user to borrow or leverage
   if (borrowedA + borrowedB < 1) return  (<div className="account-lending-pool-farming">
     <div className="info">Leverage { symbol } or Borrow to start receiving the IMX reward</div>
   </div>);
 
   // if has borrowed, but it is not tracked, show a button to track the LP
-  if ((borrowedA > 1 && farmingSharesA === 0) || (borrowedB > 1 && farmingSharesB === 0)) {
-    return  (<div className="account-lending-pool-farming">
-      <div className="info">IMX reward on your borrowed position in { symbol } is not active</div>
-      <div className="activate-imx-reward">
-        <InteractionButton name="Activate IMX Reward" onCall={onTrackBorrows} state={trackBorrowsState} />  
-      </div>
-    </div>);
-  }
-
-  // if is farming, show to reward accumulated and show a button to claim it
-  return (<>
-    <Row className="account-lending-pool-claim">
-      <Col md={8} className="col-reward-rate">
-        You are currently earning { formatAmount(userRewardPerMonth) } IMX ({ formatUSD(userRewardPerMonth * imxPrice) }) per month.
-      </Col>
-      <Col md={4} className="col-claim-reward">
-        <InteractionButton name={"Claim " + formatAmount(availableReward) + " IMX"} onCall={onClaims} state={claimsState} />  
-      </Col>
-    </Row>
-    <div className="claim-history">
-      <b>Claims history</b>
-      {claimHistory.map((claimEvent: ClaimEvent, key: any) => {
-        return (<div key={key}>
-          <a href={ urlGenerator(claimEvent.transactionHash) } target="_blank">Claim { formatAmount(claimEvent.amount) } IMX</a>
-        </div>)
-      })}
+  return  (<div className="account-lending-pool-farming">
+    <div className="info">IMX reward on your borrowed position in { symbol } is not active</div>
+    <div className="activate-imx-reward">
+      <InteractionButton name="Activate IMX Reward" onCall={onTrackBorrows} state={trackBorrowsState} />  
     </div>
-  </>);
+  </div>);
 }

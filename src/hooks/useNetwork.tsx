@@ -26,11 +26,6 @@ export function useIMX() {
   return IMX;
 }
 
-export function useIMXPair() {
-  const { IMX_PAIR } = useContext(NetworkContext);
-  return IMX_PAIR;
-}
-
 export function useWETH() {
   const { WETH } = useContext(NetworkContext);
   return WETH;
@@ -44,6 +39,11 @@ export function useRouterAddress() {
 export function useFactoryAddress() {
   const { factoryAddress } = useContext(NetworkContext);
   return factoryAddress;
+}
+
+export function useUniswapV2FactoryAddress() {
+  const { uniswapV2FactoryAddress } = useContext(NetworkContext);
+  return uniswapV2FactoryAddress;
 }
 
 export function useSimpleUniswapOracleAddress() {

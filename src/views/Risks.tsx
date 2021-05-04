@@ -14,20 +14,23 @@ export default function Risks() {
 
       <h2>Contract Security</h2>
       <p>
-        Impermax smart contracts were all audited by <a target="_blank" href="https://cyberunit.tech/">Cyber Unit</a>.
+        Impermax smart contracts were audited by <a target="_blank" href="https://www.certik.org/">Certik</a> and <a target="_blank" href="https://cyberunit.tech/">Cyber Unit</a>.
         <ul>
-          <li><a target="_blank" href="https://github.com/Impermax-Finance/impermax-x-uniswapv2-core/blob/main/audit/SC_impermax_core.pdf">Core audit</a></li>
-          <li><a target="_blank" href="https://github.com/Impermax-Finance/impermax-x-uniswapv2-periphery/blob/main/audit/SC_impermax_periphery.pdf">Periphery audit</a></li>
-          <li><a target="_blank" href="https://github.com/Impermax-Finance/simple-uniswap-oracle/blob/main/audit/SC_impermax_oracle.pdf">Oracle audit</a></li>
+          <li><a target="_blank" href="https://github.com/Impermax-Finance/impermax-x-uniswapv2-core/blob/main/audit/CertiK%20Audit%20Report%20for%20impermax-x-uniswapv2-core.pdf">Core audit by Certik</a></li>
+          <li><a target="_blank" href="https://github.com/Impermax-Finance/IMX/blob/main/audit/CertiK%20Audit%20Report%20for%20IMX.pdf">IMX audit by Certik</a></li>
+          <li><a target="_blank" href="https://github.com/Impermax-Finance/impermax-x-uniswapv2-core/blob/main/audit/SC_impermax_core.pdf">Core audit by Cyber Unit</a></li>
+          <li><a target="_blank" href="https://github.com/Impermax-Finance/impermax-x-uniswapv2-periphery/blob/main/audit/SC_impermax_periphery.pdf">Periphery audit by Cyber Unit</a></li>
+          <li><a target="_blank" href="https://github.com/Impermax-Finance/simple-uniswap-oracle/blob/main/audit/SC_impermax_oracle.pdf">Oracle audit by Cyber Unit</a></li>
         </ul>
         However, audited smart contracts may still contain bugs and errors. Please consider this while using Impermax’s DeFi applications.
       </p>
       <p>
         <b>Official Impermax Smart Contract Addresses:</b>
         <ul>
-          <li><b>Oracle:</b> <a target="_blank" href="https://etherscan.io/address/0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D">0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D</a></li>
+          <li><b>Impermax (IMX):</b> <a target="_blank" href="https://etherscan.io/token/0x7b35Ce522CB72e4077BaeB96Cb923A5529764a00">0x7b35Ce522CB72e4077BaeB96Cb923A5529764a00</a></li>
           <li><b>Factory:</b> <a target="_blank" href="https://etherscan.io/address/0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B">0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B</a></li>
-          <li><b>Router:</b> <a target="_blank" href="https://etherscan.io/address/0x3271CC175577465691E48196955e09d638Fa05D5">0x3271CC175577465691E48196955e09d638Fa05D5</a></li>
+          <li><b>Router:</b> <a target="_blank" href="https://etherscan.io/address/0x5e169082fFf23cEE6766062B96051A78c543127D">0x5e169082fFf23cEE6766062B96051A78c543127D</a></li>
+          <li><b>Oracle:</b> <a target="_blank" href="https://etherscan.io/address/0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D">0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D</a></li>
         </ul>
       </p>
 

@@ -1,11 +1,24 @@
 .modal {
+  text-align: center;
+
+  &:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+
   &.show {
-    display: flex !important;
+    display: block !important;
     align-items: center;
   }
 
   .modal-dialog {
-    flex: 1;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    width: 500px;
+
     border-radius: 0.75rem;
     overflow: hidden;
 
@@ -93,5 +106,15 @@
       }
     }
 
+  }
+}
+
+.clear-all-transactions {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #00ac6e;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
   }
 }

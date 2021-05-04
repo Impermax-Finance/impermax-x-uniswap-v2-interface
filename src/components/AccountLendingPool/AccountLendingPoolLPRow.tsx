@@ -8,7 +8,7 @@ import DepositInteractionModal from "../InteractionModal/DepositInteractionModal
 import LeverageInteractionModal from "../InteractionModal/LeverageInteractionModal";
 import WithdrawInteractionModal from "../InteractionModal/WithdrawInteractionModal";
 import DeleverageInteractionModal from "../InteractionModal/DeleverageInteractionModal";
-import { useDeposited, useSymbol, useDepositedUSD, useLiquidatableAccounts, useMaxWithdrawable, useMaxDeleverage } from "../../hooks/useData";
+import { useDeposited, useSymbol, useDepositedUSD, useMaxWithdrawable, useMaxDeleverage } from "../../hooks/useData";
 import { useTokenIcon } from "../../hooks/useUrlGenerator";
 import DisabledButtonHelper from "../DisabledButtonHelper";
 

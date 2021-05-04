@@ -7,6 +7,7 @@ import BN from "bn.js";
 import { PermitData } from "../hooks/useApprove";
 import { impermanentLoss } from "../utils";
 import { DistributorDetails } from "../utils/constants";
+import { CreatePairStep } from "../hooks/useCreateNewPair";
 
 export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData, onTransactionHash: Function) {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
@@ -229,6 +230,31 @@ export async function claimDistributor(this: ImpermaxRouter, distributorDetails:
   try {
     await claimable.methods.claim().call({from: this.account});
     const send = claimable.methods.claim().send({from: this.account});
+    return send.on('transactionHash', onTransactionHash);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function createNewPair(this: ImpermaxRouter, uniswapV2PairAddress: Address, createPairStep: CreatePairStep, onTransactionHash: Function) {
+  try {
+    let send;
+    if (createPairStep === CreatePairStep.BORROWABLE0) {
+      await this.factory.methods.createBorrowable0(uniswapV2PairAddress).call({from: this.account});
+      send = this.factory.methods.createBorrowable0(uniswapV2PairAddress).send({from: this.account});
+    }
+    if (createPairStep === CreatePairStep.BORROWABLE1) {
+      await this.factory.methods.createBorrowable1(uniswapV2PairAddress).call({from: this.account});
+      send = this.factory.methods.createBorrowable1(uniswapV2PairAddress).send({from: this.account});
+    }
+    if (createPairStep === CreatePairStep.COLLATERAL) {
+      await this.factory.methods.createCollateral(uniswapV2PairAddress).call({from: this.account});
+      send = this.factory.methods.createCollateral(uniswapV2PairAddress).send({from: this.account});
+    }
+    if (createPairStep === CreatePairStep.INITIALIZE) {
+      await this.factory.methods.initializeLendingPool(uniswapV2PairAddress).call({from: this.account});
+      send = this.factory.methods.initializeLendingPool(uniswapV2PairAddress).send({from: this.account});
+    }
     return send.on('transactionHash', onTransactionHash);
   } catch (e) {
     console.error(e);

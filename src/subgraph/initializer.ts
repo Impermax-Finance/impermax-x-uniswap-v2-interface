@@ -1,4 +1,4 @@
-import { Address, PoolTokenType, LendingPoolData, BorrowableData, TvlData } from "../impermax-router/interfaces";
+import { Address, PoolTokenType, LendingPoolData, BorrowableData, TvlData, UserData, CollateralPosition, SupplyPosition, BorrowPosition } from "../impermax-router/interfaces";
 import { decimalToBalance } from "../utils/ether-utils";
 import gql from "graphql-tag";
 import ApolloClient from "apollo-client";
@@ -40,7 +40,9 @@ export async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
     reserveFactor
     kinkBorrowRate
     kinkUtilizationRate
+    borrowIndex
     accrualTimestamp 
+    exchangeRate 
     totalBalanceUSD
     totalSupplyUSD
     totalBorrowsUSD
@@ -66,6 +68,7 @@ export async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
         totalBalanceUSD
         safetyMargin
         liquidationIncentive
+        exchangeRate 
       }
       pair {
         reserve0
@@ -193,4 +196,82 @@ export async function initializeTvlData(this: Subgraph) : Promise<TvlData> {
 export async function getTvlData(this: Subgraph) : Promise<TvlData> {
   if (!this.tvlData) this.tvlData = this.initializeTvlData();
   return this.tvlData;
+}
+
+// User Data
+export async function fetchUserData(this: Subgraph, account: Address) : Promise<{
+  collateralPositions: CollateralPosition[],
+  supplyPositions: SupplyPosition[],
+  borrowPositions: BorrowPosition[],
+}> {
+  const query = gql`{
+    user(id: "${account.toLowerCase()}") {
+      collateralPositions(first:1000) {
+        balance
+        collateral {
+          lendingPool {
+            id
+          }
+        }
+      }
+      supplyPositions(first:1000) {
+        balance
+        borrowable {
+          underlying {
+            id
+          }
+          lendingPool {
+            id
+          }
+        }
+      }
+      borrowPositions(first:1000) {
+        borrowBalance
+        borrowIndex
+        borrowable {
+          underlying {
+            id
+          }
+          lendingPool {
+            id
+          }
+        }
+      }
+    }
+  }`;
+  const result = await this.apolloFetcher(this.impermaxSubgraphUrl, query);
+  return result.data.user;
+}
+export async function initializeUserData(this: Subgraph, account: Address) : Promise<UserData> {
+  const result: UserData = {
+    collateralPositions: {},
+    supplyPositions: {},
+    borrowPositions: {},
+  };
+  const data = await this.fetchUserData(account);
+  if (!data) return null;
+  for (const collateralPosition of data.collateralPositions) {
+    result.collateralPositions[collateralPosition.collateral.lendingPool.id] = collateralPosition;
+  }
+  for (const supplyPositions of data.supplyPositions) {
+    const uniswapV2PairAddress = supplyPositions.borrowable.lendingPool.id;
+    const underlyingAddress = supplyPositions.borrowable.underlying.id;
+    const addressA = await this.getUnderlyingAddress(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+    const poolTokenType = underlyingAddress === addressA ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
+    if (!(uniswapV2PairAddress in result.supplyPositions)) result.supplyPositions[uniswapV2PairAddress] = {};
+    result.supplyPositions[uniswapV2PairAddress][poolTokenType] = supplyPositions;
+  }
+  for (const borrowPositions of data.borrowPositions) {
+    const uniswapV2PairAddress = borrowPositions.borrowable.lendingPool.id;
+    const underlyingAddress = borrowPositions.borrowable.underlying.id;
+    const addressA = await this.getUnderlyingAddress(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+    const poolTokenType = underlyingAddress === addressA ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
+    if (!(uniswapV2PairAddress in result.borrowPositions)) result.borrowPositions[uniswapV2PairAddress] = {};
+    result.borrowPositions[uniswapV2PairAddress][poolTokenType] = borrowPositions;
+  }
+  return result;
+}
+export async function getUserData(this: Subgraph, account: Address) : Promise<UserData> {
+  if (!(account in this.usersData)) this.usersData[account] = this.initializeUserData(account);
+  return this.usersData[account];
 }

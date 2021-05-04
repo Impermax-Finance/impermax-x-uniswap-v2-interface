@@ -3,11 +3,14 @@
     background-color: #202020;
     height: 80px;
     padding: 0 2rem;
-    
-    .impermax-brand {
-      width: 1.75rem;
-    }
 
+    .navbar-brand {
+      margin-right: 0;
+      .impermax-brand {
+        width: 1.75rem;
+      }
+    }
+    
     .wallet-connector {
       height: 36px;
       color: #fff;

@@ -1,10 +1,12 @@
 import ImpermaxRouter from ".";
 import { Address, PoolTokenType, LendingPoolData, BorrowableData } from "./interfaces";
-import { decimalToBalance } from "../utils/ether-utils";
+import { decimalToBalance, address } from "../utils/ether-utils";
 import gql from "graphql-tag";
 import ApolloClient from "apollo-client";
 import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { faLeaf } from "@fortawesome/free-solid-svg-icons";
+import { isAddress } from "ethers/lib/utils";
 
 
 export function getPoolTokenCache(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) {
@@ -84,13 +86,62 @@ export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress:
 
 // TWAP Price
 export async function initializeTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const { price } = await this.simpleUniswapOracle.methods.getResult(uniswapV2PairAddress).call();
-  const decimalsA = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const decimalsB = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  return price / 2**112 * Math.pow(10, decimalsA) / Math.pow(10, decimalsB);
+  try {
+    const { price } = await this.simpleUniswapOracle.methods.getResult(uniswapV2PairAddress).call();
+    const decimalsA = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
+    const decimalsB = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+    return price / 2**112 * Math.pow(10, decimalsA) / Math.pow(10, decimalsB);
+  }
+  catch {
+    // Oracle is not initialized yet
+    return 0;
+  }
 }
 export async function getTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.TWAPPrice) cache.TWAPPrice = this.initializeTWAPPrice(uniswapV2PairAddress);
   return !this.priceInverted ? (await cache.TWAPPrice) :  1 / (await cache.TWAPPrice);
+}
+
+// Check Uniswap Pair Address
+export async function isValidPair(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<boolean> {
+  if (!uniswapV2PairAddress) return false;
+  try {
+    const contract = this.newUniswapV2Pair(uniswapV2PairAddress);
+    const token0 = await contract.methods.token0().call();
+    const token1 = await contract.methods.token1().call();
+    const expectedAddress: Address = await this.uniswapV2Factory.methods.getPair(token0, token1).call();
+    if (expectedAddress.toLowerCase() === uniswapV2PairAddress.toLowerCase()) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+export async function getPairSymbols(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<{symbol0: string, symbol1: string}> {
+  try {
+    const contract = this.newUniswapV2Pair(uniswapV2PairAddress);
+    const token0 = await contract.methods.token0().call();
+    const token1 = await contract.methods.token1().call();
+    const token0Contract = this.newERC20(token0);
+    const token1Contract = this.newERC20(token1);
+    return {
+      symbol0: await token0Contract.methods.symbol().call(),
+      symbol1: await token1Contract.methods.symbol().call(),
+    }
+  } catch {
+    return {symbol0: "", symbol1: ""};
+  }
+}
+export async function isPoolTokenCreated(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<boolean> {
+  if (!isAddress(uniswapV2PairAddress)) return false;
+  const lendingPool = await this.factory.methods.getLendingPool(uniswapV2PairAddress).call();
+  if (!lendingPool) return false;
+  if (isAddress(lendingPool[poolTokenType]) && lendingPool[poolTokenType] != address(0)) return true;
+  return false; 
+}
+export async function isPairInitialized(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<boolean> {
+  if (!isAddress(uniswapV2PairAddress)) return false;
+  const lendingPool = await this.factory.methods.getLendingPool(uniswapV2PairAddress).call();
+  if (!lendingPool) return false;
+  return lendingPool.initialized;
 }

@@ -33,7 +33,6 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
 
   const symbol = useSymbol();
   const availableBalance = useAvailableBalance();
-  const availableBalanceUSD = useAvailableBalanceUSD();
   const addLiquidityUrl = useAddLiquidityUrl();
 
   const amount = useToBigNumber(val);
@@ -46,7 +45,7 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
     toggleShow(false);
   }
 
-  if (availableBalanceUSD < 1) return (
+  if (!availableBalance) return (
     <InteractionModalContainer title={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} show={show} toggleShow={toggleShow}><>
       You need to hold {symbol} in your wallet in order to deposit it.
       { poolTokenType == PoolTokenType.Collateral ? (<>

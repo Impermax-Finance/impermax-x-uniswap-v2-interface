@@ -4,6 +4,7 @@ import { decimalToBalance } from "../utils/ether-utils";
 
 import ERC20JSON from '../abis/contracts/IERC20.json';
 import UniswapV2PairJSON from '../abis/contracts/IUniswapV2Pair.json';
+import UniswapV2FactoryJSON from '../abis/contracts/IUniswapV2Factory.json';
 import Router01JSON from '../abis/contracts/IRouter01.json';
 import BorrowableJSON from '../abis/contracts/IBorrowable.json';
 import CollateralSON from '../abis/contracts/ICollateral.json';
@@ -26,7 +27,8 @@ import {
   ClaimAggregator,
   ClaimEvent,
   Claimable,
-  LendingPoolData
+  LendingPoolData,
+  UniswapV2Factory
 } from "./interfaces";
 import * as contracts from "./contracts";
 import * as fetchers from "./fetchers";
@@ -46,6 +48,7 @@ export default class ImpermaxRouter {
   dust: number;
   router: Router;
   factory: Factory;
+  uniswapV2Factory: UniswapV2Factory;
   simpleUniswapOracle: SimpleUniswapOracle;
   merkleDistributor: MerkleDistributor;
   claimAggregator: ClaimAggregator;
@@ -94,6 +97,7 @@ export default class ImpermaxRouter {
     this.dust = 1.000001;
     this.router = this.newRouter(cfg.routerAddress);
     this.factory = this.newFactory(cfg.factoryAddress);
+    this.uniswapV2Factory = this.newUniswapV2Factory(cfg.uniswapV2FactoryAddress);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
     this.merkleDistributor = this.newMerkleDistributor(cfg.merkleDistributorAddress);
     this.claimAggregator = this.newClaimAggregator(cfg.claimAggregatorAddress);
@@ -110,6 +114,7 @@ export default class ImpermaxRouter {
   newFactory(address: Address) { return new this.web3.eth.Contract(FactoryJSON.abi, address) }
   newSimpleUniswapOracle(address: Address) { return new this.web3.eth.Contract(SimpleUniswapOracleJSON.abi, address) }
   newUniswapV2Pair(address: Address) { return new this.web3.eth.Contract(UniswapV2PairJSON.abi, address) }
+  newUniswapV2Factory(address: Address) { return new this.web3.eth.Contract(UniswapV2FactoryJSON.abi, address) }
   newERC20(address: Address) { return new this.web3.eth.Contract(ERC20JSON.abi, address) }
   newCollateral(address: Address) { return new this.web3.eth.Contract(CollateralSON.abi, address) }
   newBorrowable(address: Address) { return new this.web3.eth.Contract(BorrowableJSON.abi, address) }
@@ -165,6 +170,10 @@ export default class ImpermaxRouter {
   public getBorrowableMarketPriceDenomLP = fetchers.getBorrowableMarketPriceDenomLP;
   public getMarketPrice = fetchers.getMarketPrice;
   public getTWAPPrice = fetchers.getTWAPPrice;
+  public isValidPair = fetchers.isValidPair;
+  public getPairSymbols = fetchers.getPairSymbols;
+  public isPoolTokenCreated = fetchers.isPoolTokenCreated;
+  public isPairInitialized = fetchers.isPairInitialized;
 
   // Account
   public initializeExchangeRate = account.initializeExchangeRate;
@@ -235,4 +244,5 @@ export default class ImpermaxRouter {
   public trackBorrows = interactions.trackBorrows;
   public claims = interactions.claims;
   public claimDistributor = interactions.claimDistributor;
+  public createNewPair = interactions.createNewPair;
 }

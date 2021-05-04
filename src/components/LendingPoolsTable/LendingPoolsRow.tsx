@@ -6,6 +6,7 @@ import { useContext } from "../../contexts/Theme";
 import usePairAddress from "../../hooks/usePairAddress";
 import { useSupplyUSD, useTotalBorrowsUSD, useSupplyAPY, useBorrowAPY, useSymbol, useUniswapAPY, useFarmingAPY } from "../../hooks/useData";
 import { useTokenIcon, useLendingPoolUrl } from "../../hooks/useUrlGenerator";
+import { leverage } from "../../impermax-router/interactions";
 
 const LEVERAGE = 5;
 
