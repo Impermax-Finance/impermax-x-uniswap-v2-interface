@@ -29,7 +29,7 @@ export default function Risks() {
         <ul>
           <li><b>Impermax (IMX):</b> <a target="_blank" href="https://etherscan.io/token/0x7b35Ce522CB72e4077BaeB96Cb923A5529764a00">0x7b35Ce522CB72e4077BaeB96Cb923A5529764a00</a></li>
           <li><b>Factory:</b> <a target="_blank" href="https://etherscan.io/address/0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B">0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B</a></li>
-          <li><b>Router:</b> <a target="_blank" href="https://etherscan.io/address/0x3271CC175577465691E48196955e09d638Fa05D5">0x3271CC175577465691E48196955e09d638Fa05D5</a></li>
+          <li><b>Router:</b> <a target="_blank" href="https://etherscan.io/address/0x5e169082fFf23cEE6766062B96051A78c543127D">0x5e169082fFf23cEE6766062B96051A78c543127D</a></li>
           <li><b>Oracle:</b> <a target="_blank" href="https://etherscan.io/address/0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D">0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D</a></li>
         </ul>
       </p>
