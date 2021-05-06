@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import { useWallet } from 'use-wallet';
 import { provider } from 'web3-core';
 import { Networks, chainDetailsMap } from '../utils/connections';
-import { NETWORK_URL, IMX, WETH, ROUTER, Address, FACTORY, SIMPLE_UNISWAP_ORACLE, AIRDROP_URL, MERKLE_DISTRIBUTOR, CLAIM_AGGREGATOR, DistributorDetails, DISTRIBUTORS, IMPERMAX_SUBGRAPH_URL, UNISWAP_V2_FACTORY } from '../utils/constants';
+import { NETWORK_URL, IMX, WETH, ROUTER, Address, FACTORY, SIMPLE_UNISWAP_ORACLE, AIRDROP_URL, MERKLE_DISTRIBUTOR, CLAIM_AGGREGATOR, DistributorDetails, DISTRIBUTORS, IMPERMAX_SUBGRAPH_URL, UNISWAP_V2_FACTORY, WHITELISTED_PAIRS } from '../utils/constants';
 
 export interface NetworkI {
   networkName: string;
@@ -20,6 +20,7 @@ export interface NetworkI {
   claimAggregatorAddress: Address;
   airdropUrl: string;
   distributors: DistributorDetails[];
+  whitelistedPairs: Address[];
 }
 
 const NETWORK = process.env.NETWORK as Networks;
@@ -39,6 +40,7 @@ const context : NetworkI = {
   claimAggregatorAddress: CLAIM_AGGREGATOR[NETWORK],
   airdropUrl: AIRDROP_URL[NETWORK],
   distributors: DISTRIBUTORS[NETWORK],
+  whitelistedPairs: WHITELISTED_PAIRS[NETWORK],
 };
 
 export const NetworkContext = createContext<NetworkI>(context);

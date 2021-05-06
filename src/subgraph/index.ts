@@ -12,6 +12,7 @@ export interface SubgraphCfg {
   IMX: Address;
   WETH: Address;
   uniswapV2FactoryAddress: Address;
+  whitelistedPairs: Address[];
 }
 
 export default class Subgraph {
@@ -22,6 +23,7 @@ export default class Subgraph {
   IMX: Address;
   WETH: Address;
   uniswapV2FactoryAddress: Address;
+  whitelistedPairs: Address[];
   lendingPoolsData: Promise<{
     [key in Address]?: LendingPoolData
   }>;
@@ -38,6 +40,7 @@ export default class Subgraph {
     this.IMX = cfg.IMX;
     this.WETH = cfg.WETH;
     this.uniswapV2FactoryAddress = cfg.uniswapV2FactoryAddress;
+    this.whitelistedPairs = cfg.whitelistedPairs;
     this.usersData = {};
   }
 
