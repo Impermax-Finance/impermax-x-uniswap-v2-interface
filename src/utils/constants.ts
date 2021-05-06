@@ -81,27 +81,20 @@ export const DISTRIBUTORS: NetworkIndex = {
   ],
 };
 
-/*export const ROPSTEN_ETH_IMX: Address = '0x0Efc0766F46E1AD825CE18F54F0793dd6814a947';
-export const ROPSTEN_ETH_DAI: Address = '0x1c5DEe94a34D795f9EEeF830B68B80e44868d316';
-export const ROPSTEN_ETH_UNI: Address = '0x4E99615101cCBB83A462dC4DE2bc1362EF1365e5';
-export const ROPSTEN_ETH_USDC: Address = '0x681A4164703351d6AceBA9D7038b573b444d3353';
-
-export const MAINNET_ETH_WBTC: Address = '0xBb2b8038a1640196FbE3e38816F3e67Cba72D940';
-export const MAINNET_ETH_USDC: Address = '0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc';
-export const MAINNET_USDT_USDC: Address = '0x3041CbD36888bECc7bbCBc0045E3B1f144466f5f';
-export const MAINNET_DUCK_ETH: Address = '0xc5Ed7350E0FB3f780c756bA7d5d8539dc242a414';
-
-export const LISTED_PAIRS: NetworkIndex = {
-  [Networks.Ropsten]: [
-    ROPSTEN_ETH_IMX,
-    ROPSTEN_ETH_DAI,
-    ROPSTEN_ETH_UNI,
-    //ROPSTEN_ETH_USDC,
-  ],
+export const WHITELISTED_PAIRS: NetworkIndex = {
+  [Networks.Ropsten]: [],
   [Networks.Mainnet]: [
-    MAINNET_ETH_WBTC,
-    MAINNET_ETH_USDC,
-    MAINNET_USDT_USDC,
-    MAINNET_DUCK_ETH,
-  ]
-};*/
+    "0x3041cbd36888becc7bbcbc0045e3b1f144466f5f", //USDC-USDT
+    "0xa00d47b4b304792eb07b09233467b690db847c91", //IMX-ETH
+    "0xbb2b8038a1640196fbe3e38816f3e67cba72d940", //WBTC-ETH
+    "0xa478c2975ab1ea89e8196811f51a7b7ade33eb11", //DAI-ETH
+    "0xd3d2e2692501a5c9ca623199d38826e513033a17", //UNI-ETH
+    "0x4d5ef58aac27d99935e5b6b4a6778ff292059991", //DPI-ETH
+    "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc", //USDC-ETH
+    "0x0d4a11d5eeaac28ec3f61d100daf4d40471f1852", //USDT-ETH
+    "0xc5ed7350e0fb3f780c756ba7d5d8539dc242a414", //DUCK-ETH
+    "0xf91c12dae1313d0be5d7a27aa559b1171cc1eac5", //ETH2x-FLI-ETH
+    "0x46af8ac1b82f73db6aacc1645d40c56191ab787b", //NDX-ETH
+    "0x8dcba0b75c1038c4babbdc0ff3bd9a8f6979dd13", //DEFI5-ETH
+  ],
+};

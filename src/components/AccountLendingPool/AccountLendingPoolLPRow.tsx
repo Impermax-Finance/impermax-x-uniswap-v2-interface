@@ -62,7 +62,7 @@ export default function AccountLendingPoolLPRow() {
             <Button variant="primary" onClick={() => toggleDepositModal(true)}>{t("Deposit")}</Button>
           </Col>
           <Col>
-            { depositedUSD > 0 ? (
+            { deposited > 0 ? (
               <Button variant="primary" onClick={() => toggleWithdrawModal(true)}>{t("Withdraw")}</Button>
             ) : (
               <DisabledButtonHelper text={withdrawDisabledInfo}>{t("Withdraw")}</DisabledButtonHelper>
@@ -71,7 +71,7 @@ export default function AccountLendingPoolLPRow() {
         </Row>
         <Row>
           <Col>
-            { depositedUSD > 0 ? (
+            { deposited > 0 ? (
               <Button variant="primary" onClick={() => toggleLeverageModal(true)}>{t("Leverage")}</Button>
             ) : (
               <DisabledButtonHelper text={leverageDisabledInfo}>{t("Leverage")}</DisabledButtonHelper>
