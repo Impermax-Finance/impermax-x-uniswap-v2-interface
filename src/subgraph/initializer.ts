@@ -57,7 +57,7 @@ export async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
       }
     }
   }`;
-  const id_in_string = this.whitelistedPairs.length > 0 ? `, where: {id_in: ["${ this.whitelistedPairs.join('","') }"]}` : "";
+  const id_in_string = "";// this.whitelistedPairs.length > 0 ? `, where: {id_in: ["${ this.whitelistedPairs.join('","') }"]}` : "";
   const query = gql`{
     lendingPools(first: 1000, orderBy: totalBorrowsUSD, orderDirection: desc${ id_in_string }) {
       id

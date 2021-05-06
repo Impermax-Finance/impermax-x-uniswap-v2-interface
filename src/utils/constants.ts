@@ -95,6 +95,6 @@ export const WHITELISTED_PAIRS: NetworkIndex = {
     "0xc5ed7350e0fb3f780c756ba7d5d8539dc242a414", //DUCK-ETH
     "0xf91c12dae1313d0be5d7a27aa559b1171cc1eac5", //ETH2x-FLI-ETH
     "0x46af8ac1b82f73db6aacc1645d40c56191ab787b", //NDX-ETH
-    "0xfa6de2697d59e88ed7fc4dfe5a33dac43565ea41", //DEFI5-ETH
+    "0x8dcba0b75c1038c4babbdc0ff3bd9a8f6979dd13", //DEFI5-ETH
   ],
 };
