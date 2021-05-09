@@ -1,22 +1,13 @@
-import React from "react";
-import { Row, Col } from "react-bootstrap";
-import { formatUSD, formatFloat } from "../../utils/format";
+import { Row, Col } from 'react-bootstrap';
+import { formatUSD, formatFloat } from '../../utils/format';
 
-
-export interface InlineAccountTokenInfoProps {
-  name: string;
-  symbol: string;
-  value: number;
-  valueUSD: number;
-}
-
-export default function InlineAccountTokenInfo({ name, symbol, value, valueUSD }: InlineAccountTokenInfoProps) {
+function InlineAccountTokenInfo({ name, symbol, value, valueUSD }: InlineAccountTokenInfoProps): JSX.Element {
   return (
-    <Row className="inline-account-token-info">
-      <Col className="name">
+    <Row className='inline-account-token-info'>
+      <Col className='name'>
         {name}:
       </Col>
-      <Col className="values">
+      <Col className='values'>
         <Row>
           <Col>{formatFloat(value)} {symbol}</Col>
         </Row>
@@ -27,3 +18,12 @@ export default function InlineAccountTokenInfo({ name, symbol, value, valueUSD }
     </Row>
   );
 }
+
+export interface InlineAccountTokenInfoProps {
+  name: string;
+  symbol: string;
+  value: number;
+  valueUSD: number;
+}
+
+export default InlineAccountTokenInfo;

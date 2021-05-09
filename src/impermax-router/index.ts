@@ -1,6 +1,7 @@
-import { provider } from "web3-core";
-import { BigNumber, Contract, ethers, Overrides } from 'ethers';
-import { decimalToBalance } from "../utils/ether-utils";
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
 
 import ERC20JSON from '../abis/contracts/IERC20.json';
 import UniswapV2PairJSON from '../abis/contracts/IUniswapV2Pair.json';
@@ -27,18 +28,16 @@ import {
   ClaimAggregator,
   ClaimEvent,
   Claimable,
-  LendingPoolData,
   UniswapV2Factory
-} from "./interfaces";
-import * as contracts from "./contracts";
-import * as fetchers from "./fetchers";
-import * as utils from "./utils";
-import * as approve from "./approve"
-import * as interactions from "./interactions"
-import * as account from "./account"
-import * as imx from "./imx"
-import { Networks } from "../utils/connections";
-import Subgraph from "../subgraph";
+} from './interfaces';
+import * as contracts from './contracts';
+import * as fetchers from './fetchers';
+import * as utils from './utils';
+import * as approve from './approve';
+import * as interactions from './interactions';
+import * as account from './account';
+import * as imx from './imx';
+import Subgraph from '../subgraph';
 
 export default class ImpermaxRouter {
   subgraph: Subgraph;
@@ -110,18 +109,42 @@ export default class ImpermaxRouter {
     this.claimableCache = {};
   }
 
-  newRouter(address: Address) { return new this.web3.eth.Contract(Router01JSON.abi, address) }
-  newFactory(address: Address) { return new this.web3.eth.Contract(FactoryJSON.abi, address) }
-  newSimpleUniswapOracle(address: Address) { return new this.web3.eth.Contract(SimpleUniswapOracleJSON.abi, address) }
-  newUniswapV2Pair(address: Address) { return new this.web3.eth.Contract(UniswapV2PairJSON.abi, address) }
-  newUniswapV2Factory(address: Address) { return new this.web3.eth.Contract(UniswapV2FactoryJSON.abi, address) }
-  newERC20(address: Address) { return new this.web3.eth.Contract(ERC20JSON.abi, address) }
-  newCollateral(address: Address) { return new this.web3.eth.Contract(CollateralSON.abi, address) }
-  newBorrowable(address: Address) { return new this.web3.eth.Contract(BorrowableJSON.abi, address) }
-  newMerkleDistributor(address: Address) { return new this.web3.eth.Contract(MerkleDistributorJSON.abi, address) }
-  newFarmingPool(address: Address) { return new this.web3.eth.Contract(FarmingPoolJSON.abi, address) }
-  newClaimAggregator(address: Address) { return new this.web3.eth.Contract(ClaimAggregatorJSON.abi, address) }
-  newClaimable(address: Address) { return new this.web3.eth.Contract(ClaimableJSON.abi, address) }
+  newRouter(address: Address) {
+    return new this.web3.eth.Contract(Router01JSON.abi, address);
+  }
+  newFactory(address: Address) {
+    return new this.web3.eth.Contract(FactoryJSON.abi, address);
+  }
+  newSimpleUniswapOracle(address: Address) {
+    return new this.web3.eth.Contract(SimpleUniswapOracleJSON.abi, address);
+  }
+  newUniswapV2Pair(address: Address) {
+    return new this.web3.eth.Contract(UniswapV2PairJSON.abi, address);
+  }
+  newUniswapV2Factory(address: Address) {
+    return new this.web3.eth.Contract(UniswapV2FactoryJSON.abi, address);
+  }
+  newERC20(address: Address) {
+    return new this.web3.eth.Contract(ERC20JSON.abi, address);
+  }
+  newCollateral(address: Address) {
+    return new this.web3.eth.Contract(CollateralSON.abi, address);
+  }
+  newBorrowable(address: Address) {
+    return new this.web3.eth.Contract(BorrowableJSON.abi, address);
+  }
+  newMerkleDistributor(address: Address) {
+    return new this.web3.eth.Contract(MerkleDistributorJSON.abi, address);
+  }
+  newFarmingPool(address: Address) {
+    return new this.web3.eth.Contract(FarmingPoolJSON.abi, address);
+  }
+  newClaimAggregator(address: Address) {
+    return new this.web3.eth.Contract(ClaimAggregatorJSON.abi, address);
+  }
+  newClaimable(address: Address) {
+    return new this.web3.eth.Contract(ClaimableJSON.abi, address);
+  }
 
   async unlockWallet(web3: any, account: Address) {
     this.web3 = web3;
@@ -155,7 +178,7 @@ export default class ImpermaxRouter {
   public getClaimable = contracts.getClaimable;
   public getPoolTokenAddress = contracts.getPoolTokenAddress;
   public getTokenAddress = contracts.getTokenAddress;
-  
+
   // Fetchers
   public getPoolTokenCache = fetchers.getPoolTokenCache;
   public initializeReserves = fetchers.initializeReserves;
@@ -219,7 +242,7 @@ export default class ImpermaxRouter {
   public getAvailableReward = imx.getAvailableReward;
   public getClaimHistory = imx.getClaimHistory;
   public getAvailableClaimable = imx.getAvailableClaimable;
-  
+
   // Utils
   public normalize = utils.normalize;
   public getDeadline = utils.getDeadline;

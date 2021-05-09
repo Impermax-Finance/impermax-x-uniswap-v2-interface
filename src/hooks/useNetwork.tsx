@@ -70,8 +70,3 @@ export function useDistributors() {
   const { distributors } = useContext(NetworkContext);
   return distributors;
 }
-
-export function useWhitelistedPairs() {
-  const { whitelistedPairs } = useContext(NetworkContext);
-  return whitelistedPairs;
-}

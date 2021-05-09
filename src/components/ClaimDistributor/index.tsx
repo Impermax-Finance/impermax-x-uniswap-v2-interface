@@ -1,24 +1,24 @@
-import React from 'react';
 import './index.scss';
-import { Row, Col, Card } from 'react-bootstrap';
 import { DistributorDetails } from '../../utils/constants';
 import { useAvailableClaimable } from '../../hooks/useData';
 import InteractionButton from '../InteractionButton';
 import useClaimDistributor from '../../hooks/useClaimDistributor';
 import { formatAmount } from '../../utils/format';
 
-
-export default function ClaimDistributor({ distributor }: { distributor: DistributorDetails }) {
+export default function ClaimDistributor({ distributor }: { distributor: DistributorDetails }): JSX.Element | null {
   const availableClaimable = useAvailableClaimable(distributor.claimableAddress);
   const [claimDistributorState, onClaimDistributor] = useClaimDistributor(distributor);
 
-  if (!availableClaimable) return (null);
+  if (!availableClaimable) return null;
 
   return (
-    <div className="claim-distributor">
-      <div><b>{ distributor.name }</b></div>
+    <div className='claim-distributor'>
+      <div><b>{distributor.name}</b></div>
       <div>
-        <InteractionButton name={"Claim " + formatAmount(availableClaimable) + " IMX"} onCall={onClaimDistributor} state={claimDistributorState} />
+        <InteractionButton
+          name={'Claim ' + formatAmount(availableClaimable) + ' IMX'}
+          onCall={onClaimDistributor}
+          state={claimDistributorState} />
       </div>
     </div>
   );

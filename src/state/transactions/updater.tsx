@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useWallet } from 'use-wallet';
 import { AppDispatch, AppState } from '../index';
 import { checkedTransaction, finalizeTransaction } from './actions';
-import useInterval from 'use-interval'
+import useInterval from 'use-interval';
 import useWeb3 from '../../hooks/useWeb3';
 
 export function shouldCheck(
   lastBlockNumber: number,
-  tx: { addedTime: number; receipt?: {}; lastCheckedBlockNumber?: number },
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  tx: { addedTime: number; receipt?: {}; lastCheckedBlockNumber?: number }
 ): boolean {
   if (tx.receipt) return false;
   if (!tx.lastCheckedBlockNumber) return true;
@@ -31,7 +32,7 @@ export default function Updater(): null {
   const { chainId, ethereum } = useWallet();
 
   const dispatch = useDispatch<AppDispatch>();
-  const state = useSelector<AppState, AppState['transactions']>((state) => state.transactions);
+  const state = useSelector<AppState, AppState['transactions']>(state => state.transactions);
 
   const transactions = chainId ? state[chainId] ?? {} : {};
 
@@ -40,14 +41,14 @@ export default function Updater(): null {
   useInterval(() => {
     if (!web3) return;
     web3.eth.getBlockNumber().then((data: any) => setBlockNumber(data));
-  }, 3000)
+  }, 3000);
 
   useEffect(() => {
     if (!chainId || !ethereum || !lastBlockNumber) return;
 
     Object.keys(transactions)
-      .filter((hash) => shouldCheck(lastBlockNumber, transactions[hash]))
-      .forEach((hash) => {
+      .filter(hash => shouldCheck(lastBlockNumber, transactions[hash]))
+      .forEach(hash => {
         web3.eth
           .getTransactionReceipt(hash)
           .then((receipt: any) => {
@@ -64,9 +65,9 @@ export default function Updater(): null {
                     status: receipt.status,
                     to: receipt.to,
                     transactionHash: receipt.transactionHash,
-                    transactionIndex: receipt.transactionIndex,
-                  },
-                }),
+                    transactionIndex: receipt.transactionIndex
+                  }
+                })
               );
             } else {
               dispatch(checkedTransaction({ chainId, hash, blockNumber: lastBlockNumber }));

@@ -4,7 +4,7 @@ import {
   checkedTransaction,
   clearAllTransactions,
   finalizeTransaction,
-  SerializableTransactionReceipt,
+  SerializableTransactionReceipt
 } from './actions';
 
 const now = () => new Date().getTime();
@@ -28,7 +28,7 @@ export interface TransactionState {
 
 export const initialState: TransactionState = {};
 
-export default createReducer(initialState, (builder) =>
+export default createReducer(initialState, builder =>
   builder
     .addCase(
       addTransaction,
@@ -39,7 +39,7 @@ export default createReducer(initialState, (builder) =>
         const txs = transactions[chainId] ?? {};
         txs[hash] = { hash, approval, summary, from, addedTime: now() };
         transactions[chainId] = txs;
-      },
+      }
     )
     .addCase(clearAllTransactions, (transactions, { payload: { chainId } }) => {
       if (!transactions[chainId]) return;
@@ -52,12 +52,13 @@ export default createReducer(initialState, (builder) =>
         if (!tx) {
           return;
         }
+        // eslint-disable-next-line no-negated-condition
         if (!tx.lastCheckedBlockNumber) {
           tx.lastCheckedBlockNumber = blockNumber;
         } else {
           tx.lastCheckedBlockNumber = Math.max(blockNumber, tx.lastCheckedBlockNumber);
         }
-      },
+      }
     )
     .addCase(finalizeTransaction, (transactions, { payload: { hash, chainId, receipt } }) => {
       const tx = transactions[chainId]?.[hash];
@@ -66,5 +67,5 @@ export default createReducer(initialState, (builder) =>
       }
       tx.receipt = receipt;
       tx.confirmedTime = now();
-    }),
+    })
 );

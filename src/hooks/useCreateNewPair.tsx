@@ -1,9 +1,13 @@
-import { BigNumber, ethers } from 'ethers';
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from '../state/transactions/hooks';
-import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
+import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
-import { useDecimals, useSymbol, useToNumber, usePairSymbols } from './useData';
+import { usePairSymbols } from './useData';
 
 export enum CreatePairStep {
   BORROWABLE0,
@@ -21,13 +25,13 @@ export default function useCreateNewPair(uniswapV2PairAddress: string, createPai
   const { symbol0, symbol1 } = usePairSymbols(uniswapV2PairAddress);
   const summary = createPairStep === CreatePairStep.COLLATERAL ? `Create LP pool for ${symbol0}-${symbol1}` :
     createPairStep === CreatePairStep.BORROWABLE0 ? `Create ${symbol0} pool for ${symbol0}-${symbol1}` :
-    createPairStep === CreatePairStep.BORROWABLE1 ? `Create ${symbol1} pool for ${symbol0}-${symbol1}` :
-    createPairStep === CreatePairStep.INITIALIZE ? `Initialize ${symbol0}-${symbol1}` : ``;
-  
+      createPairStep === CreatePairStep.BORROWABLE1 ? `Create ${symbol1} pool for ${symbol0}-${symbol1}` :
+        createPairStep === CreatePairStep.INITIALIZE ? `Initialize ${symbol0}-${symbol1}` : ``;
+
   const createNewPairState: ButtonState = useMemo(() => {
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
-  }, [pending,]);
+  }, [pending]);
 
   const createNewPair = useCallback(async (): Promise<void> => {
     if (createNewPairState !== ButtonState.Ready) return;
@@ -37,8 +41,7 @@ export default function useCreateNewPair(uniswapV2PairAddress: string, createPai
         addTransaction({ hash }, { summary });
       });
       doUpdate();
-    }
-    finally {
+    } finally {
       setPending(false);
     }
   }, [uniswapV2PairAddress, addTransaction, createPairStep, summary]);

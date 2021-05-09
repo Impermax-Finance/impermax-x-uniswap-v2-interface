@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 
-const AccountContext = createContext<string>("");
+const AccountContext = createContext<string>('');
 export default AccountContext;

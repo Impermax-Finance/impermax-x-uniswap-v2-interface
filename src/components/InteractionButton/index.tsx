@@ -1,8 +1,12 @@
-import React from "react";
-import { Button, Spinner } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
-import  "./index.scss";
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
+import { Spinner } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import './index.scss';
 
 export enum ButtonState {
   Disabled = 'disabled',
@@ -17,12 +21,16 @@ export interface InteractionButtonProps {
   onCall(): void;
 }
 
-export default function InteractionButton({name, onCall, state}: InteractionButtonProps) {
+export default function InteractionButton({ name, onCall, state }: InteractionButtonProps): JSX.Element {
   return (
-    <button onClick={state === ButtonState.Ready ? onCall : null} className={'interaction-button ' + state}>
+    <button
+      onClick={state === ButtonState.Ready ? onCall : null}
+      className={'interaction-button ' + state}>
       {name}
-      { state === ButtonState.Pending ? ( <Spinner animation="border" size="sm" /> ) : null }
-      { state === ButtonState.Done ? ( <FontAwesomeIcon icon={faCheck} /> ) : null }
+      {state === ButtonState.Pending ? (<Spinner
+        animation='border'
+        size='sm' />) : null}
+      {state === ButtonState.Done ? (<FontAwesomeIcon icon={faCheck} />) : null}
     </button>
   );
 }

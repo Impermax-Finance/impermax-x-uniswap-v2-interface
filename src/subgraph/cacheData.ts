@@ -1,10 +1,6 @@
-import { Address, PoolTokenType, LendingPoolData, BorrowableData } from "../impermax-router/interfaces";
-import { decimalToBalance } from "../utils/ether-utils";
-import gql from "graphql-tag";
-import ApolloClient from "apollo-client";
-import { HttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory"
-import Subgraph from ".";
+/* eslint-disable no-invalid-this */
+import { Address, PoolTokenType, BorrowableData } from '../impermax-router/interfaces';
+import Subgraph from '.';
 
 // Pair List
 export async function getPairList(this: Subgraph) : Promise<Address[]> {
@@ -14,6 +10,7 @@ export async function getPairList(this: Subgraph) : Promise<Address[]> {
 
 // Name
 export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
+  // eslint-disable-next-line eqeqeq
   if (poolTokenType == PoolTokenType.Collateral) {
     const nameA = await this.getName(uniswapV2PairAddress, PoolTokenType.BorrowableA);
     const nameB = await this.getName(uniswapV2PairAddress, PoolTokenType.BorrowableB);
@@ -27,6 +24,7 @@ export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poo
 
 // Symbol
 export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
+  // eslint-disable-next-line eqeqeq
   if (poolTokenType == PoolTokenType.Collateral) {
     const symbolA = await this.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableA);
     const symbolB = await this.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableB);
@@ -40,6 +38,7 @@ export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, p
 
 // Decimals
 export async function getDecimals(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+  // eslint-disable-next-line eqeqeq
   if (poolTokenType == PoolTokenType.Collateral) return 18;
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return parseInt(lendingPoolData[poolTokenType].underlying.decimals);
@@ -53,6 +52,7 @@ export async function getExchangeRate(this: Subgraph, uniswapV2PairAddress: Addr
 
 // Underlying Address
 export async function getUnderlyingAddress(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Address> {
+  // eslint-disable-next-line eqeqeq
   if (poolTokenType == PoolTokenType.Collateral) return uniswapV2PairAddress;
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return lendingPoolData[poolTokenType].underlying.id;
@@ -61,6 +61,7 @@ export async function getUnderlyingAddress(this: Subgraph, uniswapV2PairAddress:
 // Token price
 export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
+  // eslint-disable-next-line eqeqeq
   if (poolTokenType == PoolTokenType.Collateral) {
     return parseFloat(lendingPoolData.pair.derivedUSD);
   }
@@ -68,6 +69,7 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
 }
 export async function getImxPrice(this: Subgraph) : Promise<number> {
   const IMXPair = this.getPairAddress(this.WETH, this.IMX);
+  console.log(IMXPair);
   const AAddress = await this.getUnderlyingAddress(IMXPair, PoolTokenType.BorrowableA);
   const poolTokenType = AAddress.toLowerCase() === this.IMX.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
   return this.getTokenPrice(IMXPair, poolTokenType);
@@ -186,6 +188,7 @@ export async function getSupplyUSD(this: Subgraph, uniswapV2PairAddress: Address
 // Utilization Rate
 export async function getUtilizationRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const supply = await this.getSupply(uniswapV2PairAddress, poolTokenType);
+  // eslint-disable-next-line eqeqeq
   if (supply == 0) return 0;
   const totalBalance = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
   return totalBalance / supply;

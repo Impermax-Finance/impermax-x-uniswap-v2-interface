@@ -10,4 +10,4 @@ export {
   Web3Provider,
   Network,
   ImpermaxRouterProvider
-}
+};

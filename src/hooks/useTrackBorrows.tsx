@@ -1,13 +1,15 @@
-import { BigNumber, ethers } from 'ethers';
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from '../state/transactions/hooks';
-import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
+import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { useSymbol } from './useData';
-import { formatAmount } from '../utils/format';
 import usePairAddress from './usePairAddress';
 import { PoolTokenType } from '../impermax-router/interfaces';
-
 
 export default function useTrackBorrows(): [ButtonState, () => Promise<void>] {
   const uniswapV2PairAddress = usePairAddress();
@@ -18,7 +20,7 @@ export default function useTrackBorrows(): [ButtonState, () => Promise<void>] {
   const [pending, setPending] = useState<boolean>(false);
 
   const summary = `Enabled IMX reward for ${symbol}`;
-  
+
   const trackBorrowsState: ButtonState = useMemo(() => {
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
@@ -32,8 +34,7 @@ export default function useTrackBorrows(): [ButtonState, () => Promise<void>] {
         addTransaction({ hash }, { summary });
       });
       doUpdate();
-    }
-    finally {
+    } finally {
       setPending(false);
     }
   }, [uniswapV2PairAddress, summary, addTransaction]);

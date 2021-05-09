@@ -20,7 +20,7 @@ export const addTransaction = createAction<{
 }>('transactions/addTransaction');
 
 export const clearAllTransactions = createAction<{ chainId: number }>(
-  'transactions/clearAllTransactions',
+  'transactions/clearAllTransactions'
 );
 
 export const finalizeTransaction = createAction<{

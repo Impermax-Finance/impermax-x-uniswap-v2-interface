@@ -1,16 +1,23 @@
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
 import React, { createContext, useEffect, useState } from 'react';
 import { useWallet } from 'use-wallet';
 import ImpermaxRouter from '../impermax-router';
 import useWeb3 from '../hooks/useWeb3';
-import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId, useAirdropUrl, useIMX, useMerkleDistributorAddress, useClaimAggregatorAddress, useImpermaxSubgraphUrl, useUniswapV2FactoryAddress } from '../hooks/useNetwork';
+import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId, useAirdropUrl, useIMX, useMerkleDistributorAddress, useClaimAggregatorAddress, useUniswapV2FactoryAddress } from '../hooks/useNetwork';
 import useSubgraph from '../hooks/useSubgraph';
 
 export interface ImpermaxRouterContextI {
   impermaxRouter?: ImpermaxRouter;
   routerAccount?: string;
   routerUpdate?: number;
+  // eslint-disable-next-line @typescript-eslint/ban-types
   doUpdate?: Function;
   priceInverted?: boolean;
+  // eslint-disable-next-line @typescript-eslint/ban-types
   togglePriceInverted?: Function;
 }
 
@@ -38,7 +45,7 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     if (!impermaxRouter) return;
     impermaxRouter.cleanCache();
     impermaxRouter.subgraph.cleanCache();
-    setRouterUpdate(routerUpdate+1);
+    setRouterUpdate(routerUpdate + 1);
   };
   const togglePriceInverted = () => {
     if (!impermaxRouter) return;
@@ -47,19 +54,19 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    if(!web3) return;
+    if (!web3) return;
     if (!impermaxRouter) {
       const impermaxRouter = new ImpermaxRouter({
         subgraph,
-        web3, 
+        web3,
         chainId,
-        routerAddress, 
-        factoryAddress, 
+        routerAddress,
+        factoryAddress,
         uniswapV2FactoryAddress,
-        simpleUniswapOracleAddress, 
+        simpleUniswapOracleAddress,
         merkleDistributorAddress,
         claimAggregatorAddress,
-        WETH, 
+        WETH,
         IMX,
         airdropUrl,
         priceInverted
@@ -75,12 +82,16 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     }
   }, [web3, account]);
 
-  return <ImpermaxRouterContext.Provider value={{ 
-    impermaxRouter, 
-    routerAccount, 
-    routerUpdate, 
-    doUpdate, 
-    priceInverted, 
-    togglePriceInverted 
-  }}>{children}</ImpermaxRouterContext.Provider>;
+  return (
+    <ImpermaxRouterContext.Provider
+      value={{
+        impermaxRouter,
+        routerAccount,
+        routerUpdate,
+        doUpdate,
+        priceInverted,
+        togglePriceInverted
+      }}>{children}
+    </ImpermaxRouterContext.Provider>
+  );
 };

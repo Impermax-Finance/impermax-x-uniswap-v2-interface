@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 
-const PairAddressContext = createContext<string>("");
+const PairAddressContext = createContext<string>('');
 export default PairAddressContext;

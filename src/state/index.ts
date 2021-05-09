@@ -6,10 +6,10 @@ const PERSISTED_KEYS: string[] = ['transactions'];
 
 const store = configureStore({
   reducer: {
-    transactions,
+    transactions
   },
   middleware: [...getDefaultMiddleware({ thunk: false }), save({ states: PERSISTED_KEYS })],
-  preloadedState: load({ states: PERSISTED_KEYS }),
+  preloadedState: load({ states: PERSISTED_KEYS })
 });
 
 export default store;

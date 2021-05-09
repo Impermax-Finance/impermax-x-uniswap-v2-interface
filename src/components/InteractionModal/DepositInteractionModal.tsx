@@ -1,21 +1,17 @@
-import React, { useState } from "react";
-import InteractionModal, { InteractionModalHeader, InteractionModalBody, InteractionModalContainer } from ".";
-import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
-import NumericalInput from "../NumericalInput";
-import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
-import usePoolToken from "../../hooks/usePoolToken";
-import { formatFloat } from "../../utils/format";
-import RiskMetrics from "../RiskMetrics";
-import InputAmount from "../InputAmount";
-import InteractionButton, { ButtonState } from "../InteractionButton";
-import TransactionSize from "./TransactionRecap/TransactionSize";
-import SupplyAPY from "./TransactionRecap/SupplyAPY";
-import useApprove from "../../hooks/useApprove";
-import { BigNumber } from "ethers";
-import { decimalToBalance } from "../../utils/ether-utils";
-import useDeposit from "../../hooks/useDeposit";
-import { useDecimals, useSymbol, useAvailableBalance, useAvailableBalanceUSD, useToBigNumber } from "../../hooks/useData";
-import { useAddLiquidityUrl } from "../../hooks/useUrlGenerator";
+import { useState } from 'react';
+import { InteractionModalContainer } from '.';
+import { Row, Col } from 'react-bootstrap';
+import { PoolTokenType, ApprovalType } from '../../impermax-router/interfaces';
+import usePoolToken from '../../hooks/usePoolToken';
+import RiskMetrics from '../RiskMetrics';
+import InputAmount from '../InputAmount';
+import InteractionButton from '../InteractionButton';
+import TransactionSize from './TransactionRecap/TransactionSize';
+import SupplyAPY from './TransactionRecap/SupplyAPY';
+import useApprove from '../../hooks/useApprove';
+import useDeposit from '../../hooks/useDeposit';
+import { useSymbol, useAvailableBalance, useToBigNumber } from '../../hooks/useData';
+import { useAddLiquidityUrl } from '../../hooks/useUrlGenerator';
 
 /**
  * Props for the deposit interaction modal.
@@ -27,7 +23,7 @@ export interface DepositInteractionModalProps {
   toggleShow(s: boolean): void;
 }
 
-export default function DepositInteractionModal({show, toggleShow}: DepositInteractionModalProps) {
+export default function DepositInteractionModal({ show, toggleShow }: DepositInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
@@ -43,39 +39,70 @@ export default function DepositInteractionModal({show, toggleShow}: DepositInter
     await deposit();
     setVal(0);
     toggleShow(false);
+  };
+
+  if (!availableBalance) {
+    return (
+      <InteractionModalContainer
+        // eslint-disable-next-line eqeqeq
+        title={poolTokenType == PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
+        show={show}
+        toggleShow={toggleShow}>
+        <>
+          You need to hold {symbol} in your wallet in order to deposit it.
+          {/* eslint-disable-next-line eqeqeq */}
+          {poolTokenType == PoolTokenType.Collateral ? (
+            <>
+              <br />
+              You can obtain it by&nbsp;
+              <a
+                target='_blank'
+                href={addLiquidityUrl}>providing liquidity on Uniswap
+              </a>
+            </>
+          ) : null}
+        </>
+      </InteractionModalContainer>
+    );
   }
 
-  if (!availableBalance) return (
-    <InteractionModalContainer title={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} show={show} toggleShow={toggleShow}><>
-      You need to hold {symbol} in your wallet in order to deposit it.
-      { poolTokenType == PoolTokenType.Collateral ? (<>
-        <br/>You can obtain it by <a target="_blank" href={addLiquidityUrl}>providing liquidity on Uniswap</a>
-      </>) : null }
-    </></InteractionModalContainer>
-  );
-
   return (
-    <InteractionModalContainer title={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} show={show} toggleShow={toggleShow}><>
-      { poolTokenType == PoolTokenType.Collateral && (<RiskMetrics changeCollateral={val} hideIfNull={true} />) }
-      <InputAmount 
-        val={val}
-        setVal={setVal}
-        suffix={symbol}
-        maxTitle={'Available'}
-        max={availableBalance}
-      />
-      <div className="transaction-recap">
-        <TransactionSize amount={val} />
-        <SupplyAPY amount={val} />
-      </div>
-      <Row className="interaction-row">
-        <Col xs={6}>
-          <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
-        </Col>
-        <Col xs={6}>
-          <InteractionButton name={poolTokenType == PoolTokenType.Collateral ? "Deposit" : "Supply"} onCall={onDeposit} state={depositState} />
-        </Col>
-      </Row>
-    </></InteractionModalContainer>
+    <InteractionModalContainer
+      // eslint-disable-next-line eqeqeq
+      title={poolTokenType == PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
+      show={show}
+      toggleShow={toggleShow}>
+      <>
+        {/* eslint-disable-next-line eqeqeq */}
+        {poolTokenType == PoolTokenType.Collateral && (<RiskMetrics
+          changeCollateral={val}
+          hideIfNull={true} />)}
+        <InputAmount
+          val={val}
+          setVal={setVal}
+          suffix={symbol}
+          maxTitle='Available'
+          max={availableBalance} />
+        <div className='transaction-recap'>
+          <TransactionSize amount={val} />
+          <SupplyAPY amount={val} />
+        </div>
+        <Row className='interaction-row'>
+          <Col xs={6}>
+            <InteractionButton
+              name='Approve'
+              onCall={onApprove}
+              state={approvalState} />
+          </Col>
+          <Col xs={6}>
+            <InteractionButton
+              // eslint-disable-next-line eqeqeq
+              name={poolTokenType == PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
+              onCall={onDeposit}
+              state={depositState} />
+          </Col>
+        </Row>
+      </>
+    </InteractionModalContainer>
   );
 }

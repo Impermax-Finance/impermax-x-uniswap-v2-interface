@@ -1,15 +1,18 @@
-import { BigNumber, ethers } from 'ethers';
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
+import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from '../state/transactions/hooks';
-import useAllowance from './useAllowance';
 import usePairAddress from './usePairAddress';
 import usePoolToken from './usePoolToken';
-import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
+import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
-import { useDecimals, useSymbol, useToNumber } from './useData';
+import { useSymbol, useToNumber } from './useData';
 import { formatFloat } from '../utils/format';
-
 
 export default function useDeposit(approvalState: ButtonState, amount: BigNumber, invalidInput: boolean, permitData: PermitData): [ButtonState, () => Promise<void>] {
   const uniswapV2PairAddress = usePairAddress();
@@ -22,9 +25,10 @@ export default function useDeposit(approvalState: ButtonState, amount: BigNumber
   const val = useToNumber(amount);
   const symbol = useSymbol();
   const summary = `Deposit ${formatFloat(val)} ${symbol}`;
-  
+
   const depositState: ButtonState = useMemo(() => {
     if (invalidInput) return ButtonState.Disabled;
+    // eslint-disable-next-line eqeqeq
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
@@ -38,8 +42,7 @@ export default function useDeposit(approvalState: ButtonState, amount: BigNumber
         addTransaction({ hash }, { summary });
       });
       doUpdate();
-    }
-    finally {
+    } finally {
       setPending(false);
     }
   }, [approvalState, uniswapV2PairAddress, poolTokenType, addTransaction, amount, permitData]);

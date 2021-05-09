@@ -1,26 +1,28 @@
-import { BigNumber, ethers } from 'ethers';
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
+import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from '../state/transactions/hooks';
-import useAllowance from './useAllowance';
 import usePairAddress from './usePairAddress';
-import usePoolToken from './usePoolToken';
-import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
+import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
 import { PoolTokenType } from '../impermax-router/interfaces';
 import { useToNumber, useSymbol } from './useData';
 import { formatFloat } from '../utils/format';
 
-
 export default function useLeverage(
-  approvalStateA: ButtonState, 
-  approvalStateB: ButtonState, 
+  approvalStateA: ButtonState,
+  approvalStateB: ButtonState,
   invalidInput: boolean,
-  amountA: BigNumber, 
+  amountA: BigNumber,
   amountB: BigNumber,
-  amountAMin: BigNumber, 
+  amountAMin: BigNumber,
   amountBMin: BigNumber,
-  permitDataA: PermitData, 
+  permitDataA: PermitData,
   permitDataB: PermitData
 ): [ButtonState, () => Promise<void>] {
   const uniswapV2PairAddress = usePairAddress();
@@ -35,9 +37,10 @@ export default function useLeverage(
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const summary = `Leverage ${symbol}: borrow ${formatFloat(valA)} ${symbolA} and  ${formatFloat(valB)} ${symbolB}`;
-  
+
   const leverageState: ButtonState = useMemo(() => {
     if (invalidInput) return ButtonState.Disabled;
+    // eslint-disable-next-line eqeqeq
     if (approvalStateA != ButtonState.Done || approvalStateB != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
@@ -51,8 +54,7 @@ export default function useLeverage(
         addTransaction({ hash }, { summary });
       });
       doUpdate();
-    }
-    finally {
+    } finally {
       setPending(false);
     }
   }, [uniswapV2PairAddress, addTransaction, amountA, amountB, amountAMin, amountBMin, permitDataA, permitDataB]);

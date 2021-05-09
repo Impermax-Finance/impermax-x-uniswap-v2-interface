@@ -1,14 +1,15 @@
-import { BigNumber, ethers } from 'ethers';
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from '../state/transactions/hooks';
-import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
+import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
-import { useSymbol, useAvailableClaimable } from './useData';
+import { useAvailableClaimable } from './useData';
 import { formatAmount } from '../utils/format';
-import usePairAddress from './usePairAddress';
-import { PoolTokenType } from '../impermax-router/interfaces';
 import { DistributorDetails } from '../utils/constants';
-
 
 export default function useClaimDistributor(distributor: DistributorDetails): [ButtonState, () => Promise<void>] {
   const availableClaimable = useAvailableClaimable(distributor.claimableAddress);
@@ -18,7 +19,7 @@ export default function useClaimDistributor(distributor: DistributorDetails): [B
   const [pending, setPending] = useState<boolean>(false);
 
   const summary = `Claim ${ formatAmount(availableClaimable) } IMX from ${distributor.name}`;
-  
+
   const claimDistributorState: ButtonState = useMemo(() => {
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
@@ -32,8 +33,7 @@ export default function useClaimDistributor(distributor: DistributorDetails): [B
         addTransaction({ hash }, { summary });
       });
       doUpdate();
-    }
-    finally {
+    } finally {
       setPending(false);
     }
   }, [distributor, summary, addTransaction]);

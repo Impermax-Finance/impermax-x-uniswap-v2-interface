@@ -1,7 +1,12 @@
-import ImpermaxRouter from ".";
-import { Address, AirdropData, PoolTokenType, ClaimEvent } from "./interfaces";
-import { decimalToBalance } from "../utils/ether-utils";
-import { BigNumber } from "ethers";
+/* eslint-disable no-invalid-this */
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
+import ImpermaxRouter from '.';
+import { Address, AirdropData, PoolTokenType, ClaimEvent } from './interfaces';
+import { BigNumber } from 'ethers';
 
 // Airdrop Data
 export async function initializeAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
@@ -13,13 +18,13 @@ export async function initializeAirdropData(this: ImpermaxRouter) : Promise<Aird
       const isClaimed = await this.merkleDistributor.methods.isClaimed(data.index).call();
       if (!isClaimed) return data;
     }
-  }
-  catch {}
+  // eslint-disable-next-line no-empty
+  } catch {}
   return {
     index: -1,
     amount: null,
-    proof: [],
-  }
+    proof: []
+  };
 }
 export async function getAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
   if (!this.imxCache.airdropData) this.imxCache.airdropData = await this.initializeAirdropData();
@@ -50,8 +55,8 @@ export async function initializeAvailableReward(this: ImpermaxRouter, uniswapV2P
   const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   let totalAmount = 0;
-  if (farmingPoolA) totalAmount += await farmingPoolA.methods.claim().call({from: this.account}) / 1e18;
-  if (farmingPoolB) totalAmount += await farmingPoolB.methods.claim().call({from: this.account}) / 1e18;
+  if (farmingPoolA) totalAmount += await farmingPoolA.methods.claim().call({ from: this.account }) / 1e18;
+  if (farmingPoolB) totalAmount += await farmingPoolB.methods.claim().call({ from: this.account }) / 1e18;
   return totalAmount;
 }
 export async function getAvailableReward(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
@@ -64,15 +69,15 @@ export async function getAvailableReward(this: ImpermaxRouter, uniswapV2PairAddr
 export async function initializeClaimHistory(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<ClaimEvent[]> {
   const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const claimsA = await farmingPoolA.getPastEvents("Claim", { fromBlock: 0, filter: {account: this.account} });
-  const claimsB = await farmingPoolB.getPastEvents("Claim", { fromBlock: 0, filter: {account: this.account} });
+  const claimsA = await farmingPoolA.getPastEvents('Claim', { fromBlock: 0, filter: { account: this.account } });
+  const claimsB = await farmingPoolB.getPastEvents('Claim', { fromBlock: 0, filter: { account: this.account } });
   const claims = claimsA.concat(claimsB);
   claims.sort((a: any, b: any) => b.blockNumber - a.blockNumber); // order from newest to oldest
   const result: Array<ClaimEvent> = [];
   for (const claim of claims) {
     result.push({
       amount: claim.returnValues.amount / 1e18,
-      transactionHash: claim.transactionHash,
+      transactionHash: claim.transactionHash
     });
   }
   return result;
@@ -86,7 +91,7 @@ export async function getClaimHistory(this: ImpermaxRouter, uniswapV2PairAddress
 // Claim Claimable
 export async function initializeAvailableClaimable(this: ImpermaxRouter, claimableAddress: Address) : Promise<number> {
   const claimable = await this.getClaimable(claimableAddress);
-  return await claimable.methods.claim().call({from: this.account}) / 1e18;
+  return await claimable.methods.claim().call({ from: this.account }) / 1e18;
 }
 export async function getAvailableClaimable(this: ImpermaxRouter, claimableAddress: Address) : Promise<number> {
   const cache = this.getClaimableCache(claimableAddress);

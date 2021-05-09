@@ -11,5 +11,5 @@ export {
   Account,
   Risks,
   Claim,
-  CreateNewPair,
-}
+  CreateNewPair
+};

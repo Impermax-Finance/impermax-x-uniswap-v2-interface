@@ -1,21 +1,21 @@
-import { Dictionary } from '../../utils/languages'
+import { Dictionary } from '../../utils/languages';
 
 const translations = {
-  "Current Leverage": {
-    'ENG': "Current Leverage"
-  }, 
-  "New Leverage": {
-    'ENG': "New Leverage"
-  }, 
-  "Liquidation Prices": {
-    'ENG': "Liquidation Prices"
+  'Current Leverage': {
+    ENG: 'Current Leverage'
   },
-  "New Liquidation Prices": {
-    'ENG': "New Liquidation Prices"
+  'New Leverage': {
+    ENG: 'New Leverage'
   },
-  "TWAP Price": {
-    'ENG': "TWAP Price"
+  'Liquidation Prices': {
+    ENG: 'Liquidation Prices'
   },
+  'New Liquidation Prices': {
+    ENG: 'New Liquidation Prices'
+  },
+  'TWAP Price': {
+    ENG: 'TWAP Price'
+  }
 } as Dictionary;
 
 export default translations;

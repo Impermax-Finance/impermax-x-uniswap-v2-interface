@@ -1,6 +1,5 @@
-import { Networks } from "../utils/connections";
-import { BigNumber } from "ethers";
-import Subgraph from "../subgraph";
+import { BigNumber } from 'ethers';
+import Subgraph from '../subgraph';
 
 export type Address = string;
 export type Contract = any;
@@ -48,8 +47,8 @@ export interface Changes {
 export const NO_CHANGES = {
   changeBorrowedA: 0,
   changeBorrowedB: 0,
-  changeCollateral: 0,
-}
+  changeCollateral: 0
+};
 
 export interface ImpermaxRouterCfg {
   subgraph: Subgraph;

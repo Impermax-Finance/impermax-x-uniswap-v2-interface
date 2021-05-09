@@ -1,8 +1,13 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState } from 'react';
 import { Languages } from '../utils/languages';
 
+const LanguageProvider: React.FC = ({ children }) => {
+  const context = useContext();
+  return <LanguageContext.Provider value={context}>{children}</LanguageContext.Provider>;
+};
+
 export interface LanguageState {
-   selected: Languages;
+  selected: Languages;
 }
 
 export function useContext() {
@@ -11,14 +16,10 @@ export function useContext() {
 }
 
 export interface LanguageContextI {
-   state: Partial<LanguageState>;
-   dispatch: Function;
+  state: Partial<LanguageState>;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  dispatch: Function;
 }
 export const LanguageContext = createContext<Partial<LanguageContextI>>({});
-
-const LanguageProvider: React.FC = ({children}) => {
-    const context = useContext();
-    return <LanguageContext.Provider value={context}>{children}</LanguageContext.Provider>
-}
 
 export default LanguageProvider;

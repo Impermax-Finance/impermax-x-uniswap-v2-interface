@@ -1,11 +1,11 @@
-import { Address, PoolTokenType, LendingPoolData, BorrowableData } from "../impermax-router/interfaces";
-import { decimalToBalance } from "../utils/ether-utils";
-import gql from "graphql-tag";
-import ApolloClient from "apollo-client";
-import { HttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory"
-import Subgraph from ".";
-import BorrowPosition from "../components/AccountPage/BorrowPosition";
+/* eslint-disable no-invalid-this */
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
+import { Address, PoolTokenType } from '../impermax-router/interfaces';
+import Subgraph from '.';
 
 export async function getBorrowPositions(this: Subgraph, account: Address) : Promise<Address[]> {
   const userData = await this.getUserData(account);
@@ -21,7 +21,7 @@ export async function getSupplyPositions(this: Subgraph, account: Address) : Pro
 
 export async function getCollateralAmount(this: Subgraph, account: Address, uniswapV2PairAddress: Address) : Promise<number> {
   const userData = await this.getUserData(account);
-  if(userData && userData.collateralPositions[uniswapV2PairAddress]) {
+  if (userData && userData.collateralPositions[uniswapV2PairAddress]) {
     const exchangeRate = await this.getExchangeRate(uniswapV2PairAddress, PoolTokenType.Collateral);
     const collateralBalance = parseFloat(userData.collateralPositions[uniswapV2PairAddress].balance);
     return collateralBalance * exchangeRate;
@@ -38,7 +38,7 @@ export async function getCollateralValue(this: Subgraph, account: Address, unisw
 export async function getBorrowedAmount(this: Subgraph, account: Address, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const userData = await this.getUserData(account);
   const borrowIndex = await this.getBorrowIndex(uniswapV2PairAddress, poolTokenType);
-  if(userData && userData.borrowPositions[uniswapV2PairAddress] && userData.borrowPositions[uniswapV2PairAddress][poolTokenType]) {
+  if (userData && userData.borrowPositions[uniswapV2PairAddress] && userData.borrowPositions[uniswapV2PairAddress][poolTokenType]) {
     const borrowPosition = userData.borrowPositions[uniswapV2PairAddress][poolTokenType];
     const borrowBalance = parseFloat(borrowPosition.borrowBalance);
     const userBorrowIndex = parseFloat(borrowPosition.borrowIndex);
@@ -62,7 +62,7 @@ export async function getBorrowerEquityValue(this: Subgraph, account: Address, u
 
 export async function getSuppliedAmount(this: Subgraph, account: Address, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const userData = await this.getUserData(account);
-  if(userData && userData.supplyPositions[uniswapV2PairAddress] && userData.supplyPositions[uniswapV2PairAddress][poolTokenType]) {
+  if (userData && userData.supplyPositions[uniswapV2PairAddress] && userData.supplyPositions[uniswapV2PairAddress][poolTokenType]) {
     const exchangeRate = await this.getExchangeRate(uniswapV2PairAddress, poolTokenType);
     const supplyBalance = parseFloat(userData.supplyPositions[uniswapV2PairAddress][poolTokenType].balance);
     return supplyBalance * exchangeRate;

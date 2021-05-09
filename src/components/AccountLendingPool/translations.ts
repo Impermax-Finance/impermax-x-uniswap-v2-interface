@@ -1,66 +1,66 @@
-import { Dictionary } from '../../utils/languages'
+import { Dictionary } from '../../utils/languages';
 
 const translations = {
-  "LP Equity": {
-    'ENG': "LP Equity"
+  'LP Equity': {
+    ENG: 'LP Equity'
   },
-  "Total Collateral": {
-    'ENG': "Total Collateral"
+  'Total Collateral': {
+    ENG: 'Total Collateral'
   },
-  "Total Debt": {
-    'ENG': "Total Debt"
+  'Total Debt': {
+    ENG: 'Total Debt'
   },
-  "Current Leverage": {
-    'ENG': "Current Leverage"
+  'Current Leverage': {
+    ENG: 'Current Leverage'
   },
-  "Liquidation Prices": {
-    'ENG': "Liquidation Prices (TWAP)"
+  'Liquidation Prices': {
+    ENG: 'Liquidation Prices (TWAP)'
   },
-  "Deposit": {
-    'ENG': "Deposit"
+  Deposit: {
+    ENG: 'Deposit'
   },
-  "Deposited": {
-    'ENG': "Deposited"
+  Deposited: {
+    ENG: 'Deposited'
   },
-  "Withdraw": {
-    'ENG': "Withdraw"
+  Withdraw: {
+    ENG: 'Withdraw'
   },
-  "Supply": {
-    'ENG': "Supply"
+  Supply: {
+    ENG: 'Supply'
   },
-  "Supplied": {
-    'ENG': "Supplied"
+  Supplied: {
+    ENG: 'Supplied'
   },
-  "Leverage": {
-    'ENG': "Leverage"
+  Leverage: {
+    ENG: 'Leverage'
   },
-  "Deleverage": {
-    'ENG': "Deleverage"
+  Deleverage: {
+    ENG: 'Deleverage'
   },
-  "Obtain": {
-    'ENG': "Obtain"
+  Obtain: {
+    ENG: 'Obtain'
   },
-  "Borrow": {
-    'ENG': "Borrow"
+  Borrow: {
+    ENG: 'Borrow'
   },
-  "Borrowed": {
-    'ENG': "Borrowed"
+  Borrowed: {
+    ENG: 'Borrowed'
   },
-  "Repay": {
-    'ENG': "Repay"
+  Repay: {
+    ENG: 'Repay'
   },
-  "Supply Balance": {
-    'ENG': "Supply Balance"
+  'Supply Balance': {
+    ENG: 'Supply Balance'
   },
-  "Net APY": {
-    'ENG': "Net APY"
+  'Net APY': {
+    ENG: 'Net APY'
   },
-  "Expected monthly profit": {
-    'ENG': "Expected monthly profit"
+  'Expected monthly profit': {
+    ENG: 'Expected monthly profit'
   },
-  "Expected yearly profit": {
-    'ENG': "Expected yearly profit"
-  },
+  'Expected yearly profit': {
+    ENG: 'Expected yearly profit'
+  }
 } as Dictionary;
 
 export default translations;

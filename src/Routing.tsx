@@ -1,5 +1,4 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Home, LendingPool, Risks, Claim, CreateNewPair, Account } from './views';
 
 export interface AppRoute {
@@ -55,34 +54,39 @@ export enum AppRoutes {
 /**
  * Generates the application routing structure.
  */
-export default function Routing() {
+
+export default function Routing(): JSX.Element {
   return (
-    <div className="routing">
+    <div className='routing'>
       <Router>
-          <Switch>
-            <Route path={HomeRoute.to} exact>
-              <Home />
-            </Route>
-            <Route path={CreateNewPairRoute.to}>
-              <CreateNewPair />
-            </Route>
-            <Route path={LendingPoolRoute.to}>
-              <LendingPool />
-            </Route>
-            <Route path={AccountRoute.to}>
-              <Account />
-            </Route>
-            <Route path={ClaimRoute.to}>
-              <Claim />
-            </Route>
-            <Route path={RisksRoute.to}>
-              <Risks />
-            </Route>
-            <Route path={UserGuideRoute.to} component={() : any => { 
-              window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf'; 
+        <Switch>
+          <Route
+            path={HomeRoute.to}
+            exact>
+            <Home />
+          </Route>
+          <Route path={CreateNewPairRoute.to}>
+            <CreateNewPair />
+          </Route>
+          <Route path={LendingPoolRoute.to}>
+            <LendingPool />
+          </Route>
+          <Route path={AccountRoute.to}>
+            <Account />
+          </Route>
+          <Route path={ClaimRoute.to}>
+            <Claim />
+          </Route>
+          <Route path={RisksRoute.to}>
+            <Risks />
+          </Route>
+          <Route
+            path={UserGuideRoute.to}
+            component={() : any => {
+              window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
               return null;
             }} />
-          </Switch>
+        </Switch>
       </Router>
     </div>
   );

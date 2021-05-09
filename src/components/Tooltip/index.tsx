@@ -1,12 +1,10 @@
-import React, { useCallback, useState } from 'react'
-import { HelpCircle as Question } from 'react-feather'
-import styled from 'styled-components'
-import { Placement } from '@popperjs/core'
-import { usePopper } from 'react-popper'
-import Portal from '@reach/portal'
-import useInterval from 'use-interval'
+import React, { useCallback, useState } from 'react';
+import styled from 'styled-components';
+import { Placement } from '@popperjs/core';
+import { usePopper } from 'react-popper';
+import Portal from '@reach/portal';
+import useInterval from 'use-interval';
 import './index.scss';
-
 
 const PopoverContainer = styled.div<{ show: boolean }>`
   z-index: 9999;
@@ -16,11 +14,11 @@ const PopoverContainer = styled.div<{ show: boolean }>`
   background: #fff;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,.16);
   border-radius: 8px;
-`
+`;
 
 const ReferenceElement = styled.div`
   display: inline-block;
-`
+`;
 
 const Arrow = styled.div`
   width: 8px;
@@ -62,7 +60,19 @@ const Arrow = styled.div`
       border-top: none;
     }
   }
-`
+`;
+
+interface TooltipProps extends Omit<PopoverProps, 'content'> {
+  text: string
+}
+
+export default function Tooltip({ text, ...rest }: TooltipProps): JSX.Element {
+  return <Popover
+    content={
+      <div className='tooltip-container'>{text}</div>
+    }
+    {...rest} />;
+}
 
 export interface PopoverProps {
   content: React.ReactNode
@@ -71,10 +81,10 @@ export interface PopoverProps {
   placement?: Placement
 }
 
-export function Popover({ content, show, children, placement = 'auto' }: PopoverProps) {
-  const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>(null)
-  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null)
-  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null)
+export function Popover({ content, show, children, placement = 'auto' }: PopoverProps): JSX.Element {
+  const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
+  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
   const { styles, update, attributes } = usePopper(referenceElement, popperElement, {
     placement,
     strategy: 'fixed',
@@ -82,37 +92,29 @@ export function Popover({ content, show, children, placement = 'auto' }: Popover
       { name: 'offset', options: { offset: [8, 8] } },
       { name: 'arrow', options: { element: arrowElement } }
     ]
-  })
+  });
   const updateCallback = useCallback(() => {
-    update && update()
-  }, [update])
-  useInterval(updateCallback, show ? 100 : null)
+    update && update();
+  }, [update]);
+  useInterval(updateCallback, show ? 100 : null);
 
   return (
     <>
       <ReferenceElement ref={setReferenceElement as any}>{children}</ReferenceElement>
       <Portal>
-        <PopoverContainer show={show} ref={setPopperElement as any} style={styles.popper} {...attributes.popper}>
+        <PopoverContainer
+          show={show}
+          ref={setPopperElement as any}
+          style={styles.popper}
+          {...attributes.popper}>
           {content}
           <Arrow
             className={`arrow-${attributes.popper?.['data-popper-placement'] ?? ''}`}
             ref={setArrowElement as any}
             style={styles.arrow}
-            {...attributes.arrow}
-          />
+            {...attributes.arrow} />
         </PopoverContainer>
       </Portal>
     </>
-  )
-}
-
-
-interface TooltipProps extends Omit<PopoverProps, 'content'> {
-  text: string
-}
-
-export default function Tooltip({ text, ...rest }: TooltipProps) {
-  return <Popover content={
-    <div className="tooltip-container">{text}</div>
-  } {...rest} />
+  );
 }

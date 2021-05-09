@@ -1,22 +1,23 @@
-import { BigNumber, ethers } from 'ethers';
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
+import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from '../state/transactions/hooks';
-import useAllowance from './useAllowance';
 import usePairAddress from './usePairAddress';
-import usePoolToken from './usePoolToken';
-import useImpermaxRouter, { useRouterCallback, useDoUpdate } from './useImpermaxRouter';
+import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
-import { PoolTokenType } from '../impermax-router/interfaces';
 import { useToNumber, useSymbol } from './useData';
 import { formatFloat } from '../utils/format';
 
-
 export default function useDeleverage(
   approvalState: ButtonState,
-  invalidInput: boolean, 
+  invalidInput: boolean,
   tokens: BigNumber,
-  amountAMin: BigNumber, 
+  amountAMin: BigNumber,
   amountBMin: BigNumber,
   permitData: PermitData
 ): [ButtonState, () => Promise<void>] {
@@ -29,9 +30,10 @@ export default function useDeleverage(
   const val = useToNumber(tokens);
   const symbol = useSymbol();
   const summary = `Deleverage ${symbol}: withdraw ${formatFloat(val)} ${symbol}`;
-  
+
   const deleverageState: ButtonState = useMemo(() => {
     if (invalidInput) return ButtonState.Disabled;
+    // eslint-disable-next-line eqeqeq
     if (approvalState != ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
@@ -45,8 +47,7 @@ export default function useDeleverage(
         addTransaction({ hash }, { summary });
       });
       doUpdate();
-    }
-    finally {
+    } finally {
       setPending(false);
     }
   }, [uniswapV2PairAddress, addTransaction, tokens, amountAMin, amountBMin, permitData]);

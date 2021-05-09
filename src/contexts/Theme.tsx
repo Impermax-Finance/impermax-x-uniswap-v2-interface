@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState } from 'react';
 
 const theme = {
   buttons: {
@@ -6,7 +6,7 @@ const theme = {
       primary: '#000000'
     }
   }
-}
+};
 
 export function useContext() {
   const [state, dispatch] = useState(theme);
@@ -15,12 +15,10 @@ export function useContext() {
 
 export const ThemeContext = createContext({});
 
-export const ThemeProvider: React.FC = ({children}) => {
+export const ThemeProvider: React.FC = ({ children }) => {
+  const context = useContext();
 
-    const context = useContext();
-
-    return <ThemeContext.Provider value={context}>{children}</ThemeContext.Provider>
-
-}
+  return <ThemeContext.Provider value={context}>{children}</ThemeContext.Provider>;
+};
 
 export default ThemeProvider;

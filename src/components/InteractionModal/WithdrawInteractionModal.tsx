@@ -1,18 +1,15 @@
-import React, { useState } from "react";
-import InteractionModal, { InteractionModalHeader, InteractionModalBody, InteractionModalContainer } from ".";
-import { InputGroup, Button, FormControl, Row, Col } from "react-bootstrap";
-import NumericalInput from "../NumericalInput";
-import { PoolTokenType, ApprovalType } from "../../impermax-router/interfaces";
-import usePoolToken from "../../hooks/usePoolToken";
-import { formatFloat, formatUSD } from "../../utils/format";
-import RiskMetrics from "../RiskMetrics";
-import InputAmount from "../InputAmount";
-import InteractionButton, { ButtonState } from "../InteractionButton";
-import TransactionSize from "./TransactionRecap/TransactionSize";
-import { decimalToBalance } from "../../utils/ether-utils";
-import useApprove from "../../hooks/useApprove";
-import useWithdraw from "../../hooks/useWithdraw";
-import { useExchangeRate, useMaxWithdrawable, useSymbol, useDecimals, useToTokens } from "../../hooks/useData";
+import { useState } from 'react';
+import { InteractionModalContainer } from '.';
+import { Row, Col } from 'react-bootstrap';
+import { PoolTokenType, ApprovalType } from '../../impermax-router/interfaces';
+import usePoolToken from '../../hooks/usePoolToken';
+import RiskMetrics from '../RiskMetrics';
+import InputAmount from '../InputAmount';
+import InteractionButton from '../InteractionButton';
+import TransactionSize from './TransactionRecap/TransactionSize';
+import useApprove from '../../hooks/useApprove';
+import useWithdraw from '../../hooks/useWithdraw';
+import { useMaxWithdrawable, useSymbol, useToTokens } from '../../hooks/useData';
 
 /**
  * Props for the withdraw interaction modal.
@@ -29,7 +26,8 @@ export interface WithdrawInteractionModalProps {
  * @param param0 any Props for component
  * @see WithdrawInteractionModalProps
  */
-export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInteractionModalProps) {
+
+export default function WithdrawInteractionModal({ show, toggleShow }: WithdrawInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
@@ -44,29 +42,40 @@ export default function WithdrawInteractionModal({show, toggleShow}: WithdrawInt
     await withdraw();
     setVal(0);
     toggleShow(false);
-  }
+  };
 
   return (
-    <InteractionModalContainer title="Withdraw" show={show} toggleShow={toggleShow}><>
-      { poolTokenType == PoolTokenType.Collateral && (<RiskMetrics changeCollateral={-val} />) }
-      <InputAmount 
-        val={val}
-        setVal={setVal}
-        suffix={symbol}
-        maxTitle={'Available'}
-        max={maxWithdrawable}
-      />
-      <div className="transaction-recap">
-        <TransactionSize amount={val} />
-      </div>
-      <Row className="interaction-row">
-        <Col xs={6}>
-          <InteractionButton name="Approve" onCall={onApprove} state={approvalState} />
-        </Col>
-        <Col xs={6}>
-          <InteractionButton name="Withdraw" onCall={onWithdraw} state={withdrawState} />
-        </Col>
-      </Row>
-    </></InteractionModalContainer>
+    <InteractionModalContainer
+      title='Withdraw'
+      show={show}
+      toggleShow={toggleShow}>
+      <>
+        {/* eslint-disable-next-line eqeqeq */}
+        {poolTokenType == PoolTokenType.Collateral && (<RiskMetrics changeCollateral={-val} />)}
+        <InputAmount
+          val={val}
+          setVal={setVal}
+          suffix={symbol}
+          maxTitle='Available'
+          max={maxWithdrawable} />
+        <div className='transaction-recap'>
+          <TransactionSize amount={val} />
+        </div>
+        <Row className='interaction-row'>
+          <Col xs={6}>
+            <InteractionButton
+              name='Approve'
+              onCall={onApprove}
+              state={approvalState} />
+          </Col>
+          <Col xs={6}>
+            <InteractionButton
+              name='Withdraw'
+              onCall={onWithdraw}
+              state={withdrawState} />
+          </Col>
+        </Row>
+      </>
+    </InteractionModalContainer>
   );
 }

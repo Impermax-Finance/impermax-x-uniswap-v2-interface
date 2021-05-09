@@ -5,7 +5,7 @@ import ImpermaxRouter from '../impermax-router';
 export default function useImpermaxRouter() {
   const { impermaxRouter } = useContext(ImpermaxRouterContext);
   return impermaxRouter;
-};
+}
 
 export function useRouterAccount() {
   const { routerAccount } = useContext(ImpermaxRouterContext);

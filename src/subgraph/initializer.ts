@@ -1,11 +1,16 @@
-import { Address, PoolTokenType, LendingPoolData, BorrowableData, TvlData, UserData, CollateralPosition, SupplyPosition, BorrowPosition } from "../impermax-router/interfaces";
-import { decimalToBalance } from "../utils/ether-utils";
-import gql from "graphql-tag";
-import ApolloClient from "apollo-client";
-import { HttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import Subgraph from ".";
-import { DocumentNode } from "graphql";
+/* eslint-disable no-invalid-this */
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
+
+import { Address, PoolTokenType, LendingPoolData, TvlData, UserData, CollateralPosition, SupplyPosition, BorrowPosition } from '../impermax-router/interfaces';
+import gql from 'graphql-tag';
+import ApolloClient from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import Subgraph from '.';
+import { DocumentNode } from 'graphql';
 
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;
 const UNISWAP_FEE = 0.003;
@@ -13,13 +18,13 @@ const UNISWAP_FEE = 0.003;
 export async function apolloFetcher(subgraphUrl: string, query: DocumentNode) {
   const client = new ApolloClient({
     link: new HttpLink({
-      uri: subgraphUrl,
+      uri: subgraphUrl
     }),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache()
   });
   return client.query({
     query: query,
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-first'
   });
 }
 
@@ -57,9 +62,8 @@ export async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
       }
     }
   }`;
-  const id_in_string = "";// this.whitelistedPairs.length > 0 ? `, where: {id_in: ["${ this.whitelistedPairs.join('","') }"]}` : "";
   const query = gql`{
-    lendingPools(first: 1000, orderBy: totalBorrowsUSD, orderDirection: desc${ id_in_string }) {
+    lendingPools(first: 1000, orderBy: totalBorrowsUSD, orderDirection: desc) {
       id
       borrowable0 ${ borrowableStr }
       borrowable1 ${ borrowableStr }
@@ -88,7 +92,7 @@ export async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
 // Uniswap APY
 export async function fetchBlockByTimestamp(this: Subgraph, timestamp: number) : Promise<number> {
   const query = gql`{
-    blocks (first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp+600} }) {
+    blocks (first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp + 600} }) {
       number
     }
   }`;
@@ -97,9 +101,9 @@ export async function fetchBlockByTimestamp(this: Subgraph, timestamp: number) :
 }
 
 export async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number) : Promise<{[key in Address]: number}> {
-  const timestamp = Math.floor((new Date).getTime() / 1000);
+  const timestamp = Math.floor((new Date()).getTime() / 1000);
   const blockNumber = await this.fetchBlockByTimestamp(timestamp - seconds);
-  let addressString = "";
+  let addressString = '';
   for (const uniswapV2PairAddress of uniswapV2PairAddresses) addressString += `"${uniswapV2PairAddress.toLowerCase()}",`;
   const query = gql`{
     pairs ( block: {number: ${blockNumber}} where: { id_in: [${addressString}]} ) {
@@ -112,14 +116,14 @@ export async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: st
   for (const pair of result.data.pairs) {
     pastVolume[pair.id] = parseInt(pair.volumeUSD);
   }
-  return pastVolume
+  return pastVolume;
 }
 
 export async function fetchCurrentVolumeAndReserves(this: Subgraph, uniswapV2PairAddresses: string[]) : Promise<{
-  currentVolume: {[key in Address]: number}, 
+  currentVolume: {[key in Address]: number},
   currentReserve: {[key in Address]: number},
 }> {
-  let addressString = "";
+  let addressString = '';
   for (const uniswapV2PairAddress of uniswapV2PairAddresses) addressString += `"${uniswapV2PairAddress.toLowerCase()}",`;
   const query = gql`{
     pairs ( where: { id_in: [${addressString}]} ) {
@@ -158,12 +162,11 @@ export async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: st
   return uniswapAPY;
 }
 
-
 // LendingPool Data
 export async function initializeLendingPoolsData(this: Subgraph) : Promise<{[key in Address]?: LendingPoolData}> {
   const lendingPoolsData: {[key in Address]?: LendingPoolData} = {};
   const lendingPools = await this.fetchLendingPools();
-  let uniswapV2PairAddresses = [];
+  const uniswapV2PairAddresses = [];
   for (const lendingPool of lendingPools) {
     lendingPoolsData[lendingPool.id] = lendingPool;
     uniswapV2PairAddresses.push(lendingPool.id);
@@ -247,7 +250,7 @@ export async function initializeUserData(this: Subgraph, account: Address) : Pro
   const result: UserData = {
     collateralPositions: {},
     supplyPositions: {},
-    borrowPositions: {},
+    borrowPositions: {}
   };
   const data = await this.fetchUserData(account);
   if (!data) return null;

@@ -1,11 +1,16 @@
-import ImpermaxRouter from "."
-import { Address, LendingPool, PoolTokenType, Contract, FarmingPool, Claimable } from "./interfaces";
-import { decimalToBalance } from "../utils/ether-utils";
+/* eslint-disable no-invalid-this */
+// ray test touch <
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// ray test touch >
 
+import ImpermaxRouter from '.';
+import { Address, LendingPool, PoolTokenType, Contract, FarmingPool, Claimable } from './interfaces';
 
 export function getLendingPoolCache(this: ImpermaxRouter, uniswapV2PairAddress: Address) {
-  if (!(uniswapV2PairAddress in this.lendingPoolCache))
+  if (!(uniswapV2PairAddress in this.lendingPoolCache)) {
     this.lendingPoolCache[uniswapV2PairAddress] = {};
+  }
   return this.lendingPoolCache[uniswapV2PairAddress];
 }
 
@@ -26,7 +31,7 @@ export async function initializeLendingPool(this: ImpermaxRouter, uniswapV2PairA
     borrowableA: borrowableA,
     borrowableB: borrowableB,
     farmingPoolA: farmingPoolAAddress === '0x0000000000000000000000000000000000000000' ? null : this.newFarmingPool(farmingPoolAAddress),
-    farmingPoolB: farmingPoolBAddress === '0x0000000000000000000000000000000000000000' ? null : this.newFarmingPool(farmingPoolBAddress),
+    farmingPoolB: farmingPoolBAddress === '0x0000000000000000000000000000000000000000' ? null : this.newFarmingPool(farmingPoolBAddress)
   };
 }
 export async function getLendingPool(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<LendingPool> {
@@ -36,24 +41,26 @@ export async function getLendingPool(this: ImpermaxRouter, uniswapV2PairAddress:
 }
 
 export async function getContracts(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<[Contract, Contract]> {
-  const lendingPool = await this.getLendingPool(uniswapV2PairAddress);  
-  if (poolTokenType === PoolTokenType.BorrowableA)
+  const lendingPool = await this.getLendingPool(uniswapV2PairAddress);
+  if (poolTokenType === PoolTokenType.BorrowableA) {
     return [lendingPool.borrowableA, lendingPool.tokenA];
-  if (poolTokenType === PoolTokenType.BorrowableB) 
+  }
+  if (poolTokenType === PoolTokenType.BorrowableB) {
     return [lendingPool.borrowableB, lendingPool.tokenB];
+  }
   return [lendingPool.collateral, lendingPool.uniswapV2Pair];
 }
 export async function getPoolToken(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Contract> {
-  const [poolToken,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   return poolToken;
 }
 export async function getToken(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Contract> {
-  const [,token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   return token;
 }
 
 export async function getFarmingPool(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<FarmingPool> {
-  const lendingPool = await this.getLendingPool(uniswapV2PairAddress);  
+  const lendingPool = await this.getLendingPool(uniswapV2PairAddress);
   if (poolTokenType === PoolTokenType.BorrowableA) return lendingPool.farmingPoolA;
   if (poolTokenType === PoolTokenType.BorrowableB) return lendingPool.farmingPoolB;
   return null;
@@ -61,8 +68,9 @@ export async function getFarmingPool(this: ImpermaxRouter, uniswapV2PairAddress:
 
 // Claimable
 export function getClaimableCache(this: ImpermaxRouter, claimableAddress: Address) {
-  if (!(claimableAddress in this.claimableCache))
+  if (!(claimableAddress in this.claimableCache)) {
     this.claimableCache[claimableAddress] = {};
+  }
   return this.claimableCache[claimableAddress];
 }
 export async function initializeClaimable(this: ImpermaxRouter, claimableAddress: Address) : Promise<Claimable> {
@@ -76,10 +84,10 @@ export async function getClaimable(this: ImpermaxRouter, claimableAddress: Addre
 
 // Address
 export async function getPoolTokenAddress(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
-  const [poolToken,] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   return poolToken._address;
 }
 export async function getTokenAddress(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
-  const [,token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   return token._address;
 }

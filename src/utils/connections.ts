@@ -32,10 +32,10 @@ export type ChainDetailsMap = {
 export const chainDetailsMap: ChainDetailsMap = {
   [Networks.Ropsten]: {
     networkId: 3,
-    networkName: Networks.Ropsten,
+    networkName: Networks.Ropsten
   },
   [Networks.Mainnet]: {
     networkId: 1,
-    networkName: Networks.Mainnet,
+    networkName: Networks.Mainnet
   }
-}
+};

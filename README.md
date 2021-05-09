@@ -1,12 +1,20 @@
-Impermax Finance UI
----
 
-[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Impermax-Finance/impermax-x-uniswap-v2-interface)
+# Impermax Finance UI
 
-# Configuration
+## Quick setup
 
-Copy ```.env-configuration``` to ```.env``` with the appropriate variables.
+1. Take a copy of `.env.sample` and re-name to `.env`
+2. Enter the details into the `.env` file
 
-# Development
+## Running
 
-This project uses PM2. Start with ```npm run start:dev```. Stop the development server with ```npm run stop:dev```.
+``` bash
+# install dependencies
+$ yarn install
+
+# serve with hot reload at localhost:3000
+$ yarn dev
+
+# build for production
+$ yarn build
+```

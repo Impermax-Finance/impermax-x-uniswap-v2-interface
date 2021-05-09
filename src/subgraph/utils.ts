@@ -1,13 +1,14 @@
 import { keccak256, solidityPack, getCreate2Address } from 'ethers/lib/utils';
-import Subgraph from ".";
-import { Address } from "../utils/constants";
+import Subgraph from '.';
+import { Address } from '../utils/constants';
 
 export function getPairAddress(this: Subgraph, tokenA: Address, tokenB: Address) {
-	const [token0, token1] = tokenA < tokenB ? [tokenA, tokenB] : [tokenB, tokenA];
+  const [token0, token1] = tokenA < tokenB ? [tokenA, tokenB] : [tokenB, tokenA];
   const salt = keccak256(solidityPack(['address', 'address'], [token0, token1]));
   return getCreate2Address(
-    this.uniswapV2FactoryAddress, 
-    salt, 
+    // eslint-disable-next-line no-invalid-this
+    this.uniswapV2FactoryAddress,
+    salt,
     '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f'
   );
 }
