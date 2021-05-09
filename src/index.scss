@@ -1,0 +1,68 @@
+@import "~bootstrap/scss/bootstrap";
+
+.app {
+  min-height: 100vh;
+  background-color: #f5f6f7;
+  padding-bottom: 20px;
+}
+
+.card {
+  border-radius: 8px;
+  border: 0 none;
+  box-shadow: rgba(0, 0, 0, 0.07) 0 2px 4px 1px;
+
+  .card-body {
+      padding: 0;
+  }
+}
+
+
+.article {
+	margin: 2rem auto;
+  padding: 4rem 4rem;
+
+  a, a:hover, a:link, a:visited {
+    color: #00a368;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+  }
+  p, ul {
+    text-align: justify;
+    line-height: 1.6;
+  }
+  p {
+    margin-bottom: 1.5rem;
+  }
+  ul {
+    padding-left: 2rem;
+    margin-bottom: 0;
+  }
+  .infographic {
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+    background: #202020;
+    margin-bottom: 1rem;
+  }
+  .infographic img {
+    max-width: 100%;
+    margin: 20px 0;
+  }
+  .caption {
+    background-color: #f2f4f4;
+    font-style: italic; 
+    font-size: 1rem;
+  }
+}

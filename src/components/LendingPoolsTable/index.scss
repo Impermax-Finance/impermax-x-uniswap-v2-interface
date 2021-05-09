@@ -1,0 +1,80 @@
+.lending-pools-table {
+
+  .row {
+    border-bottom: 1px solid #e3e6e8;
+    margin: 0;
+    padding: 0.5rem 0;
+    .col {
+      text-align: center;
+    }
+    .col:first-child {
+      text-align: left;
+    }
+  }
+  .row:last-child {
+    border-bottom: 0;
+  }
+
+  .lending-pools-header {
+    color: #818d95;
+    font-size: 0.875rem;
+  }
+
+  .lending-pools-row {
+    line-height: 1.9;
+    color: #202020;
+    text-decoration: none;
+
+    .currency-name {
+      display: flex;
+
+      .combined {
+        flex-grow: 0.75;
+        display: flex;
+        align-items: center;
+        font-size: 1.125rem;
+        .currency-overlapped > img {
+          width: 2rem;
+          position: relative;
+        }
+        .currency-overlapped > img:first-child {
+          z-index: 2;
+        }
+        .currency-overlapped > img:last-child {
+          left: -0.625rem;
+        }
+      }
+
+      .currency-icon {
+        width: 1.25rem;
+        position: relative;
+        top: -0.1rem;
+        left: -0.375rem;
+      }
+    }
+
+    .leveraged-apy {
+      text-align: right;
+      color: #00b675;
+      font-weight: bold;
+      font-size: 125%;
+      display: flex;
+      align-items: center;
+      div {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+  .lending-pools-row:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+.spinner-container {
+  text-align: center;
+  padding: 30px;
+  .spinner-border {
+    color: #00ba75;
+  }
+}

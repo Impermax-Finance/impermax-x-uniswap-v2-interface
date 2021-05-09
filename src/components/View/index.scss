@@ -1,0 +1,93 @@
+.view {
+  .navbar {
+    background-color: #202020;
+    height: 80px;
+    padding: 0 2rem;
+
+    .navbar-brand {
+      margin-right: 0;
+      .impermax-brand {
+        width: 1.75rem;
+      }
+    }
+    
+    .wallet-connector {
+      height: 36px;
+      color: #fff;
+      padding: 0 1rem;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none !important;
+    }
+    .nav-button-green, .nav-button-green:active {
+      background-color: #009861;
+    }
+    .nav-button-light, .nav-button-light:active {
+      background-color: #3d3d3d;
+    }
+
+    .connected-wallet .spinner-border {
+      position: relative;
+      margin-left: 3px;
+      bottom: 1px;
+    }
+
+    .claim-button, .claim-button:focus, .claim-button:active {
+      height: 38px;
+      line-height: 100%;
+      margin-right: 15px;
+      border-radius: 50px;
+      font-weight: bold;
+      background: #ffffff;
+      border: 3px solid #00b675;
+      color: #00b675;
+      box-shadow: none;
+      .spinner-border {
+        margin-left: 8px;
+        position: relative;
+        bottom: 1px;
+      }
+    }
+    
+  }
+
+  .wrong-network, .not-connected {
+    line-height: 40px;
+    color: #fff;
+  }
+  .wrong-network {
+    background: #ca294b;
+  }
+  .not-connected {
+    background: #057dd1;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 25px;
+    a, a:link, a:visited, a:hover {
+      color: #5e6265;
+      margin-right: 30px;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    a:after {
+      content: "";
+      display: inline-block;
+      height: 5px;
+      width: 5px;
+      background-color: #5e6265;
+      border-radius: 50%;
+      position: relative;
+      left: 15px;
+      bottom: 2px;
+    }
+    a:last-child {
+      margin-right: 0;
+    }
+    a:last-child:after {
+      content: none;
+    }
+  }
+}

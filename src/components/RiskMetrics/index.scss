@@ -1,0 +1,17 @@
+.liquidation-price {
+  &.risk-0 { color: #05c881 }
+  &.risk-1 { color: #93d800 }
+  &.risk-2 { color: #d8c100 }
+  &.risk-3 { color: #ee9305 }
+  &.risk-4 { color: #ee5705 }
+  &.risk-5 { color: #b80404 }
+}
+
+.invert-price {
+  width: 14px;
+  height: 14px;
+  margin-left: 3px;
+  margin-bottom: 1px;
+  cursor: pointer;
+  color: #586267;
+}

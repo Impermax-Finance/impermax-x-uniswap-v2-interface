@@ -1,0 +1,28 @@
+.borrowables-details {
+  margin-top: 2rem;
+
+  .header {
+    font-size: 1.125rem;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    .currency-icon {
+      width: 32px;
+      margin-right: 0.75rem;
+    }
+  }
+
+  .table {
+    margin-bottom: 0;
+    td {
+      padding: .5rem 1.25rem;
+    }
+  }
+}
+
+.borrowables-details > .row {
+  margin: 0;
+}
+.borrowables-details > .row > * {
+  padding: 0 0.5rem;
+}
