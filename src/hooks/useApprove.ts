@@ -1,7 +1,7 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
 import { BigNumber, ethers } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
@@ -26,10 +26,10 @@ export interface PermitData {
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
 export default function useApprove(approvalType: ApprovalType, amount: BigNumber, invalidInput: boolean, poolTokenTypeArg?: PoolTokenType, deadline?: BigNumber): [ButtonState, () => Promise<void>, PermitData] {
   const uniswapV2PairAddress = usePairAddress();
-  // ray test touch <
+  // TODO: <
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : usePoolToken();
-  // ray test touch >
+  // TODO: >
   const impermaxRouter = useImpermaxRouter();
   const addTransaction = useTransactionAdder();
   const [pending, setPending] = useState<boolean>(false);

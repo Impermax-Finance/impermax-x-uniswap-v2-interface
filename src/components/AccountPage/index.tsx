@@ -1,7 +1,7 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
 import {
   useBorrowPositions,
@@ -15,9 +15,9 @@ import SupplyPosition from './SupplyPosition';
 import { AccountOverallStats } from '../OverallStats';
 
 export default function AccountPage(): JSX.Element {
-  // ray test touch <
+  // TODO: <
   // const userData = useUserData();
-  // ray test touch >
+  // TODO: >
   const borrowPositions = useBorrowPositions();
   const supplyPositions = useSupplyPositions();
 

@@ -1,7 +1,7 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
 import { useWETH, useChainId } from './useNetwork';
 import usePairAddress from './usePairAddress';
@@ -28,10 +28,10 @@ export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   try {
     return `/assets/icons/${convertedAddress}.png`;
   } catch {
-    // ray test touch <
+    // TODO: <
     // TODO: not working
     return '/assets/default.png';
-    // ray test touch >
+    // TODO: >
   }
 }
 

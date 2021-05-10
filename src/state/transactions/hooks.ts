@@ -1,7 +1,7 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
 import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -71,12 +71,12 @@ export function useHasPendingApproval(
   spender: string
 ): boolean {
   if (!tokenAddress || !spender) return false;
-  // ray test touch <
+  // TODO: <
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const allTransactions = useAllTransactions();
   // eslint-disable-next-line react-hooks/rules-of-hooks
   return useMemo(
-  // ray test touch >
+  // TODO: >
     () =>
       typeof tokenAddress === 'string' &&
       typeof spender === 'string' &&

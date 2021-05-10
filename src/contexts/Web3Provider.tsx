@@ -6,9 +6,9 @@ import { provider } from 'web3-core';
 const Web3Provider: React.FC = ({ children }) => {
   const { ethereum, connect } = useWallet<provider>();
   const [web3, setWeb3] = useState<any>();
-  // ray test touch <
+  // TODO: <
   // const networkUrl = useNetworkUrl();
-  // ray test touch >
+  // TODO: >
 
   useEffect(() => {
     if (ethereum) setWeb3(new Web3(ethereum));

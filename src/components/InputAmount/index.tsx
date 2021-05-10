@@ -22,11 +22,11 @@ interface InputAmountMiniProps {
 export function InputAmountMini({ val, setVal, suffix }: InputAmountMiniProps): JSX.Element {
   const [stringVal, setStringVal] = useState<string>(val.toString());
   const onUserInput = (input: string) => setStringVal(input);
-  // ray test touch <
+  // TODO: <
   // const onMax = () => setStringVal(formatFloat(max).toString());
   // const step = max ? Math.pow(10, Math.floor(Math.log10(max)) - 2) : 0;
   // min = min ? min : 0;
-  // ray test touch >
+  // TODO: >
   useEffect(() => {
     const newVal = stringVal ? parseFloat(stringVal) : 0;
     if (val === newVal) return; // avoid infinite loop

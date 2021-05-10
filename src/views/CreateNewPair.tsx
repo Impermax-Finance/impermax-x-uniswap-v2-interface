@@ -1,7 +1,7 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
 import { useEffect, useState } from 'react';
 import View from '../components/View';

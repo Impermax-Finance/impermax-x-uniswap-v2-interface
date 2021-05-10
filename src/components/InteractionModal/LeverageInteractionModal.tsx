@@ -26,9 +26,9 @@ export default function LeverageInteractionModal({ show, toggleShow }: LeverageI
   const symbol = useSymbol();
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
-  // ray test touch <
+  // TODO: <
   // const depositedUSD = useDepositedUSD();
-  // ray test touch >
+  // TODO: >
   const deadline = useDeadline();
 
   useEffect(() => {

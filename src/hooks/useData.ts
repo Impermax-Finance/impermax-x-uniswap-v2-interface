@@ -1,7 +1,7 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
 import { PoolTokenType, Changes, AirdropData, ClaimEvent, Address } from '../impermax-router/interfaces';
 import usePoolToken from './usePoolToken';
@@ -15,10 +15,10 @@ import { InputAddressState } from '../views/CreateNewPair';
 
 export function useToken(poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
-  // ray test touch <
+  // TODO: <
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : usePoolToken();
-  // ray test touch >
+  // TODO: >
   return { uniswapV2PairAddress, poolTokenType };
 }
 
@@ -510,11 +510,11 @@ export function useToTokens(val: number, poolTokenTypeArg?: PoolTokenType) : Big
 }
 
 export function usefromTokens(amount: BigNumber, poolTokenTypeArg?: PoolTokenType) : number {
-  // ray test touch <
+  // TODO: <
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const decimals = useDecimals(poolTokenTypeArg);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const exchangeRate = useExchangeRate(poolTokenTypeArg);
-  // ray test touch >
+  // TODO: >
   return parseFloat(amount.toString()) * exchangeRate / Math.pow(10, decimals);
 }

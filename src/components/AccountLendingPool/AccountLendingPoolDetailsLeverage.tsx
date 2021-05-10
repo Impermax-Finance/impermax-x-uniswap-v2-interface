@@ -1,7 +1,7 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
 import React, { useContext } from 'react';
 import { LanguageContext } from '../../contexts/Language';
@@ -25,9 +25,9 @@ export default function AccountLendingPoolDetailsLeverage(): JSX.Element {
   const LPEquityUSD = useLPEquityUSD();
   const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
   const debtUSD = useDebtUSD();
-  // ray test touch <
+  // TODO: <
   // const currentLeverage = useCurrentLeverage();
-  // ray test touch >
+  // TODO: >
 
   const LPEquityExplanation = 'Calculated as: Total Collateral - Total Debt';
 

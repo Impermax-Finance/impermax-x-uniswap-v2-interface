@@ -13,14 +13,14 @@ export default function TransactionSize({ amount }: TransactionSizeProps): JSX.E
   // eslint-disable-next-line eqeqeq
   if (poolTokenType != PoolTokenType.Collateral) return null;
 
-  // ray test touch <
+  // TODO: <
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [tokenPriceA, tokenPriceB] = usePriceDenomLP();
-  // ray test touch >
+  // TODO: >
 
   return (
     <Row>
