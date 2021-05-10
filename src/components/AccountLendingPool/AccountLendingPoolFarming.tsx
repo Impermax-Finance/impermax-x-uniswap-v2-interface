@@ -53,7 +53,9 @@ export default function AccountLendingPoolFarming(): JSX.Element {
               <div key={key}>
                 <a
                   href={urlGenerator(claimEvent.transactionHash)}
-                  target='_blank'>Claim {formatAmount(claimEvent.amount)} IMX
+                  target='_blank'
+                  rel='noopener noreferrer'>
+                  Claim {formatAmount(claimEvent.amount)} IMX
                 </a>
               </div>
             );

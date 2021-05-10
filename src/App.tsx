@@ -31,40 +31,37 @@ const App = (): JSX.Element => {
           <Updaters />
           <SubgraphProvider>
             <ImpermaxRouterProvider>
-              {/* TODO: unused */}
-              <div className='routing'>
-                <Router>
-                  <Switch>
-                    <Route
-                      path={PAGES.home.to}
-                      exact>
-                      <Home />
-                    </Route>
-                    <Route path={PAGES.createNewPair.to}>
-                      <CreateNewPair />
-                    </Route>
-                    <Route path={PAGES.lendingPool.to}>
-                      <LendingPool />
-                    </Route>
-                    <Route path={PAGES.account.to}>
-                      <Account />
-                    </Route>
-                    <Route path={PAGES.claim.to}>
-                      <Claim />
-                    </Route>
-                    <Route path={PAGES.risks.to}>
-                      <Risks />
-                    </Route>
-                    <Route
-                      path={PAGES.userGuide.to}
-                      component={() => {
-                        // TODO: should use <a /> with security attributes
-                        window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
-                        return null;
-                      }} />
-                  </Switch>
-                </Router>
-              </div>
+              <Router>
+                <Switch>
+                  <Route
+                    path={PAGES.home.to}
+                    exact>
+                    <Home />
+                  </Route>
+                  <Route path={PAGES.createNewPair.to}>
+                    <CreateNewPair />
+                  </Route>
+                  <Route path={PAGES.lendingPool.to}>
+                    <LendingPool />
+                  </Route>
+                  <Route path={PAGES.account.to}>
+                    <Account />
+                  </Route>
+                  <Route path={PAGES.claim.to}>
+                    <Claim />
+                  </Route>
+                  <Route path={PAGES.risks.to}>
+                    <Risks />
+                  </Route>
+                  <Route
+                    path={PAGES.userGuide.to}
+                    component={() => {
+                      // TODO: should use <a /> with security attributes
+                      window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
+                      return null;
+                    }} />
+                </Switch>
+              </Router>
             </ImpermaxRouterProvider>
           </SubgraphProvider>
         </Web3Provider>

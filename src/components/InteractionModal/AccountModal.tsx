@@ -16,7 +16,8 @@ function Transaction({ tx, pending }: TransactionProps) {
     <div className='transaction-row'>
       <a
         href={transactionUrl}
-        target='_blank'>
+        target='_blank'
+        rel='noopener noreferrer'>
         {tx.summary}
         {pending ? (
           <Spinner
