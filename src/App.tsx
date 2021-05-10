@@ -1,52 +1,76 @@
-import React from 'react';
-import Routing from './Routing';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from 'react-router-dom';
 import { UseWalletProvider } from 'use-wallet';
-import { Language, Theme, Web3Provider } from './contexts';
-import './index.scss';
-import Network from './contexts/Network';
-import { useChainId } from './hooks/useNetwork';
+
+import {
+  Home,
+  LendingPool,
+  Risks,
+  Claim,
+  CreateNewPair,
+  Account
+} from './views';
+// TODO: should move the providers to `src\index.tsx`
+import { Web3Provider } from './contexts';
 import { ImpermaxRouterProvider } from './contexts/ImpermaxRouterProvider';
-import { Provider } from 'react-redux';
-import store from './state';
-import Updaters from './state/Updaters';
 import { SubgraphProvider } from './contexts/SubgraphProvider';
+import Updaters from './state/Updaters';
+import { useChainId } from './hooks/useNetwork';
+import { PAGES } from 'utils/constants/links';
+import './index.scss';
 
-/**
- * Wrapper to connect all application Contexts.
- * @param param0 ReactProps
- */
-
-const Contexts: React.FC = ({ children }) => {
-  return (
-    <Provider store={store}>
-      <Network>
-        <Language>
-          <Theme>
-            <UseWalletProvider chainId={useChainId()}>
-              <Web3Provider>
-                <Updaters />
-                <SubgraphProvider>
-                  <ImpermaxRouterProvider>
-                    {children}
-                  </ImpermaxRouterProvider>
-                </SubgraphProvider>
-              </Web3Provider>
-            </UseWalletProvider>
-          </Theme>
-        </Language>
-      </Network>
-    </Provider>
-  );
-};
-
-function App(): JSX.Element {
+const App = (): JSX.Element => {
   return (
     <div className='app'>
-      <Contexts>
-        <Routing />
-      </Contexts>
+      <UseWalletProvider chainId={useChainId()}>
+        <Web3Provider>
+          <Updaters />
+          <SubgraphProvider>
+            <ImpermaxRouterProvider>
+              {/* TODO: unused */}
+              <div className='routing'>
+                <Router>
+                  <Switch>
+                    <Route
+                      path={PAGES.home.to}
+                      exact>
+                      <Home />
+                    </Route>
+                    <Route path={PAGES.createNewPair.to}>
+                      <CreateNewPair />
+                    </Route>
+                    <Route path={PAGES.lendingPool.to}>
+                      <LendingPool />
+                    </Route>
+                    <Route path={PAGES.account.to}>
+                      <Account />
+                    </Route>
+                    <Route path={PAGES.claim.to}>
+                      <Claim />
+                    </Route>
+                    <Route path={PAGES.risks.to}>
+                      <Risks />
+                    </Route>
+                    <Route
+                      path={PAGES.userGuide.to}
+                      component={() => {
+                        // TODO: should use <a /> with security attributes
+                        window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
+                        return null;
+                      }} />
+                  </Switch>
+                </Router>
+              </div>
+            </ImpermaxRouterProvider>
+          </SubgraphProvider>
+        </Web3Provider>
+      </UseWalletProvider>
     </div>
   );
-}
+};
 
 export default App;

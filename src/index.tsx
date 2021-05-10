@@ -1,12 +1,29 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
+import { Provider } from 'react-redux';
+
+import {
+  Language,
+  Theme
+} from './contexts';
+import Network from './contexts/Network';
+import store from './state';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './index.scss';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <Network>
+        <Language>
+          <Theme>
+            <App />
+          </Theme>
+        </Language>
+      </Network>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

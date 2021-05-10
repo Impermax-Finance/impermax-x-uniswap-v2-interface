@@ -7,7 +7,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import { LendingPoolsTable } from './../LendingPoolsTable';
 import './index.scss';
-import { CreateNewPairRoute } from '../../Routing';
+import { PAGES } from 'utils/constants/links';
 
 export function SearchForm(): JSX.Element {
   return (
@@ -16,8 +16,8 @@ export function SearchForm(): JSX.Element {
       <InputGroup.Append>
         <Button variant='primary'>Search</Button>
       </InputGroup.Append>
-      <a href={CreateNewPairRoute.to}>
-        <Button>{CreateNewPairRoute.value}</Button>
+      <a href={PAGES.createNewPair.to}>
+        <Button>{PAGES.createNewPair.value}</Button>
       </a>
     </InputGroup>
   );

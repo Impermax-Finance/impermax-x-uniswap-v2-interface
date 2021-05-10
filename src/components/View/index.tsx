@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
-import { HomeRoute, RisksRoute, UserGuideRoute } from '../../Routing';
+import { PAGES } from 'utils/constants/links';
 
 import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
@@ -55,14 +55,14 @@ export default function View({ children }: ViewProps): JSX.Element {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Nav className='mr-auto'>
-            <NavigationBarLink appRoute={HomeRoute} />
+            <NavigationBarLink appRoute={PAGES.home} />
             {accountUrl && (<NavigationBarLink appRoute={{ value: 'Dashboard', to: accountUrl }} />)}
             <NavigationBarLink
-              appRoute={UserGuideRoute}
+              appRoute={PAGES.userGuide}
               target='_blank' />
-            {networkName === 'mainnet' && (<NavigationBarLink appRoute={RisksRoute} />)}
-            {/* <NavigationBarLink appRoute={ClaimRoute} />*/}
-            {/* <NavigationBarLink appRoute={CreateNewPairRoute} />*/}
+            {networkName === 'mainnet' && (<NavigationBarLink appRoute={PAGES.risks} />)}
+            {/* <NavigationBarLink appRoute={PAGES.claim} />*/}
+            {/* <NavigationBarLink appRoute={PAGES.CreateNewPair} />*/}
           </Nav>
           {hasClaimableAirdrop && (<ClaimAirdrop />)}
           {
