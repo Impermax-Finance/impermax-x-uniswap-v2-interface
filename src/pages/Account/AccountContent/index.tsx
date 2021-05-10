@@ -4,17 +4,24 @@
 // TODO: >
 
 import {
-  useBorrowPositions,
-  useSupplyPositions
-} from '../../hooks/useAccountData';
-import './index.scss';
-import { Card, Spinner, Container, Row, Col } from 'react-bootstrap';
-import PairAddressContext from '../../contexts/PairAddress';
+  Card,
+  Spinner,
+  Container,
+  Row,
+  Col
+} from 'react-bootstrap';
+
 import BorrowPosition from './BorrowPosition';
 import SupplyPosition from './SupplyPosition';
-import { AccountOverallStats } from '../OverallStats';
+import { AccountOverallStats } from 'components/OverallStats';
+import {
+  useBorrowPositions,
+  useSupplyPositions
+} from 'hooks/useAccountData';
+import PairAddressContext from 'contexts/PairAddress';
+import './account-content.scss';
 
-export default function AccountPage(): JSX.Element {
+const AccountContent = (): JSX.Element => {
   // TODO: <
   // const userData = useUserData();
   // TODO: >
@@ -82,4 +89,6 @@ export default function AccountPage(): JSX.Element {
       )}
     </>
   );
-}
+};
+
+export default AccountContent;

@@ -6,22 +6,20 @@ import {
 } from 'react-router-dom';
 import { UseWalletProvider } from 'use-wallet';
 
-import {
-  Home,
-  LendingPool,
-  Risks,
-  Claim,
-  CreateNewPair,
-  Account
-} from './views';
+import Home from 'pages/Home';
+import LendingPool from 'pages/LendingPool';
+import Risks from 'pages/Risks';
+import Claim from 'pages/Claim';
+import CreateNewPair from 'pages/CreateNewPair';
+import Account from 'pages/Account';
 // TODO: should move the providers to `src\index.tsx`
-import { Web3Provider } from './contexts';
-import { ImpermaxRouterProvider } from './contexts/ImpermaxRouterProvider';
-import { SubgraphProvider } from './contexts/SubgraphProvider';
-import Updaters from './state/Updaters';
-import { useChainId } from './hooks/useNetwork';
+import { Web3Provider } from 'contexts';
+import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
+import { SubgraphProvider } from 'contexts/SubgraphProvider';
+import Updaters from 'state/Updaters';
+import { useChainId } from 'hooks/useNetwork';
 import { PAGES } from 'utils/constants/links';
-import './index.scss';
+import './app.scss';
 
 const App = (): JSX.Element => {
   return (

@@ -1,18 +1,14 @@
-import View from '../components/View';
 
 import { Container } from 'react-bootstrap';
 
-/**
- * LendingPool page view.
- */
+import View from 'components/View';
 
-export default function Risks(): JSX.Element {
+const Risks = (): JSX.Element => {
   return (
     <View>
       <Container className='article card'>
         <h1 className='font-weight-bold'>Risks of Using Impermax Finance</h1>
         <p>The use of Impermax Finance involves risks. Only invest what you can afford to lose. By using this application you acknowledge and take responsibility for the risks involved. The possible risks include, but are not limited to, the following.</p>
-
         <h2>Contract Security</h2>
         <p>
           Impermax smart contracts were audited by&nbsp;
@@ -152,4 +148,6 @@ export default function Risks(): JSX.Element {
       </Container>
     </View>
   );
-}
+};
+
+export default Risks;

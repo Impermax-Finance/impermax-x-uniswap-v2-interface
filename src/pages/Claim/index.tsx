@@ -1,15 +1,15 @@
-import View from '../components/View';
 
-import { Container, Card } from 'react-bootstrap';
-import { useDistributors } from '../hooks/useNetwork';
-import { DistributorDetails } from '../utils/constants';
-import ClaimDistributor from '../components/ClaimDistributor';
+import {
+  Container,
+  Card
+} from 'react-bootstrap';
 
-/**
- * LendingPool page view.
- */
+import View from 'components/View';
+import { useDistributors } from 'hooks/useNetwork';
+import { DistributorDetails } from 'utils/constants';
+import ClaimDistributor from 'components/ClaimDistributor';
 
-export default function Claim() {
+const Claim = (): JSX.Element => {
   const distributors = useDistributors();
 
   return (
@@ -25,4 +25,6 @@ export default function Claim() {
       </Container>
     </View>
   );
-}
+};
+
+export default Claim;

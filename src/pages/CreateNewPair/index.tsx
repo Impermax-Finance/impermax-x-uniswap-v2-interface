@@ -3,31 +3,33 @@
 // @ts-nocheck
 // TODO: >
 
-import { useEffect, useState } from 'react';
-import View from '../components/View';
-
-import { Container, Card, Row, Col } from 'react-bootstrap';
-import { useIsValidPair, useIsPairInitialized, useIsPoolTokenCreated, usePairSymbols } from '../hooks/useData';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import './createNewPair.scss';
-import InteractionButton, { ButtonState } from '../components/InteractionButton';
-import { PoolTokenType } from '../impermax-router/interfaces';
-import useCreateNewPair, { CreatePairStep } from '../hooks/useCreateNewPair';
+import {
+  useEffect,
+  useState
+} from 'react';
+import {
+  Container,
+  Card,
+  Row,
+  Col
+} from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export enum InputAddressState {
-  INVALID_ADDRESS,
-  INVALID_PAIR,
-  LOADING,
-  VALID
-}
+import View from 'components/View';
+import InteractionButton, { ButtonState } from 'components/InteractionButton';
+import {
+  useIsValidPair,
+  useIsPairInitialized,
+  useIsPoolTokenCreated,
+  usePairSymbols
+} from 'hooks/useData';
+import useCreateNewPair, { CreatePairStep } from 'hooks/useCreateNewPair';
+import { PoolTokenType } from 'impermax-router/interfaces';
+import './create-new-pair.scss';
 
-/**
- * CreateNewPair page view.
- */
-
-export default function CreateNewPair() {
+const CreateNewPair = (): JSX.Element => {
   const [stepSelected, setStepSelected] = useState<number>(1);
   const [updater, setUpdater] = useState<number>(0);
   const [uniswapV2PairAddress, setUniswapV2PairAddress] = useState<string>();
@@ -163,4 +165,13 @@ export default function CreateNewPair() {
       </Container>
     </View>
   );
+};
+
+export enum InputAddressState {
+  INVALID_ADDRESS,
+  INVALID_PAIR,
+  LOADING,
+  VALID
 }
+
+export default CreateNewPair;

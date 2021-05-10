@@ -11,7 +11,7 @@ import { useRouterCallback } from './useImpermaxRouter';
 import { BigNumber } from 'ethers';
 import { decimalToBalance } from '../utils/ether-utils';
 import { useSubgraphCallback } from './useSubgraph';
-import { InputAddressState } from '../views/CreateNewPair';
+import { InputAddressState } from 'pages/CreateNewPair';
 
 export function useToken(poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
