@@ -4,6 +4,7 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
+// TODO: should use `https://github.com/NoahZinsmeister/web3-react`
 import { UseWalletProvider } from 'use-wallet';
 
 import Home from 'pages/Home';
@@ -12,9 +13,7 @@ import Risks from 'pages/Risks';
 import Claim from 'pages/Claim';
 import CreateNewPair from 'pages/CreateNewPair';
 import Account from 'pages/Account';
-// ray test touch <
 // TODO: should move the providers to `src\index.tsx`
-// ray test touch >
 import Web3Provider from 'contexts/Web3Provider';
 import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
 import { SubgraphProvider } from 'contexts/SubgraphProvider';
