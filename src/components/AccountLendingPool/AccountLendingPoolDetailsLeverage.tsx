@@ -3,8 +3,8 @@
 // @ts-nocheck
 // TODO: >
 
-import React, { useContext } from 'react';
-import { LanguageContext } from '../../contexts/Language';
+import { useContext } from 'react';
+import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { Row, Col } from 'react-bootstrap';
 import { formatUSD } from '../../utils/format';

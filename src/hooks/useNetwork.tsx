@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { NetworkContext } from '../contexts/Network';
+import { NetworkContext } from 'contexts/NetworkProvider';
 
 export function useNetworkName() {
   const { networkName } = useContext(NetworkContext);

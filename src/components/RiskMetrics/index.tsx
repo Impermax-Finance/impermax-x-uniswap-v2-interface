@@ -4,7 +4,7 @@
 // TODO: >
 
 import { useContext } from 'react';
-import { LanguageContext } from '../../contexts/Language';
+import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { formatLeverage } from '../../utils/format';
 import DetailsRow from '../DetailsRow';

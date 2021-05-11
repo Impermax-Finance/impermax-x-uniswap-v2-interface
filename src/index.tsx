@@ -3,11 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import {
-  Language,
-  Theme
-} from './contexts';
-import Network from './contexts/Network';
+import LanguageProvider from 'contexts/LanguageProvider';
+import ThemeProvider from 'contexts/ThemeProvider';
+import NetworkProvider from 'contexts/NetworkProvider';
 import store from './state';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -15,13 +13,13 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Network>
-        <Language>
-          <Theme>
+      <NetworkProvider>
+        <LanguageProvider>
+          <ThemeProvider>
             <App />
-          </Theme>
-        </Language>
-      </Network>
+          </ThemeProvider>
+        </LanguageProvider>
+      </NetworkProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

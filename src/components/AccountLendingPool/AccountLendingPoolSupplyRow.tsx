@@ -4,7 +4,7 @@
 // TODO: >
 
 import { useContext, useState } from 'react';
-import { LanguageContext } from '../../contexts/Language';
+import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { Row, Col, Button } from 'react-bootstrap';
 import InlineAccountTokenInfo from './InlineAccountTokenInfo';

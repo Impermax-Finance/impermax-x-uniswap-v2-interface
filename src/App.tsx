@@ -12,8 +12,10 @@ import Risks from 'pages/Risks';
 import Claim from 'pages/Claim';
 import CreateNewPair from 'pages/CreateNewPair';
 import Account from 'pages/Account';
+// ray test touch <
 // TODO: should move the providers to `src\index.tsx`
-import { Web3Provider } from 'contexts';
+// ray test touch >
+import Web3Provider from 'contexts/Web3Provider';
 import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
 import { SubgraphProvider } from 'contexts/SubgraphProvider';
 import Updaters from 'state/Updaters';

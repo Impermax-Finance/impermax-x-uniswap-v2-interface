@@ -1,6 +1,21 @@
 import React, { createContext } from 'react';
 import { Networks, chainDetailsMap } from '../utils/connections';
-import { NETWORK_URL, IMX, WETH, ROUTER, Address, FACTORY, SIMPLE_UNISWAP_ORACLE, AIRDROP_URL, MERKLE_DISTRIBUTOR, CLAIM_AGGREGATOR, DistributorDetails, DISTRIBUTORS, IMPERMAX_SUBGRAPH_URL, UNISWAP_V2_FACTORY } from '../utils/constants';
+import {
+  NETWORK_URL,
+  IMX,
+  WETH,
+  ROUTER,
+  Address,
+  FACTORY,
+  SIMPLE_UNISWAP_ORACLE,
+  AIRDROP_URL,
+  MERKLE_DISTRIBUTOR,
+  CLAIM_AGGREGATOR,
+  DistributorDetails,
+  DISTRIBUTORS,
+  IMPERMAX_SUBGRAPH_URL,
+  UNISWAP_V2_FACTORY
+} from '../utils/constants';
 
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
@@ -21,7 +36,7 @@ const context : NetworkI = {
   distributors: DISTRIBUTORS[NETWORK]
 };
 
-const Network: React.FC = ({ children }) => {
+const NetworkProvider: React.FC = ({ children }) => {
   return <NetworkContext.Provider value={context}>{children}</NetworkContext.Provider>;
 };
 
@@ -44,4 +59,4 @@ export interface NetworkI {
 
 export const NetworkContext = createContext<NetworkI>(context);
 
-export default Network;
+export default NetworkProvider;
