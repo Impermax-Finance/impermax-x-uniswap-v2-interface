@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import AccountContent from './AccountContent';
 import View from 'components/View';
-import AccountContext from 'contexts/Account';
+import { AccountContext } from 'contexts/AccountProvider';
 
 const Account = (): JSX.Element => {
   const { account } = useParams<{ account: string }>();
