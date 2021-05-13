@@ -1,14 +1,30 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
-import React, { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  useEffect,
+  useState
+} from 'react';
 import { useWallet } from 'use-wallet';
-import ImpermaxRouter from '../impermax-router';
-import useWeb3 from '../hooks/useWeb3';
-import { useRouterAddress, useWETH, useFactoryAddress, useSimpleUniswapOracleAddress, useChainId, useAirdropUrl, useIMX, useMerkleDistributorAddress, useClaimAggregatorAddress, useUniswapV2FactoryAddress } from '../hooks/useNetwork';
-import useSubgraph from '../hooks/useSubgraph';
+
+import ImpermaxRouter from 'impermax-router';
+import useWeb3 from 'hooks/useWeb3';
+import {
+  useRouterAddress,
+  useWETH,
+  useFactoryAddress,
+  useSimpleUniswapOracleAddress,
+  useChainId,
+  useAirdropUrl,
+  useIMX,
+  useMerkleDistributorAddress,
+  useClaimAggregatorAddress,
+  useUniswapV2FactoryAddress
+} from 'hooks/useNetwork';
+import useSubgraph from 'hooks/useSubgraph';
 
 export interface ImpermaxRouterContextI {
   impermaxRouter?: ImpermaxRouter;
@@ -80,7 +96,10 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
       impermaxRouter.unlockWallet(web3, account);
       setRouterAccount(account);
     }
-  }, [web3, account]);
+  }, [
+    web3,
+    account
+  ]);
 
   return (
     <ImpermaxRouterContext.Provider
@@ -91,7 +110,8 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         doUpdate,
         priceInverted,
         togglePriceInverted
-      }}>{children}
+      }}>
+      {children}
     </ImpermaxRouterContext.Provider>
   );
 };

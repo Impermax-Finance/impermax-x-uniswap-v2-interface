@@ -14,6 +14,7 @@ export interface ChainDetails {
   networkName: Networks;
 }
 
+// ray test touch <
 /**
  * Type Definition of chain details, indexed by network names.
  * @see Networks
@@ -39,3 +40,4 @@ export const chainDetailsMap: ChainDetailsMap = {
     networkName: Networks.Mainnet
   }
 };
+// ray test touch >

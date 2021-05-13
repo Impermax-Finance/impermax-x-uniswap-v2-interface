@@ -1,12 +1,20 @@
-import { PoolTokenType } from '../../impermax-router/interfaces';
-import { formatUSD } from '../../utils/format';
-import { useTokenIcon, useLendingPoolUrl } from '../../hooks/useUrlGenerator';
-import { useSymbol } from '../../hooks/useData';
-import { useCollateralValue, useBorrowedValue, useBorrowerEquityValue } from '../../hooks/useAccountData';
-import { Row, Col } from 'react-bootstrap';
+
+import {
+  Row,
+  Col
+} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-export default function BorrowPosition(): JSX.Element {
+import {
+  useTokenIcon,
+  useLendingPoolUrl
+} from 'hooks/useUrlGenerator';
+import { useSymbol } from 'hooks/useData';
+import { useCollateralValue, useBorrowedValue, useBorrowerEquityValue } from 'hooks/useAccountData';
+import { PoolTokenType } from 'impermax-router/interfaces';
+import { formatUSD } from 'utils/format';
+
+const BorrowPosition = (): JSX.Element => {
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const collateralValue = useCollateralValue();
@@ -49,4 +57,6 @@ export default function BorrowPosition(): JSX.Element {
       </Col>
     </Link>
   );
-}
+};
+
+export default BorrowPosition;

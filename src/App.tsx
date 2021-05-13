@@ -1,52 +1,72 @@
-import React from 'react';
-import Routing from './Routing';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from 'react-router-dom';
+// TODO: should use `https://github.com/NoahZinsmeister/web3-react`
 import { UseWalletProvider } from 'use-wallet';
-import { Language, Theme, Web3Provider } from './contexts';
-import './index.scss';
-import Network from './contexts/Network';
-import { useChainId } from './hooks/useNetwork';
-import { ImpermaxRouterProvider } from './contexts/ImpermaxRouterProvider';
-import { Provider } from 'react-redux';
-import store from './state';
-import Updaters from './state/Updaters';
-import { SubgraphProvider } from './contexts/SubgraphProvider';
 
-/**
- * Wrapper to connect all application Contexts.
- * @param param0 ReactProps
- */
+import Home from 'pages/Home';
+import LendingPool from 'pages/LendingPool';
+import Risks from 'pages/Risks';
+import Claim from 'pages/Claim';
+import CreateNewPair from 'pages/CreateNewPair';
+import Account from 'pages/Account';
+// TODO: should move the providers to `src\index.tsx`
+import Web3Provider from 'contexts/Web3Provider';
+import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
+import { SubgraphProvider } from 'contexts/SubgraphProvider';
+import Updaters from 'state/transactions/updater';
+import { useChainId } from 'hooks/useNetwork';
+import { PAGES } from 'utils/constants/links';
+import './app.scss';
 
-const Contexts: React.FC = ({ children }) => {
-  return (
-    <Provider store={store}>
-      <Network>
-        <Language>
-          <Theme>
-            <UseWalletProvider chainId={useChainId()}>
-              <Web3Provider>
-                <Updaters />
-                <SubgraphProvider>
-                  <ImpermaxRouterProvider>
-                    {children}
-                  </ImpermaxRouterProvider>
-                </SubgraphProvider>
-              </Web3Provider>
-            </UseWalletProvider>
-          </Theme>
-        </Language>
-      </Network>
-    </Provider>
-  );
-};
-
-function App(): JSX.Element {
+const App = (): JSX.Element => {
   return (
     <div className='app'>
-      <Contexts>
-        <Routing />
-      </Contexts>
+      <UseWalletProvider chainId={useChainId()}>
+        <Web3Provider>
+          <Updaters />
+          <SubgraphProvider>
+            <ImpermaxRouterProvider>
+              <Router>
+                <Switch>
+                  <Route
+                    path={PAGES.home.to}
+                    exact>
+                    <Home />
+                  </Route>
+                  <Route path={PAGES.createNewPair.to}>
+                    <CreateNewPair />
+                  </Route>
+                  <Route path={PAGES.lendingPool.to}>
+                    <LendingPool />
+                  </Route>
+                  <Route path={PAGES.account.to}>
+                    <Account />
+                  </Route>
+                  <Route path={PAGES.claim.to}>
+                    <Claim />
+                  </Route>
+                  <Route path={PAGES.risks.to}>
+                    <Risks />
+                  </Route>
+                  <Route
+                    path={PAGES.userGuide.to}
+                    component={() => {
+                      // TODO: should use <a /> with security attributes
+                      window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
+                      return null;
+                    }} />
+                </Switch>
+              </Router>
+            </ImpermaxRouterProvider>
+          </SubgraphProvider>
+        </Web3Provider>
+      </UseWalletProvider>
     </div>
   );
-}
+};
 
 export default App;

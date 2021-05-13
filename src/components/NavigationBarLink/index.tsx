@@ -1,10 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import './index.scss';
-import { AppRoute } from '../../Routing';
 import Nav from 'react-bootstrap/Nav';
 
 export interface NavigationBarLinkProps {
-  appRoute: AppRoute;
+  appRoute: {
+    value: string;
+    to: string;
+  };
   target?: string;
 }
 

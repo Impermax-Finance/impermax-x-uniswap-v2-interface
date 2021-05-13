@@ -1,10 +1,10 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
 import { useContext, useState } from 'react';
-import { LanguageContext } from '../../contexts/Language';
+import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { Row, Col, Button } from 'react-bootstrap';
 import { PoolTokenType } from '../../impermax-router/interfaces';
@@ -38,9 +38,9 @@ export default function AccountLendingPoolLPRow(): JSX.Element {
   const [showLeverageModal, toggleLeverageModal] = useState(false);
   const [showDeleverageModal, toggleDeleverageModal] = useState(false);
 
-  // ray test touch <
+  // TODO: <
   // const maxWithdrawable = useMaxWithdrawable();
-  // ray test touch >
+  // TODO: >
   const maxDeleverage = useMaxDeleverage(0);
   const withdrawDisabledInfo = `You haven't deposited any ${symbol} yet.`;
   const leverageDisabledInfo = `You need to deposit the ${symbol} LP first in order to leverage it.`;

@@ -1,12 +1,23 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
+import { Provider } from 'react-redux';
+
+import LanguageProvider from 'contexts/LanguageProvider';
+import NetworkProvider from 'contexts/NetworkProvider';
 import App from './App';
+import store from './state';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <NetworkProvider>
+        <LanguageProvider>
+          <App />
+        </LanguageProvider>
+      </NetworkProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

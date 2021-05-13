@@ -1,20 +1,20 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
-import ERC20JSON from '../abis/contracts/IERC20.json';
-import UniswapV2PairJSON from '../abis/contracts/IUniswapV2Pair.json';
-import UniswapV2FactoryJSON from '../abis/contracts/IUniswapV2Factory.json';
-import Router01JSON from '../abis/contracts/IRouter01.json';
-import BorrowableJSON from '../abis/contracts/IBorrowable.json';
-import CollateralSON from '../abis/contracts/ICollateral.json';
-import FactoryJSON from '../abis/contracts/IFactory.json';
-import SimpleUniswapOracleJSON from '../abis/contracts/ISimpleUniswapOracle.json';
-import MerkleDistributorJSON from '../abis/contracts/IMerkleDistributor.json';
-import FarmingPoolJSON from '../abis/contracts/IFarmingPool.json';
-import ClaimAggregatorJSON from '../abis/contracts/ClaimAggregator.json';
-import ClaimableJSON from '../abis/contracts/IClaimable.json';
+import ERC20JSON from 'abis/contracts/IERC20.json';
+import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
+import UniswapV2FactoryJSON from 'abis/contracts/IUniswapV2Factory.json';
+import Router01JSON from 'abis/contracts/IRouter01.json';
+import BorrowableJSON from 'abis/contracts/IBorrowable.json';
+import CollateralSON from 'abis/contracts/ICollateral.json';
+import FactoryJSON from 'abis/contracts/IFactory.json';
+import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
+import MerkleDistributorJSON from 'abis/contracts/IMerkleDistributor.json';
+import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
+import ClaimAggregatorJSON from 'abis/contracts/ClaimAggregator.json';
+import ClaimableJSON from 'abis/contracts/IClaimable.json';
 import {
   Router,
   Address,
@@ -37,7 +37,7 @@ import * as approve from './approve';
 import * as interactions from './interactions';
 import * as account from './account';
 import * as imx from './imx';
-import Subgraph from '../subgraph';
+import Subgraph from 'subgraph';
 
 export default class ImpermaxRouter {
   subgraph: Subgraph;
@@ -146,7 +146,7 @@ export default class ImpermaxRouter {
     return new this.web3.eth.Contract(ClaimableJSON.abi, address);
   }
 
-  async unlockWallet(web3: any, account: Address) {
+  unlockWallet(web3: any, account: Address) {
     this.web3 = web3;
     this.account = account;
     this.router = this.newRouter(this.router._address);

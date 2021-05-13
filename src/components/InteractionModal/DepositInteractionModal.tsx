@@ -57,7 +57,9 @@ export default function DepositInteractionModal({ show, toggleShow }: DepositInt
               You can obtain it by&nbsp;
               <a
                 target='_blank'
-                href={addLiquidityUrl}>providing liquidity on Uniswap
+                href={addLiquidityUrl}
+                rel='noopener noreferrer'>
+                providing liquidity on Uniswap
               </a>
             </>
           ) : null}

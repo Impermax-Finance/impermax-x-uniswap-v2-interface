@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
-import { HomeRoute, RisksRoute, UserGuideRoute } from '../../Routing';
+import { PAGES } from 'utils/constants/links';
 
 import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
@@ -47,7 +47,8 @@ export default function View({ children }: ViewProps): JSX.Element {
           <Navbar.Brand>
             <a
               href='https://impermax.finance/'
-              target='_blank'>
+              target='_blank'
+              rel='noopener noreferrer'>
               <img
                 className='impermax-brand'
                 src='/assets/impermax.png' />
@@ -55,14 +56,14 @@ export default function View({ children }: ViewProps): JSX.Element {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Nav className='mr-auto'>
-            <NavigationBarLink appRoute={HomeRoute} />
+            <NavigationBarLink appRoute={PAGES.home} />
             {accountUrl && (<NavigationBarLink appRoute={{ value: 'Dashboard', to: accountUrl }} />)}
             <NavigationBarLink
-              appRoute={UserGuideRoute}
+              appRoute={PAGES.userGuide}
               target='_blank' />
-            {networkName === 'mainnet' && (<NavigationBarLink appRoute={RisksRoute} />)}
-            {/* <NavigationBarLink appRoute={ClaimRoute} />*/}
-            {/* <NavigationBarLink appRoute={CreateNewPairRoute} />*/}
+            {networkName === 'mainnet' && (<NavigationBarLink appRoute={PAGES.risks} />)}
+            {/* <NavigationBarLink appRoute={PAGES.claim} />*/}
+            {/* <NavigationBarLink appRoute={PAGES.CreateNewPair} />*/}
           </Nav>
           {hasClaimableAirdrop && (<ClaimAirdrop />)}
           {
@@ -93,31 +94,45 @@ export default function View({ children }: ViewProps): JSX.Element {
       <div className='footer container'>
         <a
           href='https://impermax.finance/'
-          target='_blank'>Website
+          target='_blank'
+          rel='noopener noreferrer'>
+          Website
         </a>
         <a
           href='https://twitter.com/ImpermaxFinance'
-          target='_blank'>Twitter
+          target='_blank'
+          rel='noopener noreferrer'>
+          Twitter
         </a>
         <a
           href='https://t.me/ImpermaxFinance'
-          target='_blank'>Telegram
+          target='_blank'
+          rel='noopener noreferrer'>
+          Telegram
         </a>
         <a
           href='https://discord.gg/XN739EgG4X'
-          target='_blank'>Discord
+          target='_blank'
+          rel='noopener noreferrer'>
+          Discord
         </a>
         <a
           href='https://impermax.medium.com/'
-          target='_blank'>Medium
+          target='_blank'
+          rel='noopener noreferrer'>
+          Medium
         </a>
         <a
           href='https://www.reddit.com/r/ImpermaxFinance/'
-          target='_blank'>Reddit
+          target='_blank'
+          rel='noopener noreferrer'>
+          Reddit
         </a>
         <a
           href='https://github.com/Impermax-Finance'
-          target='_blank'>Github
+          target='_blank'
+          rel='noopener noreferrer'>
+          Github
         </a>
       </div>
     </div>

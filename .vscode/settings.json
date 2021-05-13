@@ -1,6 +1,10 @@
 {
   "cSpell.words": [
+    "Borrowable",
+    "IERC",
+    "Serializable",
     "TTFB",
+    "TWAP",
     "browserslist",
     "camelcase",
     "eqeqeq",

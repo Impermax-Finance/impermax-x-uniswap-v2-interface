@@ -9,12 +9,7 @@
 ## Running
 
 ``` bash
-# install dependencies
-$ yarn install
-
-# serve with hot reload at localhost:3000
-$ yarn dev
-
-# build for production
-$ yarn build
+$ yarn install # install dependencies
+$ yarn start # serve with hot reload at localhost:3000
+$ yarn build # build for production
 ```

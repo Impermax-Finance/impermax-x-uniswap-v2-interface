@@ -1,65 +1,68 @@
-import View from '../components/View';
 
 import { Container } from 'react-bootstrap';
 
-/**
- * LendingPool page view.
- */
+import View from 'components/View';
 
-export default function Risks() {
+const Risks = (): JSX.Element => {
   return (
     <View>
       <Container className='article card'>
         <h1 className='font-weight-bold'>Risks of Using Impermax Finance</h1>
         <p>The use of Impermax Finance involves risks. Only invest what you can afford to lose. By using this application you acknowledge and take responsibility for the risks involved. The possible risks include, but are not limited to, the following.</p>
-
         <h2>Contract Security</h2>
         <p>
           Impermax smart contracts were audited by&nbsp;
           <a
             target='_blank'
-            href='https://www.certik.org/'>
+            href='https://www.certik.org/'
+            rel='noopener noreferrer'>
             Certik
           </a>
           &nbsp;and&nbsp;
           <a
             target='_blank'
-            href='https://cyberunit.tech/'>
+            href='https://cyberunit.tech/'
+            rel='noopener noreferrer'>
             Cyber Unit
           </a>.
           <ul>
             <li>
               <a
                 target='_blank'
-                href='https://github.com/Impermax-Finance/impermax-x-uniswapv2-core/blob/main/audit/CertiK%20Audit%20Report%20for%20impermax-x-uniswapv2-core.pdf'>
+                href='https://github.com/Impermax-Finance/impermax-x-uniswapv2-core/blob/main/audit/CertiK%20Audit%20Report%20for%20impermax-x-uniswapv2-core.pdf'
+                rel='noopener noreferrer'>
                 Core audit by Certik
               </a>
             </li>
             <li>
               <a
                 target='_blank'
-                href='https://github.com/Impermax-Finance/IMX/blob/main/audit/CertiK%20Audit%20Report%20for%20IMX.pdf'>
+                href='https://github.com/Impermax-Finance/IMX/blob/main/audit/CertiK%20Audit%20Report%20for%20IMX.pdf'
+                rel='noopener noreferrer'>
                 IMX audit by Certik
               </a>
             </li>
             <li>
               <a
                 target='_blank'
-                href='https://github.com/Impermax-Finance/impermax-x-uniswapv2-core/blob/main/audit/SC_impermax_core.pdf'>
+                href='https://github.com/Impermax-Finance/impermax-x-uniswapv2-core/blob/main/audit/SC_impermax_core.pdf'
+                rel='noopener noreferrer'>
                 Core audit by Cyber Unit
               </a>
             </li>
             <li>
               <a
                 target='_blank'
-                href='https://github.com/Impermax-Finance/impermax-x-uniswapv2-periphery/blob/main/audit/SC_impermax_periphery.pdf'>
+                href='https://github.com/Impermax-Finance/impermax-x-uniswapv2-periphery/blob/main/audit/SC_impermax_periphery.pdf'
+                rel='noopener noreferrer'>
                 Periphery audit by Cyber Unit
               </a>
             </li>
             <li>
               <a
                 target='_blank'
-                href='https://github.com/Impermax-Finance/simple-uniswap-oracle/blob/main/audit/SC_impermax_oracle.pdf'>
+                href='https://github.com/Impermax-Finance/simple-uniswap-oracle/blob/main/audit/SC_impermax_oracle.pdf'
+                rel='noopener noreferrer'>
                 Oracle audit by Cyber Unit
               </a>
             </li>
@@ -73,7 +76,8 @@ export default function Risks() {
               <b>Impermax (IMX): </b>
               <a
                 target='_blank'
-                href='https://etherscan.io/token/0x7b35Ce522CB72e4077BaeB96Cb923A5529764a00'>
+                href='https://etherscan.io/token/0x7b35Ce522CB72e4077BaeB96Cb923A5529764a00'
+                rel='noopener noreferrer'>
                 0x7b35Ce522CB72e4077BaeB96Cb923A5529764a00
               </a>
             </li>
@@ -81,7 +85,8 @@ export default function Risks() {
               <b>Factory: </b>
               <a
                 target='_blank'
-                href='https://etherscan.io/address/0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B'>
+                href='https://etherscan.io/address/0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B'
+                rel='noopener noreferrer'>
                 0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B
               </a>
             </li>
@@ -89,7 +94,8 @@ export default function Risks() {
               <b>Router: </b>
               <a
                 target='_blank'
-                href='https://etherscan.io/address/0x5e169082fFf23cEE6766062B96051A78c543127D'>
+                href='https://etherscan.io/address/0x5e169082fFf23cEE6766062B96051A78c543127D'
+                rel='noopener noreferrer'>
                 0x5e169082fFf23cEE6766062B96051A78c543127D
               </a>
             </li>
@@ -97,7 +103,8 @@ export default function Risks() {
               <b>Oracle: </b>
               <a
                 target='_blank'
-                href='https://etherscan.io/address/0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D'>
+                href='https://etherscan.io/address/0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D'
+                rel='noopener noreferrer'>
                 0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D
               </a>
             </li>
@@ -133,11 +140,14 @@ export default function Risks() {
           If you’re new to Impermax and are unsure of how it works and how to use it, please check out our&nbsp;
           <a
             target='_blank'
-            href='https://ropsten.impermax.finance/'>
+            href='https://ropsten.impermax.finance/'
+            rel='noopener noreferrer'>
             application on the ropsten testnet
           </a> first. There, you will be able to use the same application and see how it interoperates with Uniswap in a safe environment with free funds.
         </p>
       </Container>
     </View>
   );
-}
+};
+
+export default Risks;

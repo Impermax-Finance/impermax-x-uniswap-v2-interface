@@ -6,7 +6,7 @@ export enum Languages {
 
 export type Translations = {
   [K in Languages]: string
-};
+}
 
 export type Dictionary = {
   [key: string]: Translations

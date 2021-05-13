@@ -1,15 +1,12 @@
-import View from '../components/View';
+
 import { useParams } from 'react-router-dom';
-
 import { Container } from 'react-bootstrap';
-import PairAddressContext from '../contexts/PairAddress';
-import LendingPoolPage from '../components/LendingPoolPage';
 
-/**
- * LendingPool page view.
- */
+import View from 'components/View';
+import PairAddressContext from 'contexts/PairAddress';
+import LendingPoolPage from 'components/LendingPoolPage';
 
-export default function LendingPool() {
+const LendingPool = (): JSX.Element => {
   const { uniswapV2PairAddress } = useParams<{ uniswapV2PairAddress: string }>();
 
   // const doUpdate = useDoUpdate();
@@ -24,4 +21,6 @@ export default function LendingPool() {
       </Container>
     </View>
   );
-}
+};
+
+export default LendingPool;

@@ -1,23 +1,30 @@
-// ray test touch <
+// TODO: <
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-// ray test touch >
+// TODO: >
 
+import {
+  Card,
+  Spinner,
+  Container,
+  Row,
+  Col
+} from 'react-bootstrap';
+
+import BorrowPosition from './BorrowPosition';
+import SupplyPosition from './SupplyPosition';
+import { AccountOverallStats } from 'components/OverallStats';
 import {
   useBorrowPositions,
   useSupplyPositions
-} from '../../hooks/useAccountData';
-import './index.scss';
-import { Card, Spinner, Container, Row, Col } from 'react-bootstrap';
-import PairAddressContext from '../../contexts/PairAddress';
-import BorrowPosition from './BorrowPosition';
-import SupplyPosition from './SupplyPosition';
-import { AccountOverallStats } from '../OverallStats';
+} from 'hooks/useAccountData';
+import PairAddressContext from 'contexts/PairAddress';
+import './account-content.scss';
 
-export default function AccountPage(): JSX.Element {
-  // ray test touch <
+const AccountContent = (): JSX.Element => {
+  // TODO: <
   // const userData = useUserData();
-  // ray test touch >
+  // TODO: >
   const borrowPositions = useBorrowPositions();
   const supplyPositions = useSupplyPositions();
 
@@ -82,4 +89,6 @@ export default function AccountPage(): JSX.Element {
       )}
     </>
   );
-}
+};
+
+export default AccountContent;
