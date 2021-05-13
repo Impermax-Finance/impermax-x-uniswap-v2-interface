@@ -16,6 +16,7 @@
     "inmemory",
     "localstorage",
     "merkle",
+    "mixins",
     "nocheck",
     "nonwords",
     "npmjs",
