@@ -4,10 +4,9 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import LanguageProvider from 'contexts/LanguageProvider';
-import ThemeProvider from 'contexts/ThemeProvider';
 import NetworkProvider from 'contexts/NetworkProvider';
-import store from './state';
 import App from './App';
+import store from './state';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
@@ -15,9 +14,7 @@ ReactDOM.render(
     <Provider store={store}>
       <NetworkProvider>
         <LanguageProvider>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
+          <App />
         </LanguageProvider>
       </NetworkProvider>
     </Provider>
