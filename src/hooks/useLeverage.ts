@@ -5,7 +5,7 @@
 
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
-import { useTransactionAdder } from '../state/transactions/hooks';
+import { useTransactionAdder } from 'store/transactions/hooks';
 import usePairAddress from './usePairAddress';
 import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';

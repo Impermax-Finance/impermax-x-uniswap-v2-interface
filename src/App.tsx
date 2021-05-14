@@ -17,7 +17,7 @@ import Account from 'pages/Account';
 import Web3Provider from 'contexts/Web3Provider';
 import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
 import { SubgraphProvider } from 'contexts/SubgraphProvider';
-import Updaters from 'state/transactions/updater';
+import Updaters from 'store/transactions/updater';
 import { useChainId } from 'hooks/useNetwork';
 import { PAGES } from 'utils/constants/links';
 import './app.scss';
