@@ -8,11 +8,6 @@ export function useNetworkName() {
   return networkName;
 }
 
-export function useChainId() {
-  const { chainId } = useContext(NetworkContext);
-  return chainId;
-}
-
 export function useImpermaxSubgraphUrl() {
   const { impermaxSubgraphUrl } = useContext(NetworkContext);
   return impermaxSubgraphUrl;

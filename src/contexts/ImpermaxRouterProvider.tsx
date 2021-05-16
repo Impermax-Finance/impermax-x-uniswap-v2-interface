@@ -12,12 +12,13 @@ import { useWallet } from 'use-wallet';
 
 import ImpermaxRouter from 'impermax-router';
 import useWeb3 from 'hooks/useWeb3';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 import {
   useRouterAddress,
   useWETH,
   useFactoryAddress,
   useSimpleUniswapOracleAddress,
-  useChainId,
   useAirdropUrl,
   useIMX,
   useMerkleDistributorAddress,
@@ -41,8 +42,10 @@ export const ImpermaxRouterContext = createContext<ImpermaxRouterContextI>({});
 
 export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const { account } = useWallet();
+  // ray test touch <
   const web3 = useWeb3();
-  const chainId = useChainId();
+  // ray test touch >
+  const { chainId } = useWeb3React<Web3Provider>();
   const subgraph = useSubgraph();
   const routerAddress = useRouterAddress();
   const factoryAddress = useFactoryAddress();

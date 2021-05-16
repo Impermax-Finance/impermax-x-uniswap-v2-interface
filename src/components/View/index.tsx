@@ -10,6 +10,7 @@ import { useHasClaimableAirdrop } from '../../hooks/useData';
 import { ClaimAirdrop } from './ClaimAirdrop';
 import { useThisAccountUrl } from '../../hooks/useUrlGenerator';
 import clsx from 'clsx';
+import WalletConnect from 'parts/WalletConnect';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -77,6 +78,7 @@ export default function View({ children }: ViewProps): JSX.Element {
                 onClick={onConnect}>Connect Wallet
               </Button>
           }
+          <WalletConnect />
         </Container>
       </Navbar>
       {!connected && wrongNetwork && (

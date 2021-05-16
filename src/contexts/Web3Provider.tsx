@@ -1,3 +1,4 @@
+// ray test touch <
 import React, { createContext, useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { useWallet } from 'use-wallet';
@@ -29,3 +30,4 @@ export interface Web3ContextI {
 export const Web3Context = createContext<Web3ContextI>({ web3: null });
 
 export default Web3Provider;
+// ray test touch >

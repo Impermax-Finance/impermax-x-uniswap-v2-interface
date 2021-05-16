@@ -4,7 +4,8 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
-// TODO: should use `https://github.com/NoahZinsmeister/web3-react`
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 import { UseWalletProvider } from 'use-wallet';
 import clsx from 'clsx';
 
@@ -15,23 +16,24 @@ import Claim from 'pages/Claim';
 import CreateNewPair from 'pages/CreateNewPair';
 import Account from 'pages/Account';
 // TODO: should move the providers to `src\index.tsx`
-import Web3Provider from 'contexts/Web3Provider';
+import CustomWeb3Provider from 'contexts/Web3Provider';
 import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
 import { SubgraphProvider } from 'contexts/SubgraphProvider';
-import { useChainId } from 'hooks/useNetwork';
 import { PAGES } from 'utils/constants/links';
 import Updaters from 'store/transactions/updater';
 import './app.scss';
 
 const App = (): JSX.Element => {
+  const { chainId = 0 } = useWeb3React<Web3Provider>();
+
   return (
     <div
       className={clsx(
         'min-h-screen',
         'bg-default'
       )}>
-      <UseWalletProvider chainId={useChainId()}>
-        <Web3Provider>
+      <UseWalletProvider chainId={chainId}>
+        <CustomWeb3Provider>
           <Updaters />
           <SubgraphProvider>
             <ImpermaxRouterProvider>
@@ -68,7 +70,7 @@ const App = (): JSX.Element => {
               </Router>
             </ImpermaxRouterProvider>
           </SubgraphProvider>
-        </Web3Provider>
+        </CustomWeb3Provider>
       </UseWalletProvider>
     </div>
   );

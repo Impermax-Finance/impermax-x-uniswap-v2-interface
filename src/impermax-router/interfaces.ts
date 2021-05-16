@@ -52,7 +52,9 @@ export const NO_CHANGES = {
 
 export interface ImpermaxRouterCfg {
   subgraph: Subgraph;
+  // ray test touch <
   web3: any;
+  // ray test touch >
   chainId: number;
   routerAddress: Address;
   factoryAddress: Address;

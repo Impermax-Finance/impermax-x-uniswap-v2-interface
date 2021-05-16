@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import { Networks, chainDetailsMap } from '../utils/connections';
+import { Networks } from '../utils/connections';
 import {
   NETWORK_URL,
   IMX,
@@ -21,7 +21,6 @@ const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkI = {
   networkName: NETWORK,
-  chainId: chainDetailsMap[process.env.REACT_APP_NETWORK as Networks].networkId,
   impermaxSubgraphUrl: IMPERMAX_SUBGRAPH_URL[NETWORK],
   networkUrl: NETWORK_URL[NETWORK],
   IMX: IMX[NETWORK],
@@ -42,7 +41,6 @@ const NetworkProvider: React.FC = ({ children }) => {
 
 export interface NetworkI {
   networkName: string;
-  chainId: number;
   impermaxSubgraphUrl: string;
   networkUrl: string;
   IMX: Address;

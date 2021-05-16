@@ -3,7 +3,8 @@ import { InteractionModalContainer } from '.';
 import { Spinner } from 'react-bootstrap';
 import { TransactionDetails } from 'store/transactions/reducer';
 import { useTransactionUrl } from '../../hooks/useUrlGenerator';
-import { useChainId } from '../../hooks/useNetwork';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 import { clearAllTransactions } from 'store/transactions/actions';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'store/index';
@@ -42,7 +43,7 @@ export interface AccountModalProps {
 }
 
 export default function AccountModal({ show, toggleShow, pending, confirmed }: AccountModalProps): JSX.Element {
-  const chainId = useChainId();
+  const { chainId } = useWeb3React<Web3Provider>();
   const dispatch = useDispatch<AppDispatch>();
   const clearAllTransactionsCallback = useCallback(() => {
     if (chainId) dispatch(clearAllTransactions({ chainId }));

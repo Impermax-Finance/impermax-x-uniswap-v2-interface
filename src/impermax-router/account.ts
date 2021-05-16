@@ -22,8 +22,10 @@ export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress
 // Available Balance
 export async function initializeAvailableBalance(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  // ray test touch <
   // eslint-disable-next-line eqeqeq
   if (token._address == this.WETH) return (await this.web3.eth.getBalance(this.account)) / 1e18 / this.dust;
+  // ray test touch >
   const balance = await token.methods.balanceOf(this.account).call();
   return (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) / this.dust;
 }

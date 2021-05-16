@@ -3,7 +3,9 @@
 // @ts-nocheck
 // TODO: >
 
-import { useWETH, useChainId } from './useNetwork';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
+import { useWETH } from './useNetwork';
 import usePairAddress from './usePairAddress';
 import { PoolTokenType } from '../impermax-router/interfaces';
 import { useUnderlyingAddress } from './useData';
@@ -47,7 +49,7 @@ export function useAddLiquidityUrl() : string {
 }
 
 export function useTransactionUrlGenerator() : (hash: string) => string {
-  const chainId = useChainId();
+  const { chainId } = useWeb3React<Web3Provider>();
   // eslint-disable-next-line eqeqeq
   const subdomain = chainId == 3 ? 'ropsten.' : '';
   return (hash: string) => 'https://' + subdomain + 'etherscan.io/tx/' + hash;

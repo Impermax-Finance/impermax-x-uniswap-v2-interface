@@ -104,6 +104,7 @@ export async function getPermitData(
     }
   });
 
+  // ray test touch <
   this.web3.currentProvider.send(
     {
       method: 'eth_signTypedData_v4',
@@ -126,4 +127,5 @@ export async function getPermitData(
       callBack({ permitData, deadline, amount });
     }
   );
+  // ray test touch >
 }
