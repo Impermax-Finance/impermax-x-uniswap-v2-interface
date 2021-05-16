@@ -4,6 +4,7 @@ import {
   Row,
   Col
 } from 'react-bootstrap';
+import clsx from 'clsx';
 
 import { PoolTokenType } from 'impermax-router/interfaces';
 import { useTokenIcon, useLendingPoolUrl } from 'hooks/useUrlGenerator';
@@ -29,8 +30,12 @@ const SupplyPosition = (): JSX.Element => {
       <Col className='currency-name d-none d-sm-block'>
         <div className='combined'>
           <div className='currency-overlapped'>
-            <img src={tokenIconA} />
-            <img src={tokenIconB} />
+            <img
+              className='inline-block'
+              src={tokenIconA} />
+            <img
+              className='inline-block'
+              src={tokenIconB} />
           </div>
           {symbolA}/{symbolB}
         </div>
@@ -40,12 +45,18 @@ const SupplyPosition = (): JSX.Element => {
           <Col className='details-amount'>
             <div>
               <img
-                className='currency-icon'
+                className={clsx(
+                  'currency-icon',
+                  'inline-block'
+                )}
                 src={tokenIconA} /> {formatAmount(suppliedAmountA)} {symbolA}
             </div>
             <div>
               <img
-                className='currency-icon'
+                className={clsx(
+                  'currency-icon',
+                  'inline-block'
+                )}
                 src={tokenIconB} /> {formatAmount(suppliedAmountB)} {symbolB}
             </div>
           </Col>

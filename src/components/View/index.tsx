@@ -2,7 +2,6 @@ import React from 'react';
 import './index.scss';
 import NavigationBarLink from '../NavigationBarLink';
 import { PAGES } from 'utils/constants/links';
-
 import { Button, Nav, Navbar, Container } from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
 import { ConnectedWalletButtonComponent } from './ConnectedWalletButtonComponent';
@@ -10,6 +9,7 @@ import { useNetworkName } from '../../hooks/useNetwork';
 import { useHasClaimableAirdrop } from '../../hooks/useData';
 import { ClaimAirdrop } from './ClaimAirdrop';
 import { useThisAccountUrl } from '../../hooks/useUrlGenerator';
+import clsx from 'clsx';
 
 interface ViewProps {
   children: React.ReactNode;
@@ -50,7 +50,10 @@ export default function View({ children }: ViewProps): JSX.Element {
               target='_blank'
               rel='noopener noreferrer'>
               <img
-                className='impermax-brand'
+                className={clsx(
+                  'impermax-brand',
+                  'inline-block'
+                )}
                 src='/assets/impermax.png' />
             </a>
           </Navbar.Brand>

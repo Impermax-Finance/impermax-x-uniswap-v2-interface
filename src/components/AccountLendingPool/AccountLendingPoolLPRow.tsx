@@ -52,8 +52,12 @@ export default function AccountLendingPoolLPRow(): JSX.Element {
         <Col md={3}>
           <Row className='account-lending-pool-name-icon'>
             <Col className='token-icon icon-overlapped'>
-              <img src={tokenIconA} />
-              <img src={tokenIconB} />
+              <img
+                className='inline-block'
+                src={tokenIconA} />
+              <img
+                className='inline-block'
+                src={tokenIconB} />
             </Col>
             <Col className='token-name'>
               {`${symbol} LP`}

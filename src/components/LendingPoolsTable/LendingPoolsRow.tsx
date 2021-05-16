@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { formatUSD, formatPercentage } from '../../utils/format';
 import { useSupplyUSD, useTotalBorrowsUSD, useSupplyAPY, useBorrowAPY, useSymbol, useUniswapAPY, useFarmingAPY } from '../../hooks/useData';
 import { useTokenIcon, useLendingPoolUrl } from '../../hooks/useUrlGenerator';
+import clsx from 'clsx';
 
 const LEVERAGE = 5;
 
@@ -38,21 +39,31 @@ export default function LendingPoolsRow(): JSX.Element {
         <div className='currency-name'>
           <div className='combined'>
             <div className='currency-overlapped'>
-              <img src={tokenIconA} />
-              <img src={tokenIconB} />
+              <img
+                className='inline-block'
+                src={tokenIconA} />
+              <img
+                className='inline-block'
+                src={tokenIconB} />
             </div>
             {symbolA}/{symbolB}
           </div>
           <div className='d-none d-md-block'>
             <div>
               <img
-                className='currency-icon'
+                className={clsx(
+                  'currency-icon',
+                  'inline-block'
+                )}
                 src={tokenIconA} />
               {symbolA}
             </div>
             <div>
               <img
-                className='currency-icon'
+                className={clsx(
+                  'currency-icon',
+                  'inline-block'
+                )}
                 src={tokenIconB} />
               {symbolB}
             </div>

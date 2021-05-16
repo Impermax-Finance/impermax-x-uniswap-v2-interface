@@ -11,6 +11,7 @@ import { formatUSD, formatPercentage } from '../../utils/format';
 import BorrowableDetailsRow from './BorrowableDetailsRow';
 import { useSymbol, useName, useSupplyUSD, useTotalBorrowsUSD, useUtilizationRate, useSupplyAPY, useBorrowAPY, useFarmingAPY, useHasFarming } from '../../hooks/useData';
 import { useTokenIcon } from '../../hooks/useUrlGenerator';
+import clsx from 'clsx';
 
 /**
  * Generate the Currency Equity Details card, giving information about the suppy and rates for a particular currency in
@@ -37,7 +38,10 @@ export default function BorrowableDetails(): JSX.Element {
     <div className='borrowable-details'>
       <div className='header'>
         <img
-          className='currency-icon'
+          className={clsx(
+            'currency-icon',
+            'inline-block'
+          )}
           src={tokenIcon} />
         {name} ({symbol})
       </div>

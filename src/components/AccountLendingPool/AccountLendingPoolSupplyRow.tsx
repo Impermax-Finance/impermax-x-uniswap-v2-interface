@@ -37,7 +37,7 @@ export default function AccountLendingPoolSupplyRow(): JSX.Element {
           <Row className='account-lending-pool-name-icon'>
             <Col className='token-icon'>
               <img
-                className=''
+                className='inline-block'
                 src={tokenIcon} />
             </Col>
             <Col className='token-name'>

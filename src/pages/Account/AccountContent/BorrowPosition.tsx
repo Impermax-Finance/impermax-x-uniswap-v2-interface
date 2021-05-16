@@ -32,8 +32,12 @@ const BorrowPosition = (): JSX.Element => {
       <Col className='currency-name'>
         <div className='combined'>
           <div className='currency-overlapped'>
-            <img src={tokenIconA} />
-            <img src={tokenIconB} />
+            <img
+              className='inline-block'
+              src={tokenIconA} />
+            <img
+              className='inline-block'
+              src={tokenIconB} />
           </div>
           {symbolA}/{symbolB}
         </div>
