@@ -7,6 +7,7 @@
     "TWAP",
     "browserslist",
     "camelcase",
+    "clsx",
     "craco",
     "eqeqeq",
     "eslintignore",
