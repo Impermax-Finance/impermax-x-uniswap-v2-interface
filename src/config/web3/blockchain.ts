@@ -1,5 +1,6 @@
 
-// ray test touch <
+const POLLING_INTERVAL = 12000;
+
 const CHAIN_IDS = Object.freeze({
   MAIN_NET: 1,
   ROPSTEN: 3,
@@ -12,6 +13,6 @@ const CHAIN_IDS = Object.freeze({
 });
 
 export {
-  CHAIN_IDS
+  CHAIN_IDS,
+  POLLING_INTERVAL
 };
-// ray test touch >
