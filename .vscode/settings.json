@@ -23,6 +23,7 @@
     "npmjs",
     "popperjs",
     "reduxjs",
-    "tailwindcss"
+    "tailwindcss",
+    "webfonts"
   ]
 }
