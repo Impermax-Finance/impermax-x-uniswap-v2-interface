@@ -6,8 +6,9 @@ import { Provider } from 'react-redux';
 import LanguageProvider from 'contexts/LanguageProvider';
 import NetworkProvider from 'contexts/NetworkProvider';
 import App from './App';
-import store from './state';
+import store from './store';
 import reportWebVitals from './reportWebVitals';
+import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>

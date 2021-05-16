@@ -7,6 +7,8 @@
     "TWAP",
     "browserslist",
     "camelcase",
+    "clsx",
+    "craco",
     "eqeqeq",
     "eslintignore",
     "fontawesome",
@@ -15,10 +17,13 @@
     "inmemory",
     "localstorage",
     "merkle",
+    "mixins",
     "nocheck",
     "nonwords",
     "npmjs",
     "popperjs",
-    "reduxjs"
+    "reduxjs",
+    "tailwindcss",
+    "webfonts"
   ]
 }

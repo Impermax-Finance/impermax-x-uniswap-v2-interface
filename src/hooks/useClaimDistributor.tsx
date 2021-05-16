@@ -4,7 +4,7 @@
 // TODO: >
 
 import { useCallback, useMemo, useState } from 'react';
-import { useTransactionAdder } from '../state/transactions/hooks';
+import { useTransactionAdder } from 'store/transactions/hooks';
 import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { useAvailableClaimable } from './useData';

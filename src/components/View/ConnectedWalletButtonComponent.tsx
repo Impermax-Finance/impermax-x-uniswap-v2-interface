@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import AccountModal from '../InteractionModal/AccountModal';
-import { useAllTransactions, isTransactionRecent } from '../../state/transactions/hooks';
-import { TransactionDetails } from '../../state/transactions/reducer';
+import { useAllTransactions, isTransactionRecent } from 'store/transactions/hooks';
+import { TransactionDetails } from 'store/transactions/reducer';
 import { useThisAccountUrl } from '../../hooks/useUrlGenerator';
 import { Link } from 'react-router-dom';
 

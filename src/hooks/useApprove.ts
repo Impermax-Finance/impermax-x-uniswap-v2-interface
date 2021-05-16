@@ -5,7 +5,7 @@
 
 import { BigNumber, ethers } from 'ethers';
 import { useCallback, useMemo, useState } from 'react';
-import { useTransactionAdder } from '../state/transactions/hooks';
+import { useTransactionAdder } from 'store/transactions/hooks';
 import useAllowance from './useAllowance';
 import { ApprovalType, PoolTokenType } from '../impermax-router/interfaces';
 import usePairAddress from './usePairAddress';

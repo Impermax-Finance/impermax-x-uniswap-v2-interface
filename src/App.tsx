@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 // TODO: should use `https://github.com/NoahZinsmeister/web3-react`
 import { UseWalletProvider } from 'use-wallet';
+import clsx from 'clsx';
 
 import Home from 'pages/Home';
 import LendingPool from 'pages/LendingPool';
@@ -17,14 +18,18 @@ import Account from 'pages/Account';
 import Web3Provider from 'contexts/Web3Provider';
 import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
 import { SubgraphProvider } from 'contexts/SubgraphProvider';
-import Updaters from 'state/transactions/updater';
 import { useChainId } from 'hooks/useNetwork';
 import { PAGES } from 'utils/constants/links';
+import Updaters from 'store/transactions/updater';
 import './app.scss';
 
 const App = (): JSX.Element => {
   return (
-    <div className='app'>
+    <div
+      className={clsx(
+        'min-h-screen',
+        'bg-default'
+      )}>
       <UseWalletProvider chainId={useChainId()}>
         <Web3Provider>
           <Updaters />

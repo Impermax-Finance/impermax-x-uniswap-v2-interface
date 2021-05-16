@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import { InteractionModalContainer } from '.';
 import { Spinner } from 'react-bootstrap';
-import { TransactionDetails } from '../../state/transactions/reducer';
+import { TransactionDetails } from 'store/transactions/reducer';
 import { useTransactionUrl } from '../../hooks/useUrlGenerator';
 import { useChainId } from '../../hooks/useNetwork';
-import { clearAllTransactions } from '../../state/transactions/actions';
+import { clearAllTransactions } from 'store/transactions/actions';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../state';
+import { AppDispatch } from 'store/index';
 
 const MAX_TRANSACTION_HISTORY = 10;
 
