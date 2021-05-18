@@ -10,7 +10,6 @@ import usePairAddress from './usePairAddress';
 import { PoolTokenType } from '../impermax-router/interfaces';
 import { useUnderlyingAddress } from './useData';
 import Web3 from 'web3';
-import { useWallet } from 'use-wallet';
 
 export function useLendingPoolUrl() : string {
   const uniswapV2PairAddress = usePairAddress();
@@ -18,8 +17,10 @@ export function useLendingPoolUrl() : string {
 }
 
 export function useThisAccountUrl() : string {
-  const { account } = useWallet();
+  const { account } = useWeb3React<Web3Provider>();
+
   if (!account) return null;
+
   return '/account/' + account;
 }
 

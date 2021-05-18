@@ -61,7 +61,6 @@ const WalletConnect = (): JSX.Element => {
           'mx-1'
         )}>
         <button
-          style={{ minWidth: 160 }}
           className={clsx(
             'border',
             'text-white'
@@ -75,7 +74,6 @@ const WalletConnect = (): JSX.Element => {
         </button>
         {(active || error) && (
           <button
-            style={{ minWidth: 160 }}
             className={clsx(
               'border',
               'text-white'

@@ -7,13 +7,14 @@ import {
   useEffect,
   useState
 } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 import {
   Container,
   Card,
   Row,
   Col
 } from 'react-bootstrap';
-import { useWallet } from 'use-wallet';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -61,7 +62,8 @@ const CreateNewPair = (): JSX.Element => {
 
   const stepClassName = (n: number) => stepSelected === n ? 'step selected' : stepSelected > n ? 'step done' : 'step todo';
 
-  const { account } = useWallet();
+  const { account } = useWeb3React<Web3Provider>();
+
   if (!account) return (<View>{}</View>);
 
   return (
