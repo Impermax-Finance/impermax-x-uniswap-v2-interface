@@ -1,57 +1,87 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useWallet } from 'use-wallet';
-import { AppDispatch, AppState } from '../index';
-import { checkedTransaction, finalizeTransaction } from './actions';
-import useInterval from 'use-interval';
-import useWeb3 from '../../hooks/useWeb3';
 
-export function shouldCheck(
-  lastBlockNumber: number,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  tx: { addedTime: number; receipt?: {}; lastCheckedBlockNumber?: number }
+import * as React from 'react';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
+import useInterval from 'use-interval';
+import { useWeb3React } from '@web3-react/core';
+import {
+  Web3Provider,
+  TransactionReceipt
+} from '@ethersproject/providers';
+
+import {
+  AppDispatch,
+  AppState
+} from '../index';
+import {
+  checkedTransaction,
+  finalizeTransaction
+} from './actions';
+
+function shouldCheck(
+  blockNumber: number,
+  tx: {
+    addedTime: number;
+    receipt?: unknown; // TODO: should type properly
+    lastCheckedBlockNumber?: number
+  }
 ): boolean {
   if (tx.receipt) return false;
   if (!tx.lastCheckedBlockNumber) return true;
-  const blocksSinceCheck = lastBlockNumber - tx.lastCheckedBlockNumber;
+  const blocksSinceCheck = blockNumber - tx.lastCheckedBlockNumber;
   if (blocksSinceCheck < 1) return false;
   const minutesPending = (new Date().getTime() - tx.addedTime) / 1000 / 60;
+  // every 10 blocks if pending for longer than an hour
   if (minutesPending > 60) {
-    // every 10 blocks if pending for longer than an hour
     return blocksSinceCheck > 9;
+  // every 3 blocks if pending more than 5 minutes
   } else if (minutesPending > 5) {
-    // every 3 blocks if pending more than 5 minutes
     return blocksSinceCheck > 2;
+  // otherwise every block
   } else {
-    // otherwise every block
     return true;
   }
 }
 
-export default function Updater(): null {
-  const { chainId, ethereum } = useWallet();
+// TODO: should be a custom hook instead of a component
+const Updater = (): null => {
+  const {
+    library,
+    chainId = 0
+  } = useWeb3React<Web3Provider>();
 
   const dispatch = useDispatch<AppDispatch>();
   const state = useSelector<AppState, AppState['transactions']>(state => state.transactions);
 
-  const transactions = chainId ? state[chainId] ?? {} : {};
+  const transactions = state[chainId];
 
-  const web3 = useWeb3();
-  const [lastBlockNumber, setBlockNumber] = useState<number>();
-  useInterval(() => {
-    if (!web3) return;
-    web3.eth.getBlockNumber().then((data: any) => setBlockNumber(data));
+  const [blockNumber, setBlockNumber] = React.useState<number>();
+  useInterval(async () => {
+    if (!library) return;
+
+    try {
+      const theBlockNumber = await library.getBlockNumber();
+
+      setBlockNumber(theBlockNumber);
+    } catch (error) {
+      console.log('[Updater useInterval] error.message => ', error.message);
+    }
   }, 3000);
 
-  useEffect(() => {
-    if (!chainId || !ethereum || !lastBlockNumber) return;
+  React.useEffect(() => {
+    if (!library) return;
+    if (!chainId) return;
+    if (!blockNumber) return;
+    if (!transactions) return;
 
     Object.keys(transactions)
-      .filter(hash => shouldCheck(lastBlockNumber, transactions[hash]))
+      .filter(hash => shouldCheck(blockNumber, transactions[hash]))
       .forEach(hash => {
-        web3.eth
+        library
           .getTransactionReceipt(hash)
-          .then((receipt: any) => {
+          .then((receipt: TransactionReceipt) => {
             if (receipt) {
               dispatch(
                 finalizeTransaction({
@@ -70,14 +100,30 @@ export default function Updater(): null {
                 })
               );
             } else {
-              dispatch(checkedTransaction({ chainId, hash, blockNumber: lastBlockNumber }));
+              dispatch(checkedTransaction({
+                chainId,
+                hash,
+                blockNumber: blockNumber
+              }));
             }
           })
-          .catch((error: any) => {
-            console.error(`failed to check transaction hash: ${hash}`, error);
+          .catch((error: Error) => {
+            console.error(`Failed to check transaction hash: ${hash} error.message => `, error.message);
           });
       });
-  }, [chainId, ethereum, transactions, lastBlockNumber, dispatch]);
+  }, [
+    library,
+    chainId,
+    transactions,
+    blockNumber,
+    dispatch
+  ]);
 
   return null;
-}
+};
+
+export {
+  shouldCheck
+};
+
+export default Updater;

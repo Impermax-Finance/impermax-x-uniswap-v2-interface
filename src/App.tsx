@@ -1,4 +1,5 @@
 
+import * as React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,7 +21,7 @@ import CustomWeb3Provider from 'contexts/Web3Provider';
 import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
 import { SubgraphProvider } from 'contexts/SubgraphProvider';
 import { PAGES } from 'utils/constants/links';
-import Updaters from 'store/transactions/updater';
+import Updater from 'store/transactions/updater';
 import './app.scss';
 
 const App = (): JSX.Element => {
@@ -34,7 +35,7 @@ const App = (): JSX.Element => {
       )}>
       <UseWalletProvider chainId={chainId}>
         <CustomWeb3Provider>
-          <Updaters />
+          <Updater />
           <SubgraphProvider>
             <ImpermaxRouterProvider>
               <Router>
