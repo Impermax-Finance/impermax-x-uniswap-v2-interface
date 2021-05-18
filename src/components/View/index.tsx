@@ -1,28 +1,37 @@
-import React from 'react';
-import './index.scss';
-import NavigationBarLink from '../NavigationBarLink';
-import { PAGES } from 'utils/constants/links';
-import { Button, Nav, Navbar, Container } from 'react-bootstrap';
+import * as React from 'react';
+import {
+  Button,
+  Nav,
+  Navbar,
+  Container
+} from 'react-bootstrap';
 import { useWallet } from 'use-wallet';
-import { ConnectedWalletButtonComponent } from './ConnectedWalletButtonComponent';
-import { useNetworkName } from '../../hooks/useNetwork';
-import { useHasClaimableAirdrop } from '../../hooks/useData';
-import { ClaimAirdrop } from './ClaimAirdrop';
-import { useThisAccountUrl } from '../../hooks/useUrlGenerator';
 import clsx from 'clsx';
-import WalletConnect from 'parts/WalletConnect';
 
-interface ViewProps {
+import { ClaimAirdrop } from './ClaimAirdrop';
+import { ConnectedWalletButtonComponent } from './ConnectedWalletButtonComponent';
+import WalletConnect from 'parts/WalletConnect';
+import NavigationBarLink from 'components/NavigationBarLink';
+import { useNetworkName } from 'hooks/useNetwork';
+import { useHasClaimableAirdrop } from 'hooks/useData';
+import { useThisAccountUrl } from 'hooks/useUrlGenerator';
+import { PAGES } from 'utils/constants/links';
+import './index.scss';
+
+interface Props {
   children: React.ReactNode;
 }
 
-/**
- * Creates a view component that wraps application page content.
- * @param param0 ViewProps
- */
+const View = ({ children }: Props): JSX.Element => {
+  // ray test touch <
+  const {
+    account,
+    connect,
+    status,
+    error
+  } = useWallet();
+  // ray test touch >
 
-export default function View({ children }: ViewProps): JSX.Element {
-  const { account, connect, status, error } = useWallet();
   const onConnect = () => {
     try {
       localStorage.removeItem('signOut');
@@ -32,11 +41,9 @@ export default function View({ children }: ViewProps): JSX.Element {
     }
   };
 
-  // eslint-disable-next-line eqeqeq
-  const wrongNetwork = status == 'error' && error && error.toString().indexOf('ChainUnsupportedError') >= 0;
+  const wrongNetwork = status === 'error' && error && error.toString().indexOf('ChainUnsupportedError') >= 0;
   const networkName = useNetworkName();
-  // eslint-disable-next-line eqeqeq
-  const connected = status == 'connected';
+  const connected = status === 'connected';
 
   const hasClaimableAirdrop = useHasClaimableAirdrop();
   const accountUrl = useThisAccountUrl();
@@ -55,43 +62,53 @@ export default function View({ children }: ViewProps): JSX.Element {
                   'impermax-brand',
                   'inline-block'
                 )}
-                src='/assets/impermax.png' />
+                src='/assets/impermax.png'
+                alt='impermax' />
             </a>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Nav className='mr-auto'>
             <NavigationBarLink appRoute={PAGES.home} />
-            {accountUrl && (<NavigationBarLink appRoute={{ value: 'Dashboard', to: accountUrl }} />)}
+            {accountUrl && (
+              <NavigationBarLink appRoute={{ value: 'Dashboard', to: accountUrl }} />
+            )}
             <NavigationBarLink
               appRoute={PAGES.userGuide}
               target='_blank' />
-            {networkName === 'mainnet' && (<NavigationBarLink appRoute={PAGES.risks} />)}
+            {/* ray test touch < */}
+            {networkName === 'mainnet' && (
+              <NavigationBarLink appRoute={PAGES.risks} />
+            )}
+            {/* ray test touch > */}
             {/* <NavigationBarLink appRoute={PAGES.claim} />*/}
             {/* <NavigationBarLink appRoute={PAGES.CreateNewPair} />*/}
           </Nav>
-          {hasClaimableAirdrop && (<ClaimAirdrop />)}
-          {
-            account ?
-              <ConnectedWalletButtonComponent account={account} /> :
-              <Button
-                className='wallet-connector nav-button-green'
-                onClick={onConnect}>Connect Wallet
-              </Button>
-          }
+          {hasClaimableAirdrop && (
+            <ClaimAirdrop />
+          )}
+          {account ? (
+            <ConnectedWalletButtonComponent account={account} />
+          ) : (
+            <Button
+              className='wallet-connector nav-button-green'
+              onClick={onConnect}>
+              Connect Wallet
+            </Button>
+          )}
           <WalletConnect />
         </Container>
       </Navbar>
       {!connected && wrongNetwork && (
         <div className='wrong-network'>
           <div className='container'>
-            You&apos;re connected to the wrong network. Please connect to the supported network: {networkName}
+            You&apos;re connected to the wrong network. Please connect to the supported network: {networkName}.
           </div>
         </div>
       )}
       {!connected && !wrongNetwork && (
         <div className='not-connected'>
           <div className='container'>
-            Please connect with Metamask or another web3 provider
+            Please connect with Metamask or another web3 provider.
           </div>
         </div>
       )}
@@ -142,4 +159,6 @@ export default function View({ children }: ViewProps): JSX.Element {
       </div>
     </div>
   );
-}
+};
+
+export default View;
