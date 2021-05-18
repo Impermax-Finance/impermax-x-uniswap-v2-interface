@@ -42,9 +42,7 @@ export const ImpermaxRouterContext = createContext<ImpermaxRouterContextI>({});
 
 export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const { account } = useWallet();
-  // ray test touch <
   const web3 = useWeb3();
-  // ray test touch >
   const { chainId } = useWeb3React<Web3Provider>();
   const subgraph = useSubgraph();
   const routerAddress = useRouterAddress();

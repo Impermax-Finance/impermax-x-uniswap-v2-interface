@@ -36,9 +36,7 @@ export default function Updater(): null {
 
   const transactions = chainId ? state[chainId] ?? {} : {};
 
-  // ray test touch <
   const web3 = useWeb3();
-  // ray test touch >
   const [lastBlockNumber, setBlockNumber] = useState<number>();
   useInterval(() => {
     if (!web3) return;

@@ -3,7 +3,6 @@
 // @ts-nocheck
 // TODO: >
 
-// ray test touch <
 import ERC20JSON from 'abis/contracts/IERC20.json';
 import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import UniswapV2FactoryJSON from 'abis/contracts/IUniswapV2Factory.json';
@@ -40,7 +39,7 @@ import * as account from './account';
 import * as imx from './imx';
 import Subgraph from 'subgraph';
 
-export default class ImpermaxRouter {
+class ImpermaxRouter {
   subgraph: Subgraph;
   web3: any;
   chainId: number;
@@ -270,4 +269,5 @@ export default class ImpermaxRouter {
   public claimDistributor = interactions.claimDistributor;
   public createNewPair = interactions.createNewPair;
 }
-// ray test touch >
+
+export default ImpermaxRouter;

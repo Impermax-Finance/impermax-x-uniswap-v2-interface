@@ -1,4 +1,3 @@
-// ray test touch <
 import React, { createContext, useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { useWallet } from 'use-wallet';
@@ -12,8 +11,9 @@ const Web3Provider: React.FC = ({ children }) => {
   // TODO: >
 
   useEffect(() => {
-    if (ethereum) setWeb3(new Web3(ethereum));
-    else {
+    if (ethereum) {
+      setWeb3(new Web3(ethereum));
+    } else {
       // const defaultProvider = new Web3.providers.WebsocketProvider( networkUrl );
       // setWeb3(new Web3(defaultProvider));
       connect('injected');
@@ -30,4 +30,3 @@ export interface Web3ContextI {
 export const Web3Context = createContext<Web3ContextI>({ web3: null });
 
 export default Web3Provider;
-// ray test touch >
