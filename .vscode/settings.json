@@ -16,6 +16,7 @@
     "ethersproject",
     "fontawesome",
     "fortawesome",
+    "headlessui",
     "impermax",
     "inmemory",
     "localstorage",

@@ -102,6 +102,7 @@ const View = ({ children }: Props): JSX.Element => {
           <WalletConnect />
         </Container>
       </Navbar>
+      {/* ray test touch < */}
       {!connected && wrongNetwork && (
         <div className='wrong-network'>
           <div className='container'>
@@ -116,8 +117,9 @@ const View = ({ children }: Props): JSX.Element => {
           </div>
         </div>
       )}
+      {/* ray test touch > */}
       {children}
-      <div className='footer container'>
+      <footer className='footer container'>
         <a
           href='https://impermax.finance/'
           target='_blank'
@@ -160,7 +162,7 @@ const View = ({ children }: Props): JSX.Element => {
           rel='noopener noreferrer'>
           Github
         </a>
-      </div>
+      </footer>
     </div>
   );
 };

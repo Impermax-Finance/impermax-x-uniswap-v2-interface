@@ -22,6 +22,7 @@ interface ConnectedWalletButtonComponentProps {
  * Sets up a component for the application's wallet section, when the wallet is connected.
  */
 
+// ray test touch <
 export function ConnectedWalletButtonComponent({ account } : ConnectedWalletButtonComponentProps): JSX.Element {
   const accountUrl = useThisAccountUrl();
 
@@ -42,7 +43,8 @@ export function ConnectedWalletButtonComponent({ account } : ConnectedWalletButt
       <div className='connected-wallet'>
         <Button
           className='wallet-connector nav-button-light'
-          onClick={() => toggleAccountModal(true)}>Transactions
+          onClick={() => toggleAccountModal(true)}>
+          Transactions
           {pending.length > 0 && (<Spinner
             animation='border'
             size='sm' />)}
@@ -59,3 +61,4 @@ export function ConnectedWalletButtonComponent({ account } : ConnectedWalletButt
     </>
   );
 }
+// ray test touch >
