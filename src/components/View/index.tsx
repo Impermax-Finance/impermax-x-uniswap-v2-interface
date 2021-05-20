@@ -42,11 +42,15 @@ const View = ({ children }: Props): JSX.Element => {
   };
 
   const wrongNetwork = status === 'error' && error && error.toString().indexOf('ChainUnsupportedError') >= 0;
+  // ray test touch <
   const networkName = useNetworkName();
+  // ray test touch >
   const connected = status === 'connected';
 
   const hasClaimableAirdrop = useHasClaimableAirdrop();
+  // ray test touch <
   const accountUrl = useThisAccountUrl();
+  // ray test touch >
 
   return (
     <div className='view'>
