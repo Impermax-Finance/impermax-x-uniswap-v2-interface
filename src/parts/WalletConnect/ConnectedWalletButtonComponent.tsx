@@ -3,8 +3,11 @@ import { Button, Spinner } from 'react-bootstrap';
 import AccountModal from '../../components/InteractionModal/AccountModal';
 import { useAllTransactions, isTransactionRecent } from 'store/transactions/hooks';
 import { TransactionDetails } from 'store/transactions/reducer';
-import { useThisAccountUrl } from '../../hooks/useUrlGenerator';
 import { Link } from 'react-router-dom';
+import {
+  PAGES,
+  PARAMETERS
+} from 'utils/constants/links';
 
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
   return b.addedTime - a.addedTime;
@@ -14,7 +17,7 @@ function shortenAddress(address: string) {
   return address.substring(0, 6) + '...' + address.slice(-4);
 }
 
-interface ConnectedWalletButtonComponentProps {
+interface Props {
   account: string;
 }
 
@@ -23,8 +26,8 @@ interface ConnectedWalletButtonComponentProps {
  */
 
 // ray test touch <
-export function ConnectedWalletButtonComponent({ account } : ConnectedWalletButtonComponentProps): JSX.Element {
-  const accountUrl = useThisAccountUrl();
+function ConnectedWalletButtonComponent({ account } : Props): JSX.Element {
+  const accountPageURL = PAGES.account.to.replace(`:${PARAMETERS.ACCOUNT}`, account);
 
   const allTransactions = useAllTransactions();
 
@@ -49,7 +52,7 @@ export function ConnectedWalletButtonComponent({ account } : ConnectedWalletButt
             animation='border'
             size='sm' />)}
         </Button>
-        <Link to={accountUrl}>
+        <Link to={accountPageURL}>
           <Button className='wallet-connector nav-button-green'>{shortenAddress(account)}</Button>
         </Link>
       </div>
@@ -61,4 +64,6 @@ export function ConnectedWalletButtonComponent({ account } : ConnectedWalletButt
     </>
   );
 }
+
+export default ConnectedWalletButtonComponent;
 // ray test touch >

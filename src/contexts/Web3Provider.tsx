@@ -6,16 +6,11 @@ import { provider } from 'web3-core';
 const Web3Provider: React.FC = ({ children }) => {
   const { ethereum, connect } = useWallet<provider>();
   const [web3, setWeb3] = useState<any>();
-  // TODO: <
-  // const networkUrl = useNetworkUrl();
-  // TODO: >
 
   useEffect(() => {
     if (ethereum) {
       setWeb3(new Web3(ethereum));
     } else {
-      // const defaultProvider = new Web3.providers.WebsocketProvider( networkUrl );
-      // setWeb3(new Web3(defaultProvider));
       connect('injected');
     }
   }, [ethereum]);

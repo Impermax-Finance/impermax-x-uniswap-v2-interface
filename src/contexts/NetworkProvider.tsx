@@ -1,7 +1,7 @@
+
 import React, { createContext } from 'react';
-import { Networks } from '../utils/connections';
+import { Networks } from 'utils/connections';
 import {
-  NETWORK_URL,
   IMX,
   WETH,
   ROUTER,
@@ -15,14 +15,13 @@ import {
   DISTRIBUTORS,
   IMPERMAX_SUBGRAPH_URL,
   UNISWAP_V2_FACTORY
-} from '../utils/constants';
+} from 'utils/constants';
 
+// ray test touch <
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkI = {
-  networkName: NETWORK,
   impermaxSubgraphUrl: IMPERMAX_SUBGRAPH_URL[NETWORK],
-  networkUrl: NETWORK_URL[NETWORK],
   IMX: IMX[NETWORK],
   WETH: WETH[NETWORK],
   routerAddress: ROUTER[NETWORK],
@@ -34,15 +33,14 @@ const context : NetworkI = {
   airdropUrl: AIRDROP_URL[NETWORK],
   distributors: DISTRIBUTORS[NETWORK]
 };
+// ray test touch >
 
 const NetworkProvider: React.FC = ({ children }) => {
   return <NetworkContext.Provider value={context}>{children}</NetworkContext.Provider>;
 };
 
 export interface NetworkI {
-  networkName: string;
   impermaxSubgraphUrl: string;
-  networkUrl: string;
   IMX: Address;
   WETH: Address;
   routerAddress: Address;

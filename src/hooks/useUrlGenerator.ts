@@ -16,14 +16,6 @@ export function useLendingPoolUrl() : string {
   return '/lending-pool/' + uniswapV2PairAddress;
 }
 
-export function useThisAccountUrl() : string {
-  const { account } = useWeb3React<Web3Provider>();
-
-  if (!account) return null;
-
-  return '/account/' + account;
-}
-
 export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   const tokenAddress = useUnderlyingAddress(poolTokenTypeArg);
   if (!tokenAddress) return '';

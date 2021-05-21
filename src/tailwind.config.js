@@ -14,6 +14,30 @@ const IMPERMAX_JADE = Object.freeze({
   800: '#006d45',
   900: '#005938'
 });
+const IMPERMAX_MAROON_FLUSH = Object.freeze({
+  50: '#fcf4f6',
+  100: '#faeaed',
+  200: '#f2cad2',
+  300: '#eaa9b7',
+  400: '#da6981',
+  500: '#ca294b',
+  600: '#b62544',
+  700: '#981f38',
+  800: '#79192d',
+  900: '#631425'
+});
+const IMPERMAX_LOCHMARA = Object.freeze({
+  50: '#f3f9fd',
+  100: '#e6f2fa',
+  200: '#c1dff4',
+  300: '#9bcbed',
+  400: '#50a4df',
+  500: '#057dd1',
+  600: '#0571bc',
+  700: '#045e9d',
+  800: '#034b7d',
+  900: '#023d66'
+});
 
 module.exports = {
   purge: [
@@ -29,6 +53,12 @@ module.exports = {
         },
         impermaxJade: {
           DEFAULT: IMPERMAX_JADE[500]
+        },
+        impermaxMaroonFlush: {
+          DEFAULT: IMPERMAX_MAROON_FLUSH[500]
+        },
+        impermaxLochmara: {
+          DEFAULT: IMPERMAX_LOCHMARA[500]
         },
         primary: {
           50: IMPERMAX_JADE[50],
