@@ -18,7 +18,7 @@ import {
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import View from 'components/View';
+import Layout from 'parts/Layout';
 import InteractionButton, { ButtonState } from 'components/InteractionButton';
 import {
   useIsValidPair,
@@ -64,10 +64,10 @@ const CreateNewPair = (): JSX.Element => {
 
   const { account } = useWeb3React<Web3Provider>();
 
-  if (!account) return (<View>{}</View>);
+  if (!account) return (<Layout>{}</Layout>);
 
   return (
-    <View>
+    <Layout>
       <Container className='create-new-pair'>
         <Card className='mt-4 p-4'>
           <Row className='steps'>
@@ -165,7 +165,7 @@ const CreateNewPair = (): JSX.Element => {
           )}
         </Card>
       </Container>
-    </View>
+    </Layout>
   );
 };
 

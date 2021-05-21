@@ -1,11 +1,11 @@
 
 import { Container } from 'react-bootstrap';
 
-import View from 'components/View';
+import Layout from 'parts/Layout';
 
 const Risks = (): JSX.Element => {
   return (
-    <View>
+    <Layout>
       <Container className='article card'>
         <h1 className='font-weight-bold'>Risks of Using Impermax Finance</h1>
         <p>The use of Impermax Finance involves risks. Only invest what you can afford to lose. By using this application you acknowledge and take responsibility for the risks involved. The possible risks include, but are not limited to, the following.</p>
@@ -146,7 +146,7 @@ const Risks = (): JSX.Element => {
           </a> first. There, you will be able to use the same application and see how it interoperates with Uniswap in a safe environment with free funds.
         </p>
       </Container>
-    </View>
+    </Layout>
   );
 };
 

@@ -1,18 +1,18 @@
 
-import View from 'components/View';
+import Layout from 'parts/Layout';
 import LendingPoolsSearch from 'components/LendingPoolsSearch';
 import OverallStats from 'components/OverallStats';
 import CreateNewMarketButton from 'components/CreateNewMarketButton';
 
 const Home = (): JSX.Element => {
   return (
-    <View>
+    <Layout>
       <div>
         <OverallStats />
         <CreateNewMarketButton />
         <LendingPoolsSearch />
       </div>
-    </View>
+    </Layout>
   );
 };
 

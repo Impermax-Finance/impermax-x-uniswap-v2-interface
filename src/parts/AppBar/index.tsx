@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 import {
   Button,
   Nav,
@@ -16,13 +16,8 @@ import { useNetworkName } from 'hooks/useNetwork';
 import { useHasClaimableAirdrop } from 'hooks/useData';
 import { useThisAccountUrl } from 'hooks/useUrlGenerator';
 import { PAGES } from 'utils/constants/links';
-import './index.scss';
 
-interface Props {
-  children: React.ReactNode;
-}
-
-const View = ({ children }: Props): JSX.Element => {
+const AppBar = (): JSX.Element => {
   // ray test touch <
   const {
     account,
@@ -53,7 +48,7 @@ const View = ({ children }: Props): JSX.Element => {
   // ray test touch >
 
   return (
-    <div className='view'>
+    <>
       <Navbar>
         <Container>
           <Navbar.Brand>
@@ -118,53 +113,8 @@ const View = ({ children }: Props): JSX.Element => {
         </div>
       )}
       {/* ray test touch > */}
-      {children}
-      <footer className='footer container'>
-        <a
-          href='https://impermax.finance/'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Website
-        </a>
-        <a
-          href='https://twitter.com/ImpermaxFinance'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Twitter
-        </a>
-        <a
-          href='https://t.me/ImpermaxFinance'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Telegram
-        </a>
-        <a
-          href='https://discord.gg/XN739EgG4X'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Discord
-        </a>
-        <a
-          href='https://impermax.medium.com/'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Medium
-        </a>
-        <a
-          href='https://www.reddit.com/r/ImpermaxFinance/'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Reddit
-        </a>
-        <a
-          href='https://github.com/Impermax-Finance'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Github
-        </a>
-      </footer>
-    </div>
+    </>
   );
 };
 
-export default View;
+export default AppBar;

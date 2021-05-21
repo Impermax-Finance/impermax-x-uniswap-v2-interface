@@ -6,7 +6,7 @@
 import { Button } from 'react-bootstrap';
 import { useAirdropData } from '../../hooks/useData';
 import { formatAmount } from '../../utils/format';
-import { ButtonState } from '../InteractionButton';
+import { ButtonState } from '../../components/InteractionButton';
 import useClaimAirdrop from '../../hooks/useClaimAirdrop';
 
 /**

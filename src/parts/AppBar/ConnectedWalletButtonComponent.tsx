@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
-import AccountModal from '../InteractionModal/AccountModal';
+import AccountModal from '../../components/InteractionModal/AccountModal';
 import { useAllTransactions, isTransactionRecent } from 'store/transactions/hooks';
 import { TransactionDetails } from 'store/transactions/reducer';
 import { useThisAccountUrl } from '../../hooks/useUrlGenerator';

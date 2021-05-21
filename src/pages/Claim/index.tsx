@@ -4,7 +4,7 @@ import {
   Card
 } from 'react-bootstrap';
 
-import View from 'components/View';
+import Layout from 'parts/Layout';
 import { useDistributors } from 'hooks/useNetwork';
 import { DistributorDetails } from 'utils/constants';
 import ClaimDistributor from 'components/ClaimDistributor';
@@ -13,7 +13,7 @@ const Claim = (): JSX.Element => {
   const distributors = useDistributors();
 
   return (
-    <View>
+    <Layout>
       <Container>
         <Card className='mt-5'>
           {distributors.map(
@@ -23,7 +23,7 @@ const Claim = (): JSX.Element => {
           )}
         </Card>
       </Container>
-    </View>
+    </Layout>
   );
 };
 
