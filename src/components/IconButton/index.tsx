@@ -1,6 +1,7 @@
 
 import clsx from 'clsx';
 
+import ImpermaxButtonBase, { Props as ImpermaxButtonBaseProps } from 'components/UI/ImpermaxButtonBase';
 import { ReactComponent as SpinIcon } from 'assets/images/icons/spin.svg';
 
 type CustomProps = {
@@ -9,41 +10,38 @@ type CustomProps = {
 
 const IconButton = ({
   children,
+  disabled = false,
   pending = false,
   className,
   ...rest
-}: Props): JSX.Element => (
-  <button
-    className={clsx(
-      'rounded-full',
-      'grid',
-      'place-items-center',
-      'hover:bg-black',
-      'hover:bg-opacity-5',
-      'dark:hover:bg-white',
-      'dark:hover:bg-opacity-10',
-      'transition-colors',
-      'focus:outline-none',
-      'focus:ring',
-      'focus:border-primary-300',
-      'focus:ring-primary-200',
-      'focus:ring-opacity-50',
-      { 'cursor-wait pointer-events-none':
-        pending },
-      className
-    )}
-    {...rest}>
-    {pending ? (
-      <SpinIcon
-        className={clsx(
-          'animate-spin',
-          'w-5',
-          'h-5'
-        )} />
-    ) : children}
-  </button>
-);
+}: Props): JSX.Element => {
+  const disabledOrPending = disabled || pending;
 
-export type Props = CustomProps & React.ComponentPropsWithRef<'button'>;
+  return (
+    <ImpermaxButtonBase
+      className={clsx(
+        'rounded-full',
+        'justify-center',
+        'hover:bg-black',
+        'hover:bg-opacity-5',
+        'dark:hover:bg-white',
+        'dark:hover:bg-opacity-10',
+        className
+      )}
+      disabled={disabledOrPending}
+      {...rest}>
+      {pending ? (
+        <SpinIcon
+          className={clsx(
+            'animate-spin',
+            'w-5',
+            'h-5'
+          )} />
+      ) : children}
+    </ImpermaxButtonBase>
+  );
+};
+
+export type Props = CustomProps & ImpermaxButtonBaseProps;
 
 export default IconButton;
