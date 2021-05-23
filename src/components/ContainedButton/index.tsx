@@ -1,13 +1,12 @@
 
-// ray test touch <
 import clsx from 'clsx';
 
+import ImpermaxButtonBase from 'components/UI/ImpermaxButtonBase';
+
 const ContainedButton = (): JSX.Element => (
-  <button
+  <ImpermaxButtonBase
     type='button'
     className={clsx(
-      'inline-flex',
-      'items-center',
       'px-4',
       'py-2',
       'border',
@@ -17,16 +16,11 @@ const ContainedButton = (): JSX.Element => (
       'rounded-md',
       'shadow-sm',
       'text-white',
-      'bg-indigo-600',
-      'hover:bg-indigo-700',
-      'focus:outline-none',
-      'focus:ring-2',
-      'focus:ring-offset-2',
-      'focus:ring-indigo-500'
+      'bg-impermaxJade-600',
+      'hover:bg-impermaxJade-700'
     )}>
-    Button text
-  </button>
+    ContainedButton
+  </ImpermaxButtonBase>
 );
 
 export default ContainedButton;
-// ray test touch >

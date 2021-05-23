@@ -52,7 +52,15 @@ module.exports = {
           DEFAULT: IMPERMAX_BLACK_HAZE[500]
         },
         impermaxJade: {
-          DEFAULT: IMPERMAX_JADE[500]
+          50: IMPERMAX_JADE[50],
+          100: IMPERMAX_JADE[100],
+          200: IMPERMAX_JADE[200],
+          300: IMPERMAX_JADE[300],
+          400: IMPERMAX_JADE[400],
+          DEFAULT: IMPERMAX_JADE[500],
+          600: IMPERMAX_JADE[600],
+          700: IMPERMAX_JADE[700],
+          800: IMPERMAX_JADE[800]
         },
         impermaxCarnation: {
           DEFAULT: IMPERMAX_CARNATION[500]
