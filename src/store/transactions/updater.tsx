@@ -4,7 +4,6 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
-import useInterval from 'use-interval';
 import { useWeb3React } from '@web3-react/core';
 import {
   Web3Provider,
@@ -57,18 +56,42 @@ const Updater = (): null => {
 
   const transactions = state[chainId];
 
-  const [blockNumber, setBlockNumber] = React.useState<number>();
-  useInterval(async () => {
+  const [blockNumber, setBlockNumber] = React.useState<number | null>();
+  // ray test touch <
+  React.useEffect(() => {
     if (!library) return;
+    if (!chainId) return;
 
-    try {
-      const theBlockNumber = await library.getBlockNumber();
+    let stale = false;
 
-      setBlockNumber(theBlockNumber);
-    } catch (error) {
-      console.log('[Updater useInterval] error.message => ', error.message);
-    }
-  }, 3000);
+    library
+      .getBlockNumber()
+      .then((blockNumber: number) => {
+        if (!stale) {
+          setBlockNumber(blockNumber);
+        }
+      })
+      .catch(() => {
+        if (!stale) {
+          setBlockNumber(null);
+        }
+      });
+
+    const updateBlockNumber = (blockNumber: number) => {
+      setBlockNumber(blockNumber);
+    };
+    library.on('block', updateBlockNumber);
+
+    return () => {
+      stale = true;
+      library.removeListener('block', updateBlockNumber);
+      setBlockNumber(undefined);
+    };
+  }, [
+    library,
+    chainId
+  ]); // ensures refresh if referential identity of library doesn't change across chainIds
+  // ray test touch >
 
   React.useEffect(() => {
     if (!library) return;
@@ -103,7 +126,7 @@ const Updater = (): null => {
               dispatch(checkedTransaction({
                 chainId,
                 hash,
-                blockNumber: blockNumber
+                blockNumber
               }));
             }
           })
@@ -120,10 +143,6 @@ const Updater = (): null => {
   ]);
 
   return null;
-};
-
-export {
-  shouldCheck
 };
 
 export default Updater;
