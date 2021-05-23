@@ -6,6 +6,7 @@ import clsx from 'clsx';
 
 import ConnectedWalletButtonComponent from './ConnectedWalletButtonComponent';
 import ErrorModal from 'components/ErrorModal';
+import JadeContainedButton from 'components/JadeContainedButton';
 import useEagerConnect from 'utils/hooks/web3/use-eager-connect';
 import useInactiveListener from 'utils/hooks/web3/use-inactive-listener';
 import { injected } from 'utils/helpers/web3/connectors';
@@ -53,7 +54,7 @@ const WalletConnect = (): JSX.Element => {
     deactivate();
   };
 
-  // TODO: should improve the UI/UX
+  // ray test touch <
   return (
     <>
       <div
@@ -66,31 +67,18 @@ const WalletConnect = (): JSX.Element => {
         {account && (
           <ConnectedWalletButtonComponent account={account} />
         )}
-        {/* ray test touch < */}
         {(active || error) ? (
-          <button
-            className={clsx(
-              'border',
-              'text-white'
-            )}
+          <JadeContainedButton
             onClick={handleDeactivate}>
-            Unconnect
-          </button>
+            Disconnect Wallet
+          </JadeContainedButton>
         ) : (
-          <button
-            className={clsx(
-              'border',
-              'text-white'
-            )}
+          <JadeContainedButton
             disabled={connectDisabled || activating}
             onClick={handleActivate}>
-            <div className='space-x-1'>
-              {connected && <span>✅</span>}
-              <span>{connected ? 'Connected' : 'Connect'}</span>
-            </div>
-          </button>
+            Connect Wallet
+          </JadeContainedButton>
         )}
-        {/* ray test touch > */}
       </div>
       {!!error && (
         <ErrorModal
@@ -101,6 +89,7 @@ const WalletConnect = (): JSX.Element => {
       )}
     </>
   );
+  // ray test touch >
 };
 
 export default WalletConnect;
