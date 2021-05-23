@@ -10,7 +10,7 @@ interface CustomProps {
   pending?: boolean;
 }
 
-const ContainedButton = ({
+const JadeContainedButton = ({
   className,
   children,
   startIcon,
@@ -63,4 +63,4 @@ const ContainedButton = ({
 
 export type Props = CustomProps & ImpermaxButtonBaseProps;
 
-export default ContainedButton;
+export default JadeContainedButton;
