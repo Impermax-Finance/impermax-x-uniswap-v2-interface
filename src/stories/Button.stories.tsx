@@ -1,5 +1,4 @@
 /* eslint-disable import/exports-last */
-import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
 import { Button, ButtonProps } from './Button';

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button } from './Button';
-import './header.css';
+// import './header.css';
 
 export interface HeaderProps {
   // eslint-disable-next-line @typescript-eslint/ban-types
