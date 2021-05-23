@@ -4,12 +4,14 @@ import {
   Meta
 } from '@storybook/react';
 
-import ContainedButton from './';
+import ContainedButton, { Props } from './';
 
-const Template: Story = args => <ContainedButton {...args} />;
+const Template: Story<Props> = args => <ContainedButton {...args} />;
 
 const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  children: 'ContainedButton'
+};
 
 export {
   Default
