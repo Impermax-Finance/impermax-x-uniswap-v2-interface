@@ -57,7 +57,7 @@ const Updater = (): null => {
   const transactions = state[chainId];
 
   const [blockNumber, setBlockNumber] = React.useState<number | null>();
-  // ray test touch <
+  // TODO: should use just one `React.useEffect`
   React.useEffect(() => {
     if (!library) return;
     if (!chainId) return;
@@ -91,8 +91,6 @@ const Updater = (): null => {
     library,
     chainId
   ]); // ensures refresh if referential identity of library doesn't change across chainIds
-  // ray test touch >
-
   React.useEffect(() => {
     if (!library) return;
     if (!chainId) return;
