@@ -14,8 +14,6 @@ const ButtonGroup = ({
       'inline-flex',
       'shadow-sm',
       'rounded-md',
-      'divide-x',
-      'divide-gray-300',
       className
     )}
     {...rest} />
@@ -45,7 +43,7 @@ const JadeButtonGroupItem = ({
         'focus:ring-opacity-50',
 
         'border',
-        'border-transparent',
+        'border-gray-300',
         'font-medium',
         'shadow-sm',
         'text-white',
@@ -57,6 +55,7 @@ const JadeButtonGroupItem = ({
         'px-4',
         'py-2',
         'text-sm',
+        '-ml-px',
         className
       )}
       disabled={disabledOrPending}
