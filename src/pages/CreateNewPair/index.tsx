@@ -7,17 +7,18 @@ import {
   useEffect,
   useState
 } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 import {
   Container,
   Card,
   Row,
   Col
 } from 'react-bootstrap';
-import { useWallet } from 'use-wallet';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import View from 'components/View';
+import Layout from 'parts/Layout';
 import InteractionButton, { ButtonState } from 'components/InteractionButton';
 import {
   useIsValidPair,
@@ -61,11 +62,12 @@ const CreateNewPair = (): JSX.Element => {
 
   const stepClassName = (n: number) => stepSelected === n ? 'step selected' : stepSelected > n ? 'step done' : 'step todo';
 
-  const { account } = useWallet();
-  if (!account) return (<View>{}</View>);
+  const { account } = useWeb3React<Web3Provider>();
+
+  if (!account) return (<Layout>{}</Layout>);
 
   return (
-    <View>
+    <Layout>
       <Container className='create-new-pair'>
         <Card className='mt-4 p-4'>
           <Row className='steps'>
@@ -163,7 +165,7 @@ const CreateNewPair = (): JSX.Element => {
           )}
         </Card>
       </Container>
-    </View>
+    </Layout>
   );
 };
 

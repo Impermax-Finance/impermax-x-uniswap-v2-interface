@@ -1,6 +1,13 @@
 import React, { createContext } from 'react';
 import Subgraph from '../subgraph';
-import { useChainId, useImpermaxSubgraphUrl, useWETH, useIMX, useUniswapV2FactoryAddress } from '../hooks/useNetwork';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
+import {
+  useImpermaxSubgraphUrl,
+  useWETH,
+  useIMX,
+  useUniswapV2FactoryAddress
+} from '../hooks/useNetwork';
 
 export interface SubgraphContextI {
   subgraph?: Subgraph;
@@ -9,7 +16,7 @@ export interface SubgraphContextI {
 export const SubgraphContext = createContext<SubgraphContextI>({});
 
 export const SubgraphProvider: React.FC = ({ children }) => {
-  const chainId = useChainId();
+  const { chainId = 0 } = useWeb3React<Web3Provider>();
   const impermaxSubgraphUrl = useImpermaxSubgraphUrl();
   const WETH = useWETH();
   const IMX = useIMX();

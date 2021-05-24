@@ -2,23 +2,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { Web3ReactProvider } from '@web3-react/core';
 
+import App from './App';
+import getLibrary from 'utils/helpers/web3/get-library';
 import LanguageProvider from 'contexts/LanguageProvider';
 import NetworkProvider from 'contexts/NetworkProvider';
-import App from './App';
 import store from './store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <NetworkProvider>
-        <LanguageProvider>
-          <App />
-        </LanguageProvider>
-      </NetworkProvider>
-    </Provider>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <Provider store={store}>
+        <NetworkProvider>
+          <LanguageProvider>
+            <App />
+          </LanguageProvider>
+        </NetworkProvider>
+      </Provider>
+    </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

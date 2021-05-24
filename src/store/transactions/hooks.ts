@@ -3,9 +3,16 @@
 // @ts-nocheck
 // TODO: >
 
-import { useCallback, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useWallet } from 'use-wallet';
+import {
+  useCallback,
+  useMemo
+} from 'react';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 
 import { AppDispatch, AppState } from '../index';
 import { addTransaction, clearAllTransactions } from './actions';
@@ -16,7 +23,10 @@ export function useTransactionAdder(): (
   response: {hash: string},
   customData?: { summary?: string; approval?: { tokenAddress: string; spender: string } },
 ) => void {
-  const { chainId, account } = useWallet();
+  const {
+    chainId,
+    account
+  } = useWeb3React<Web3Provider>();
   const dispatch = useDispatch<AppDispatch>();
 
   return useCallback(
@@ -42,7 +52,7 @@ export function useTransactionAdder(): (
 
 // returns all the transactions for the current chain
 export function useAllTransactions(): { [txHash: string]: TransactionDetails } {
-  const { chainId } = useWallet();
+  const { chainId } = useWeb3React<Web3Provider>();
   const state = useSelector<AppState, AppState['transactions']>(state => state.transactions);
 
   return chainId ? state[chainId] ?? {} : {};
@@ -100,8 +110,10 @@ export function useHasPendingApproval(
 }
 
 export function useClearAllTransactions(): { clearAllTransactions: () => void } {
-  const { chainId } = useWallet();
+  const { chainId } = useWeb3React<Web3Provider>();
+
   const dispatch = useDispatch<AppDispatch>();
+
   return {
     clearAllTransactions: useCallback(() => dispatch(clearAllTransactions({ chainId })), [
       dispatch

@@ -2,7 +2,7 @@
 import { useParams } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
-import View from 'components/View';
+import Layout from 'parts/Layout';
 import PairAddressContext from 'contexts/PairAddress';
 import LendingPoolPage from 'components/LendingPoolPage';
 
@@ -13,13 +13,13 @@ const LendingPool = (): JSX.Element => {
   // useInterval(() => doUpdate(), 60000);
 
   return (
-    <View>
+    <Layout>
       <Container className='lending-pool'>
         <PairAddressContext.Provider value={uniswapV2PairAddress}>
           <LendingPoolPage />
         </PairAddressContext.Provider>
       </Container>
-    </View>
+    </Layout>
   );
 };
 

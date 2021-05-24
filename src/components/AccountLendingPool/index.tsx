@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Card } from 'react-bootstrap';
-import { useWallet } from 'use-wallet';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 import Button from 'react-bootstrap/Button';
-import './index.scss';
+
+import { injected } from 'utils/helpers/web3/connectors';
 import { useRouterAccount } from '../../hooks/useImpermaxRouter';
 import { PoolTokenType } from '../../impermax-router/interfaces';
 import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
@@ -14,6 +16,7 @@ import AccountLendingPoolDetailsLeverage from './AccountLendingPoolDetailsLevera
 import AccountLendingPoolDetailsEarnInterest from './AccountLendingPoolDetailsEarnInterest';
 import { useDepositedUSD, useSuppliedUSD } from '../../hooks/useData';
 import AccountLendingPoolFarming from './AccountLendingPoolFarming';
+import './index.scss';
 
 interface AccountLendingPoolContainerProps {
   children: any;
@@ -44,7 +47,10 @@ export enum AccountLendingPoolPage {
 }
 
 export default function AccountLendingPool(): JSX.Element {
-  const { connect, account } = useWallet();
+  const {
+    activate,
+    account
+  } = useWeb3React<Web3Provider>();
   const routerAccount = useRouterAccount();
 
   const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
@@ -62,9 +68,11 @@ export default function AccountLendingPool(): JSX.Element {
         <div className='text-center py-5'>
           <Button
             onClick={() => {
-              connect('injected');
+              // TODO: should handle properly
+              activate(injected);
             }}
-            className='button-green'>Connect to use the App
+            className='button-green'>
+            Connect to use the App
           </Button>
         </div>
       </AccountLendingPoolContainer>

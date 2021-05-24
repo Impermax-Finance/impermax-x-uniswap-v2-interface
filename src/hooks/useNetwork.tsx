@@ -3,24 +3,9 @@ import { useContext } from 'react';
 
 import { NetworkContext } from 'contexts/NetworkProvider';
 
-export function useNetworkName() {
-  const { networkName } = useContext(NetworkContext);
-  return networkName;
-}
-
-export function useChainId() {
-  const { chainId } = useContext(NetworkContext);
-  return chainId;
-}
-
 export function useImpermaxSubgraphUrl() {
   const { impermaxSubgraphUrl } = useContext(NetworkContext);
   return impermaxSubgraphUrl;
-}
-
-export function useNetworkUrl() {
-  const { networkUrl } = useContext(NetworkContext);
-  return networkUrl;
 }
 
 export function useIMX() {

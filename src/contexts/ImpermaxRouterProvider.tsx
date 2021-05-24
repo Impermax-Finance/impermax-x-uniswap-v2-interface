@@ -8,7 +8,8 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import { useWallet } from 'use-wallet';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 
 import ImpermaxRouter from 'impermax-router';
 import useWeb3 from 'hooks/useWeb3';
@@ -17,7 +18,6 @@ import {
   useWETH,
   useFactoryAddress,
   useSimpleUniswapOracleAddress,
-  useChainId,
   useAirdropUrl,
   useIMX,
   useMerkleDistributorAddress,
@@ -40,9 +40,11 @@ export interface ImpermaxRouterContextI {
 export const ImpermaxRouterContext = createContext<ImpermaxRouterContextI>({});
 
 export const ImpermaxRouterProvider: React.FC = ({ children }) => {
-  const { account } = useWallet();
+  const {
+    account,
+    chainId
+  } = useWeb3React<Web3Provider>();
   const web3 = useWeb3();
-  const chainId = useChainId();
   const subgraph = useSubgraph();
   const routerAddress = useRouterAddress();
   const factoryAddress = useFactoryAddress();

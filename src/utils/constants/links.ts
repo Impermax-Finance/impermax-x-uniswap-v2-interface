@@ -1,4 +1,8 @@
 
+const PARAMETERS = Object.freeze({
+  ACCOUNT: 'account'
+});
+
 const PAGES = Object.freeze({
   home: {
     value: 'Markets',
@@ -10,7 +14,7 @@ const PAGES = Object.freeze({
   },
   account: {
     value: 'Account',
-    to: '/account/:account'
+    to: `/account/:${PARAMETERS.ACCOUNT}`
   },
   createNewPair: {
     value: 'Create New Pair',
@@ -31,5 +35,6 @@ const PAGES = Object.freeze({
 });
 
 export {
+  PARAMETERS,
   PAGES
 };

@@ -1,0 +1,32 @@
+
+import clsx from 'clsx';
+
+interface CustomProps {
+  disabled?: boolean;
+}
+
+const ImpermaxButtonBase = ({
+  disabled = false,
+  className,
+  children,
+  ...rest
+}: Props): JSX.Element => (
+  <button
+    className={clsx(
+      'select-none',
+      'transition-colors',
+      'inline-flex',
+      'items-center',
+      'text-center',
+      { 'text-black text-opacity-25 dark:text-white dark:text-opacity-30 pointer-events-none':
+        disabled },
+      className
+    )}
+    {...rest}>
+    {children}
+  </button>
+);
+
+export type Props = CustomProps & React.ComponentPropsWithRef<'button'>;
+
+export default ImpermaxButtonBase;

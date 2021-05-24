@@ -39,7 +39,7 @@ import * as account from './account';
 import * as imx from './imx';
 import Subgraph from 'subgraph';
 
-export default class ImpermaxRouter {
+class ImpermaxRouter {
   subgraph: Subgraph;
   web3: any;
   chainId: number;
@@ -269,3 +269,5 @@ export default class ImpermaxRouter {
   public claimDistributor = interactions.claimDistributor;
   public createNewPair = interactions.createNewPair;
 }
+
+export default ImpermaxRouter;
