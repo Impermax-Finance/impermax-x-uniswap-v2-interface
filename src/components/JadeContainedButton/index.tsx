@@ -25,6 +25,12 @@ const JadeContainedButton = ({
     <ImpermaxButtonBase
       type='button'
       className={clsx(
+        'focus:outline-none',
+        'focus:ring',
+        'focus:border-primary-300',
+        'focus:ring-primary-200',
+        'focus:ring-opacity-50',
+
         'border',
         'border-transparent',
         'font-medium',

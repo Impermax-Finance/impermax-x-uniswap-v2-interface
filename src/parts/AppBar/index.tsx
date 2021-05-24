@@ -29,43 +29,41 @@ const AppBar = (): JSX.Element => {
 
   // ray test touch <
   return (
-    <>
-      <Navbar>
-        <Container>
-          <Navbar.Brand>
-            <a
-              href='https://impermax.finance/'
-              target='_blank'
-              rel='noopener noreferrer'>
-              <img
-                className={clsx(
-                  'impermax-brand',
-                  'inline-block'
-                )}
-                src='/assets/impermax.png'
-                alt='impermax' />
-            </a>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Nav className='mr-auto'>
-            <NavigationBarLink appRoute={PAGES.home} />
-            {accountPageURL && (
-              <NavigationBarLink appRoute={{ value: 'Dashboard', to: accountPageURL }} />
-            )}
-            <NavigationBarLink
-              appRoute={PAGES.userGuide}
-              target='_blank' />
-            {chainId === CHAIN_IDS.ETHEREUM_MAIN_NET && (
-              <NavigationBarLink appRoute={PAGES.risks} />
-            )}
-          </Nav>
-          {hasClaimableAirdrop && (
-            <ClaimAirdrop />
+    <Navbar>
+      <Container>
+        <Navbar.Brand>
+          <a
+            href='https://impermax.finance/'
+            target='_blank'
+            rel='noopener noreferrer'>
+            <img
+              className={clsx(
+                'impermax-brand',
+                'inline-block'
+              )}
+              src='/assets/impermax.png'
+              alt='impermax' />
+          </a>
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls='basic-navbar-nav' />
+        <Nav className='mr-auto'>
+          <NavigationBarLink appRoute={PAGES.home} />
+          {accountPageURL && (
+            <NavigationBarLink appRoute={{ value: 'Dashboard', to: accountPageURL }} />
           )}
-          <WalletConnect />
-        </Container>
-      </Navbar>
-    </>
+          <NavigationBarLink
+            appRoute={PAGES.userGuide}
+            target='_blank' />
+          {chainId === CHAIN_IDS.ETHEREUM_MAIN_NET && (
+            <NavigationBarLink appRoute={PAGES.risks} />
+          )}
+        </Nav>
+        {hasClaimableAirdrop && (
+          <ClaimAirdrop />
+        )}
+        <WalletConnect />
+      </Container>
+    </Navbar>
   );
   // ray test touch >
 };

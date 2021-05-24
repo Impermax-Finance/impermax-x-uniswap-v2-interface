@@ -20,6 +20,12 @@ const IconButton = ({
   return (
     <ImpermaxButtonBase
       className={clsx(
+        'focus:outline-none',
+        'focus:ring',
+        'focus:border-primary-300',
+        'focus:ring-primary-200',
+        'focus:ring-opacity-50',
+
         'rounded-full',
         'justify-center',
         'hover:bg-black',

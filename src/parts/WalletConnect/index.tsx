@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
-import ConnectedWalletButtonComponent from './ConnectedWalletButtonComponent';
+import ConnectedWalletInfo from './ConnectedWalletInfo';
 import ErrorModal from 'components/ErrorModal';
 import JadeContainedButton from 'components/JadeContainedButton';
 import useEagerConnect from 'utils/hooks/web3/use-eager-connect';
@@ -54,18 +54,16 @@ const WalletConnect = (): JSX.Element => {
     deactivate();
   };
 
-  // ray test touch <
   return (
     <>
       <div
         className={clsx(
           'flex',
           'items-center',
-          'space-x-2',
-          'mx-1'
+          'space-x-2'
         )}>
         {account && (
-          <ConnectedWalletButtonComponent account={account} />
+          <ConnectedWalletInfo account={account} />
         )}
         {(active || error) ? (
           <JadeContainedButton
@@ -89,7 +87,6 @@ const WalletConnect = (): JSX.Element => {
       )}
     </>
   );
-  // ray test touch >
 };
 
 export default WalletConnect;
