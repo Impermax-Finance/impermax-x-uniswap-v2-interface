@@ -1,84 +1,46 @@
 
-// ray test touch <
 import clsx from 'clsx';
 
-const ButtonGroup = (): JSX.Element => (
-  <span className='relative z-0 inline-flex shadow-sm rounded-md'>
-    <button
-      type='button'
-      className={clsx(
-        'relative',
-        'inline-flex',
-        'items-center',
-        'px-4',
-        'py-2',
-        'rounded-l-md',
-        'border',
-        'border-gray-300',
-        'bg-white',
-        'text-sm',
-        'font-medium',
-        'text-gray-700',
-        'hover:bg-gray-50',
-        'focus:z-10',
-        'focus:outline-none',
-        'focus:ring-1',
-        'focus:ring-indigo-500',
-        'focus:border-indigo-500'
-      )}>
-      Years
-    </button>
-    <button
-      type='button'
-      className={clsx(
-        '-ml-px',
-        'relative',
-        'inline-flex',
-        'items-center',
-        'px-4',
-        'py-2',
-        'border',
-        'border-gray-300',
-        'bg-white',
-        'text-sm',
-        'font-medium',
-        'text-gray-700',
-        'hover:bg-gray-50',
-        'focus:z-10',
-        'focus:outline-none',
-        'focus:ring-1',
-        'focus:ring-indigo-500',
-        'focus:border-indigo-500'
-      )}>
-      Months
-    </button>
-    <button
-      type='button'
-      className={clsx(
-        '-ml-px',
-        'relative',
-        'inline-flex',
-        'items-center',
-        'px-4',
-        'py-2',
-        'rounded-r-md',
-        'border',
-        'border-gray-300',
-        'bg-white',
-        'text-sm',
-        'font-medium',
-        'text-gray-700',
-        'hover:bg-gray-50',
-        'focus:z-10',
-        'focus:outline-none',
-        'focus:ring-1',
-        'focus:ring-indigo-500',
-        'focus:border-indigo-500'
-      )}>
-      Days
-    </button>
-  </span>
+import ImpermaxButtonBase, { Props as ImpermaxButtonBaseProps } from 'components/UI/ImpermaxButtonBase';
+
+const ButtonGroup = ({
+  className,
+  ...rest
+}: React.ComponentPropsWithRef<'span'>): JSX.Element => (
+  <span
+    className={clsx(
+      'z-0',
+      'inline-flex',
+      'shadow-sm',
+      'rounded-md',
+      'divide-x',
+      'divide-gray-300',
+      className
+    )}
+    {...rest} />
 );
 
+const JadeButtonGroupItem = ({
+  className,
+  ...rest
+}: ImpermaxButtonBaseProps): JSX.Element => (
+  <ImpermaxButtonBase
+    type='button'
+    className={clsx(
+      'px-4',
+      'py-2',
+      'first:rounded-l-md',
+      'last:rounded-r-md',
+      'text-white',
+      'bg-impermaxJade-600',
+      'hover:bg-impermaxJade-700',
+      className
+    )}
+    {...rest} />
+);
+
+export {
+  JadeButtonGroupItem
+};
+
 export default ButtonGroup;
-// ray test touch >
