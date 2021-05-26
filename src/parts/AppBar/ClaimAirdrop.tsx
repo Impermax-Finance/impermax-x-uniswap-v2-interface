@@ -3,6 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
+// ray test touch <
 import { Button } from 'react-bootstrap';
 import { useAirdropData } from '../../hooks/useData';
 import { formatAmount } from '../../utils/format';
@@ -30,3 +31,4 @@ export function ClaimAirdrop(): JSX.Element {
     </>
   );
 }
+// ray test touch >

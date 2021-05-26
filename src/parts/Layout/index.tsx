@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import AppBar from 'parts/AppBar';
 import Footer from 'parts/Footer';
-import './index.scss';
 
 interface Props {
   children: React.ReactNode;
