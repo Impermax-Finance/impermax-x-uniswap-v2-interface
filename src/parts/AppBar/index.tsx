@@ -44,7 +44,7 @@ const AppBar = ({
           path: PAGES.home.to,
           strict: true
         })
-      )
+      )?.isExact
     },
     {
       title: 'Dashboard',
@@ -55,7 +55,7 @@ const AppBar = ({
           path: PAGES.account.to,
           strict: true
         })
-      )
+      )?.isExact
     },
     {
       title: 'User Guide',
@@ -66,7 +66,7 @@ const AppBar = ({
           path: PAGES.userGuide.to,
           strict: true
         })
-      )
+      )?.isExact
     },
     {
       title: 'Risks',
@@ -77,7 +77,7 @@ const AppBar = ({
           path: PAGES.risks.to,
           strict: true
         })
-      )
+      )?.isExact
     }
   ];
 

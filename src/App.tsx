@@ -40,11 +40,6 @@ const App = (): JSX.Element => {
             <ImpermaxRouterProvider>
               <Router>
                 <Switch>
-                  <Route
-                    path={PAGES.home.to}
-                    exact>
-                    <Home />
-                  </Route>
                   <Route path={PAGES.createNewPair.to}>
                     <CreateNewPair />
                   </Route>
@@ -60,6 +55,7 @@ const App = (): JSX.Element => {
                   <Route path={PAGES.risks.to}>
                     <Risks />
                   </Route>
+                  {/* ray test touch < */}
                   <Route
                     path={PAGES.userGuide.to}
                     component={() => {
@@ -67,6 +63,12 @@ const App = (): JSX.Element => {
                       window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
                       return null;
                     }} />
+                  {/* ray test touch > */}
+                  <Route
+                    path={PAGES.home.to}
+                    exact>
+                    <Home />
+                  </Route>
                 </Switch>
               </Router>
             </ImpermaxRouterProvider>
