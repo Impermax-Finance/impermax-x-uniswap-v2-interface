@@ -22,9 +22,7 @@ const Layout = ({
     )}
     {...rest}>
     <AppBar
-      style={{
-        height: LAYOUT.appBarHeight
-      }}
+      appBarHeight={LAYOUT.appBarHeight}
       className={clsx(
         'fixed',
         'top-0',

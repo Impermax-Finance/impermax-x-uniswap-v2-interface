@@ -22,10 +22,15 @@ import {
   PARAMETERS
 } from 'utils/constants/links';
 
+interface CustomProps {
+  appBarHeight: number;
+}
+
 const AppBar = ({
+  appBarHeight,
   className,
   ...rest
-}: React.ComponentPropsWithRef<'nav'>): JSX.Element => {
+}: CustomProps & React.ComponentPropsWithRef<'nav'>): JSX.Element => {
   const {
     chainId,
     account
@@ -101,12 +106,10 @@ const AppBar = ({
               'lg:px-8'
             )}>
             <div
+              style={{ height: appBarHeight }}
               className={clsx(
                 'flex',
-                'justify-between',
-                // ray test touch <
-                'h-20'
-                // ray test touch >
+                'justify-between'
               )}>
               <div className='flex'>
                 <div
