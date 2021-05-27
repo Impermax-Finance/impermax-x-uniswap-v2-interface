@@ -12,7 +12,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
-import { ClaimAirdrop } from './ClaimAirdrop';
+import ClaimAirdrop from './ClaimAirdrop';
 import WalletConnect from 'parts/WalletConnect';
 import { CHAIN_IDS } from 'config/web3/blockchain';
 import { ReactComponent as ImpermaxLogoIcon } from 'assets/images/icons/impermax-logo.svg';
