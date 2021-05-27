@@ -1,71 +1,260 @@
 
 import {
-  Nav,
-  Navbar,
-  Container
-} from 'react-bootstrap';
+  NavLink,
+  useRouteMatch
+} from 'react-router-dom';
+import { Disclosure } from '@headlessui/react';
+import {
+  MenuIcon,
+  XIcon
+} from '@heroicons/react/outline';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
 import { ClaimAirdrop } from './ClaimAirdrop';
 import WalletConnect from 'parts/WalletConnect';
-import NavigationBarLink from 'components/NavigationBarLink';
-import { useHasClaimableAirdrop } from 'hooks/useData';
 import { CHAIN_IDS } from 'config/web3/blockchain';
+import { ReactComponent as ImpermaxLogoIcon } from 'assets/images/icons/impermax-logo.svg';
+import { useHasClaimableAirdrop } from 'hooks/useData';
 import {
   PAGES,
   PARAMETERS
 } from 'utils/constants/links';
 
-const AppBar = (): JSX.Element => {
+interface CustomProps {
+  appBarHeight: number;
+}
+
+const AppBar = ({
+  appBarHeight,
+  className,
+  ...rest
+}: CustomProps & React.ComponentPropsWithRef<'nav'>): JSX.Element => {
   const {
     chainId,
     account
   } = useWeb3React<Web3Provider>();
 
   const hasClaimableAirdrop = useHasClaimableAirdrop();
-  const accountPageURL = account && PAGES.account.to.replace(`:${PARAMETERS.ACCOUNT}`, account);
 
-  // ray test touch <
+  const NAVIGATION_ITEMS = [
+    {
+      title: 'Markets',
+      link: PAGES.home.to,
+      enabled: true,
+      matched: (
+        useRouteMatch({
+          path: PAGES.home.to,
+          strict: true
+        })
+      )?.isExact
+    },
+    {
+      title: 'Dashboard',
+      link: account ? PAGES.account.to.replace(`:${PARAMETERS.ACCOUNT}`, account) : '',
+      enabled: !!account,
+      matched: (
+        useRouteMatch({
+          path: PAGES.account.to,
+          strict: true
+        })
+      )?.isExact
+    },
+    {
+      title: 'User Guide',
+      link: PAGES.userGuide.to,
+      enabled: true,
+      matched: (
+        useRouteMatch({
+          path: PAGES.userGuide.to,
+          strict: true
+        })
+      )?.isExact
+    },
+    {
+      title: 'Risks',
+      link: PAGES.risks.to,
+      enabled: chainId === CHAIN_IDS.ETHEREUM_MAIN_NET,
+      matched: (
+        useRouteMatch({
+          path: PAGES.risks.to,
+          strict: true
+        })
+      )?.isExact
+    }
+  ];
+
   return (
-    <Navbar>
-      <Container>
-        <Navbar.Brand>
-          <a
-            href='https://impermax.finance/'
-            target='_blank'
-            rel='noopener noreferrer'>
-            <img
+    <Disclosure
+      as='nav'
+      className={clsx(
+        'bg-impermaxBlackHaze',
+        'shadow',
+        className
+      )}
+      {...rest}>
+      {({ open }) => (
+        <>
+          <div
+            className={clsx(
+              'max-w-7xl',
+              'mx-auto',
+              'px-4',
+              'sm:px-6',
+              'lg:px-8'
+            )}>
+            <div
+              style={{ height: appBarHeight }}
               className={clsx(
-                'impermax-brand',
-                'inline-block'
-              )}
-              src='/assets/impermax.png'
-              alt='impermax' />
-          </a>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls='basic-navbar-nav' />
-        <Nav className='mr-auto'>
-          <NavigationBarLink appRoute={PAGES.home} />
-          {accountPageURL && (
-            <NavigationBarLink appRoute={{ value: 'Dashboard', to: accountPageURL }} />
-          )}
-          <NavigationBarLink
-            appRoute={PAGES.userGuide}
-            target='_blank' />
-          {chainId === CHAIN_IDS.ETHEREUM_MAIN_NET && (
-            <NavigationBarLink appRoute={PAGES.risks} />
-          )}
-        </Nav>
-        {hasClaimableAirdrop && (
-          <ClaimAirdrop />
-        )}
-        <WalletConnect />
-      </Container>
-    </Navbar>
+                'flex',
+                'justify-between'
+              )}>
+              <div className='flex'>
+                <div
+                  className={clsx(
+                    'flex-shrink-0',
+                    'flex',
+                    'items-center'
+                  )}>
+                  <NavLink to={PAGES.home.to}>
+                    <ImpermaxLogoIcon
+                      className='text-impermaxJade'
+                      width={42}
+                      height={39} />
+                  </NavLink>
+                </div>
+                <div
+                  className={clsx(
+                    'hidden',
+                    'sm:ml-6',
+                    'sm:flex',
+                    'sm:space-x-8'
+                  )}>
+                  {NAVIGATION_ITEMS.map(navigationItem => (
+                    navigationItem.enabled ? (
+                      <NavLink
+                        key={navigationItem.title}
+                        to={navigationItem.link}
+                        className={clsx(
+                          navigationItem.matched ?
+                            'border-impermaxAstral-500 text-textPrimary' :
+                            'border-transparent text-textSecondary hover:border-gray-300 hover:text-gray-700',
+                          'inline-flex',
+                          'items-center',
+                          'px-1',
+                          'pt-1',
+                          'border-b-2',
+                          'text-sm',
+                          'font-medium'
+                        )}>
+                        {navigationItem.title}
+                      </NavLink>
+                    ) : null
+                  ))}
+                </div>
+              </div>
+              <div
+                className={clsx(
+                  'hidden',
+                  'sm:ml-6',
+                  'sm:flex',
+                  'sm:items-center'
+                )}>
+                {hasClaimableAirdrop && (
+                  <ClaimAirdrop />
+                )}
+                <WalletConnect />
+              </div>
+              <div
+                className={clsx(
+                  '-mr-2',
+                  'flex',
+                  'items-center',
+                  'sm:hidden'
+                )}>
+                {/* Mobile menu button */}
+                <Disclosure.Button
+                  className={clsx(
+                    'inline-flex',
+                    'items-center',
+                    'justify-center',
+                    'p-2',
+                    'rounded-md',
+                    'text-gray-400',
+                    'hover:text-textSecondary',
+                    'hover:bg-gray-100',
+                    'focus:outline-none',
+                    'focus:ring-2',
+                    'focus:ring-inset',
+                    'focus:ring-impermaxAstral-500'
+                  )}>
+                  <span className='sr-only'>Open main menu</span>
+                  {open ? (
+                    <XIcon
+                      className={clsx(
+                        'block',
+                        'h-6',
+                        'w-6'
+                      )}
+                      aria-hidden='true' />
+                  ) : (
+                    <MenuIcon
+                      className={clsx(
+                        'block',
+                        'h-6',
+                        'w-6'
+                      )}
+                      aria-hidden='true' />
+                  )}
+                </Disclosure.Button>
+              </div>
+            </div>
+          </div>
+          <Disclosure.Panel className='sm:hidden'>
+            <div
+              className={clsx(
+                'pt-2',
+                'pb-3',
+                'space-y-1',
+                'bg-impermaxBlackHaze'
+              )}>
+              {NAVIGATION_ITEMS.map(navigationItem => (
+                navigationItem.enabled ? (
+                  <NavLink
+                    key={navigationItem.title}
+                    to={navigationItem.link}
+                    className={clsx(
+                      navigationItem.matched ?
+                        'bg-impermaxAstral-50 border-impermaxAstral-500 text-impermaxAstral-700' :
+                        // eslint-disable-next-line max-len
+                        'border-transparent text-textSecondary hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700',
+                      'block',
+                      'pl-3',
+                      'pr-4',
+                      'py-2',
+                      'border-l-4',
+                      'text-base',
+                      'font-medium'
+                    )}>
+                    {navigationItem.title}
+                  </NavLink>
+                ) : null
+              ))}
+            </div>
+            <div className='pt-4 pb-3 border-t border-gray-200'>
+              <div className='flex items-center px-4'>
+                {hasClaimableAirdrop && (
+                  <ClaimAirdrop />
+                )}
+                <WalletConnect />
+              </div>
+            </div>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
   );
-  // ray test touch >
 };
 
 export default AppBar;
