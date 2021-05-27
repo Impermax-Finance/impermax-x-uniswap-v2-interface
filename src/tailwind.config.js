@@ -100,6 +100,16 @@ module.exports = {
       },
       backgroundColor: {
         default: IMPERMAX_BLACK_HAZE[500]
+      },
+      // MEMO: inspired by https://material-ui.com/customization/default-theme/
+      zIndex: {
+        impermaxMobileStepper: 1000,
+        impermaxSpeedDial: 1050,
+        impermaxAppBar: 1100,
+        impermaxDrawer: 1200,
+        impermaxModal: 1300,
+        impermaxSnackbar: 1400,
+        impermaxTooltip: 1500
       }
     }
   },
