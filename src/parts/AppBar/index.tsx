@@ -38,7 +38,6 @@ const AppBar = ({
 
   const hasClaimableAirdrop = useHasClaimableAirdrop();
 
-  // TODO: should handle `match` case
   const NAVIGATION_ITEMS = [
     {
       title: 'Markets',
