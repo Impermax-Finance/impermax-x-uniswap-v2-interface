@@ -29,6 +29,7 @@ export function formatPercentage(n: number, decimals = 2) : string {
   return formatToDecimals(n * 100, decimals) + '%';
 }
 
+// TODO: could use https://formatjs.io/docs/react-intl/
 export function formatAmount(n: number) : string {
   if (!n || n === Infinity) return '0';
   if (n < 1000) return formatToDecimals(n, 2);
