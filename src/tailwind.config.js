@@ -1,4 +1,6 @@
 
+const colors = require('tailwindcss/colors');
+
 const IMPERMAX_BLACK_HAZE = Object.freeze({
   500: '#f5f6f7'
 });
@@ -100,6 +102,10 @@ module.exports = {
       },
       backgroundColor: {
         default: IMPERMAX_BLACK_HAZE[500]
+      },
+      textColor: {
+        textPrimary: colors.coolGray[900],
+        textSecondary: colors.coolGray[500]
       },
       // MEMO: inspired by https://material-ui.com/customization/default-theme/
       zIndex: {

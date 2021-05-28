@@ -1,5 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
+import { useMeasure } from 'react-use';
 
 import AppBar from 'parts/AppBar';
 import Footer from 'parts/Footer';
@@ -9,30 +10,45 @@ const Layout = ({
   children,
   className,
   ...rest
-}: React.ComponentPropsWithRef<'div'>): JSX.Element => (
-  <div
-    style={{
-      paddingTop: LAYOUT.appBarHeight
-    }}
-    className={clsx(
-      'bg-impermaxBlackHaze',
-      'relative',
-      'min-h-screen',
-      className
-    )}
-    {...rest}>
-    <AppBar
-      appBarHeight={LAYOUT.appBarHeight}
+}: React.ComponentPropsWithRef<'div'>): JSX.Element => {
+  const [ref, { height: footerHeight }] = useMeasure<HTMLDivElement>();
+
+  return (
+    <div
+      style={{
+        paddingTop: LAYOUT.appBarHeight
+      }}
       className={clsx(
-        'fixed',
-        'top-0',
-        'right-0',
-        'left-0',
-        'z-impermaxAppBar'
-      )} />
-    {children}
-    <Footer />
-  </div>
-);
+        'bg-impermaxBlackHaze',
+        'relative',
+        'min-h-screen',
+        className
+      )}
+      {...rest}>
+      <AppBar
+        appBarHeight={LAYOUT.appBarHeight}
+        className={clsx(
+          'fixed',
+          'top-0',
+          'right-0',
+          'left-0',
+          'z-impermaxAppBar'
+        )} />
+      <main
+        style={{
+          paddingBottom: footerHeight
+        }}>
+        {children}
+      </main>
+      <Footer
+        ref={ref}
+        className={clsx(
+          'absolute',
+          'bottom-0',
+          'w-full'
+        )} />
+    </div>
+  );
+};
 
 export default Layout;
