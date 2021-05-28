@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import { LendingPoolsTable } from './../LendingPoolsTable';
-import './index.scss';
 import { PAGES } from 'utils/constants/links';
 
 export function SearchForm(): JSX.Element {
@@ -29,7 +28,7 @@ export function SearchForm(): JSX.Element {
 
 export default function LendingPoolsSearch(): JSX.Element {
   return (
-    <div className='lending-pools-search'>
+    <div className='my-8'>
       <Container>
         <Row>
           <Col sm={12}>
