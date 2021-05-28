@@ -1,4 +1,5 @@
 
+const plugin = require('tailwindcss/plugin');
 const colors = require('tailwindcss/colors');
 
 const IMPERMAX_BLACK_HAZE = Object.freeze({
@@ -127,5 +128,17 @@ module.exports = {
       ]
     }
   },
-  plugins: []
+  plugins: [
+    plugin(function ({
+      addBase,
+      theme
+    }) {
+      // MEMO: inspired by https://tailwindcss.com/docs/adding-base-styles#using-a-plugin
+      addBase({
+        body: {
+          color: theme('textColor.textPrimary')
+        }
+      });
+    })
+  ]
 };
