@@ -35,9 +35,19 @@ const JadeContainedButton = ({
         'border-transparent',
         'font-medium',
         'shadow-sm',
-        'text-white',
-        'bg-impermaxJade-600',
-        'hover:bg-impermaxJade-700',
+
+        disabledOrPending ? clsx(
+          'bg-black',
+          'bg-opacity-10',
+          'text-black',
+          'text-opacity-25',
+          'dark:text-white',
+          'dark:text-opacity-30'
+        ) : clsx(
+          'text-white',
+          'bg-impermaxJade-600',
+          'hover:bg-impermaxJade-700'
+        ),
 
         'rounded-md',
         'px-4',
