@@ -12,6 +12,7 @@
     "chromaui",
     "clsx",
     "compat",
+    "componentize",
     "craco",
     "eqeqeq",
     "eslintignore",
@@ -30,6 +31,7 @@
     "npmjs",
     "popperjs",
     "reduxjs",
+    "semibold",
     "tailwindcss",
     "webfonts"
   ]

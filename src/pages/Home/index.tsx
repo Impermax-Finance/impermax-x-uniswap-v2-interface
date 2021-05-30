@@ -7,11 +7,9 @@ import CreateNewMarketButton from 'components/CreateNewMarketButton';
 const Home = (): JSX.Element => {
   return (
     <Layout>
-      <div>
-        <OverallStats />
-        <CreateNewMarketButton />
-        <LendingPoolsSearch />
-      </div>
+      <OverallStats />
+      <CreateNewMarketButton />
+      <LendingPoolsSearch />
     </Layout>
   );
 };
