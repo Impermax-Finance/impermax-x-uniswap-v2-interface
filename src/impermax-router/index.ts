@@ -90,7 +90,9 @@ class ImpermaxRouter {
 
   constructor(cfg: ImpermaxRouterCfg) {
     this.subgraph = cfg.subgraph;
+    // ray test touch <
     this.web3 = cfg.web3;
+    // ray test touch >
     this.chainId = cfg.chainId;
     this.uiMargin = 1.1;
     this.dust = 1.000001;
@@ -109,6 +111,7 @@ class ImpermaxRouter {
     this.claimableCache = {};
   }
 
+  // ray test touch <
   newRouter(address: Address) {
     return new this.web3.eth.Contract(Router01JSON.abi, address);
   }
@@ -145,7 +148,9 @@ class ImpermaxRouter {
   newClaimable(address: Address) {
     return new this.web3.eth.Contract(ClaimableJSON.abi, address);
   }
+  // ray test touch >
 
+  // ray test touch <
   unlockWallet(web3: any, account: Address) {
     this.web3 = web3;
     this.account = account;
@@ -154,6 +159,7 @@ class ImpermaxRouter {
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle._address);
     this.cleanCache();
   }
+  // ray test touch >
 
   cleanCache() {
     this.lendingPoolCache = {};

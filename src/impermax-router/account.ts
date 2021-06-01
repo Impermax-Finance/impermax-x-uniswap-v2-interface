@@ -19,6 +19,7 @@ export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress
   return cache.exchangeRate;
 }
 
+// ray test touch <
 // Available Balance
 export async function initializeAvailableBalance(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
@@ -27,6 +28,7 @@ export async function initializeAvailableBalance(this: ImpermaxRouter, uniswapV2
   const balance = await token.methods.balanceOf(this.account).call();
   return (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) / this.dust;
 }
+// ray test touch >
 export async function getAvailableBalance(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.availableBalance) cache.availableBalance = this.initializeAvailableBalance(uniswapV2PairAddress, poolTokenType);
