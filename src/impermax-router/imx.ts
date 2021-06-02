@@ -33,7 +33,8 @@ export async function getAirdropData(this: ImpermaxRouter) : Promise<AirdropData
 
 export async function hasClaimableAirdrop(this: ImpermaxRouter) : Promise<boolean> {
   const airdropData = await this.getAirdropData();
-  if (airdropData.amount) return true;
+  // TODO: double-check
+  if (airdropData?.amount) return true;
   return false;
 }
 

@@ -1,3 +1,4 @@
+
 import React, { createContext, useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { useWallet } from 'use-wallet';
@@ -8,12 +9,17 @@ const Web3Provider: React.FC = ({ children }) => {
   const [web3, setWeb3] = useState<any>();
 
   useEffect(() => {
+    if (!connect) return;
+
     if (ethereum) {
       setWeb3(new Web3(ethereum));
     } else {
       connect('injected');
     }
-  }, [ethereum]);
+  }, [
+    ethereum,
+    connect
+  ]);
 
   return <Web3Context.Provider value={{ web3 }}>{children}</Web3Context.Provider>;
 };

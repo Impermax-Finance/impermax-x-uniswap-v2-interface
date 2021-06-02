@@ -73,6 +73,22 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (!web3) return;
+
+    // TODO: double-check
+    if (!IMX) return;
+    if (!WETH) return;
+    if (!airdropUrl) return;
+    if (!chainId) return;
+    if (!claimAggregatorAddress) return;
+    if (!factoryAddress) return;
+    if (!merkleDistributorAddress) return;
+    // if (!impermaxRouter) return;
+    // if (!priceInverted) return;
+    if (!routerAddress) return;
+    if (!simpleUniswapOracleAddress) return;
+    if (!subgraph) return;
+    if (!uniswapV2FactoryAddress) return;
+
     if (!impermaxRouter) {
       const impermaxRouter = new ImpermaxRouter({
         subgraph,
@@ -100,7 +116,21 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     }
   }, [
     web3,
-    account
+    account,
+    // TODO: double-check
+    IMX,
+    WETH,
+    airdropUrl,
+    chainId,
+    claimAggregatorAddress,
+    factoryAddress,
+    impermaxRouter,
+    merkleDistributorAddress,
+    priceInverted,
+    routerAddress,
+    simpleUniswapOracleAddress,
+    subgraph,
+    uniswapV2FactoryAddress
   ]);
 
   return (

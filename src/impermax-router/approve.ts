@@ -105,6 +105,7 @@ export async function getPermitData(
   });
 
   // ray test touch <
+  // TODO: replace with https://docs.ethers.io/v5/api/signer/#Signer-signTypedData
   this.web3.currentProvider.send(
     {
       method: 'eth_signTypedData_v4',
