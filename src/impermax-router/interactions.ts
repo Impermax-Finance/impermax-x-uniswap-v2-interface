@@ -113,23 +113,41 @@ export async function borrow(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, onTransactionHash: Function) {
+export async function repay(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  amount: BigNumber,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   const [borrowable, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const deadline = this.getDeadline();
-  let send;
+
   try {
-    // eslint-disable-next-line eqeqeq
-    if (token._address == this.WETH) {
-      await this.router.methods.repayETH(borrowable._address, this.account, deadline).call({ from: this.account, value: amount });
-      send = this.router.methods.repayETH(borrowable._address, this.account, deadline).send({ from: this.account, value: amount });
+    if (token._address === this.WETH) {
+      // ray test touch <<
+      const overrides = { value: amount };
+      const tx = await this.router.repayETH(borrowable._address, this.account, deadline, overrides);
+      await tx.wait();
+      // await this.router.methods.repayETH(borrowable._address, this.account, deadline).call({ from: this.account, value: amount });
+      // send = this.router.methods.repayETH(borrowable._address, this.account, deadline).send({ from: this.account, value: amount });
+      // ray test touch >>
     } else {
-      await this.router.methods.repay(borrowable._address, amount, this.account, deadline).call({ from: this.account });
-      send = this.router.methods.repay(borrowable._address, amount, this.account, deadline).send({ from: this.account });
+      // ray test touch <<
+      const tx = await this.router.repay(borrowable._address, amount, this.account, deadline);
+      await tx.wait();
+      // await this.router.methods.repay(borrowable._address, amount, this.account, deadline).call({ from: this.account });
+      // send = this.router.methods.repay(borrowable._address, amount, this.account, deadline).send({ from: this.account });
+      // ray test touch >>
     }
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    // ray test touch <<
+    onTransactionHash();
+    // let send;
+    // return send.on('transactionHash', onTransactionHash);
+    // ray test touch >>
+  } catch (error) {
+    console.error('[repay] error.message => ', error.message);
   }
 }
 
