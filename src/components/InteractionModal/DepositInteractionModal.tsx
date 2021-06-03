@@ -70,13 +70,11 @@ export default function DepositInteractionModal({ show, toggleShow }: DepositInt
 
   return (
     <InteractionModalContainer
-      // eslint-disable-next-line eqeqeq
-      title={poolTokenType == PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
+      title={poolTokenType === PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
       show={show}
       toggleShow={toggleShow}>
       <>
-        {/* eslint-disable-next-line eqeqeq */}
-        {poolTokenType == PoolTokenType.Collateral && (<RiskMetrics
+        {poolTokenType === PoolTokenType.Collateral && (<RiskMetrics
           changeCollateral={val}
           hideIfNull={true} />)}
         <InputAmount
@@ -98,8 +96,7 @@ export default function DepositInteractionModal({ show, toggleShow }: DepositInt
           </Col>
           <Col xs={6}>
             <InteractionButton
-              // eslint-disable-next-line eqeqeq
-              name={poolTokenType == PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
+              name={poolTokenType === PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
               onCall={onDeposit}
               state={depositState} />
           </Col>

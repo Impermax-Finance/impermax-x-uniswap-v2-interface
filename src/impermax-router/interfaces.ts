@@ -70,7 +70,7 @@ export interface ImpermaxRouterCfg {
   airdropUrl: string;
   priceInverted: boolean;
   // ray test touch <<
-  provider: Web3Provider;
+  library: Web3Provider;
   // ray test touch >>
 }
 
