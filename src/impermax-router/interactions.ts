@@ -74,24 +74,42 @@ export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Addre
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function borrow(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData, onTransactionHash: Function) {
+export async function borrow(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  amount: BigNumber,
+  permitData: PermitData,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   const [borrowable, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
-  let send;
+
   try {
-    // eslint-disable-next-line eqeqeq
-    if (token._address == this.WETH) {
-      await this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).call({ from: this.account });
-      send = this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).send({ from: this.account });
+    if (token._address === this.WETH) {
+      // ray test touch <<
+      const tx = await this.router.borrowETH(borrowable._address, amount, this.account, deadline, data);
+      await tx.wait();
+      // await this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).call({ from: this.account });
+      // send = this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).send({ from: this.account });
+      // ray test touch >>
     } else {
-      await this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).call({ from: this.account });
-      send = this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).send({ from: this.account });
+      // ray test touch <<
+      const tx = await this.router.borrow(borrowable._address, amount, this.account, deadline, data);
+      await tx.wait();
+      // await this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).call({ from: this.account });
+      // send = this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).send({ from: this.account });
+      // ray test touch >>
     }
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    // ray test touch <<
+    onTransactionHash();
+    // let send;
+    // return send.on('transactionHash', onTransactionHash);
+    // ray test touch >>
+  } catch (error) {
+    console.error('[borrow] error.message => ', error.message);
   }
 }
 
@@ -153,17 +171,35 @@ export async function leverage(
   permitDataB: PermitData,
   // eslint-disable-next-line @typescript-eslint/ban-types
   onTransactionHash: Function
-) {
+): Promise<void> {
   const dataA = permitDataA ? permitDataA.permitData : '0x';
   const dataB = permitDataB ? permitDataB.permitData : '0x';
-  if (permitDataA && permitDataB && !permitDataA.deadline.eq(permitDataB.deadline)) return console.error('Permits deadline are not equal');
+  if (permitDataA && permitDataB && !permitDataA.deadline.eq(permitDataB.deadline)) {
+    return console.error('Permits deadline are not equal');
+  }
   const deadline = permitDataA ? permitDataA.deadline : permitDataB ? permitDataB.deadline : this.getDeadline();
   try {
-    await this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).call({ from: this.account });
-    const send = this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).send({ from: this.account });
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    // ray test touch <<
+    const tx =
+      await this.router.leverage(
+        uniswapV2PairAddress,
+        amountA,
+        amountB,
+        amountAMin,
+        amountBMin,
+        this.account,
+        deadline,
+        dataA,
+        dataB
+      );
+    await tx.wait();
+    onTransactionHash();
+    // await this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).call({ from: this.account });
+    // const send = this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).send({ from: this.account });
+    // return send.on('transactionHash', onTransactionHash);
+    // ray test touch >>
+  } catch (error) {
+    console.error('[leverage] error.message => ', error.message);
   }
 }
 
