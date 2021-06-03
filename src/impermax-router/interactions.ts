@@ -21,33 +21,17 @@ export async function deposit(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
     if (token._address === this.WETH) {
-      // ray test touch <<
       const overrides = { value: amount };
       const tx = await this.router.mintETH(poolToken._address, this.account, deadline, overrides);
       await tx.wait();
-      // await this.router.methods.mintETH(poolToken._address, this.account, deadline).call({ from: this.account, value: amount });
-      // send = this.router.methods.mintETH(poolToken._address, this.account, deadline).send({ from: this.account, value: amount });
-      // ray test touch >>
     } else if (poolTokenType === PoolTokenType.Collateral) {
-      // ray test touch <<
       const tx = await this.router.mintCollateral(poolToken._address, amount, this.account, deadline, data);
       await tx.wait();
-      // await this.router.methods.mintCollateral(poolToken._address, amount, this.account, deadline, data).call({ from: this.account });
-      // send = this.router.methods.mintCollateral(poolToken._address, amount, this.account, deadline, data).send({ from: this.account });
-      // ray test touch >>
     } else {
-      // ray test touch <<
       const tx = this.router.mint(poolToken._address, amount, this.account, deadline);
       await tx.wait();
-      // await this.router.methods.mint(poolToken._address, amount, this.account, deadline).call({ from: this.account });
-      // send = this.router.methods.mint(poolToken._address, amount, this.account, deadline).send({ from: this.account });
-      // ray test touch >>
     }
-    // ray test touch <<
     onTransactionHash();
-    // let send;
-    // return send.on('transactionHash', onTransactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[deposit] error.message => ', error.message);
   }
@@ -68,25 +52,13 @@ export async function withdraw(
 
   try {
     if (token._address === this.WETH) {
-      // ray test touch <<
       const tx = await this.router.redeemETH(poolToken._address, tokens, this.account, deadline, data);
       await tx.wait();
-      // await this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).call({ from: this.account });
-      // send = this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).send({ from: this.account });
-      // ray test touch >>
     } else {
-      // ray test touch <<
       const tx = await this.router.redeem(poolToken._address, tokens, this.account, deadline, data);
       await tx.wait();
-      // await this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).call({ from: this.account });
-      // send = this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).send({ from: this.account });
-      // ray test touch >>
     }
-    // ray test touch <<
     onTransactionHash();
-    // let send;
-    // return send.on('transactionHash', onTransactionHash);
-    // ray test touch >>
   } catch (e) {
     console.error(e);
   }
@@ -107,25 +79,13 @@ export async function borrow(
 
   try {
     if (token._address === this.WETH) {
-      // ray test touch <<
       const tx = await this.router.borrowETH(borrowable._address, amount, this.account, deadline, data);
       await tx.wait();
-      // await this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).call({ from: this.account });
-      // send = this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).send({ from: this.account });
-      // ray test touch >>
     } else {
-      // ray test touch <<
       const tx = await this.router.borrow(borrowable._address, amount, this.account, deadline, data);
       await tx.wait();
-      // await this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).call({ from: this.account });
-      // send = this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).send({ from: this.account });
-      // ray test touch >>
     }
-    // ray test touch <<
     onTransactionHash();
-    // let send;
-    // return send.on('transactionHash', onTransactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[borrow] error.message => ', error.message);
   }
@@ -144,26 +104,14 @@ export async function repay(
 
   try {
     if (token._address === this.WETH) {
-      // ray test touch <<
       const overrides = { value: amount };
       const tx = await this.router.repayETH(borrowable._address, this.account, deadline, overrides);
       await tx.wait();
-      // await this.router.methods.repayETH(borrowable._address, this.account, deadline).call({ from: this.account, value: amount });
-      // send = this.router.methods.repayETH(borrowable._address, this.account, deadline).send({ from: this.account, value: amount });
-      // ray test touch >>
     } else {
-      // ray test touch <<
       const tx = await this.router.repay(borrowable._address, amount, this.account, deadline);
       await tx.wait();
-      // await this.router.methods.repay(borrowable._address, amount, this.account, deadline).call({ from: this.account });
-      // send = this.router.methods.repay(borrowable._address, amount, this.account, deadline).send({ from: this.account });
-      // ray test touch >>
     }
-    // ray test touch <<
     onTransactionHash();
-    // let send;
-    // return send.on('transactionHash', onTransactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[repay] error.message => ', error.message);
   }
@@ -215,7 +163,6 @@ export async function leverage(
   }
   const deadline = permitDataA ? permitDataA.deadline : permitDataB ? permitDataB.deadline : this.getDeadline();
   try {
-    // ray test touch <<
     const tx =
       await this.router.leverage(
         uniswapV2PairAddress,
@@ -230,10 +177,6 @@ export async function leverage(
       );
     await tx.wait();
     onTransactionHash();
-    // await this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).call({ from: this.account });
-    // const send = this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).send({ from: this.account });
-    // return send.on('transactionHash', onTransactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[leverage] error.message => ', error.message);
   }
@@ -270,14 +213,9 @@ export async function deleverage(
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
-    // ray test touch <<
     const tx = await this.router.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data);
     await tx.wait();
     onTransactionHash();
-    // await this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).call({ from: this.account });
-    // const send = this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).send({ from: this.account });
-    // return send.on('transactionHash', onTransactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[deleverage] error.message => ', error.message);
   }
