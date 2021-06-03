@@ -53,22 +53,40 @@ export async function deposit(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, tokens: BigNumber, permitData: PermitData, onTransactionHash: Function) {
+export async function withdraw(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  tokens: BigNumber,
+  permitData: PermitData,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
-  let send;
+
   try {
-    // eslint-disable-next-line eqeqeq
-    if (token._address == this.WETH) {
-      await this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).call({ from: this.account });
-      send = this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).send({ from: this.account });
+    if (token._address === this.WETH) {
+      // ray test touch <<
+      const tx = await this.router.redeemETH(poolToken._address, tokens, this.account, deadline, data);
+      await tx.wait();
+      // await this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).call({ from: this.account });
+      // send = this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).send({ from: this.account });
+      // ray test touch >>
     } else {
-      await this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).call({ from: this.account });
-      send = this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).send({ from: this.account });
+      // ray test touch <<
+      const tx = await this.router.redeem(poolToken._address, tokens, this.account, deadline, data);
+      await tx.wait();
+      // await this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).call({ from: this.account });
+      // send = this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).send({ from: this.account });
+      // ray test touch >>
     }
-    return send.on('transactionHash', onTransactionHash);
+    // ray test touch <<
+    onTransactionHash();
+    // let send;
+    // return send.on('transactionHash', onTransactionHash);
+    // ray test touch >>
   } catch (e) {
     console.error(e);
   }
@@ -248,15 +266,20 @@ export async function deleverage(
   permitData: PermitData,
   // eslint-disable-next-line @typescript-eslint/ban-types
   onTransactionHash: Function
-) {
+): Promise<void> {
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
-    await this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).call({ from: this.account });
-    const send = this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).send({ from: this.account });
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    // ray test touch <<
+    const tx = await this.router.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data);
+    await tx.wait();
+    onTransactionHash();
+    // await this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).call({ from: this.account });
+    // const send = this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).send({ from: this.account });
+    // return send.on('transactionHash', onTransactionHash);
+    // ray test touch >>
+  } catch (error) {
+    console.error('[deleverage] error.message => ', error.message);
   }
 }
 
