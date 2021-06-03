@@ -120,11 +120,11 @@ class ImpermaxRouter {
   newRouter(address: Address): Contract {
     return new Contract(address, Router01JSON.abi, this.library.getSigner(this.account));
   }
-  newFactory(address: Address) {
-    // ray test touch <<
-    return new this.web3.eth.Contract(FactoryJSON.abi, address);
-    // ray test touch >>
+
+  newFactory(address: Address): Contract {
+    return new Contract(address, FactoryJSON.abi, this.library.getSigner(this.account));
   }
+
   newSimpleUniswapOracle(address: Address) {
     return new this.web3.eth.Contract(SimpleUniswapOracleJSON.abi, address);
   }
@@ -163,9 +163,10 @@ class ImpermaxRouter {
     this.account = account;
     // ray test touch <<
     this.router = this.newRouter(this.router.address);
+    this.factory = this.newFactory(this.factory.address);
     // this.router = this.newRouter(this.router._address);
+    // this.factory = this.newFactory(this.factory._address);
     // ray test touch >>
-    this.factory = this.newFactory(this.factory._address);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle._address);
     this.cleanCache();
   }

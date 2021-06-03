@@ -134,17 +134,29 @@ export async function getPairSymbols(this: ImpermaxRouter, uniswapV2PairAddress:
     return { symbol0: '', symbol1: '' };
   }
 }
-export async function isPoolTokenCreated(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<boolean> {
+
+export async function isPoolTokenCreated(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType
+) : Promise<boolean> {
   if (!isAddress(uniswapV2PairAddress)) return false;
-  const lendingPool = await this.factory.methods.getLendingPool(uniswapV2PairAddress).call();
+
+  const lendingPool = await this.factory.getLendingPool(uniswapV2PairAddress);
+
   if (!lendingPool) return false;
-  // eslint-disable-next-line eqeqeq
-  if (isAddress(lendingPool[poolTokenType]) && lendingPool[poolTokenType] != address(0)) return true;
+  if (isAddress(lendingPool[poolTokenType]) && lendingPool[poolTokenType] !== address(0)) return true;
   return false;
 }
-export async function isPairInitialized(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<boolean> {
+
+export async function isPairInitialized(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address
+) : Promise<boolean> {
   if (!isAddress(uniswapV2PairAddress)) return false;
-  const lendingPool = await this.factory.methods.getLendingPool(uniswapV2PairAddress).call();
+
+  const lendingPool = await this.factory.getLendingPool(uniswapV2PairAddress);
+
   if (!lendingPool) return false;
   return lendingPool.initialized;
 }

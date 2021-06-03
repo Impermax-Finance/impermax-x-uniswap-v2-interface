@@ -282,28 +282,32 @@ export async function claimDistributor(this: ImpermaxRouter, distributorDetails:
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function createNewPair(this: ImpermaxRouter, uniswapV2PairAddress: Address, createPairStep: CreatePairStep, onTransactionHash: Function) {
+export async function createNewPair(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  createPairStep: CreatePairStep,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   try {
-    let send;
     if (createPairStep === CreatePairStep.BORROWABLE0) {
-      await this.factory.methods.createBorrowable0(uniswapV2PairAddress).call({ from: this.account });
-      send = this.factory.methods.createBorrowable0(uniswapV2PairAddress).send({ from: this.account });
+      const tx = await this.factory.createBorrowable0(uniswapV2PairAddress);
+      await tx.wait();
     }
     if (createPairStep === CreatePairStep.BORROWABLE1) {
-      await this.factory.methods.createBorrowable1(uniswapV2PairAddress).call({ from: this.account });
-      send = this.factory.methods.createBorrowable1(uniswapV2PairAddress).send({ from: this.account });
+      const tx = await this.factory.createBorrowable1(uniswapV2PairAddress);
+      await tx.wait();
     }
     if (createPairStep === CreatePairStep.COLLATERAL) {
-      await this.factory.methods.createCollateral(uniswapV2PairAddress).call({ from: this.account });
-      send = this.factory.methods.createCollateral(uniswapV2PairAddress).send({ from: this.account });
+      const tx = await this.factory.createCollateral(uniswapV2PairAddress);
+      await tx.wait();
     }
     if (createPairStep === CreatePairStep.INITIALIZE) {
-      await this.factory.methods.initializeLendingPool(uniswapV2PairAddress).call({ from: this.account });
-      send = this.factory.methods.initializeLendingPool(uniswapV2PairAddress).send({ from: this.account });
+      const tx = await this.factory.initializeLendingPool(uniswapV2PairAddress);
+      await tx.wait();
     }
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    onTransactionHash();
+  } catch (error) {
+    console.error('[createNewPair] error.message => ', error.message);
   }
 }
