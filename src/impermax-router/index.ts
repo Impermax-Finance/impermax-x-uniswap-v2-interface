@@ -120,10 +120,7 @@ class ImpermaxRouter {
 
   // ray test touch <
   newRouter(address: Address): Contract {
-    // ray test touch <<
     return new Contract(address, Router01JSON.abi, this.library.getSigner(this.account));
-    // return new this.web3.eth.Contract(Router01JSON.abi, address);
-    // ray test touch >>
   }
   newFactory(address: Address) {
     return new this.web3.eth.Contract(FactoryJSON.abi, address);
