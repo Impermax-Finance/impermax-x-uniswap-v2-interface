@@ -1,4 +1,9 @@
+
 import { BigNumber } from 'ethers';
+// ray test touch <<
+import { Web3Provider } from '@ethersproject/providers';
+// ray test touch >>
+
 import Subgraph from '../subgraph';
 
 export type Address = string;
@@ -64,6 +69,9 @@ export interface ImpermaxRouterCfg {
   WETH: Address;
   airdropUrl: string;
   priceInverted: boolean;
+  // ray test touch <<
+  provider: Web3Provider;
+  // ray test touch >>
 }
 
 export interface BorrowableData {

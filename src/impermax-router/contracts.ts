@@ -15,7 +15,10 @@ export function getLendingPoolCache(this: ImpermaxRouter, uniswapV2PairAddress: 
 }
 
 export async function initializeLendingPool(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<LendingPool> {
-  const lPool = await this.router.methods.getLendingPool(uniswapV2PairAddress).call();
+  // ray test touch <<
+  const lPool = await this.router.getLendingPool(uniswapV2PairAddress);
+  // const lPool = await this.router.methods.getLendingPool(uniswapV2PairAddress).call();
+  // ray test touch >>
   const uniswapV2Pair = this.newUniswapV2Pair(uniswapV2PairAddress);
   const tokenAAddress = await uniswapV2Pair.methods.token0().call();
   const tokenBAddress = await uniswapV2Pair.methods.token1().call();
@@ -36,7 +39,9 @@ export async function initializeLendingPool(this: ImpermaxRouter, uniswapV2PairA
 }
 export async function getLendingPool(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<LendingPool> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.lendingPool) cache.lendingPool = this.initializeLendingPool(uniswapV2PairAddress);
+  if (!cache.lendingPool) {
+    cache.lendingPool = this.initializeLendingPool(uniswapV2PairAddress);
+  }
   return cache.lendingPool;
 }
 

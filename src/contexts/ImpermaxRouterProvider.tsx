@@ -42,7 +42,10 @@ export const ImpermaxRouterContext = createContext<ImpermaxRouterContextI>({});
 export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const {
     account,
-    chainId
+    chainId,
+    // ray test touch <<
+    library
+    // ray test touch >>
   } = useWeb3React<Web3Provider>();
   const web3 = useWeb3();
   const subgraph = useSubgraph();
@@ -88,10 +91,16 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     if (!simpleUniswapOracleAddress) return;
     if (!subgraph) return;
     if (!uniswapV2FactoryAddress) return;
+    // ray test touch <<
+    if (!library) return;
+    // ray test touch >>
 
     if (!impermaxRouter) {
       const impermaxRouter = new ImpermaxRouter({
         subgraph,
+        // ray test touch <<
+        library,
+        // ray test touch >>
         web3,
         chainId,
         routerAddress,
@@ -130,7 +139,10 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     routerAddress,
     simpleUniswapOracleAddress,
     subgraph,
-    uniswapV2FactoryAddress
+    uniswapV2FactoryAddress,
+    // ray test touch <<
+    library
+    // ray test touch >>
   ]);
 
   return (

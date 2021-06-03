@@ -33,7 +33,10 @@ const TYPES = {
 export function getOwnerSpender(this: ImpermaxRouter) : {owner: string, spender: string} {
   return {
     owner: this.account,
-    spender: this.router._address
+    // ray test touch <<
+    spender: this.router.address
+    // spender: this.router._address
+    // ray test touch >>
   };
 }
 

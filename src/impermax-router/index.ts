@@ -3,6 +3,10 @@
 // @ts-nocheck
 // TODO: >
 
+// ray test touch <<
+import { Contract } from '@ethersproject/contracts';
+// ray test touch >>
+
 import ERC20JSON from 'abis/contracts/IERC20.json';
 import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import UniswapV2FactoryJSON from 'abis/contracts/IUniswapV2Factory.json';
@@ -91,6 +95,9 @@ class ImpermaxRouter {
   constructor(cfg: ImpermaxRouterCfg) {
     this.subgraph = cfg.subgraph;
     // ray test touch <
+    // ray test touch <<
+    this.library = cfg.library;
+    // ray test touch >>
     this.web3 = cfg.web3;
     // ray test touch >
     this.chainId = cfg.chainId;
@@ -112,8 +119,11 @@ class ImpermaxRouter {
   }
 
   // ray test touch <
-  newRouter(address: Address) {
-    return new this.web3.eth.Contract(Router01JSON.abi, address);
+  newRouter(address: Address): Contract {
+    // ray test touch <<
+    return new Contract(address, Router01JSON.abi, this.library.getSigner(this.account));
+    // return new this.web3.eth.Contract(Router01JSON.abi, address);
+    // ray test touch >>
   }
   newFactory(address: Address) {
     return new this.web3.eth.Contract(FactoryJSON.abi, address);
@@ -154,7 +164,10 @@ class ImpermaxRouter {
   unlockWallet(web3: any, account: Address) {
     this.web3 = web3;
     this.account = account;
-    this.router = this.newRouter(this.router._address);
+    // ray test touch <<
+    this.router = this.newRouter(this.router.address);
+    // this.router = this.newRouter(this.router._address);
+    // ray test touch >>
     this.factory = this.newFactory(this.factory._address);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle._address);
     this.cleanCache();
