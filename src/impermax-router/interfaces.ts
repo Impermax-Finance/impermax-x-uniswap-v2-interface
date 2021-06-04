@@ -1,8 +1,6 @@
 
 import { BigNumber } from 'ethers';
-// ray test touch <<
 import { Web3Provider } from '@ethersproject/providers';
-// ray test touch >>
 
 import Subgraph from '../subgraph';
 

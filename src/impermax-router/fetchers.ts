@@ -92,7 +92,6 @@ export async function initializeTWAPPrice(
   uniswapV2PairAddress: Address
 ) : Promise<number> {
   try {
-    // ray test touch <<
     /**
      * MEMO:
      * https://github.com/EthWorks/Waffle/issues/339
@@ -100,7 +99,6 @@ export async function initializeTWAPPrice(
      * https://ethereum.stackexchange.com/questions/57191/what-happens-if-view-function-calls-function-that-is-neither-view-nor-pure
      */
     const { price } = await this.simpleUniswapOracle.callStatic.getResult(uniswapV2PairAddress);
-    // ray test touch >>
     const decimalsA = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
     const decimalsB = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
     return price / 2 ** 112 * Math.pow(10, decimalsA) / Math.pow(10, decimalsB);

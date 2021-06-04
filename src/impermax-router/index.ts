@@ -126,11 +126,9 @@ class ImpermaxRouter {
   }
 
   newSimpleUniswapOracle(address: Address): Contract {
-    // ray test touch <<
     return new Contract(address, SimpleUniswapOracleJSON.abi, this.library);
-    // return new this.web3.eth.Contract(SimpleUniswapOracleJSON.abi, address);
-    // ray test touch >>
   }
+
   newUniswapV2Pair(address: Address) {
     return new this.web3.eth.Contract(UniswapV2PairJSON.abi, address);
   }
@@ -164,14 +162,9 @@ class ImpermaxRouter {
   unlockWallet(web3: any, account: Address): void {
     this.web3 = web3;
     this.account = account;
-    // ray test touch <<
     this.router = this.newRouter(this.router.address);
     this.factory = this.newFactory(this.factory.address);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle.address);
-    // this.router = this.newRouter(this.router._address);
-    // this.factory = this.newFactory(this.factory._address);
-    // this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle._address);
-    // ray test touch >>
     this.cleanCache();
   }
   // ray test touch >
