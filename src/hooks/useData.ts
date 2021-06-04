@@ -99,9 +99,9 @@ export function useMarketPrice() : number {
 
 export function useOracleIsInitialized() : boolean {
   const uniswapV2PairAddress = usePairAddress();
-  const [oracleIsInitialied, setOracleIsInitialized] = useState<boolean>(true);
+  const [oracleIsInitialized, setOracleIsInitialized] = useState<boolean>(true);
   useRouterCallback(async router => setOracleIsInitialized(await router.getTWAPPrice(uniswapV2PairAddress) !== 0));
-  return oracleIsInitialied;
+  return oracleIsInitialized;
 }
 
 export function useTWAPPrice() : number {

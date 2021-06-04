@@ -87,22 +87,39 @@ export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress:
 }
 
 // TWAP Price
-export async function initializeTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+export async function initializeTWAPPrice(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address
+) : Promise<number> {
   try {
-    const { price } = await this.simpleUniswapOracle.methods.getResult(uniswapV2PairAddress).call();
+    // ray test touch <<
+    /**
+     * MEMO:
+     * https://github.com/EthWorks/Waffle/issues/339
+     * https://ethereum.stackexchange.com/questions/88119/i-see-no-way-to-obtain-the-return-value-of-a-non-view-function-ethers-js
+     * https://ethereum.stackexchange.com/questions/57191/what-happens-if-view-function-calls-function-that-is-neither-view-nor-pure
+     */
+    const { price } = await this.simpleUniswapOracle.callStatic.getResult(uniswapV2PairAddress);
+    // ray test touch >>
     const decimalsA = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
     const decimalsB = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
     return price / 2 ** 112 * Math.pow(10, decimalsA) / Math.pow(10, decimalsB);
-  } catch {
+  } catch (error) {
     // Oracle is not initialized yet
-    return 0;
+    console.error('[initializeTWAPPrice] error.message => ', error.message);
+    return 0; // TODO: error-prone
   }
 }
+
 export async function getTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.TWAPPrice) cache.TWAPPrice = this.initializeTWAPPrice(uniswapV2PairAddress);
-  // eslint-disable-next-line no-negated-condition
-  return !this.priceInverted ? (await cache.TWAPPrice) : 1 / (await cache.TWAPPrice);
+  if (!cache.TWAPPrice) {
+    cache.TWAPPrice = this.initializeTWAPPrice(uniswapV2PairAddress);
+  }
+
+  const twapPrice = await cache.TWAPPrice;
+
+  return this.priceInverted ? 1 / twapPrice : twapPrice;
 }
 
 // Check Uniswap Pair Address
