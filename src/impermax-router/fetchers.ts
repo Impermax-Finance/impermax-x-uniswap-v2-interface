@@ -16,37 +16,70 @@ export function getPoolTokenCache(this: ImpermaxRouter, uniswapV2PairAddress: Ad
   return cache.poolToken[poolTokenType];
 }
 
+// ray test touch <<
 // Reserves
-export async function initializeReserves(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
+export async function initializeReserves(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address
+) : Promise<[number, number]> {
   const [, uniswapV2Pair] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const { reserve0, reserve1 } = await uniswapV2Pair.methods.getReserves().call();
+  const {
+    reserve0,
+    reserve1
+  } = await uniswapV2Pair.getReserves();
+  // const {
+  //   reserve0,
+  //   reserve1
+  // } = await uniswapV2Pair.methods.getReserves().call();
+
   return [
     await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableA, reserve0),
     await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableB, reserve1)
   ];
 }
+// ray test touch >>
+
 export async function getReserves(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.reserves) cache.reserves = this.initializeReserves(uniswapV2PairAddress);
   return cache.reserves;
 }
 
+// ray test touch <<
 // LP Total Supply
-export async function initializeLPTotalSupply(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
+export async function initializeLPTotalSupply(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address
+) : Promise<number> {
   const [, uniswapV2Pair] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const totalSupply = await uniswapV2Pair.methods.totalSupply().call();
+  const totalSupply = await uniswapV2Pair.totalSupply();
+  // const totalSupply = await uniswapV2Pair.methods.totalSupply().call();
+
   return this.normalize(uniswapV2PairAddress, PoolTokenType.Collateral, totalSupply);
 }
+// ray test touch >>
+
 export async function getLPTotalSupply(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.LPTotalSupply) cache.LPTotalSupply = this.initializeLPTotalSupply(uniswapV2PairAddress);
   return cache.LPTotalSupply;
 }
 
+// ray test touch <<
 // Price Denom LP
-export async function initializePriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
+export async function initializePriceDenomLP(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address
+) : Promise<[number, number]> {
   const [collateral] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const { price0, price1 } = await collateral.methods.getPrices().call();
+  const {
+    price0,
+    price1
+  } = await collateral.callStatic.getPrices();
+  // const {
+  //   price0,
+  //   price1
+  // } = await collateral.methods.getPrices().call();
   const decimalsA = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const decimalsB = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   return [
@@ -54,6 +87,8 @@ export async function initializePriceDenomLP(this: ImpermaxRouter, uniswapV2Pair
     price1 / 1e18 / 1e18 * Math.pow(10, decimalsB)
   ];
 }
+// ray test touch >>
+
 export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.priceDenomLP) cache.priceDenomLP = this.initializePriceDenomLP(uniswapV2PairAddress);
@@ -120,35 +155,60 @@ export async function getTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: A
   return this.priceInverted ? 1 / twapPrice : twapPrice;
 }
 
+// ray test touch <<
 // Check Uniswap Pair Address
 export async function isValidPair(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<boolean> {
   if (!uniswapV2PairAddress) return false;
   try {
     const contract = this.newUniswapV2Pair(uniswapV2PairAddress);
-    const token0 = await contract.methods.token0().call();
-    const token1 = await contract.methods.token1().call();
-    const expectedAddress: Address = await this.uniswapV2Factory.methods.getPair(token0, token1).call();
-    if (expectedAddress.toLowerCase() === uniswapV2PairAddress.toLowerCase()) return true;
+    const token0 = await contract.token0();
+    const token1 = await contract.token1();
+    const expectedAddress: Address = await this.uniswapV2Factory.getPair(token0, token1);
+    // const token0 = await contract.methods.token0().call();
+    // const token1 = await contract.methods.token1().call();
+    // const expectedAddress: Address = await this.uniswapV2Factory.methods.getPair(token0, token1).call();
+
+    if (expectedAddress.toLowerCase() === uniswapV2PairAddress.toLowerCase()) {
+      return true;
+    }
     return false;
-  } catch {
+  } catch (error) {
+    console.log('[isValidPair] error.message => ', error.message);
     return false;
   }
 }
-export async function getPairSymbols(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<{symbol0: string, symbol1: string}> {
+// ray test touch >>
+
+// ray test touch <<
+export async function getPairSymbols(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address
+) : Promise<{symbol0: string, symbol1: string}> {
   try {
     const contract = this.newUniswapV2Pair(uniswapV2PairAddress);
-    const token0 = await contract.methods.token0().call();
-    const token1 = await contract.methods.token1().call();
+    const token0 = await contract.token0();
+    const token1 = await contract.token1();
+    // const token0 = await contract.methods.token0().call();
+    // const token1 = await contract.methods.token1().call();
     const token0Contract = this.newERC20(token0);
     const token1Contract = this.newERC20(token1);
+
     return {
-      symbol0: await token0Contract.methods.symbol().call(),
-      symbol1: await token1Contract.methods.symbol().call()
+      symbol0: await token0Contract.symbol(),
+      symbol1: await token1Contract.symbol()
+      // symbol0: await token0Contract.methods.symbol().call(),
+      // symbol1: await token1Contract.methods.symbol().call()
     };
-  } catch {
-    return { symbol0: '', symbol1: '' };
+  } catch (error) {
+    console.log('[getPairSymbols] error.message => ', error.message);
+
+    return {
+      symbol0: '',
+      symbol1: ''
+    };
   }
 }
+// ray test touch >>
 
 export async function isPoolTokenCreated(
   this: ImpermaxRouter,
