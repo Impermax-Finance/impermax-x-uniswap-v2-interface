@@ -6,8 +6,7 @@ import { useNextSupplyAPY } from '../../../hooks/useData';
 
 export default function SupplyAPY({ amount }: { amount: number }): JSX.Element | null {
   const poolTokenType = usePoolToken();
-  // eslint-disable-next-line eqeqeq
-  if (poolTokenType == PoolTokenType.Collateral) return null;
+  if (poolTokenType === PoolTokenType.Collateral) return null;
 
   // TODO: <
   // eslint-disable-next-line react-hooks/rules-of-hooks

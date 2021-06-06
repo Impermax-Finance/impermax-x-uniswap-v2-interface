@@ -10,8 +10,7 @@ export async function getPairList(this: Subgraph) : Promise<Address[]> {
 
 // Name
 export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
-  // eslint-disable-next-line eqeqeq
-  if (poolTokenType == PoolTokenType.Collateral) {
+  if (poolTokenType === PoolTokenType.Collateral) {
     const nameA = await this.getName(uniswapV2PairAddress, PoolTokenType.BorrowableA);
     const nameB = await this.getName(uniswapV2PairAddress, PoolTokenType.BorrowableB);
     return nameA + '-' + nameB + ' LP';
@@ -24,8 +23,7 @@ export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poo
 
 // Symbol
 export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
-  // eslint-disable-next-line eqeqeq
-  if (poolTokenType == PoolTokenType.Collateral) {
+  if (poolTokenType === PoolTokenType.Collateral) {
     const symbolA = await this.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableA);
     const symbolB = await this.getSymbol(uniswapV2PairAddress, PoolTokenType.BorrowableB);
     return symbolA + '-' + symbolB;
@@ -38,8 +36,7 @@ export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, p
 
 // Decimals
 export async function getDecimals(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  // eslint-disable-next-line eqeqeq
-  if (poolTokenType == PoolTokenType.Collateral) return 18;
+  if (poolTokenType === PoolTokenType.Collateral) return 18;
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return parseInt(lendingPoolData[poolTokenType].underlying.decimals);
 }
@@ -52,8 +49,7 @@ export async function getExchangeRate(this: Subgraph, uniswapV2PairAddress: Addr
 
 // Underlying Address
 export async function getUnderlyingAddress(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Address> {
-  // eslint-disable-next-line eqeqeq
-  if (poolTokenType == PoolTokenType.Collateral) return uniswapV2PairAddress;
+  if (poolTokenType === PoolTokenType.Collateral) return uniswapV2PairAddress;
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return lendingPoolData[poolTokenType].underlying.id;
 }
@@ -61,8 +57,7 @@ export async function getUnderlyingAddress(this: Subgraph, uniswapV2PairAddress:
 // Token price
 export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  // eslint-disable-next-line eqeqeq
-  if (poolTokenType == PoolTokenType.Collateral) {
+  if (poolTokenType === PoolTokenType.Collateral) {
     return parseFloat(lendingPoolData.pair.derivedUSD);
   }
   return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).underlying.derivedUSD);
@@ -188,8 +183,7 @@ export async function getSupplyUSD(this: Subgraph, uniswapV2PairAddress: Address
 // Utilization Rate
 export async function getUtilizationRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const supply = await this.getSupply(uniswapV2PairAddress, poolTokenType);
-  // eslint-disable-next-line eqeqeq
-  if (supply == 0) return 0;
+  if (supply === 0) return 0;
   const totalBalance = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
   return totalBalance / supply;
 }

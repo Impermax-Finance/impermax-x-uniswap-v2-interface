@@ -3,7 +3,11 @@
 // @ts-nocheck
 // TODO: >
 
-import { BigNumber, ethers } from 'ethers';
+import {
+  Zero,
+  MaxUint256
+} from '@ethersproject/constants';
+import { BigNumber } from '@ethersproject/bignumber';
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from 'store/transactions/hooks';
 import useAllowance from './useAllowance';
@@ -14,8 +18,8 @@ import useImpermaxRouter from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { useSymbol } from './useData';
 
-const ZERO = ethers.constants.Zero;
-const APPROVE_AMOUNT = ethers.constants.MaxUint256;
+const ZERO = Zero;
+const APPROVE_AMOUNT = MaxUint256;
 
 export interface PermitData {
   permitData: string;

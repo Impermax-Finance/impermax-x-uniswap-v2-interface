@@ -356,7 +356,6 @@ const Footer = React.forwardRef<Ref, Props>(({
               'sm:flex',
               'sm:max-w-md'
             )}>
-            {/* ray test touch < */}
             {/* TODO: should componentize */}
             <label
               htmlFor='emailAddress'
@@ -389,7 +388,6 @@ const Footer = React.forwardRef<Ref, Props>(({
                 'focus:placeholder-gray-400'
               )}
               placeholder='Enter your email' />
-            {/* ray test touch > */}
             <div
               className={clsx(
                 'mt-3',

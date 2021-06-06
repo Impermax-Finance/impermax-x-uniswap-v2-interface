@@ -1,96 +1,119 @@
 /* eslint-disable no-invalid-this */
 import ImpermaxRouter from '.';
 import { Address, PoolTokenType, AirdropData } from './interfaces';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { PermitData } from '../hooks/useApprove';
 import { impermanentLoss } from '../utils';
 import { DistributorDetails } from '../utils/constants';
 import { CreatePairStep } from '../hooks/useCreateNewPair';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function deposit(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData, onTransactionHash: Function) {
+export async function deposit(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  amount: BigNumber,
+  permitData: PermitData,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
-  let send;
   try {
-    // eslint-disable-next-line eqeqeq
-    if (token._address == this.WETH) {
-      await this.router.methods.mintETH(poolToken._address, this.account, deadline).call({ from: this.account, value: amount });
-      send = this.router.methods.mintETH(poolToken._address, this.account, deadline).send({ from: this.account, value: amount });
-    // eslint-disable-next-line eqeqeq
-    } else if (poolTokenType == PoolTokenType.Collateral) {
-      await this.router.methods.mintCollateral(poolToken._address, amount, this.account, deadline, data).call({ from: this.account });
-      send = this.router.methods.mintCollateral(poolToken._address, amount, this.account, deadline, data).send({ from: this.account });
+    if (token.address === this.WETH) {
+      const overrides = { value: amount };
+      const tx = await this.router.mintETH(poolToken.address, this.account, deadline, overrides);
+      await tx.wait();
+    } else if (poolTokenType === PoolTokenType.Collateral) {
+      const tx = await this.router.mintCollateral(poolToken.address, amount, this.account, deadline, data);
+      await tx.wait();
     } else {
-      await this.router.methods.mint(poolToken._address, amount, this.account, deadline).call({ from: this.account });
-      send = this.router.methods.mint(poolToken._address, amount, this.account, deadline).send({ from: this.account });
+      const tx = this.router.mint(poolToken.address, amount, this.account, deadline);
+      await tx.wait();
     }
-    return send.on('transactionHash', onTransactionHash);
+    onTransactionHash();
+  } catch (error) {
+    console.error('[deposit] error.message => ', error.message);
+  }
+}
+
+export async function withdraw(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  tokens: BigNumber,
+  permitData: PermitData,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
+  const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+  const data = permitData ? permitData.permitData : '0x';
+  const deadline = permitData ? permitData.deadline : this.getDeadline();
+
+  try {
+    if (token.address === this.WETH) {
+      const tx = await this.router.redeemETH(poolToken.address, tokens, this.account, deadline, data);
+      await tx.wait();
+    } else {
+      const tx = await this.router.redeem(poolToken.address, tokens, this.account, deadline, data);
+      await tx.wait();
+    }
+    onTransactionHash();
   } catch (e) {
     console.error(e);
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function withdraw(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, tokens: BigNumber, permitData: PermitData, onTransactionHash: Function) {
-  const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  const data = permitData ? permitData.permitData : '0x';
-  const deadline = permitData ? permitData.deadline : this.getDeadline();
-  let send;
-  try {
-    // eslint-disable-next-line eqeqeq
-    if (token._address == this.WETH) {
-      await this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).call({ from: this.account });
-      send = this.router.methods.redeemETH(poolToken._address, tokens, this.account, deadline, data).send({ from: this.account });
-    } else {
-      await this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).call({ from: this.account });
-      send = this.router.methods.redeem(poolToken._address, tokens, this.account, deadline, data).send({ from: this.account });
-    }
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function borrow(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, permitData: PermitData, onTransactionHash: Function) {
+export async function borrow(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  amount: BigNumber,
+  permitData: PermitData,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   const [borrowable, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
-  let send;
+
   try {
-    // eslint-disable-next-line eqeqeq
-    if (token._address == this.WETH) {
-      await this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).call({ from: this.account });
-      send = this.router.methods.borrowETH(borrowable._address, amount, this.account, deadline, data).send({ from: this.account });
+    if (token.address === this.WETH) {
+      const tx = await this.router.borrowETH(borrowable.address, amount, this.account, deadline, data);
+      await tx.wait();
     } else {
-      await this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).call({ from: this.account });
-      send = this.router.methods.borrow(borrowable._address, amount, this.account, deadline, data).send({ from: this.account });
+      const tx = await this.router.borrow(borrowable.address, amount, this.account, deadline, data);
+      await tx.wait();
     }
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    onTransactionHash();
+  } catch (error) {
+    console.error('[borrow] error.message => ', error.message);
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function repay(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: BigNumber, onTransactionHash: Function) {
+export async function repay(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  amount: BigNumber,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   const [borrowable, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const deadline = this.getDeadline();
-  let send;
+
   try {
-    // eslint-disable-next-line eqeqeq
-    if (token._address == this.WETH) {
-      await this.router.methods.repayETH(borrowable._address, this.account, deadline).call({ from: this.account, value: amount });
-      send = this.router.methods.repayETH(borrowable._address, this.account, deadline).send({ from: this.account, value: amount });
+    if (token.address === this.WETH) {
+      const overrides = { value: amount };
+      const tx = await this.router.repayETH(borrowable.address, this.account, deadline, overrides);
+      await tx.wait();
     } else {
-      await this.router.methods.repay(borrowable._address, amount, this.account, deadline).call({ from: this.account });
-      send = this.router.methods.repay(borrowable._address, amount, this.account, deadline).send({ from: this.account });
+      const tx = await this.router.repay(borrowable.address, amount, this.account, deadline);
+      await tx.wait();
     }
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    onTransactionHash();
+  } catch (error) {
+    console.error('[repay] error.message => ', error.message);
   }
 }
 
@@ -132,17 +155,30 @@ export async function leverage(
   permitDataB: PermitData,
   // eslint-disable-next-line @typescript-eslint/ban-types
   onTransactionHash: Function
-) {
+): Promise<void> {
   const dataA = permitDataA ? permitDataA.permitData : '0x';
   const dataB = permitDataB ? permitDataB.permitData : '0x';
-  if (permitDataA && permitDataB && !permitDataA.deadline.eq(permitDataB.deadline)) return console.error('Permits deadline are not equal');
+  if (permitDataA && permitDataB && !permitDataA.deadline.eq(permitDataB.deadline)) {
+    return console.error('Permits deadline are not equal');
+  }
   const deadline = permitDataA ? permitDataA.deadline : permitDataB ? permitDataB.deadline : this.getDeadline();
   try {
-    await this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).call({ from: this.account });
-    const send = this.router.methods.leverage(uniswapV2PairAddress, amountA, amountB, amountAMin, amountBMin, this.account, deadline, dataA, dataB).send({ from: this.account });
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    const tx =
+      await this.router.leverage(
+        uniswapV2PairAddress,
+        amountA,
+        amountB,
+        amountAMin,
+        amountBMin,
+        this.account,
+        deadline,
+        dataA,
+        dataB
+      );
+    await tx.wait();
+    onTransactionHash();
+  } catch (error) {
+    console.error('[leverage] error.message => ', error.message);
   }
 }
 
@@ -173,31 +209,40 @@ export async function deleverage(
   permitData: PermitData,
   // eslint-disable-next-line @typescript-eslint/ban-types
   onTransactionHash: Function
-) {
+): Promise<void> {
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
-    await this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).call({ from: this.account });
-    const send = this.router.methods.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data).send({ from: this.account });
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    const tx = await this.router.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data);
+    await tx.wait();
+    onTransactionHash();
+  } catch (error) {
+    console.error('[deleverage] error.message => ', error.message);
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function claimAirdrop(this: ImpermaxRouter, airdropData: AirdropData, onTransactionHash: Function) {
+export async function claimAirdrop(
+  this: ImpermaxRouter,
+  airdropData: AirdropData,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   try {
-    await this.merkleDistributor.methods.claim(airdropData.index, this.account, airdropData.amount, airdropData.proof).call({ from: this.account });
-    const send = this.merkleDistributor.methods.claim(airdropData.index, this.account, airdropData.amount, airdropData.proof).send({ from: this.account });
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    const tx =
+      await this.merkleDistributor.claim(airdropData.index, this.account, airdropData.amount, airdropData.proof);
+    await tx.wait();
+    onTransactionHash();
+  } catch (error) {
+    console.error('[claimAirdrop] error.message => ', error.message);
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function trackBorrows(this: ImpermaxRouter, uniswapV2PairAddress: Address, onTransactionHash: Function) {
+export async function trackBorrows(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   const toTrack = [];
   const borrowableA = await this.getPoolToken(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const borrowableB = await this.getPoolToken(uniswapV2PairAddress, PoolTokenType.BorrowableB);
@@ -205,69 +250,82 @@ export async function trackBorrows(this: ImpermaxRouter, uniswapV2PairAddress: A
   const borrowedB = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   const sharesA = await this.getFarmingShares(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const sharesB = await this.getFarmingShares(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  if (borrowedA > 0 && sharesA === 0) toTrack.push(borrowableA._address);
-  if (borrowedB > 0 && sharesB === 0) toTrack.push(borrowableB._address);
+  if (borrowedA > 0 && sharesA === 0) toTrack.push(borrowableA.address);
+  if (borrowedB > 0 && sharesB === 0) toTrack.push(borrowableB.address);
   try {
-    await this.claimAggregator.methods.trackBorrows(this.account, toTrack).call({ from: this.account });
-    const send = this.claimAggregator.methods.trackBorrows(this.account, toTrack).send({ from: this.account });
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    const tx = await this.claimAggregator.trackBorrows(this.account, toTrack);
+    await tx.wait();
+    onTransactionHash();
+  } catch (error) {
+    console.error('[trackBorrows] error.message => ', error.message);
   }
 }
+// ray test touch >>
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function claims(this: ImpermaxRouter, uniswapV2PairAddress: Address, onTransactionHash: Function) {
+export async function claims(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   const toClaim = [];
   const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   const claimAmountA = await farmingPoolA.methods.claim().call({ from: this.account }) / 1e18;
   const claimAmountB = await farmingPoolB.methods.claim().call({ from: this.account }) / 1e18;
-  if (claimAmountA * 1 > 0) toClaim.push(farmingPoolA._address);
-  if (claimAmountB * 1 > 0) toClaim.push(farmingPoolB._address);
+  if (claimAmountA * 1 > 0) toClaim.push(farmingPoolA.address);
+  if (claimAmountB * 1 > 0) toClaim.push(farmingPoolB.address);
   try {
-    await this.claimAggregator.methods.claims(this.account, toClaim).call({ from: this.account });
-    const send = this.claimAggregator.methods.claims(this.account, toClaim).send({ from: this.account });
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    const tx = this.claimAggregator.claims(this.account, toClaim);
+    await tx.wait();
+    onTransactionHash();
+  } catch (error) {
+    console.error('[claims] error.message => ', error.message);
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function claimDistributor(this: ImpermaxRouter, distributorDetails: DistributorDetails, onTransactionHash: Function) {
+export async function claimDistributor(
+  this: ImpermaxRouter,
+  distributorDetails: DistributorDetails,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   const claimable = await this.getClaimable(distributorDetails.claimableAddress);
   try {
-    await claimable.methods.claim().call({ from: this.account });
-    const send = claimable.methods.claim().send({ from: this.account });
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    const tx = await claimable.claim();
+    await tx.wait();
+    onTransactionHash();
+  } catch (error) {
+    console.error('[claimDistributor] error.message => ', error.message);
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function createNewPair(this: ImpermaxRouter, uniswapV2PairAddress: Address, createPairStep: CreatePairStep, onTransactionHash: Function) {
+export async function createNewPair(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  createPairStep: CreatePairStep,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
   try {
-    let send;
     if (createPairStep === CreatePairStep.BORROWABLE0) {
-      await this.factory.methods.createBorrowable0(uniswapV2PairAddress).call({ from: this.account });
-      send = this.factory.methods.createBorrowable0(uniswapV2PairAddress).send({ from: this.account });
+      const tx = await this.factory.createBorrowable0(uniswapV2PairAddress);
+      await tx.wait();
     }
     if (createPairStep === CreatePairStep.BORROWABLE1) {
-      await this.factory.methods.createBorrowable1(uniswapV2PairAddress).call({ from: this.account });
-      send = this.factory.methods.createBorrowable1(uniswapV2PairAddress).send({ from: this.account });
+      const tx = await this.factory.createBorrowable1(uniswapV2PairAddress);
+      await tx.wait();
     }
     if (createPairStep === CreatePairStep.COLLATERAL) {
-      await this.factory.methods.createCollateral(uniswapV2PairAddress).call({ from: this.account });
-      send = this.factory.methods.createCollateral(uniswapV2PairAddress).send({ from: this.account });
+      const tx = await this.factory.createCollateral(uniswapV2PairAddress);
+      await tx.wait();
     }
     if (createPairStep === CreatePairStep.INITIALIZE) {
-      await this.factory.methods.initializeLendingPool(uniswapV2PairAddress).call({ from: this.account });
-      send = this.factory.methods.initializeLendingPool(uniswapV2PairAddress).send({ from: this.account });
+      const tx = await this.factory.initializeLendingPool(uniswapV2PairAddress);
+      await tx.wait();
     }
-    return send.on('transactionHash', onTransactionHash);
-  } catch (e) {
-    console.error(e);
+    onTransactionHash();
+  } catch (error) {
+    console.error('[createNewPair] error.message => ', error.message);
   }
 }

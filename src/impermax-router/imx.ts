@@ -6,7 +6,7 @@
 
 import ImpermaxRouter from '.';
 import { Address, AirdropData, PoolTokenType, ClaimEvent } from './interfaces';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 // Airdrop Data
 export async function initializeAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
@@ -15,17 +15,19 @@ export async function initializeAirdropData(this: ImpermaxRouter) : Promise<Aird
     const data = await json.json();
     if (data) {
       data.amount = BigNumber.from(data.amount);
-      const isClaimed = await this.merkleDistributor.methods.isClaimed(data.index).call();
+      const isClaimed = await this.merkleDistributor.isClaimed(data.index);
       if (!isClaimed) return data;
     }
-  // eslint-disable-next-line no-empty
-  } catch {}
+  } catch (error) {
+    console.log('[initializeAirdropData] error.message => ', error.message);
+  }
   return {
     index: -1,
     amount: null,
     proof: []
   };
 }
+
 export async function getAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
   if (!this.imxCache.airdropData) this.imxCache.airdropData = await this.initializeAirdropData();
   return this.imxCache.airdropData;
@@ -33,17 +35,23 @@ export async function getAirdropData(this: ImpermaxRouter) : Promise<AirdropData
 
 export async function hasClaimableAirdrop(this: ImpermaxRouter) : Promise<boolean> {
   const airdropData = await this.getAirdropData();
-  if (airdropData.amount) return true;
+  // TODO: double-check
+  if (airdropData?.amount) return true;
   return false;
 }
 
 // Farming Shares
-export async function initializeFarmingShares(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+export async function initializeFarmingShares(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType
+) : Promise<number> {
   const farmingPool = await this.getFarmingPool(uniswapV2PairAddress, poolTokenType);
   if (!farmingPool) return 0;
-  const { shares } = await farmingPool.methods.recipients(this.account).call();
+  const { shares } = await farmingPool.recipients(this.account);
   return shares * 1;
 }
+
 export async function getFarmingShares(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.farmingShares) cache.farmingShares = this.initializeFarmingShares(uniswapV2PairAddress, poolTokenType);
@@ -89,10 +97,14 @@ export async function getClaimHistory(this: ImpermaxRouter, uniswapV2PairAddress
 }
 
 // Claim Claimable
-export async function initializeAvailableClaimable(this: ImpermaxRouter, claimableAddress: Address) : Promise<number> {
+export async function initializeAvailableClaimable(
+  this: ImpermaxRouter,
+  claimableAddress: Address
+) : Promise<number> {
   const claimable = await this.getClaimable(claimableAddress);
-  return await claimable.methods.claim().call({ from: this.account }) / 1e18;
+  return await claimable.claim() / 1e18;
 }
+
 export async function getAvailableClaimable(this: ImpermaxRouter, claimableAddress: Address) : Promise<number> {
   const cache = this.getClaimableCache(claimableAddress);
   if (!cache.availableClaimable) cache.availableClaimable = await this.initializeAvailableClaimable(claimableAddress);

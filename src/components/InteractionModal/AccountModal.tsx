@@ -55,8 +55,7 @@ export default function AccountModal({ show, toggleShow, pending, confirmed }: A
       show={show}
       toggleShow={toggleShow}>
       <>
-        {/* eslint-disable-next-line eqeqeq */}
-        {pending.length == 0 && confirmed.length == 0 ? (
+        {pending.length === 0 && confirmed.length === 0 ? (
           <div>You have no recent transaction</div>
         ) : (
           <>

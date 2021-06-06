@@ -4,12 +4,17 @@
 // @ts-nocheck
 // TODO: >
 
-import ImpermaxRouter from '.';
-import { Address, PoolTokenType, ApprovalType } from './interfaces';
-import { BigNumber, ethers } from 'ethers';
-import { PermitData } from '../hooks/useApprove';
+import { BigNumber } from '@ethersproject/bignumber';
+import { defaultAbiCoder } from '@ethersproject/abi';
+import { MaxUint256 } from '@ethersproject/constants';
 
-const MAX_UINT256 = ethers.constants.MaxUint256;
+import { PermitData } from '../hooks/useApprove';
+import ImpermaxRouter from '.';
+import {
+  Address,
+  PoolTokenType,
+  ApprovalType
+} from './interfaces';
 
 const EIP712DOMAIN = [
   { name: 'name', type: 'string' },
@@ -33,37 +38,63 @@ const TYPES = {
 export function getOwnerSpender(this: ImpermaxRouter) : {owner: string, spender: string} {
   return {
     owner: this.account,
-    spender: this.router._address
+    spender: this.router.address
   };
 }
 
-export async function getAllowance(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, approvalType: ApprovalType) : Promise<BigNumber> {
+export async function getAllowance(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  approvalType: ApprovalType
+) : Promise<BigNumber> {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  // eslint-disable-next-line eqeqeq
-  if (token._address == this.WETH && approvalType == ApprovalType.UNDERLYING) return MAX_UINT256;
-  const { owner, spender } = this.getOwnerSpender();
+  if (token.address === this.WETH && approvalType === ApprovalType.UNDERLYING) {
+    return MaxUint256;
+  }
+
+  const {
+    owner,
+    spender
+  } = this.getOwnerSpender();
+
+  // TODO: should use `switch`
   const allowance =
-    // eslint-disable-next-line eqeqeq
-    (approvalType == ApprovalType.POOL_TOKEN) ? await poolToken.methods.allowance(owner, spender).call() :
-      // eslint-disable-next-line eqeqeq
-      (approvalType == ApprovalType.UNDERLYING) ? await token.methods.allowance(owner, spender).call() :
-        // eslint-disable-next-line eqeqeq
-        (approvalType == ApprovalType.BORROW) ? await poolToken.methods.borrowAllowance(owner, spender).call() : 0;
+    (approvalType === ApprovalType.POOL_TOKEN) ? await poolToken.allowance(owner, spender) :
+      (approvalType === ApprovalType.UNDERLYING) ? await token.allowance(owner, spender) :
+        (approvalType === ApprovalType.BORROW) ? await poolToken.borrowAllowance(owner, spender) : 0;
+
   return BigNumber.from(allowance);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function approve(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, approvalType: ApprovalType, amount: BigNumber, onTransactionHash: Function) {
-  const { owner, spender } = this.getOwnerSpender();
-  const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  let send;
-  // eslint-disable-next-line eqeqeq
-  if (approvalType == ApprovalType.POOL_TOKEN) send = poolToken.methods.approve(spender, amount).send({ from: owner });
-  // eslint-disable-next-line eqeqeq
-  if (approvalType == ApprovalType.UNDERLYING) send = token.methods.approve(spender, amount).send({ from: owner });
-  // eslint-disable-next-line eqeqeq
-  if (approvalType == ApprovalType.BORROW) send = poolToken.methods.borrowApprove(spender, amount).send({ from: owner });
-  return send.on('transactionHash', onTransactionHash);
+export async function approve(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  approvalType: ApprovalType,
+  amount: BigNumber,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
+  const { spender } = this.getOwnerSpender();
+  const [
+    poolToken,
+    token
+  ] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+
+  if (approvalType === ApprovalType.POOL_TOKEN) {
+    const tx = await poolToken.approve(spender, amount);
+    await tx.wait();
+  }
+  if (approvalType === ApprovalType.UNDERLYING) {
+    const tx = await token.approve(spender, amount);
+    await tx.wait();
+  }
+  if (approvalType === ApprovalType.BORROW) {
+    const tx = await poolToken.borrowApprove(spender, amount);
+    await tx.wait();
+  }
+  onTransactionHash();
 }
 
 export async function getPermitData(
@@ -74,56 +105,78 @@ export async function getPermitData(
   amount: BigNumber,
   deadlineArg: BigNumber | null,
   callBack: (permitData: PermitData) => void
-) {
-  // eslint-disable-next-line eqeqeq
-  if (approvalType === ApprovalType.UNDERLYING && poolTokenType != PoolTokenType.Collateral) return callBack(null);
-  const { owner, spender } = this.getOwnerSpender();
-  const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  // eslint-disable-next-line eqeqeq
-  const contract = approvalType == ApprovalType.UNDERLYING ? token : poolToken;
-  const nonce = await contract.methods.nonces(owner).call();
-  const name = await contract.methods.name().call();
-  const deadline = deadlineArg ? deadlineArg : this.getDeadline();
-
-  const data = JSON.stringify({
-    types: TYPES,
-    domain: {
-      name: name,
-      version: '1',
-      chainId: this.chainId,
-      verifyingContract: contract._address
-    },
-    // eslint-disable-next-line eqeqeq
-    primaryType: approvalType == ApprovalType.BORROW ? 'BorrowPermit' : 'Permit',
-    message: {
-      owner: owner,
-      spender: spender,
-      value: amount.toString(),
-      nonce: BigNumber.from(nonce).toHexString(),
-      deadline: deadline.toNumber()
+): Promise<void> {
+  try {
+    if (approvalType === ApprovalType.UNDERLYING && poolTokenType !== PoolTokenType.Collateral) {
+      return callBack(null);
     }
-  });
 
-  this.web3.currentProvider.send(
-    {
-      method: 'eth_signTypedData_v4',
-      params: [owner, data],
-      from: owner
-    },
-    (err: any, data: any) => {
-      if (err) {
-        console.error(err);
-        return callBack(null);
+    const {
+      owner,
+      spender
+    } = this.getOwnerSpender();
+    const [
+      poolToken,
+      token
+    ] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    const contract = approvalType === ApprovalType.UNDERLYING ? token : poolToken;
+    const nonce = await contract.nonces(owner);
+    const name = await contract.name();
+    const deadline = deadlineArg ? deadlineArg : this.getDeadline();
+
+    const data = {
+      types: TYPES,
+      domain: {
+        name: name,
+        version: '1',
+        chainId: this.chainId,
+        verifyingContract: contract.address
+      },
+      primaryType: approvalType === ApprovalType.BORROW ? 'BorrowPermit' : 'Permit',
+      message: {
+        owner: owner,
+        spender: spender,
+        value: amount.toString(),
+        nonce: BigNumber.from(nonce).toHexString(),
+        deadline: deadline.toNumber()
       }
-      const signature = data.result.substring(2);
-      const r = '0x' + signature.substring(0, 64);
-      const s = '0x' + signature.substring(64, 128);
-      const v = parseInt(signature.substring(128, 130), 16);
-      const permitData: string = ethers.utils.defaultAbiCoder.encode(
-        ['bool', 'uint8', 'bytes32', 'bytes32'],
-        [false, v, r, s]
+    };
+
+    /**
+     * MEMO: inspired by:
+     * - https://gist.github.com/ajb413/6ca63eb868e179a9c0a3b8dc735733cf
+     * - https://www.gitmemory.com/issue/ethers-io/ethers.js/1020/683313086
+     */
+    const signer = this.library.getSigner(this.account);
+    const signature =
+      await EIP712.sign(
+        data.domain,
+        data.primaryType,
+        data.message,
+        data.types,
+        signer
       );
-      callBack({ permitData, deadline, amount });
-    }
-  );
+    const permitData: string = defaultAbiCoder.encode(
+      [
+        'bool',
+        'uint8',
+        'bytes32',
+        'bytes32'
+      ],
+      [
+        false,
+        signature.v,
+        signature.r,
+        signature.s
+      ]
+    );
+    callBack({
+      permitData,
+      deadline,
+      amount
+    });
+  } catch (error) {
+    console.log('[getPermitData] error.message => ', error.message);
+    callBack(null);
+  }
 }

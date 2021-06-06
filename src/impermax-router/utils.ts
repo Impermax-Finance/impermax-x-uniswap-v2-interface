@@ -5,7 +5,7 @@
 
 import ImpermaxRouter from '.';
 import { Address, PoolTokenType } from './interfaces';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 export async function normalize(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: number) : Promise<number> {
   // eslint-disable-next-line no-invalid-this

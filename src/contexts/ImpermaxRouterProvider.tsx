@@ -12,7 +12,6 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import ImpermaxRouter from 'impermax-router';
-import useWeb3 from 'hooks/useWeb3';
 import {
   useRouterAddress,
   useWETH,
@@ -42,9 +41,9 @@ export const ImpermaxRouterContext = createContext<ImpermaxRouterContextI>({});
 export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const {
     account,
-    chainId
+    chainId,
+    library
   } = useWeb3React<Web3Provider>();
-  const web3 = useWeb3();
   const subgraph = useSubgraph();
   const routerAddress = useRouterAddress();
   const factoryAddress = useFactoryAddress();
@@ -72,10 +71,26 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!web3) return;
+    // TODO: double-check
+    if (!IMX) return;
+    if (!WETH) return;
+    if (!airdropUrl) return;
+    if (!chainId) return;
+    if (!claimAggregatorAddress) return;
+    if (!factoryAddress) return;
+    if (!merkleDistributorAddress) return;
+    // if (!impermaxRouter) return;
+    // if (!priceInverted) return;
+    if (!routerAddress) return;
+    if (!simpleUniswapOracleAddress) return;
+    if (!subgraph) return;
+    if (!uniswapV2FactoryAddress) return;
+    if (!library) return;
+
     if (!impermaxRouter) {
       const impermaxRouter = new ImpermaxRouter({
         subgraph,
+        library,
         web3,
         chainId,
         routerAddress,
@@ -90,17 +105,31 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         priceInverted
       });
       if (account) {
-        impermaxRouter.unlockWallet(web3, account);
+        impermaxRouter.unlockWallet(library, account);
         setRouterAccount(account);
       }
       setImpermaxRouter(impermaxRouter);
     } else if (account) {
-      impermaxRouter.unlockWallet(web3, account);
+      impermaxRouter.unlockWallet(library, account);
       setRouterAccount(account);
     }
   }, [
-    web3,
-    account
+    account,
+    // TODO: double-check
+    IMX,
+    WETH,
+    airdropUrl,
+    chainId,
+    claimAggregatorAddress,
+    factoryAddress,
+    impermaxRouter,
+    merkleDistributorAddress,
+    priceInverted,
+    routerAddress,
+    simpleUniswapOracleAddress,
+    subgraph,
+    uniswapV2FactoryAddress,
+    library
   ]);
 
   return (

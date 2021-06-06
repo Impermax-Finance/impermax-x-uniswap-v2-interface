@@ -34,17 +34,14 @@ export function useAddLiquidityUrl() : string {
   const WETH = useWETH();
   const tokenAAddress = useUnderlyingAddress(PoolTokenType.BorrowableA);
   const tokenBAddress = useUnderlyingAddress(PoolTokenType.BorrowableB);
-  // eslint-disable-next-line eqeqeq
-  const addressA = tokenAAddress == WETH ? 'ETH' : tokenAAddress;
-  // eslint-disable-next-line eqeqeq
-  const addressB = tokenBAddress == WETH ? 'ETH' : tokenBAddress;
+  const addressA = tokenAAddress === WETH ? 'ETH' : tokenAAddress;
+  const addressB = tokenBAddress === WETH ? 'ETH' : tokenBAddress;
   return 'https://app.uniswap.org/#/add/' + addressA + '/' + addressB;
 }
 
 export function useTransactionUrlGenerator() : (hash: string) => string {
   const { chainId } = useWeb3React<Web3Provider>();
-  // eslint-disable-next-line eqeqeq
-  const subdomain = chainId == 3 ? 'ropsten.' : '';
+  const subdomain = chainId === 3 ? 'ropsten.' : '';
   return (hash: string) => 'https://' + subdomain + 'etherscan.io/tx/' + hash;
 }
 

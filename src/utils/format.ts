@@ -7,8 +7,7 @@ function formatSmallNumber(n: number, significant = 6) {
  * Return the number floored to a certain amount of significant digits
  */
 export function formatFloat(n: number, significant = 6) : string {
-  // eslint-disable-next-line eqeqeq
-  if (n == Infinity) return 'Infinity'; // return "∞";
+  if (n === Infinity) return 'Infinity'; // return "∞";
   if (!n) return '0';
   if (n * 1.000001 >= 10 ** (significant - 1)) return Math.floor(n).toString();
   if (n < 1e-6) return formatSmallNumber(n, significant);
@@ -20,8 +19,7 @@ export function formatFloat(n: number, significant = 6) : string {
 }
 
 export function formatToDecimals(n: number, decimals = 2) : string {
-  // eslint-disable-next-line eqeqeq
-  if (n == Infinity) return 'Infinity'; // return "∞";
+  if (n === Infinity) return 'Infinity'; // return "∞";
   return (Math.round(n * (10 ** decimals)) / (10 ** decimals)).toFixed(decimals);
 }
 
@@ -48,7 +46,6 @@ export function formatUSD(n: number) : string {
 }
 
 export function formatLeverage(n: number) : string {
-  // eslint-disable-next-line eqeqeq
-  if (n == Infinity) return '∞';
+  if (n === Infinity) return '∞';
   return formatToDecimals(n, 2) + 'x';
 }

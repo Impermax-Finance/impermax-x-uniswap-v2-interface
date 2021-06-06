@@ -1,12 +1,15 @@
 {
   "cSpell.words": [
+    "AUSD",
     "Borrowable",
+    "CUSD",
     "IERC",
     "LOCHMARA",
     "Serializable",
     "TTFB",
     "TWAP",
     "Unconnect",
+    "bignumber",
     "browserslist",
     "camelcase",
     "chromaui",
@@ -23,6 +26,7 @@
     "heroicons",
     "impermax",
     "inmemory",
+    "keccak",
     "localstorage",
     "merkle",
     "mixins",
@@ -32,7 +36,9 @@
     "popperjs",
     "reduxjs",
     "semibold",
+    "struct",
     "tailwindcss",
+    "typehash",
     "webfonts"
   ]
 }

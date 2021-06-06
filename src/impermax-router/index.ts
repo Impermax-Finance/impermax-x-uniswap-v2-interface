@@ -3,6 +3,9 @@
 // @ts-nocheck
 // TODO: >
 
+import { Contract } from '@ethersproject/contracts';
+import { Web3Provider } from '@ethersproject/providers';
+
 import ERC20JSON from 'abis/contracts/IERC20.json';
 import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import UniswapV2FactoryJSON from 'abis/contracts/IUniswapV2Factory.json';
@@ -90,7 +93,7 @@ class ImpermaxRouter {
 
   constructor(cfg: ImpermaxRouterCfg) {
     this.subgraph = cfg.subgraph;
-    this.web3 = cfg.web3;
+    this.library = cfg.library;
     this.chainId = cfg.chainId;
     this.uiMargin = 1.1;
     this.dust = 1.000001;
@@ -109,59 +112,70 @@ class ImpermaxRouter {
     this.claimableCache = {};
   }
 
-  newRouter(address: Address) {
-    return new this.web3.eth.Contract(Router01JSON.abi, address);
-  }
-  newFactory(address: Address) {
-    return new this.web3.eth.Contract(FactoryJSON.abi, address);
-  }
-  newSimpleUniswapOracle(address: Address) {
-    return new this.web3.eth.Contract(SimpleUniswapOracleJSON.abi, address);
-  }
-  newUniswapV2Pair(address: Address) {
-    return new this.web3.eth.Contract(UniswapV2PairJSON.abi, address);
-  }
-  newUniswapV2Factory(address: Address) {
-    return new this.web3.eth.Contract(UniswapV2FactoryJSON.abi, address);
-  }
-  newERC20(address: Address) {
-    return new this.web3.eth.Contract(ERC20JSON.abi, address);
-  }
-  newCollateral(address: Address) {
-    return new this.web3.eth.Contract(CollateralSON.abi, address);
-  }
-  newBorrowable(address: Address) {
-    return new this.web3.eth.Contract(BorrowableJSON.abi, address);
-  }
-  newMerkleDistributor(address: Address) {
-    return new this.web3.eth.Contract(MerkleDistributorJSON.abi, address);
-  }
-  newFarmingPool(address: Address) {
-    return new this.web3.eth.Contract(FarmingPoolJSON.abi, address);
-  }
-  newClaimAggregator(address: Address) {
-    return new this.web3.eth.Contract(ClaimAggregatorJSON.abi, address);
-  }
-  newClaimable(address: Address) {
-    return new this.web3.eth.Contract(ClaimableJSON.abi, address);
+  newRouter(address: Address): Contract {
+    return new Contract(address, Router01JSON.abi, this.library.getSigner(this.account));
   }
 
-  unlockWallet(web3: any, account: Address) {
-    this.web3 = web3;
+  newFactory(address: Address): Contract {
+    return new Contract(address, FactoryJSON.abi, this.library.getSigner(this.account));
+  }
+
+  newSimpleUniswapOracle(address: Address): Contract {
+    return new Contract(address, SimpleUniswapOracleJSON.abi, this.library);
+  }
+
+  newUniswapV2Pair(address: Address): Contract {
+    return new Contract(address, UniswapV2PairJSON.abi, this.library);
+  }
+
+  newUniswapV2Factory(address: Address): Contract {
+    return new Contract(address, UniswapV2FactoryJSON.abi, this.library);
+  }
+
+  newERC20(address: Address): Contract {
+    return new Contract(address, ERC20JSON.abi, this.library);
+  }
+
+  newCollateral(address: Address): Contract {
+    return new Contract(address, CollateralSON.abi, this.library);
+  }
+
+  newBorrowable(address: Address): Contract {
+    return new Contract(address, BorrowableJSON.abi, this.library);
+  }
+
+  newMerkleDistributor(address: Address): Contract {
+    return new Contract(address, MerkleDistributorJSON.abi, this.library.getSigner(this.account));
+  }
+
+  newFarmingPool(address: Address): Contract {
+    return new Contract(address, FarmingPoolJSON.abi, this.library);
+  }
+
+  newClaimAggregator(address: Address): Contract {
+    return new Contract(address, ClaimAggregatorJSON.abi, this.library.getSigner(this.account));
+  }
+
+  newClaimable(address: Address): Contract {
+    return new Contract(address, ClaimableJSON.abi, this.library.getSigner(this.account));
+  }
+
+  unlockWallet(library: Web3Provider, account: Address): void {
+    this.library = library;
     this.account = account;
-    this.router = this.newRouter(this.router._address);
-    this.factory = this.newFactory(this.factory._address);
-    this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle._address);
+    this.router = this.newRouter(this.router.address);
+    this.factory = this.newFactory(this.factory.address);
+    this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle.address);
     this.cleanCache();
   }
 
-  cleanCache() {
+  cleanCache(): void {
     this.lendingPoolCache = {};
     this.imxCache = {};
     this.claimableCache = {};
   }
 
-  setPriceInverted(priceInverted: boolean) {
+  setPriceInverted(priceInverted: boolean): void {
     this.priceInverted = priceInverted;
   }
 

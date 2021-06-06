@@ -8,7 +8,7 @@ import usePoolToken from './usePoolToken';
 import usePairAddress from './usePairAddress';
 import { useState, useEffect } from 'react';
 import { useRouterCallback } from './useImpermaxRouter';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { decimalToBalance } from '../utils/ether-utils';
 import { useSubgraphCallback } from './useSubgraph';
 import { InputAddressState } from 'pages/CreateNewPair';
@@ -99,9 +99,9 @@ export function useMarketPrice() : number {
 
 export function useOracleIsInitialized() : boolean {
   const uniswapV2PairAddress = usePairAddress();
-  const [oracleIsInitialied, setOracleIsInitialized] = useState<boolean>(true);
+  const [oracleIsInitialized, setOracleIsInitialized] = useState<boolean>(true);
   useRouterCallback(async router => setOracleIsInitialized(await router.getTWAPPrice(uniswapV2PairAddress) !== 0));
-  return oracleIsInitialied;
+  return oracleIsInitialized;
 }
 
 export function useTWAPPrice() : number {

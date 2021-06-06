@@ -3,7 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from 'store/transactions/hooks';
 import usePairAddress from './usePairAddress';
@@ -28,8 +28,7 @@ export default function useBorrow(approvalState: ButtonState, amount: BigNumber,
 
   const borrowState: ButtonState = useMemo(() => {
     if (invalidInput) return ButtonState.Disabled;
-    // eslint-disable-next-line eqeqeq
-    if (approvalState != ButtonState.Done) return ButtonState.Disabled;
+    if (approvalState !== ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
   }, [approvalState, pending, amount]);
