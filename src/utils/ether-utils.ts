@@ -1,5 +1,5 @@
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { formatToDecimals } from './format';
 
 export function balanceToDecimal(s: string): string {

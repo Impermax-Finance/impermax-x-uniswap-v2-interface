@@ -3,7 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from 'store/transactions/hooks';
 import usePairAddress from './usePairAddress';

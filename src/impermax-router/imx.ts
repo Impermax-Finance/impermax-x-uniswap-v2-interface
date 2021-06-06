@@ -6,7 +6,7 @@
 
 import ImpermaxRouter from '.';
 import { Address, AirdropData, PoolTokenType, ClaimEvent } from './interfaces';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 // Airdrop Data
 export async function initializeAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {

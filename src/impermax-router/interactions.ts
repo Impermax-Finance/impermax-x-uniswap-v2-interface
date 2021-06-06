@@ -1,7 +1,7 @@
 /* eslint-disable no-invalid-this */
 import ImpermaxRouter from '.';
 import { Address, PoolTokenType, AirdropData } from './interfaces';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { PermitData } from '../hooks/useApprove';
 import { impermanentLoss } from '../utils';
 import { DistributorDetails } from '../utils/constants';

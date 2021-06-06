@@ -8,7 +8,7 @@ import usePoolToken from './usePoolToken';
 import usePairAddress from './usePairAddress';
 import { useState, useEffect } from 'react';
 import { useRouterCallback } from './useImpermaxRouter';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { decimalToBalance } from '../utils/ether-utils';
 import { useSubgraphCallback } from './useSubgraph';
 import { InputAddressState } from 'pages/CreateNewPair';

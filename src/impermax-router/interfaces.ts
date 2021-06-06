@@ -1,5 +1,5 @@
 
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { Web3Provider } from '@ethersproject/providers';
 
 import Subgraph from '../subgraph';
