@@ -67,9 +67,7 @@ export interface ImpermaxRouterCfg {
   WETH: Address;
   airdropUrl: string;
   priceInverted: boolean;
-  // ray test touch <<
   library: Web3Provider;
-  // ray test touch >>
 }
 
 export interface BorrowableData {

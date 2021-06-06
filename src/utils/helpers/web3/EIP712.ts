@@ -1,5 +1,4 @@
 
-// ray test touch <<
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
@@ -137,8 +136,8 @@ async function sign(domain, primaryType, message, types = {}, signer) {
 
       signature = { r, s, v };
     }
-  } catch (e) {
-    throw new Error(e);
+  } catch (error) {
+    throw new Error(error);
   }
 
   return signature;
@@ -153,4 +152,3 @@ export {
   digestToSign,
   sign
 };
-// ray test touch >>

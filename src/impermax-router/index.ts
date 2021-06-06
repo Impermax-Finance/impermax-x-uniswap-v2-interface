@@ -4,6 +4,7 @@
 // TODO: >
 
 import { Contract } from '@ethersproject/contracts';
+import { Web3Provider } from '@ethersproject/providers';
 
 import ERC20JSON from 'abis/contracts/IERC20.json';
 import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
@@ -92,12 +93,7 @@ class ImpermaxRouter {
 
   constructor(cfg: ImpermaxRouterCfg) {
     this.subgraph = cfg.subgraph;
-    // ray test touch <
-    // ray test touch <<
     this.library = cfg.library;
-    // ray test touch >>
-    this.web3 = cfg.web3;
-    // ray test touch >
     this.chainId = cfg.chainId;
     this.uiMargin = 1.1;
     this.dust = 1.000001;
@@ -116,7 +112,6 @@ class ImpermaxRouter {
     this.claimableCache = {};
   }
 
-  // ray test touch <
   newRouter(address: Address): Contract {
     return new Contract(address, Router01JSON.abi, this.library.getSigner(this.account));
   }
@@ -165,16 +160,14 @@ class ImpermaxRouter {
     return new Contract(address, ClaimableJSON.abi, this.library.getSigner(this.account));
   }
 
-  // ray test touch <
-  unlockWallet(web3: any, account: Address): void {
-    this.web3 = web3;
+  unlockWallet(library: Web3Provider, account: Address): void {
+    this.library = library;
     this.account = account;
     this.router = this.newRouter(this.router.address);
     this.factory = this.newFactory(this.factory.address);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle.address);
     this.cleanCache();
   }
-  // ray test touch >
 
   cleanCache(): void {
     this.lendingPoolCache = {};
