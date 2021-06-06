@@ -12,7 +12,6 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import ImpermaxRouter from 'impermax-router';
-import useWeb3 from 'hooks/useWeb3';
 import {
   useRouterAddress,
   useWETH,
@@ -45,7 +44,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     chainId,
     library
   } = useWeb3React<Web3Provider>();
-  const web3 = useWeb3();
   const subgraph = useSubgraph();
   const routerAddress = useRouterAddress();
   const factoryAddress = useFactoryAddress();
@@ -73,8 +71,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!web3) return;
-
     // TODO: double-check
     if (!IMX) return;
     if (!WETH) return;
@@ -118,7 +114,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
       setRouterAccount(account);
     }
   }, [
-    web3,
     account,
     // TODO: double-check
     IMX,

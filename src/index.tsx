@@ -1,6 +1,7 @@
 
-import React from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Web3ReactProvider } from '@web3-react/core';
 
@@ -8,6 +9,9 @@ import App from './App';
 import getLibrary from 'utils/helpers/web3/get-library';
 import LanguageProvider from 'contexts/LanguageProvider';
 import NetworkProvider from 'contexts/NetworkProvider';
+import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
+import { SubgraphProvider } from 'contexts/SubgraphProvider';
+import Updater from 'store/transactions/updater';
 import store from './store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
@@ -18,7 +22,14 @@ ReactDOM.render(
       <Provider store={store}>
         <NetworkProvider>
           <LanguageProvider>
-            <App />
+            <Updater />
+            <SubgraphProvider>
+              <ImpermaxRouterProvider>
+                <Router>
+                  <App />
+                </Router>
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
           </LanguageProvider>
         </NetworkProvider>
       </Provider>
