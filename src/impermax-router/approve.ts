@@ -142,6 +142,11 @@ export async function getPermitData(
       }
     };
 
+    /**
+     * MEMO: inspired by:
+     * - https://gist.github.com/ajb413/6ca63eb868e179a9c0a3b8dc735733cf
+     * - https://www.gitmemory.com/issue/ethers-io/ethers.js/1020/683313086
+     */
     const signer = this.library.getSigner(this.account);
     const signature =
       await EIP712.sign(
