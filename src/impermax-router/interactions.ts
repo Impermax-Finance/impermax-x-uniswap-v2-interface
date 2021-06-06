@@ -232,9 +232,6 @@ export async function claimAirdrop(
       await this.merkleDistributor.claim(airdropData.index, this.account, airdropData.amount, airdropData.proof);
     await tx.wait();
     onTransactionHash();
-    // await this.merkleDistributor.methods.claim(airdropData.index, this.account, airdropData.amount, airdropData.proof).call({ from: this.account });
-    // const send = this.merkleDistributor.methods.claim(airdropData.index, this.account, airdropData.amount, airdropData.proof).send({ from: this.account });
-    // return send.on('transactionHash', onTransactionHash);
   } catch (error) {
     console.error('[claimAirdrop] error.message => ', error.message);
   }

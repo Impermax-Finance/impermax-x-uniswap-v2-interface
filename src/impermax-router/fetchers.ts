@@ -70,10 +70,6 @@ export async function initializePriceDenomLP(
     price0,
     price1
   } = await collateral.callStatic.getPrices();
-  // const {
-  //   price0,
-  //   price1
-  // } = await collateral.methods.getPrices().call();
   const decimalsA = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const decimalsB = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   return [
@@ -81,7 +77,6 @@ export async function initializePriceDenomLP(
     price1 / 1e18 / 1e18 * Math.pow(10, decimalsB)
   ];
 }
-// ray test touch >>
 
 export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);

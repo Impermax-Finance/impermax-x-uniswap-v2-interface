@@ -16,7 +16,6 @@ export async function initializeAirdropData(this: ImpermaxRouter) : Promise<Aird
     if (data) {
       data.amount = BigNumber.from(data.amount);
       const isClaimed = await this.merkleDistributor.isClaimed(data.index);
-      // const isClaimed = await this.merkleDistributor.methods.isClaimed(data.index).call();
       if (!isClaimed) return data;
     }
   } catch (error) {
