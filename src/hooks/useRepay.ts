@@ -27,8 +27,7 @@ export default function useRepay(approvalState: ButtonState, amount: BigNumber, 
 
   const repayState: ButtonState = useMemo(() => {
     if (invalidInput) return ButtonState.Disabled;
-    // eslint-disable-next-line eqeqeq
-    if (approvalState != ButtonState.Done) return ButtonState.Disabled;
+    if (approvalState !== ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
   }, [approvalState, pending, amount]);

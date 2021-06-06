@@ -50,8 +50,7 @@ export default function WithdrawInteractionModal({ show, toggleShow }: WithdrawI
       show={show}
       toggleShow={toggleShow}>
       <>
-        {/* eslint-disable-next-line eqeqeq */}
-        {poolTokenType == PoolTokenType.Collateral && (<RiskMetrics changeCollateral={-val} />)}
+        {poolTokenType === PoolTokenType.Collateral && (<RiskMetrics changeCollateral={-val} />)}
         <InputAmount
           val={val}
           setVal={setVal}

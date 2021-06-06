@@ -90,8 +90,7 @@ export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress
 }
 export async function getBorrowablePriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
-  // eslint-disable-next-line eqeqeq
-  if (poolTokenType == PoolTokenType.BorrowableA) return priceA;
+  if (poolTokenType === PoolTokenType.BorrowableA) return priceA;
   return priceB;
 }
 export async function getMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
@@ -104,8 +103,7 @@ export async function getMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairA
 }
 export async function getBorrowableMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
-  // eslint-disable-next-line eqeqeq
-  if (poolTokenType == PoolTokenType.BorrowableA) return priceA;
+  if (poolTokenType === PoolTokenType.BorrowableA) return priceA;
   return priceB;
 }
 

@@ -44,14 +44,12 @@ export default function DepositInteractionModal({ show, toggleShow }: DepositInt
   if (!availableBalance) {
     return (
       <InteractionModalContainer
-        // eslint-disable-next-line eqeqeq
-        title={poolTokenType == PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
+        title={poolTokenType === PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
         show={show}
         toggleShow={toggleShow}>
         <>
           You need to hold {symbol} in your wallet in order to deposit it.
-          {/* eslint-disable-next-line eqeqeq */}
-          {poolTokenType == PoolTokenType.Collateral ? (
+          {poolTokenType === PoolTokenType.Collateral ? (
             <>
               <br />
               You can obtain it by&nbsp;

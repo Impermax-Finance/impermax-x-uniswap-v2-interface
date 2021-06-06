@@ -40,8 +40,7 @@ export default function useLeverage(
 
   const leverageState: ButtonState = useMemo(() => {
     if (invalidInput) return ButtonState.Disabled;
-    // eslint-disable-next-line eqeqeq
-    if (approvalStateA != ButtonState.Done || approvalStateB != ButtonState.Done) return ButtonState.Disabled;
+    if (approvalStateA !== ButtonState.Done || approvalStateB !== ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
   }, [approvalStateA, approvalStateB, pending]);

@@ -51,10 +51,8 @@ export default function RepayInteractionModal({ show, toggleShow }: RepayInterac
       toggleShow={toggleShow}>
       <>
         <RiskMetrics
-          // eslint-disable-next-line eqeqeq
-          changeBorrowedA={poolTokenType == PoolTokenType.BorrowableA ? -val : 0}
-          // eslint-disable-next-line eqeqeq
-          changeBorrowedB={poolTokenType == PoolTokenType.BorrowableB ? -val : 0} />
+          changeBorrowedA={poolTokenType === PoolTokenType.BorrowableA ? -val : 0}
+          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? -val : 0} />
         <InputAmount
           val={val}
           setVal={setVal}

@@ -183,8 +183,7 @@ export async function getMarketValues(this: ImpermaxRouter, uniswapV2PairAddress
 export async function getNewLeverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<number> {
   const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, changes);
   const valueDebt = valueA + valueB;
-  // eslint-disable-next-line eqeqeq
-  if (valueDebt == 0) return 1;
+  if (valueDebt === 0) return 1;
   const equity = valueCollateral - valueDebt;
   if (equity <= 0) return Infinity;
   return valueDebt / equity + 1;
@@ -196,8 +195,7 @@ export async function getLeverage(this: ImpermaxRouter, uniswapV2PairAddress: Ad
 // Liquidation Threshold
 export async function getNewLiquidationPriceSwings(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<[number, number]> {
   const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, changes);
-  // eslint-disable-next-line eqeqeq
-  if (valueA + valueB == 0) return [Infinity, Infinity];
+  if (valueA + valueB === 0) return [Infinity, Infinity];
   const safetyMargin = await this.subgraph.getSafetyMargin(uniswapV2PairAddress);
   const liquidationIncentive = await this.subgraph.getLiquidationIncentive(uniswapV2PairAddress);
   const actualCollateral = valueCollateral / liquidationIncentive;
@@ -225,8 +223,7 @@ export async function getLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAd
 export async function getMaxWithdrawable(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const deposited = await this.getDeposited(uniswapV2PairAddress, poolTokenType);
   const availableCash = await this.subgraph.getTotalBalance(uniswapV2PairAddress, poolTokenType);
-  // eslint-disable-next-line eqeqeq
-  if (poolTokenType != PoolTokenType.Collateral) return Math.min(deposited, availableCash) / this.dust;
+  if (poolTokenType !== PoolTokenType.Collateral) return Math.min(deposited, availableCash) / this.dust;
   const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, NO_CHANGES);
   const safetyMargin = (await this.subgraph.getSafetyMargin(uniswapV2PairAddress)) * this.uiMargin;
   const liquidationIncentive = await this.subgraph.getLiquidationIncentive(uniswapV2PairAddress);
@@ -240,10 +237,8 @@ export async function getMaxWithdrawable(this: ImpermaxRouter, uniswapV2PairAddr
 export async function getMaxBorrowable(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const availableCash = await this.subgraph.getTotalBalance(uniswapV2PairAddress, poolTokenType);
   const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, NO_CHANGES);
-  // eslint-disable-next-line eqeqeq
-  const valueBorrowed = poolTokenType == PoolTokenType.BorrowableA ? valueA : valueB;
-  // eslint-disable-next-line eqeqeq
-  const valueOther = poolTokenType == PoolTokenType.BorrowableA ? valueB : valueA;
+  const valueBorrowed = poolTokenType === PoolTokenType.BorrowableA ? valueA : valueB;
+  const valueOther = poolTokenType === PoolTokenType.BorrowableA ? valueB : valueA;
   const safetyMargin = (await this.subgraph.getSafetyMargin(uniswapV2PairAddress)) * this.uiMargin;
   const liquidationIncentive = await this.subgraph.getLiquidationIncentive(uniswapV2PairAddress);
   const actualCollateral = valueCollateral / liquidationIncentive;
@@ -274,8 +269,7 @@ export async function getMaxLeverage(this: ImpermaxRouter, uniswapV2PairAddress:
   const additionalValueBorrowablePerSide = Math.min(num1 / den, num2 / den, availableCashValue1, availableCashValue2) * adjustFactor;
   const valueDebt = valueA + valueB;
   const equity = valueCollateral - valueDebt;
-  // eslint-disable-next-line eqeqeq
-  if (equity == 0) return 1;
+  if (equity === 0) return 1;
   return (valueDebt + additionalValueBorrowablePerSide * 2) / equity + 1;
 }
 

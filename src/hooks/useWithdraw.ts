@@ -28,8 +28,7 @@ export default function useWithdraw(approvalState: ButtonState, tokens: BigNumbe
 
   const withdrawState: ButtonState = useMemo(() => {
     if (invalidInput) return ButtonState.Disabled;
-    // eslint-disable-next-line eqeqeq
-    if (approvalState != ButtonState.Done) return ButtonState.Disabled;
+    if (approvalState !== ButtonState.Done) return ButtonState.Disabled;
     if (pending) return ButtonState.Pending;
     return ButtonState.Ready;
   }, [approvalState, pending]);
