@@ -20,27 +20,15 @@ export async function deposit(
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
-    // ray test touch <<
     if (token.address === this.WETH) {
-    // if (token._address === this.WETH) {
-    // ray test touch >>
       const overrides = { value: amount };
-      // ray test touch <<
       const tx = await this.router.mintETH(poolToken.address, this.account, deadline, overrides);
-      // const tx = await this.router.mintETH(poolToken._address, this.account, deadline, overrides);
-      // ray test touch >>
       await tx.wait();
     } else if (poolTokenType === PoolTokenType.Collateral) {
-      // ray test touch <<
       const tx = await this.router.mintCollateral(poolToken.address, amount, this.account, deadline, data);
-      // const tx = await this.router.mintCollateral(poolToken._address, amount, this.account, deadline, data);
-      // ray test touch >>
       await tx.wait();
     } else {
-      // ray test touch <<
       const tx = this.router.mint(poolToken.address, amount, this.account, deadline);
-      // const tx = this.router.mint(poolToken._address, amount, this.account, deadline);
-      // ray test touch >>
       await tx.wait();
     }
     onTransactionHash();
@@ -63,20 +51,11 @@ export async function withdraw(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
 
   try {
-    // ray test touch <<
     if (token.address === this.WETH) {
-    // if (token._address === this.WETH) {
-    // ray test touch >>
-      // ray test touch <<
       const tx = await this.router.redeemETH(poolToken.address, tokens, this.account, deadline, data);
-      // const tx = await this.router.redeemETH(poolToken._address, tokens, this.account, deadline, data);
-      // ray test touch >>
       await tx.wait();
     } else {
-      // ray test touch <<
       const tx = await this.router.redeem(poolToken.address, tokens, this.account, deadline, data);
-      // const tx = await this.router.redeem(poolToken._address, tokens, this.account, deadline, data);
-      // ray test touch >>
       await tx.wait();
     }
     onTransactionHash();
@@ -99,20 +78,11 @@ export async function borrow(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
 
   try {
-    // ray test touch <<
     if (token.address === this.WETH) {
-    // if (token._address === this.WETH) {
-    // ray test touch >>
-      // ray test touch <<
       const tx = await this.router.borrowETH(borrowable.address, amount, this.account, deadline, data);
-      // const tx = await this.router.borrowETH(borrowable._address, amount, this.account, deadline, data);
-      // ray test touch >>
       await tx.wait();
     } else {
-      // ray test touch <<
       const tx = await this.router.borrow(borrowable.address, amount, this.account, deadline, data);
-      // const tx = await this.router.borrow(borrowable._address, amount, this.account, deadline, data);
-      // ray test touch >>
       await tx.wait();
     }
     onTransactionHash();
@@ -133,21 +103,12 @@ export async function repay(
   const deadline = this.getDeadline();
 
   try {
-    // ray test touch <<
     if (token.address === this.WETH) {
-    // if (token._address === this.WETH) {
-    // ray test touch >>
       const overrides = { value: amount };
-      // ray test touch <<
       const tx = await this.router.repayETH(borrowable.address, this.account, deadline, overrides);
-      // const tx = await this.router.repayETH(borrowable._address, this.account, deadline, overrides);
-      // ray test touch >>
       await tx.wait();
     } else {
-      // ray test touch <<
       const tx = await this.router.repay(borrowable.address, amount, this.account, deadline);
-      // const tx = await this.router.repay(borrowable._address, amount, this.account, deadline);
-      // ray test touch >>
       await tx.wait();
     }
     onTransactionHash();
@@ -260,7 +221,6 @@ export async function deleverage(
   }
 }
 
-// ray test touch <<
 export async function claimAirdrop(
   this: ImpermaxRouter,
   airdropData: AirdropData,
@@ -279,9 +239,7 @@ export async function claimAirdrop(
     console.error('[claimAirdrop] error.message => ', error.message);
   }
 }
-// ray test touch >>
 
-// ray test touch <<
 export async function trackBorrows(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
@@ -295,26 +253,18 @@ export async function trackBorrows(
   const borrowedB = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   const sharesA = await this.getFarmingShares(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const sharesB = await this.getFarmingShares(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  // ray test touch <<
   if (borrowedA > 0 && sharesA === 0) toTrack.push(borrowableA.address);
   if (borrowedB > 0 && sharesB === 0) toTrack.push(borrowableB.address);
-  // if (borrowedA > 0 && sharesA === 0) toTrack.push(borrowableA._address);
-  // if (borrowedB > 0 && sharesB === 0) toTrack.push(borrowableB._address);
-  // ray test touch >>
   try {
     const tx = await this.claimAggregator.trackBorrows(this.account, toTrack);
     await tx.wait();
     onTransactionHash();
-    // await this.claimAggregator.methods.trackBorrows(this.account, toTrack).call({ from: this.account });
-    // const send = this.claimAggregator.methods.trackBorrows(this.account, toTrack).send({ from: this.account });
-    // return send.on('transactionHash', onTransactionHash);
   } catch (error) {
     console.error('[trackBorrows] error.message => ', error.message);
   }
 }
 // ray test touch >>
 
-// ray test touch <<
 export async function claims(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
@@ -326,26 +276,17 @@ export async function claims(
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   const claimAmountA = await farmingPoolA.methods.claim().call({ from: this.account }) / 1e18;
   const claimAmountB = await farmingPoolB.methods.claim().call({ from: this.account }) / 1e18;
-  // ray test touch <<
   if (claimAmountA * 1 > 0) toClaim.push(farmingPoolA.address);
   if (claimAmountB * 1 > 0) toClaim.push(farmingPoolB.address);
-  // if (claimAmountA * 1 > 0) toClaim.push(farmingPoolA._address);
-  // if (claimAmountB * 1 > 0) toClaim.push(farmingPoolB._address);
-  // ray test touch >>
   try {
     const tx = this.claimAggregator.claims(this.account, toClaim);
     await tx.wait();
     onTransactionHash();
-    // await this.claimAggregator.methods.claims(this.account, toClaim).call({ from: this.account });
-    // const send = this.claimAggregator.methods.claims(this.account, toClaim).send({ from: this.account });
-    // return send.on('transactionHash', onTransactionHash);
   } catch (error) {
     console.error('[claims] error.message => ', error.message);
   }
 }
-// ray test touch >>
 
-// ray test touch <<
 export async function claimDistributor(
   this: ImpermaxRouter,
   distributorDetails: DistributorDetails,
@@ -357,14 +298,10 @@ export async function claimDistributor(
     const tx = await claimable.claim();
     await tx.wait();
     onTransactionHash();
-    // await claimable.methods.claim().call({ from: this.account });
-    // const send = claimable.methods.claim().send({ from: this.account });
-    // return send.on('transactionHash', onTransactionHash);
   } catch (error) {
     console.error('[claimDistributor] error.message => ', error.message);
   }
 }
-// ray test touch >>
 
 export async function createNewPair(
   this: ImpermaxRouter,

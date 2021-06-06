@@ -8,7 +8,6 @@ import ImpermaxRouter from '.';
 import { Address, AirdropData, PoolTokenType, ClaimEvent } from './interfaces';
 import { BigNumber } from 'ethers';
 
-// ray test touch <<
 // Airdrop Data
 export async function initializeAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
   try {
@@ -29,7 +28,6 @@ export async function initializeAirdropData(this: ImpermaxRouter) : Promise<Aird
     proof: []
   };
 }
-// ray test touch >>
 
 export async function getAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
   if (!this.imxCache.airdropData) this.imxCache.airdropData = await this.initializeAirdropData();
@@ -43,7 +41,6 @@ export async function hasClaimableAirdrop(this: ImpermaxRouter) : Promise<boolea
   return false;
 }
 
-// ray test touch <<
 // Farming Shares
 export async function initializeFarmingShares(
   this: ImpermaxRouter,
@@ -53,10 +50,8 @@ export async function initializeFarmingShares(
   const farmingPool = await this.getFarmingPool(uniswapV2PairAddress, poolTokenType);
   if (!farmingPool) return 0;
   const { shares } = await farmingPool.recipients(this.account);
-  // const { shares } = await farmingPool.methods.recipients(this.account).call();
   return shares * 1;
 }
-// ray test touch >>
 
 export async function getFarmingShares(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
@@ -102,19 +97,15 @@ export async function getClaimHistory(this: ImpermaxRouter, uniswapV2PairAddress
   return cache.claimHistory;
 }
 
-// ray test touch <<
 // Claim Claimable
 export async function initializeAvailableClaimable(
   this: ImpermaxRouter,
   claimableAddress: Address
 ) : Promise<number> {
   const claimable = await this.getClaimable(claimableAddress);
-  // ray test touch <<
   return await claimable.claim() / 1e18;
-  // ray test touch >>
-  // return await claimable.methods.claim().call({ from: this.account }) / 1e18;
 }
-// ray test touch >>
+
 export async function getAvailableClaimable(this: ImpermaxRouter, claimableAddress: Address) : Promise<number> {
   const cache = this.getClaimableCache(claimableAddress);
   if (!cache.availableClaimable) cache.availableClaimable = await this.initializeAvailableClaimable(claimableAddress);

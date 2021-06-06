@@ -4,16 +4,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-// TODO: should use path import
-import { ethers } from 'ethers';
+import { defaultAbiCoder } from '@ethersproject/abi';
+import { keccak256 as ethersUtilsKeccak256 } from '@ethersproject/keccak256';
 
 function abiRawEncode(encTypes, encValues) {
-  const hexStr = ethers.utils.defaultAbiCoder.encode(encTypes, encValues);
+  const hexStr = defaultAbiCoder.encode(encTypes, encValues);
   return Buffer.from(hexStr.slice(2, hexStr.length), 'hex');
 }
 
 function keccak256(arg) {
-  const hexStr = ethers.utils.keccak256(arg);
+  const hexStr = ethersUtilsKeccak256(arg);
   return Buffer.from(hexStr.slice(2, hexStr.length), 'hex');
 }
 

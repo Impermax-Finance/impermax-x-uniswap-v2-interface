@@ -9,7 +9,6 @@ import { formatUnits } from '@ethersproject/units';
 import ImpermaxRouter from '.';
 import { Address, PoolTokenType, Changes, NO_CHANGES } from './interfaces';
 
-// ray test touch <<
 // Exchange rate
 export async function initializeExchangeRate(
   this: ImpermaxRouter,
@@ -18,10 +17,9 @@ export async function initializeExchangeRate(
 ) : Promise<number> {
   const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const exchangeRate = await poolToken.callStatic.exchangeRate();
-  // const exchangeRate = await poolToken.methods.exchangeRate().call();
+
   return exchangeRate / 1e18;
 }
-// ray test touch >>
 
 export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
@@ -37,16 +35,12 @@ export async function initializeAvailableBalance(
 ) : Promise<number> {
   const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   if (token.address === this.WETH) {
-  // if (token._address === this.WETH) {
     const bigBalance = await this.library.getBalance(this.account);
     const availableBalance = parseFloat(formatUnits(bigBalance)) / this.dust;
     return availableBalance;
   }
 
-  // ray test touch <<
   const balance = await token.balanceOf(this.account);
-  // const balance = await token.methods.balanceOf(this.account).call();
-  // ray test touch >>
 
   return (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) / this.dust;
 }
@@ -70,7 +64,6 @@ export async function getAvailableBalanceUSD(this: ImpermaxRouter, uniswapV2Pair
   return availableBalance * tokenPrice;
 }
 
-// ray test touch <<
 // Deposited
 export async function initializeDeposited(
   this: ImpermaxRouter,
@@ -80,10 +73,9 @@ export async function initializeDeposited(
   const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const exchangeRate = await this.getExchangeRate(uniswapV2PairAddress, poolTokenType);
   const balance = await poolToken.balanceOf(this.account);
-  // const balance = await poolToken.methods.balanceOf(this.account).call();
+
   return (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) * exchangeRate;
 }
-// ray test touch >>
 
 export async function getDeposited(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
@@ -96,7 +88,6 @@ export async function getDepositedUSD(this: ImpermaxRouter, uniswapV2PairAddress
   return deposited * tokenPrice;
 }
 
-// ray test touch <<
 // Borrowed
 export async function initializeBorrowed(
   this: ImpermaxRouter,
@@ -105,13 +96,11 @@ export async function initializeBorrowed(
 ) : Promise<number> {
   const [borrowable] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
   const balance = await borrowable.borrowBalance(this.account);
-  // const balance = await borrowable.methods.borrowBalance(this.account).call();
   const storedAmount = await this.normalize(uniswapV2PairAddress, poolTokenType, balance);
   const accrualTimestamp = await this.subgraph.getAccrualTimestamp(uniswapV2PairAddress, poolTokenType);
   const borrowRate = await this.subgraph.getBorrowRate(uniswapV2PairAddress, poolTokenType);
   return storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
 }
-// ray test touch >>
 
 export async function getBorrowed(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);

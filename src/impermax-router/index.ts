@@ -129,68 +129,41 @@ class ImpermaxRouter {
     return new Contract(address, SimpleUniswapOracleJSON.abi, this.library);
   }
 
-  // ray test touch <<
   newUniswapV2Pair(address: Address): Contract {
     return new Contract(address, UniswapV2PairJSON.abi, this.library);
-    // return new this.web3.eth.Contract(UniswapV2PairJSON.abi, address);
   }
-  // ray test touch >>
 
-  // ray test touch <<
   newUniswapV2Factory(address: Address): Contract {
     return new Contract(address, UniswapV2FactoryJSON.abi, this.library);
-    // return new this.web3.eth.Contract(UniswapV2FactoryJSON.abi, address);
   }
-  // ray test touch >>
 
-  // ray test touch <<
   newERC20(address: Address): Contract {
     return new Contract(address, ERC20JSON.abi, this.library);
-    // return new this.web3.eth.Contract(ERC20JSON.abi, address);
   }
-  // ray test touch >>
 
-  // ray test touch <<
   newCollateral(address: Address): Contract {
     return new Contract(address, CollateralSON.abi, this.library);
-    // return new this.web3.eth.Contract(CollateralSON.abi, address);
   }
-  // ray test touch >>
 
-  // ray test touch <<
   newBorrowable(address: Address): Contract {
     return new Contract(address, BorrowableJSON.abi, this.library);
-    // return new this.web3.eth.Contract(BorrowableJSON.abi, address);
   }
-  // ray test touch >>
 
-  // ray test touch <<
   newMerkleDistributor(address: Address): Contract {
     return new Contract(address, MerkleDistributorJSON.abi, this.library.getSigner(this.account));
-    // return new this.web3.eth.Contract(MerkleDistributorJSON.abi, address);
   }
-  // ray test touch >>
 
-  // ray test touch <<
   newFarmingPool(address: Address): Contract {
     return new Contract(address, FarmingPoolJSON.abi, this.library);
-    // return new this.web3.eth.Contract(FarmingPoolJSON.abi, address);
   }
-  // ray test touch >>
 
-  // ray test touch <<
   newClaimAggregator(address: Address): Contract {
     return new Contract(address, ClaimAggregatorJSON.abi, this.library.getSigner(this.account));
-    // return new this.web3.eth.Contract(ClaimAggregatorJSON.abi, address);
   }
-  // ray test touch >>
 
-  // ray test touch <<
   newClaimable(address: Address): Contract {
     return new Contract(address, ClaimableJSON.abi, this.library.getSigner(this.account));
-    // return new this.web3.eth.Contract(ClaimableJSON.abi, address);
   }
-  // ray test touch >>
 
   // ray test touch <
   unlockWallet(web3: any, account: Address): void {

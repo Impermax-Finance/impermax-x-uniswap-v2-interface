@@ -14,7 +14,6 @@ export function getLendingPoolCache(this: ImpermaxRouter, uniswapV2PairAddress: 
   return this.lendingPoolCache[uniswapV2PairAddress];
 }
 
-// ray test touch <<
 export async function initializeLendingPool(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address
@@ -23,14 +22,10 @@ export async function initializeLendingPool(
   const uniswapV2Pair = this.newUniswapV2Pair(uniswapV2PairAddress);
   const tokenAAddress = await uniswapV2Pair.token0();
   const tokenBAddress = await uniswapV2Pair.token1();
-  // const tokenAAddress = await uniswapV2Pair.methods.token0().call();
-  // const tokenBAddress = await uniswapV2Pair.methods.token1().call();
   const borrowableA = this.newBorrowable(lPool.borrowableA);
   const borrowableB = this.newBorrowable(lPool.borrowableB);
   const farmingPoolAAddress = await borrowableA.borrowTracker();
   const farmingPoolBAddress = await borrowableB.borrowTracker();
-  // const farmingPoolAAddress = await borrowableA.methods.borrowTracker().call();
-  // const farmingPoolBAddress = await borrowableB.methods.borrowTracker().call();
 
   return {
     uniswapV2Pair,
@@ -49,7 +44,6 @@ export async function initializeLendingPool(
         this.newFarmingPool(farmingPoolBAddress)
   };
 }
-// ray test touch >>
 
 export async function getLendingPool(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<LendingPool> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
@@ -59,7 +53,6 @@ export async function getLendingPool(this: ImpermaxRouter, uniswapV2PairAddress:
   return cache.lendingPool;
 }
 
-// ray test touch <<
 export async function getContracts(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
@@ -86,18 +79,27 @@ export async function getContracts(
     lendingPool.uniswapV2Pair
   ];
 }
-// ray test touch >>
 
-export async function getPoolToken(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Contract> {
+export async function getPoolToken(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType
+) : Promise<Contract> {
   const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+
   return poolToken;
 }
-export async function getToken(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Contract> {
+
+export async function getToken(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType
+) : Promise<Contract> {
   const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+
   return token;
 }
 
-// ray test touch <<
 export async function getFarmingPool(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
@@ -115,7 +117,6 @@ export async function getFarmingPool(
 
   return null;
 }
-// ray test touch >>
 
 // Claimable
 export function getClaimableCache(this: ImpermaxRouter, claimableAddress: Address) {
@@ -147,20 +148,15 @@ export async function getPoolTokenAddress(
 ) : Promise<string> {
   const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
 
-  // ray test touch <<
   return poolToken.address;
-  // return poolToken._address;
-  // ray test touch >>
 }
 
-// ray test touch <<
 export async function getTokenAddress(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
   poolTokenType: PoolTokenType
 ) : Promise<string> {
   const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+
   return token.address;
-  // return token._address;
 }
-// ray test touch >>
