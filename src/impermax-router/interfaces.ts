@@ -1,11 +1,11 @@
 
 import { BigNumber } from '@ethersproject/bignumber';
 import { Web3Provider } from '@ethersproject/providers';
+import { Contract } from '@ethersproject/contracts';
 
 import Subgraph from '../subgraph';
 
 export type Address = string;
-export type Contract = any;
 export type Router = Contract;
 export type Factory = Contract;
 export type SimpleUniswapOracle = Contract;
