@@ -10,16 +10,9 @@ import ImpermaxModal, {
 } from 'components/UI/ImpermaxModal';
 import { ReactComponent as CloseIcon } from 'assets/images/icons/close.svg';
 
-interface CustomProps {
-  title: string;
-  description: string;
-}
-
-const ErrorModal = ({
+const NetworkConnectModal = ({
   open,
-  onClose,
-  title,
-  description
+  onClose
 }: Props): JSX.Element => {
   const closeIconRef = React.useRef(null);
 
@@ -39,7 +32,7 @@ const ErrorModal = ({
             'text-lg',
             'font-medium'
           )}>
-          {title}
+          Select a Network
         </ImpermaxModalTitle>
         <IconButton
           className={clsx(
@@ -56,14 +49,14 @@ const ErrorModal = ({
             height={18}
             className='text-textSecondary' />
         </IconButton>
-        <p className='text-base'>
-          {description}
-        </p>
+        {/* ray test touch < */}
+        Hi
+        {/* ray test touch > */}
       </ImpermaxModalInnerWrapper>
     </ImpermaxModal>
   );
 };
 
-export type Props = Omit<ImpermaxModalProps, 'children'> & CustomProps;
+export type Props = Omit<ImpermaxModalProps, 'children'>;
 
-export default ErrorModal;
+export default NetworkConnectModal;
