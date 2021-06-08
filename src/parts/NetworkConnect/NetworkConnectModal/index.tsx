@@ -26,15 +26,17 @@ const NetworkConnectModal = ({
 }: Props): JSX.Element => {
   const closeIconRef = React.useRef(null);
   const {
+    chainId,
     account,
     library
   } = useWeb3React<Web3Provider>();
 
-  const handleNetworkConnect = (chainId: number) => () => {
+  const handleNetworkConnect = (newChainID: number) => () => {
     if (!library) {
       throw new Error('Invalid library!');
     }
-    const networkDetail = NETWORK_DETAILS[chainId];
+
+    const networkDetail = NETWORK_DETAILS[newChainID];
     library.send('wallet_addEthereumChain', [networkDetail, account]);
   };
 
@@ -82,13 +84,15 @@ const NetworkConnectModal = ({
             CHAIN_IDS.HARMONY,
             CHAIN_IDS.AVALANCHE,
             CHAIN_IDS.OKEX
-          ].map((chainId, index) => {
+          ].map(chainID => {
+            const selected = chainId === chainID;
+
             return (
-              <ListItem key={chainId}>
+              <ListItem key={chainID}>
                 <a
                   href='#impermax'
                   className={clsx(
-                    index === 0 ? clsx(
+                    selected ? clsx(
                       'text-textPrimary',
                       'bg-gray-100' // TODO: double-check with the design
                     ) : clsx(
@@ -104,17 +108,17 @@ const NetworkConnectModal = ({
                     'rounded-md',
                     'space-x-3'
                   )}
-                  aria-current={index === 0 ? 'page' : undefined}
-                  onClick={handleNetworkConnect(chainId)}>
+                  aria-current={selected ? 'page' : undefined}
+                  onClick={handleNetworkConnect(chainID)}>
                   <ImpermaxImage
                     className={clsx(
                       'rounded-md',
                       'w-8',
                       'h-8'
                     )}
-                    src={NETWORK_ICON_PATHS[chainId]} />
+                    src={NETWORK_ICON_PATHS[chainID]} />
                   <span className='truncate'>
-                    {NETWORK_LABELS[chainId]}
+                    {NETWORK_LABELS[chainID]}
                   </span>
                 </a>
               </ListItem>
