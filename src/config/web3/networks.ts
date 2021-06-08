@@ -1,23 +1,4 @@
 
-// ray test touch <
-// TODO: should consider bundle optimization
-import arbitrumIcon from 'assets/images/networks/arbitrum-network.jpg';
-import avalancheIcon from 'assets/images/networks/avalanche-network.jpg';
-import bscIcon from 'assets/images/networks/bsc-network.jpg';
-import fantomIcon from 'assets/images/networks/fantom-network.jpg';
-import goerliIcon from 'assets/images/networks/goerli-network.jpg';
-import harmonyIcon from 'assets/images/networks/harmony-network.jpg';
-import hecoIcon from 'assets/images/networks/heco-network.jpg';
-import kovanIcon from 'assets/images/networks/kovan-network.jpg';
-import mainnetIcon from 'assets/images/networks/mainnet-network.jpg';
-import maticIcon from 'assets/images/networks/matic-network.jpg';
-import okexIcon from 'assets/images/networks/okex-network.jpg';
-import polygonIcon from 'assets/images/networks/polygon-network.jpg';
-import rinkebyIcon from 'assets/images/networks/rinkeby-network.jpg';
-import ropstenIcon from 'assets/images/networks/ropsten-network.jpg';
-import xDaiIcon from 'assets/images/networks/xdai-network.jpg';
-// ray test touch >
-
 const POLLING_INTERVAL = 12000;
 
 const CHAIN_IDS = Object.freeze({
@@ -46,27 +27,27 @@ const CHAIN_IDS = Object.freeze({
   OKEX_TESTNET: 65
 });
 
-const NETWORK_ICONS = {
-  [CHAIN_IDS.ETHEREUM_MAIN_NET]: mainnetIcon,
-  [CHAIN_IDS.ROPSTEN]: ropstenIcon,
-  [CHAIN_IDS.RINKEBY]: rinkebyIcon,
-  [CHAIN_IDS.GÖRLI]: goerliIcon,
-  [CHAIN_IDS.KOVAN]: kovanIcon,
-  [CHAIN_IDS.FANTOM]: fantomIcon,
-  [CHAIN_IDS.FANTOM_TESTNET]: fantomIcon,
-  [CHAIN_IDS.BSC]: bscIcon,
-  [CHAIN_IDS.BSC_TESTNET]: bscIcon,
-  [CHAIN_IDS.MATIC]: polygonIcon,
-  [CHAIN_IDS.MATIC_TESTNET]: maticIcon,
-  [CHAIN_IDS.XDAI]: xDaiIcon,
-  [CHAIN_IDS.ARBITRUM]: arbitrumIcon,
-  [CHAIN_IDS.AVALANCHE]: avalancheIcon,
-  [CHAIN_IDS.HECO]: hecoIcon,
-  [CHAIN_IDS.HECO_TESTNET]: hecoIcon,
-  [CHAIN_IDS.HARMONY]: harmonyIcon,
-  [CHAIN_IDS.HARMONY_TESTNET]: harmonyIcon,
-  [CHAIN_IDS.OKEX]: okexIcon,
-  [CHAIN_IDS.OKEX_TESTNET]: okexIcon
+const NETWORK_ICON_PATHS = {
+  [CHAIN_IDS.ETHEREUM_MAIN_NET]: 'assets/images/networks/mainnet-network.jpg',
+  [CHAIN_IDS.ROPSTEN]: 'assets/images/networks/ropsten-network.jpg',
+  [CHAIN_IDS.RINKEBY]: 'assets/images/networks/rinkeby-network.jpg',
+  [CHAIN_IDS.GÖRLI]: 'assets/images/networks/goerli-network.jpg',
+  [CHAIN_IDS.KOVAN]: 'assets/images/networks/kovan-network.jpg',
+  [CHAIN_IDS.FANTOM]: 'assets/images/networks/fantom-network.jpg',
+  [CHAIN_IDS.FANTOM_TESTNET]: 'assets/images/networks/fantom-network.jpg',
+  [CHAIN_IDS.BSC]: 'assets/images/networks/bsc-network.jpg',
+  [CHAIN_IDS.BSC_TESTNET]: 'assets/images/networks/bsc-network.jpg',
+  [CHAIN_IDS.MATIC]: 'assets/images/networks/polygon-network.jpg',
+  [CHAIN_IDS.MATIC_TESTNET]: 'assets/images/networks/matic-network.jpg',
+  [CHAIN_IDS.XDAI]: 'assets/images/networks/xdai-network.jpg',
+  [CHAIN_IDS.ARBITRUM]: 'assets/images/networks/arbitrum-network.jpg',
+  [CHAIN_IDS.AVALANCHE]: 'assets/images/networks/avalanche-network.jpg',
+  [CHAIN_IDS.HECO]: 'assets/images/networks/heco-network.jpg',
+  [CHAIN_IDS.HECO_TESTNET]: 'assets/images/networks/heco-network.jpg',
+  [CHAIN_IDS.HARMONY]: 'assets/images/networks/harmony-network.jpg',
+  [CHAIN_IDS.HARMONY_TESTNET]: 'assets/images/networks/harmony-network.jpg',
+  [CHAIN_IDS.OKEX]: 'assets/images/networks/okex-network.jpg',
+  [CHAIN_IDS.OKEX_TESTNET]: 'assets/images/networks/okex-network.jpg'
 };
 
 interface NetworkDetails {
@@ -214,7 +195,7 @@ const NETWORK_LABELS: { [chainId: number]: string } = {
 export {
   CHAIN_IDS,
   POLLING_INTERVAL,
-  NETWORK_ICONS,
+  NETWORK_ICON_PATHS,
   NETWORK_DETAILS,
   NETWORK_LABELS
 };

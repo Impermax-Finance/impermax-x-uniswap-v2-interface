@@ -13,7 +13,7 @@ import ImpermaxImage from 'components/UI/ImpermaxImage'; // TODO: should use nex
 import {
   CHAIN_IDS,
   NETWORK_LABELS,
-  NETWORK_ICONS
+  NETWORK_ICON_PATHS
 } from 'config/web3/networks';
 import { ReactComponent as CloseIcon } from 'assets/images/icons/close.svg';
 
@@ -96,7 +96,7 @@ const NetworkConnectModal = ({
                       'w-8',
                       'h-8'
                     )}
-                    src={NETWORK_ICONS[chainId]} />
+                    src={NETWORK_ICON_PATHS[chainId]} />
                   <span className='truncate'>
                     {NETWORK_LABELS[chainId]}
                   </span>
