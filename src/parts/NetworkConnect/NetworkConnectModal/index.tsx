@@ -1,5 +1,7 @@
 
 import * as React from 'react';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
 import IconButton from 'components/IconButton';
@@ -13,7 +15,8 @@ import ImpermaxImage from 'components/UI/ImpermaxImage'; // TODO: should use nex
 import {
   CHAIN_IDS,
   NETWORK_LABELS,
-  NETWORK_ICON_PATHS
+  NETWORK_ICON_PATHS,
+  NETWORK_DETAILS
 } from 'config/web3/networks';
 import { ReactComponent as CloseIcon } from 'assets/images/icons/close.svg';
 
@@ -22,6 +25,18 @@ const NetworkConnectModal = ({
   onClose
 }: Props): JSX.Element => {
   const closeIconRef = React.useRef(null);
+  const {
+    account,
+    library
+  } = useWeb3React<Web3Provider>();
+
+  const handleNetworkConnect = (chainId: number) => () => {
+    if (!library) {
+      throw new Error('Invalid library!');
+    }
+    const networkDetail = NETWORK_DETAILS[chainId];
+    library.send('wallet_addEthereumChain', [networkDetail, account]);
+  };
 
   return (
     <ImpermaxModal
@@ -89,7 +104,8 @@ const NetworkConnectModal = ({
                     'rounded-md',
                     'space-x-3'
                   )}
-                  aria-current={index === 0 ? 'page' : undefined}>
+                  aria-current={index === 0 ? 'page' : undefined}
+                  onClick={handleNetworkConnect(chainId)}>
                   <ImpermaxImage
                     className={clsx(
                       'rounded-md',
