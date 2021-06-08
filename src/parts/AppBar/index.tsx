@@ -15,7 +15,7 @@ import clsx from 'clsx';
 import ClaimAirdrop from './ClaimAirdrop';
 import WalletConnect from 'parts/WalletConnect';
 import NetworkConnect from 'parts/NetworkConnect';
-import { CHAIN_IDS } from 'config/web3/blockchain';
+import { CHAIN_IDS } from 'config/web3/networks';
 import { ReactComponent as ImpermaxLogoIcon } from 'assets/images/icons/impermax-logo.svg';
 import { useHasClaimableAirdrop } from 'hooks/useData';
 import {

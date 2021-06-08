@@ -41,6 +41,18 @@ const IMPERMAX_ASTRAL = Object.freeze({
   800: '#1c455c',
   900: '#17384b'
 });
+const IMPERMAX_MERCURY = Object.freeze({
+  50: '#fefefe',
+  100: '#fdfdfd',
+  200: '#f9f9f9',
+  300: '#f5f5f5',
+  400: '#eeeeee',
+  500: '#e7e7e7',
+  600: '#d0d0d0',
+  700: '#adadad',
+  800: '#8b8b8b',
+  900: '#717171'
+});
 
 module.exports = {
   purge: [
@@ -87,6 +99,9 @@ module.exports = {
           600: IMPERMAX_ASTRAL[600],
           700: IMPERMAX_ASTRAL[700],
           800: IMPERMAX_ASTRAL[800]
+        },
+        impermaxMercury: {
+          DEFAULT: IMPERMAX_MERCURY[500]
         },
         primary: {
           50: IMPERMAX_JADE[50],
