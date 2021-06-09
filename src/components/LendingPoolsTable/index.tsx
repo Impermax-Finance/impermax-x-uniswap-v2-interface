@@ -17,6 +17,7 @@ import { Spinner } from 'react-bootstrap';
  * Generate a searchable lending pools table.
  */
 
+// ray test touch <
 export function LendingPoolsTable(): JSX.Element {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
@@ -58,3 +59,4 @@ export function LendingPoolsTable(): JSX.Element {
     </div>
   );
 }
+// ray test touch >

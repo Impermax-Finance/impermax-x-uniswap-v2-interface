@@ -22,11 +22,13 @@ export function useToken(poolTokenTypeArg?: PoolTokenType) {
   return { uniswapV2PairAddress, poolTokenType };
 }
 
+// ray test touch <
 export function usePairList() : Address[] {
   const [pairList, setPairList] = useState<Address[]>();
   useSubgraphCallback(async subgraph => setPairList(await subgraph.getPairList()));
   return pairList;
 }
+// ray test touch >
 
 export function useDecimals(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);

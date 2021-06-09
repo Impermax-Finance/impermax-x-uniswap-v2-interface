@@ -8,6 +8,7 @@ export default function useSubgraph() {
   return subgraph;
 }
 
+// ray test touch <
 export function useSubgraphCallback(f: (subgraph: Subgraph) => void, a?: Array<any>) {
   const { subgraph } = useContext(SubgraphContext);
   const routerUpdate = useRouterUpdate();
@@ -15,3 +16,4 @@ export function useSubgraphCallback(f: (subgraph: Subgraph) => void, a?: Array<a
     if (subgraph) f(subgraph);
   }, [subgraph, routerUpdate].concat(a));
 }
+// ray test touch >
