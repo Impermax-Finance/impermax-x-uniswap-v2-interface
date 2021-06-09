@@ -52,7 +52,7 @@ const ImpermaxModal = ({
         className={clsx(
           'fixed',
           'inset-0',
-          'z-interlayModal',
+          'z-impermaxModal',
           'overflow-y-auto'
         )}
         open={open}
