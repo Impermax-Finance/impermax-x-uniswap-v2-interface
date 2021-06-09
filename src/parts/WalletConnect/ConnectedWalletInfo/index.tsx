@@ -20,7 +20,7 @@ interface Props {
 }
 
 function ConnectedWalletInfo({ account } : Props): JSX.Element {
-  const accountPageURL = PAGES.account.to.replace(`:${PARAMETERS.ACCOUNT}`, account);
+  const accountPageURL = PAGES.ACCOUNT.replace(`:${PARAMETERS.ACCOUNT}`, account);
 
   const allTransactions = useAllTransactions();
 

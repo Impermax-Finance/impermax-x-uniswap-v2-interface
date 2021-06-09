@@ -1,37 +1,17 @@
 
 const PARAMETERS = Object.freeze({
-  ACCOUNT: 'account'
+  ACCOUNT: 'account',
+  UNISWAP_V2_PAIR_ADDRESS: 'uniswapV2PairAddress'
 });
 
 const PAGES = Object.freeze({
-  home: {
-    value: 'Markets',
-    to: '/'
-  },
-  lendingPool: {
-    value: 'LendingPool',
-    to: '/lending-pool/:uniswapV2PairAddress'
-  },
-  account: {
-    value: 'Account',
-    to: `/account/:${PARAMETERS.ACCOUNT}`
-  },
-  createNewPair: {
-    value: 'Create New Pair',
-    to: '/create-new-pair'
-  },
-  risks: {
-    value: 'Risks',
-    to: '/risks'
-  },
-  claim: {
-    value: 'Claim',
-    to: '/claim'
-  },
-  userGuide: {
-    value: 'User Guide',
-    to: '/user-guide'
-  }
+  HOME: '/',
+  LENDING_POOL: `/lending-pool/:${PARAMETERS.UNISWAP_V2_PAIR_ADDRESS}`,
+  ACCOUNT: `/account/:${PARAMETERS.ACCOUNT}`,
+  CREATE_NEW_PAIR: '/create-new-pair',
+  RISKS: '/risks',
+  CLAIM: '/claim',
+  USER_GUIDE: '/user-guide'
 });
 
 export {

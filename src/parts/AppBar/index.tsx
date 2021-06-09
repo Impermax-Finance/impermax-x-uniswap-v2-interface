@@ -42,44 +42,44 @@ const AppBar = ({
   const NAVIGATION_ITEMS = [
     {
       title: 'Markets',
-      link: PAGES.home.to,
+      link: PAGES.HOME,
       enabled: true,
       matched: (
         useRouteMatch({
-          path: PAGES.home.to,
+          path: PAGES.HOME,
           strict: true
         })
       )?.isExact
     },
     {
       title: 'Dashboard',
-      link: account ? PAGES.account.to.replace(`:${PARAMETERS.ACCOUNT}`, account) : '',
+      link: account ? PAGES.ACCOUNT.replace(`:${PARAMETERS.ACCOUNT}`, account) : '',
       enabled: !!account,
       matched: (
         useRouteMatch({
-          path: PAGES.account.to,
+          path: PAGES.ACCOUNT,
           strict: true
         })
       )?.isExact
     },
     {
       title: 'User Guide',
-      link: PAGES.userGuide.to,
+      link: PAGES.USER_GUIDE,
       enabled: true,
       matched: (
         useRouteMatch({
-          path: PAGES.userGuide.to,
+          path: PAGES.USER_GUIDE,
           strict: true
         })
       )?.isExact
     },
     {
       title: 'Risks',
-      link: PAGES.risks.to,
+      link: PAGES.RISKS,
       enabled: chainId === CHAIN_IDS.ETHEREUM_MAIN_NET,
       matched: (
         useRouteMatch({
-          path: PAGES.risks.to,
+          path: PAGES.RISKS,
           strict: true
         })
       )?.isExact
@@ -118,7 +118,7 @@ const AppBar = ({
                     'flex',
                     'items-center'
                   )}>
-                  <NavLink to={PAGES.home.to}>
+                  <NavLink to={PAGES.HOME}>
                     <ImpermaxLogoIcon
                       className='text-impermaxJade'
                       width={42}

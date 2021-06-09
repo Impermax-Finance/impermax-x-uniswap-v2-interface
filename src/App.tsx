@@ -16,24 +16,24 @@ import './app.scss';
 const App = (): JSX.Element => {
   return (
     <Switch>
-      <Route path={PAGES.createNewPair.to}>
+      <Route path={PAGES.CREATE_NEW_PAIR}>
         <CreateNewPair />
       </Route>
-      <Route path={PAGES.lendingPool.to}>
+      <Route path={PAGES.LENDING_POOL}>
         <LendingPool />
       </Route>
-      <Route path={PAGES.account.to}>
+      <Route path={PAGES.ACCOUNT}>
         <Account />
       </Route>
-      <Route path={PAGES.claim.to}>
+      <Route path={PAGES.CLAIM}>
         <Claim />
       </Route>
-      <Route path={PAGES.risks.to}>
+      <Route path={PAGES.RISKS}>
         <Risks />
       </Route>
       {/* ray test touch < */}
       <Route
-        path={PAGES.userGuide.to}
+        path={PAGES.USER_GUIDE}
         component={() => {
           // TODO: should use <a /> with security attributes
           window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
@@ -41,7 +41,7 @@ const App = (): JSX.Element => {
         }} />
       {/* ray test touch > */}
       <Route
-        path={PAGES.home.to}
+        path={PAGES.HOME}
         exact>
         <Home />
       </Route>

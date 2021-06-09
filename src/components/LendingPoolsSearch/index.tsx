@@ -15,8 +15,8 @@ export function SearchForm(): JSX.Element {
       <InputGroup.Append>
         <Button variant='primary'>Search</Button>
       </InputGroup.Append>
-      <a href={PAGES.createNewPair.to}>
-        <Button>{PAGES.createNewPair.value}</Button>
+      <a href={PAGES.CREATE_NEW_PAIR}>
+        <Button>Create New Pair</Button>
       </a>
     </InputGroup>
   );
