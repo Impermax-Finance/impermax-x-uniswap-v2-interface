@@ -2,7 +2,8 @@ import { PoolTokenType } from '../../impermax-router/interfaces';
 import { Link } from 'react-router-dom';
 import { formatUSD, formatPercentage } from '../../utils/format';
 import { useSupplyUSD, useTotalBorrowsUSD, useSupplyAPY, useBorrowAPY, useSymbol, useUniswapAPY, useFarmingAPY } from '../../hooks/useData';
-import { useTokenIcon, useLendingPoolURL } from '../../hooks/useUrlGenerator';
+import { useTokenIcon } from '../../hooks/useUrlGenerator';
+import useLendingPoolURL from 'hooks/use-lending-pool-url';
 import clsx from 'clsx';
 
 const LEVERAGE = 5;

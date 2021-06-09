@@ -8,29 +8,8 @@ import { Web3Provider } from '@ethersproject/providers';
 import { getAddress } from '@ethersproject/address';
 
 import { useWETH } from './useNetwork';
-import usePairAddress from './usePairAddress';
 import { PoolTokenType } from '../impermax-router/interfaces';
 import { useUnderlyingAddress } from './useData';
-import {
-  PAGES,
-  PARAMETERS
-} from 'utils/constants/links';
-
-export function useLendingPoolURL() : string {
-  const uniswapV2PairAddress = usePairAddress();
-  const { chainId } = useWeb3React<Web3Provider>();
-
-  if (!chainId) {
-    throw new Error('Invalid Chain ID!');
-  }
-
-  const lendingPoolURL =
-    PAGES.LENDING_POOL
-      .replace(`:${PARAMETERS.CHAIN_ID}`, chainId)
-      .replace(`:${PARAMETERS.UNISWAP_V2_PAIR_ADDRESS}`, uniswapV2PairAddress);
-
-  return lendingPoolURL;
-}
 
 export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   const tokenAddress = useUnderlyingAddress(poolTokenTypeArg);

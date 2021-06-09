@@ -5,10 +5,8 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import {
-  useTokenIcon,
-  useLendingPoolURL
-} from 'hooks/useUrlGenerator';
+import { useTokenIcon } from 'hooks/useUrlGenerator';
+import useLendingPoolURL from 'hooks/use-lending-pool-url';
 import { useSymbol } from 'hooks/useData';
 import { useCollateralValue, useBorrowedValue, useBorrowerEquityValue } from 'hooks/useAccountData';
 import { PoolTokenType } from 'impermax-router/interfaces';

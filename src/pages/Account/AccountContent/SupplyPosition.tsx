@@ -7,7 +7,8 @@ import {
 import clsx from 'clsx';
 
 import { PoolTokenType } from 'impermax-router/interfaces';
-import { useTokenIcon, useLendingPoolURL } from 'hooks/useUrlGenerator';
+import useLendingPoolURL from 'hooks/use-lending-pool-url';
+import { useTokenIcon } from 'hooks/useUrlGenerator';
 import { useSuppliedAmount, useSuppliedValue } from 'hooks/useAccountData';
 import { useSymbol } from 'hooks/useData';
 import { formatUSD, formatAmount } from 'utils/format';
