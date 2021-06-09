@@ -4,18 +4,28 @@
 // @ts-nocheck
 // TODO: >
 
-import { Address, PoolTokenType, LendingPoolData, TvlData, UserData, CollateralPosition, SupplyPosition, BorrowPosition } from '../impermax-router/interfaces';
 import gql from 'graphql-tag';
 import ApolloClient from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import Subgraph from '.';
 import { DocumentNode } from 'graphql';
+
+import {
+  Address,
+  PoolTokenType,
+  LendingPoolData,
+  TvlData,
+  UserData,
+  CollateralPosition,
+  SupplyPosition,
+  BorrowPosition
+} from 'impermax-router/interfaces';
+import Subgraph from '.';
 
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;
 const UNISWAP_FEE = 0.003;
 
-export async function apolloFetcher(subgraphUrl: string, query: DocumentNode) {
+async function apolloFetcher(subgraphUrl: string, query: DocumentNode) {
   const client = new ApolloClient({
     link: new HttpLink({
       uri: subgraphUrl
@@ -29,7 +39,7 @@ export async function apolloFetcher(subgraphUrl: string, query: DocumentNode) {
 }
 
 // Fetch Lending Pools
-export async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
+async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
   const borrowableStr = `{
     id
     underlying {
@@ -90,7 +100,7 @@ export async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
 }
 
 // Uniswap APY
-export async function fetchBlockByTimestamp(this: Subgraph, timestamp: number) : Promise<number> {
+async function fetchBlockByTimestamp(this: Subgraph, timestamp: number) : Promise<number> {
   const query = gql`{
     blocks (first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp + 600} }) {
       number
@@ -100,7 +110,7 @@ export async function fetchBlockByTimestamp(this: Subgraph, timestamp: number) :
   return result.data.blocks[0].number;
 }
 
-export async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number) : Promise<{[key in Address]: number}> {
+async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number) : Promise<{[key in Address]: number}> {
   const timestamp = Math.floor((new Date()).getTime() / 1000);
   const blockNumber = await this.fetchBlockByTimestamp(timestamp - seconds);
   let addressString = '';
@@ -119,7 +129,7 @@ export async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: st
   return pastVolume;
 }
 
-export async function fetchCurrentVolumeAndReserves(this: Subgraph, uniswapV2PairAddresses: string[]) : Promise<{
+async function fetchCurrentVolumeAndReserves(this: Subgraph, uniswapV2PairAddresses: string[]) : Promise<{
   currentVolume: {[key in Address]: number},
   currentReserve: {[key in Address]: number},
 }> {
@@ -142,7 +152,7 @@ export async function fetchCurrentVolumeAndReserves(this: Subgraph, uniswapV2Pai
   return { currentReserve, currentVolume };
 }
 
-export async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number = 60 * 60 * 24 * 7) : Promise<{[key in Address]: number}> {
+async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number = 60 * 60 * 24 * 7) : Promise<{[key in Address]: number}> {
   const pastVolume = await this.fetchPastVolume(uniswapV2PairAddresses, seconds);
   const { currentVolume, currentReserve } = await this.fetchCurrentVolumeAndReserves(uniswapV2PairAddresses);
   const uniswapAPY: {[key in Address]: number} = {};
@@ -163,7 +173,7 @@ export async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: st
 }
 
 // LendingPool Data
-export async function initializeLendingPoolsData(this: Subgraph) : Promise<{[key in Address]?: LendingPoolData}> {
+async function initializeLendingPoolsData(this: Subgraph) : Promise<{[key in Address]?: LendingPoolData}> {
   const lendingPoolsData: {[key in Address]?: LendingPoolData} = {};
   const lendingPools = await this.fetchLendingPools();
   const uniswapV2PairAddresses = [];
@@ -177,16 +187,16 @@ export async function initializeLendingPoolsData(this: Subgraph) : Promise<{[key
   }
   return lendingPoolsData;
 }
-export async function getLendingPoolsData(this: Subgraph) : Promise<{[key in Address]: LendingPoolData}> {
+async function getLendingPoolsData(this: Subgraph) : Promise<{[key in Address]: LendingPoolData}> {
   if (!this.lendingPoolsData) this.lendingPoolsData = this.initializeLendingPoolsData();
   return this.lendingPoolsData;
 }
-export async function getLendingPoolData(this: Subgraph, uniswapV2PairAddress: Address) : Promise<LendingPoolData> {
+async function getLendingPoolData(this: Subgraph, uniswapV2PairAddress: Address) : Promise<LendingPoolData> {
   return (await this.getLendingPoolsData())[uniswapV2PairAddress.toLowerCase()];
 }
 
 // TVL Data
-export async function initializeTvlData(this: Subgraph) : Promise<TvlData> {
+async function initializeTvlData(this: Subgraph) : Promise<TvlData> {
   const query = gql`{
     impermaxFactories(first: 1) {
       totalBalanceUSD
@@ -197,13 +207,13 @@ export async function initializeTvlData(this: Subgraph) : Promise<TvlData> {
   const result = await this.apolloFetcher(this.impermaxSubgraphUrl, query);
   return result.data.impermaxFactories[0];
 }
-export async function getTvlData(this: Subgraph) : Promise<TvlData> {
+async function getTvlData(this: Subgraph) : Promise<TvlData> {
   if (!this.tvlData) this.tvlData = this.initializeTvlData();
   return this.tvlData;
 }
 
 // User Data
-export async function fetchUserData(this: Subgraph, account: Address) : Promise<{
+async function fetchUserData(this: Subgraph, account: Address) : Promise<{
   collateralPositions: CollateralPosition[],
   supplyPositions: SupplyPosition[],
   borrowPositions: BorrowPosition[],
@@ -246,7 +256,7 @@ export async function fetchUserData(this: Subgraph, account: Address) : Promise<
   const result = await this.apolloFetcher(this.impermaxSubgraphUrl, query);
   return result.data.user;
 }
-export async function initializeUserData(this: Subgraph, account: Address) : Promise<UserData> {
+async function initializeUserData(this: Subgraph, account: Address) : Promise<UserData> {
   const result: UserData = {
     collateralPositions: {},
     supplyPositions: {},
@@ -275,7 +285,24 @@ export async function initializeUserData(this: Subgraph, account: Address) : Pro
   }
   return result;
 }
-export async function getUserData(this: Subgraph, account: Address) : Promise<UserData> {
+async function getUserData(this: Subgraph, account: Address) : Promise<UserData> {
   if (!(account in this.usersData)) this.usersData[account] = this.initializeUserData(account);
   return this.usersData[account];
 }
+
+export {
+  apolloFetcher,
+  fetchLendingPools,
+  fetchBlockByTimestamp,
+  fetchPastVolume,
+  fetchCurrentVolumeAndReserves,
+  fetchUniswapAPY,
+  initializeLendingPoolsData,
+  getLendingPoolsData,
+  getLendingPoolData,
+  initializeTvlData,
+  getTvlData,
+  fetchUserData,
+  initializeUserData,
+  getUserData
+};

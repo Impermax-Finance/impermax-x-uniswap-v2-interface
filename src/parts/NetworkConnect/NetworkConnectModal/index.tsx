@@ -90,7 +90,7 @@ const NetworkConnectModal = ({
             return (
               <ListItem key={chainID}>
                 <a
-                  href='#impermax'
+                  href='#impermax' // TODO: should add URL switching
                   className={clsx(
                     selected ? clsx(
                       'text-textPrimary',
