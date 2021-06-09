@@ -2,7 +2,7 @@ import { PoolTokenType } from '../../impermax-router/interfaces';
 import { Link } from 'react-router-dom';
 import { formatUSD, formatPercentage } from '../../utils/format';
 import { useSupplyUSD, useTotalBorrowsUSD, useSupplyAPY, useBorrowAPY, useSymbol, useUniswapAPY, useFarmingAPY } from '../../hooks/useData';
-import { useTokenIcon, useLendingPoolUrl } from '../../hooks/useUrlGenerator';
+import { useTokenIcon, useLendingPoolURL } from '../../hooks/useUrlGenerator';
 import clsx from 'clsx';
 
 const LEVERAGE = 5;
@@ -24,7 +24,7 @@ export default function LendingPoolsRow(): JSX.Element {
   const borrowAPYB = useBorrowAPY(PoolTokenType.BorrowableB);
   const farmingPoolAPYA = useFarmingAPY(PoolTokenType.BorrowableA);
   const farmingPoolAPYB = useFarmingAPY(PoolTokenType.BorrowableB);
-  const lendingPoolUrl = useLendingPoolUrl();
+  const lendingPoolUrl = useLendingPoolURL();
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
   const uniAPY = useUniswapAPY();

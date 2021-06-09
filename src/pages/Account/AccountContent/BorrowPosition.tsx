@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 import {
   useTokenIcon,
-  useLendingPoolUrl
+  useLendingPoolURL
 } from 'hooks/useUrlGenerator';
 import { useSymbol } from 'hooks/useData';
 import { useCollateralValue, useBorrowedValue, useBorrowerEquityValue } from 'hooks/useAccountData';
@@ -23,7 +23,7 @@ const BorrowPosition = (): JSX.Element => {
   const equityValue = useBorrowerEquityValue();
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
-  const lendingPoolUrl = useLendingPoolUrl();
+  const lendingPoolUrl = useLendingPoolURL();
 
   return (
     <Link

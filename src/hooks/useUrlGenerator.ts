@@ -16,7 +16,7 @@ import {
   PARAMETERS
 } from 'utils/constants/links';
 
-export function useLendingPoolUrl() : string {
+export function useLendingPoolURL() : string {
   const uniswapV2PairAddress = usePairAddress();
   const { chainId } = useWeb3React<Web3Provider>();
 
