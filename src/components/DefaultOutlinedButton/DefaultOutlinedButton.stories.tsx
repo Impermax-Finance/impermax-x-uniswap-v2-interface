@@ -1,5 +1,4 @@
 
-// ray test touch <
 import {
   Story,
   Meta
@@ -22,4 +21,3 @@ export default {
   title: 'DefaultOutlinedButton',
   component: DefaultOutlinedButton
 } as Meta;
-// ray test touch >
