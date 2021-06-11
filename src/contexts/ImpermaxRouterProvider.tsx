@@ -14,9 +14,6 @@ import { Web3Provider } from '@ethersproject/providers';
 import ImpermaxRouter from 'impermax-router';
 import {
   useRouterAddress,
-  // ray test touch <<
-  // useWETH,
-  // ray test touch >>
   useFactoryAddress,
   useSimpleUniswapOracleAddress,
   useAirdropUrl,
@@ -52,9 +49,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const simpleUniswapOracleAddress = useSimpleUniswapOracleAddress();
   const merkleDistributorAddress = useMerkleDistributorAddress();
   const claimAggregatorAddress = useClaimAggregatorAddress();
-  // ray test touch <<
-  // const WETH = useWETH();
-  // ray test touch >>
   const airdropUrl = useAirdropUrl();
   const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
   const [routerAccount, setRouterAccount] = useState<string>();
@@ -76,9 +70,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     // TODO: double-check
-    // ray test touch <<
-    // if (!WETH) return;
-    // ray test touch >>
     if (!airdropUrl) return;
     if (!chainId) return;
     if (!claimAggregatorAddress) return;
@@ -104,9 +95,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         simpleUniswapOracleAddress,
         merkleDistributorAddress,
         claimAggregatorAddress,
-        // ray test touch <<
-        // WETH,
-        // ray test touch >>
         airdropUrl,
         priceInverted
       });
@@ -122,9 +110,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   }, [
     account,
     // TODO: double-check
-    // ray test touch <<
-    // WETH,
-    // ray test touch >>
     airdropUrl,
     chainId,
     claimAggregatorAddress,

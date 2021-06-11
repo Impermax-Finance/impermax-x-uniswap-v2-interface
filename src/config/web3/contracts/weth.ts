@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { CHAIN_IDS } from 'config/web3/networks';
 
 const WETH_ADDRESSES: {
@@ -12,4 +11,3 @@ const WETH_ADDRESSES: {
 export {
   WETH_ADDRESSES
 };
-// ray test touch >>

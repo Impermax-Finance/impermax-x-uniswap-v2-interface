@@ -40,9 +40,7 @@ export async function initializeAvailableBalance(
   poolTokenType: PoolTokenType
 ) : Promise<number> {
   const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  // ray test touch <<
   const wethAddress = WETH_ADDRESSES[this.chainId];
-  // ray test touch >>
   if (token.address === wethAddress) {
     const bigBalance = await this.library.getBalance(this.account);
     const availableBalance = parseFloat(formatUnits(bigBalance)) / this.dust;

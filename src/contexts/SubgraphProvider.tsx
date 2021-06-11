@@ -4,12 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import Subgraph from 'subgraph';
-import {
-  // ray test touch <<
-  // useWETH,
-  // ray test touch >>
-  useUniswapV2FactoryAddress
-} from 'hooks/useNetwork';
+import { useUniswapV2FactoryAddress } from 'hooks/useNetwork';
 
 const SubgraphContext = React.createContext<SubgraphContextInterface>({});
 
@@ -21,9 +16,6 @@ const SubgraphProvider = ({
   children
 }: SubgraphProviderProps): JSX.Element | null => {
   const { chainId } = useWeb3React<Web3Provider>();
-  // ray test touch <<
-  // const WETH = useWETH();
-  // ray test touch >>
   const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
 
   if (!chainId) {
@@ -32,9 +24,6 @@ const SubgraphProvider = ({
 
   const subgraph = new Subgraph({
     chainId,
-    // ray test touch <<
-    // WETH,
-    // ray test touch >>
     uniswapV2FactoryAddress
   });
 

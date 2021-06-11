@@ -2,9 +2,6 @@
 import React, { createContext } from 'react';
 import { Networks } from 'utils/connections';
 import {
-  // ray test touch <<
-  // WETH,
-  // ray test touch >>
   ROUTER,
   Address,
   FACTORY,
@@ -21,9 +18,6 @@ import {
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkInterface = {
-  // ray test touch <<
-  // WETH: WETH[NETWORK],
-  // ray test touch >>
   routerAddress: ROUTER[NETWORK],
   factoryAddress: FACTORY[NETWORK],
   uniswapV2FactoryAddress: UNISWAP_V2_FACTORY[NETWORK],
@@ -40,9 +34,6 @@ const NetworkProvider: React.FC = ({ children }) => {
 };
 
 export interface NetworkInterface {
-  // ray test touch <<
-  // WETH: Address;
-  // ray test touch >>
   routerAddress: Address;
   factoryAddress: Address;
   uniswapV2FactoryAddress: Address;

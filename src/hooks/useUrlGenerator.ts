@@ -7,10 +7,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { getAddress } from '@ethersproject/address';
 
-// ray test touch <<
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
-// import { useWETH } from './useNetwork';
-// ray test touch >>
 import { PoolTokenType } from '../impermax-router/interfaces';
 import { useUnderlyingAddress } from './useData';
 
@@ -29,11 +26,8 @@ export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
 }
 
 export function useAddLiquidityUrl() : string {
-  // ray test touch <<
   const { chainId } = useWeb3React<Web3Provider>();
   const wethAddress = WETH_ADDRESSES[chainId];
-  // const WETH = useWETH();
-  // ray test touch >>
   const tokenAAddress = useUnderlyingAddress(PoolTokenType.BorrowableA);
   const tokenBAddress = useUnderlyingAddress(PoolTokenType.BorrowableB);
   const addressA = tokenAAddress === wethAddress ? 'ETH' : tokenAAddress;

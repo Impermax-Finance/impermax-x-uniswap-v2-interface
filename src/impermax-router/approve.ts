@@ -50,9 +50,7 @@ export async function getAllowance(
   approvalType: ApprovalType
 ) : Promise<BigNumber> {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  // ray test touch <<
   const wethAddress = WETH_ADDRESSES[this.chainId];
-  // ray test touch >>
   if (token.address === wethAddress && approvalType === ApprovalType.UNDERLYING) {
     return MaxUint256;
   }

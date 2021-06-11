@@ -22,9 +22,7 @@ export async function deposit(
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
-    // ray test touch <<
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    // ray test touch >>
     if (token.address === wethAddress) {
       const overrides = { value: amount };
       const tx = await this.router.mintETH(poolToken.address, this.account, deadline, overrides);
@@ -56,9 +54,7 @@ export async function withdraw(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
 
   try {
-    // ray test touch <<
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    // ray test touch >>
     if (token.address === wethAddress) {
       const tx = await this.router.redeemETH(poolToken.address, tokens, this.account, deadline, data);
       await tx.wait();
@@ -86,9 +82,7 @@ export async function borrow(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
 
   try {
-    // ray test touch <<
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    // ray test touch >>
     if (token.address === wethAddress) {
       const tx = await this.router.borrowETH(borrowable.address, amount, this.account, deadline, data);
       await tx.wait();
@@ -114,9 +108,7 @@ export async function repay(
   const deadline = this.getDeadline();
 
   try {
-    // ray test touch <<
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    // ray test touch >>
     if (token.address === wethAddress) {
       const overrides = { value: amount };
       const tx = await this.router.repayETH(borrowable.address, this.account, deadline, overrides);
