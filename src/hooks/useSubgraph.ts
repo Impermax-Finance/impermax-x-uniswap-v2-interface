@@ -10,7 +10,13 @@ export default function useSubgraph() {
 
 // ray test touch <
 export function useSubgraphCallback(f: (subgraph: Subgraph) => void, a?: Array<any>) {
+  // ray test touch <<
+  console.log('ray : ***** useSubgraphCallback');
+  // ray test touch >>
   const { subgraph } = useContext(SubgraphContext);
+  // ray test touch <<
+  console.log('ray : ***** subgraph => ', subgraph);
+  // ray test touch >>
   const routerUpdate = useRouterUpdate();
   return useEffect(() => {
     if (subgraph) f(subgraph);

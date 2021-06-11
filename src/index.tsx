@@ -7,11 +7,6 @@ import { Web3ReactProvider } from '@web3-react/core';
 
 import App from './App';
 import getLibrary from 'utils/helpers/web3/get-library';
-import LanguageProvider from 'contexts/LanguageProvider';
-import NetworkProvider from 'contexts/NetworkProvider';
-import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
-import { SubgraphProvider } from 'contexts/SubgraphProvider';
-import Updater from 'store/transactions/updater';
 import store from './store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
@@ -20,18 +15,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Web3ReactProvider getLibrary={getLibrary}>
       <Provider store={store}>
-        <NetworkProvider>
-          <LanguageProvider>
-            <Updater />
-            <SubgraphProvider>
-              <ImpermaxRouterProvider>
-                <Router>
-                  <App />
-                </Router>
-              </ImpermaxRouterProvider>
-            </SubgraphProvider>
-          </LanguageProvider>
-        </NetworkProvider>
+        <Router>
+          <App />
+        </Router>
       </Provider>
     </Web3ReactProvider>
   </React.StrictMode>,

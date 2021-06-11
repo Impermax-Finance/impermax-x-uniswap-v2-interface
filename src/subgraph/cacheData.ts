@@ -8,7 +8,13 @@ import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 
 // Pair List
 export async function getPairList(this: Subgraph) : Promise<Address[]> {
+  // ray test touch <<
+  console.log('ray : ***** getPairList');
+  // ray test touch >>
   const lendingPoolData = await this.getLendingPoolsData();
+  // ray test touch <<
+  console.log('ray : ***** lendingPoolData => ', lendingPoolData);
+  // ray test touch >>
   return Object.keys(lendingPoolData);
 }
 

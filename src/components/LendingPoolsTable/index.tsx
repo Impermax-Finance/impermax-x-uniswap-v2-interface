@@ -22,6 +22,9 @@ export function LendingPoolsTable(): JSX.Element {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const pairList = usePairList();
+  // ray test touch <<
+  console.log('ray : ***** pairList => ', pairList);
+  // ray test touch >>
   const t = (s: string) => (phrases[s][language]);
 
   if (!pairList) {
