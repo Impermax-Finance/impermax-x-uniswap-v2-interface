@@ -57,7 +57,9 @@ export interface ImpermaxRouterConfigInterface {
   subgraph: Subgraph;
   web3: any;
   chainId: number;
-  factoryAddress: Address;
+  // ray test touch <<
+  // factoryAddress: Address;
+  // ray test touch >>
   uniswapV2FactoryAddress: Address;
   simpleUniswapOracleAddress: Address;
   merkleDistributorAddress: Address;

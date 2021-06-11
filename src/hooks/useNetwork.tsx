@@ -3,10 +3,12 @@ import { useContext } from 'react';
 
 import { NetworkContext } from 'contexts/NetworkProvider';
 
-export function useFactoryAddress() {
-  const { factoryAddress } = useContext(NetworkContext);
-  return factoryAddress;
-}
+// ray test touch <<
+// export function useFactoryAddress() {
+//   const { factoryAddress } = useContext(NetworkContext);
+//   return factoryAddress;
+// }
+// ray test touch >>
 
 export function useUniswapV2FactoryAddress() {
   const { uniswapV2FactoryAddress } = useContext(NetworkContext);

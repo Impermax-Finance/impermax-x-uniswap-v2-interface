@@ -42,6 +42,9 @@ import * as account from './account';
 import * as imx from './imx';
 import Subgraph from 'subgraph';
 import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
+// ray test touch <<
+import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
+// ray test touch >>
 
 class ImpermaxRouter {
   subgraph: Subgraph;
@@ -98,7 +101,9 @@ class ImpermaxRouter {
     this.uiMargin = 1.1;
     this.dust = 1.000001;
     this.router = this.newRouter(ROUTER_ADDRESSES[config.chainId]);
-    this.factory = this.newFactory(config.factoryAddress);
+    // ray test touch <<
+    this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
+    // ray test touch >>
     this.uniswapV2Factory = this.newUniswapV2Factory(config.uniswapV2FactoryAddress);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(config.simpleUniswapOracleAddress);
     this.merkleDistributor = this.newMerkleDistributor(config.merkleDistributorAddress);
