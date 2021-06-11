@@ -17,13 +17,6 @@ export const RPC_URLS = {
   3: 'wss://ropsten.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158'
 };
 
-// ray test touch <<
-// export const ROUTER: NetworkIndex = {
-//   [Networks.Ropsten]: '0xbFf4acF789297A8507Eb7493AE18EB2C3A3A9632',
-//   [Networks.Mainnet]: '0x5e169082fff23cee6766062b96051a78c543127d'
-// };
-// ray test touch >>
-
 export const FACTORY: NetworkIndex = {
   [Networks.Ropsten]: '0x3fdB4b27e1b4be9b27514C643a8Baef95Cf9b549',
   [Networks.Mainnet]: '0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B'

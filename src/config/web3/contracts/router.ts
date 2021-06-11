@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { CHAIN_IDS } from 'config/web3/networks';
 
 const ROUTER_ADDRESSES: {
@@ -12,4 +11,3 @@ const ROUTER_ADDRESSES: {
 export {
   ROUTER_ADDRESSES
 };
-// ray test touch >>

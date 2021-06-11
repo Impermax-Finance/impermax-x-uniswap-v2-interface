@@ -41,9 +41,7 @@ import * as interactions from './interactions';
 import * as account from './account';
 import * as imx from './imx';
 import Subgraph from 'subgraph';
-// ray test touch <<
 import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
-// ray test touch >>
 
 class ImpermaxRouter {
   subgraph: Subgraph;
@@ -99,10 +97,7 @@ class ImpermaxRouter {
     this.chainId = config.chainId;
     this.uiMargin = 1.1;
     this.dust = 1.000001;
-    // ray test touch <<
     this.router = this.newRouter(ROUTER_ADDRESSES[config.chainId]);
-    // this.router = this.newRouter(config.routerAddress);
-    // ray test touch >>
     this.factory = this.newFactory(config.factoryAddress);
     this.uniswapV2Factory = this.newUniswapV2Factory(config.uniswapV2FactoryAddress);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(config.simpleUniswapOracleAddress);
