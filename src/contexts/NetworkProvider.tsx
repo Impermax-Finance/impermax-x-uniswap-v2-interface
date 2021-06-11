@@ -3,9 +3,6 @@ import React, { createContext } from 'react';
 import { Networks } from 'utils/connections';
 import {
   Address,
-  // ray test touch <<
-  // FACTORY,
-  // ray test touch >>
   SIMPLE_UNISWAP_ORACLE,
   AIRDROP_URL,
   MERKLE_DISTRIBUTOR,
@@ -19,9 +16,6 @@ import {
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkInterface = {
-  // ray test touch <<
-  // factoryAddress: FACTORY[NETWORK],
-  // ray test touch >>
   uniswapV2FactoryAddress: UNISWAP_V2_FACTORY[NETWORK],
   simpleUniswapOracleAddress: SIMPLE_UNISWAP_ORACLE[NETWORK],
   merkleDistributorAddress: MERKLE_DISTRIBUTOR[NETWORK],
@@ -38,9 +32,6 @@ const NetworkProvider: React.FC = ({ children }) => {
 };
 
 export interface NetworkInterface {
-  // ray test touch <<
-  // factoryAddress: Address;
-  // ray test touch >>
   uniswapV2FactoryAddress: Address;
   simpleUniswapOracleAddress: Address;
   merkleDistributorAddress: Address;

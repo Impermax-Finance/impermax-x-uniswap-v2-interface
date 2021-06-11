@@ -55,16 +55,11 @@ export const NO_CHANGES = {
 
 export interface ImpermaxRouterConfigInterface {
   subgraph: Subgraph;
-  web3: any;
   chainId: number;
-  // ray test touch <<
-  // factoryAddress: Address;
-  // ray test touch >>
   uniswapV2FactoryAddress: Address;
   simpleUniswapOracleAddress: Address;
   merkleDistributorAddress: Address;
   claimAggregatorAddress: Address;
-  WETH: Address;
   airdropUrl: string;
   priceInverted: boolean;
   library: Web3Provider;

@@ -17,13 +17,6 @@ export const RPC_URLS = {
   3: 'wss://ropsten.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158'
 };
 
-// ray test touch <<
-// export const FACTORY: NetworkIndex = {
-//   [Networks.Ropsten]: '0x3fdB4b27e1b4be9b27514C643a8Baef95Cf9b549',
-//   [Networks.Mainnet]: '0x8C3736e2FE63cc2cD89Ee228D9dBcAb6CE5B767B'
-// };
-// ray test touch >>
-
 export const UNISWAP_V2_FACTORY: NetworkIndex = {
   [Networks.Ropsten]: '0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f',
   [Networks.Mainnet]: '0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f'
@@ -33,11 +26,6 @@ export const SIMPLE_UNISWAP_ORACLE: NetworkIndex = {
   [Networks.Ropsten]: '0xc53bb18028feA1B413057e2b2474F9838c465Fc3',
   [Networks.Mainnet]: '0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D'
 };
-
-// export const WETH: NetworkIndex = {
-//   [Networks.Ropsten]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
-//   [Networks.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
-// };
 
 export const CLAIM_AGGREGATOR: NetworkIndex = {
   [Networks.Ropsten]: '0x2078270ae9956f1298f8bfd8be43306bbd4ab551',
