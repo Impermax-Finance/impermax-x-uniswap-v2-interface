@@ -39,6 +39,7 @@ export interface SubgraphContextInterface {
 }
 
 export {
-  SubgraphContext,
-  SubgraphProvider
+  SubgraphContext
 };
+
+export default SubgraphProvider;

@@ -13,7 +13,9 @@ import { Web3Provider } from '@ethersproject/providers';
 
 import ImpermaxRouter from 'impermax-router';
 import {
-  useRouterAddress,
+  // ray test touch <<
+  // useRouterAddress,
+  // ray test touch >>
   useFactoryAddress,
   useSimpleUniswapOracleAddress,
   useAirdropUrl,
@@ -43,7 +45,9 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     library
   } = useWeb3React<Web3Provider>();
   const subgraph = useSubgraph();
-  const routerAddress = useRouterAddress();
+  // ray test touch <<
+  // const routerAddress = useRouterAddress();
+  // ray test touch >>
   const factoryAddress = useFactoryAddress();
   const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
   const simpleUniswapOracleAddress = useSimpleUniswapOracleAddress();
@@ -77,7 +81,9 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     if (!merkleDistributorAddress) return;
     // if (!impermaxRouter) return;
     // if (!priceInverted) return;
-    if (!routerAddress) return;
+    // ray test touch <<
+    // if (!routerAddress) return;
+    // ray test touch >>
     if (!simpleUniswapOracleAddress) return;
     if (!subgraph) return;
     if (!uniswapV2FactoryAddress) return;
@@ -89,7 +95,9 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         library,
         web3,
         chainId,
-        routerAddress,
+        // ray test touch <<
+        // routerAddress,
+        // ray test touch >>
         factoryAddress,
         uniswapV2FactoryAddress,
         simpleUniswapOracleAddress,
@@ -117,7 +125,9 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     impermaxRouter,
     merkleDistributorAddress,
     priceInverted,
-    routerAddress,
+    // ray test touch <<
+    // routerAddress,
+    // ray test touch >>
     simpleUniswapOracleAddress,
     subgraph,
     uniswapV2FactoryAddress,

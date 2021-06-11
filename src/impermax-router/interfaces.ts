@@ -53,11 +53,13 @@ export const NO_CHANGES = {
   changeCollateral: 0
 };
 
-export interface ImpermaxRouterCfgInterface {
+export interface ImpermaxRouterConfigInterface {
   subgraph: Subgraph;
   web3: any;
   chainId: number;
-  routerAddress: Address;
+  // ray test touch <<
+  // routerAddress: Address;
+  // ray test touch >>
   factoryAddress: Address;
   uniswapV2FactoryAddress: Address;
   simpleUniswapOracleAddress: Address;

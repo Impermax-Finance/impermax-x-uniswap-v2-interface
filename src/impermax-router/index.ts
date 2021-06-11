@@ -23,7 +23,7 @@ import {
   Address,
   LendingPool,
   PoolTokenType,
-  ImpermaxRouterCfgInterface,
+  ImpermaxRouterConfigInterface,
   Factory,
   SimpleUniswapOracle,
   AirdropData,
@@ -41,6 +41,9 @@ import * as interactions from './interactions';
 import * as account from './account';
 import * as imx from './imx';
 import Subgraph from 'subgraph';
+// ray test touch <<
+import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
+// ray test touch >>
 
 class ImpermaxRouter {
   subgraph: Subgraph;
@@ -90,20 +93,23 @@ class ImpermaxRouter {
     }
   };
 
-  constructor(cfg: ImpermaxRouterCfgInterface) {
-    this.subgraph = cfg.subgraph;
-    this.library = cfg.library;
-    this.chainId = cfg.chainId;
+  constructor(config: ImpermaxRouterConfigInterface) {
+    this.subgraph = config.subgraph;
+    this.library = config.library;
+    this.chainId = config.chainId;
     this.uiMargin = 1.1;
     this.dust = 1.000001;
-    this.router = this.newRouter(cfg.routerAddress);
-    this.factory = this.newFactory(cfg.factoryAddress);
-    this.uniswapV2Factory = this.newUniswapV2Factory(cfg.uniswapV2FactoryAddress);
-    this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
-    this.merkleDistributor = this.newMerkleDistributor(cfg.merkleDistributorAddress);
-    this.claimAggregator = this.newClaimAggregator(cfg.claimAggregatorAddress);
-    this.airdropUrl = cfg.airdropUrl;
-    this.priceInverted = cfg.priceInverted;
+    // ray test touch <<
+    this.router = this.newRouter(ROUTER_ADDRESSES[config.chainId]);
+    // this.router = this.newRouter(config.routerAddress);
+    // ray test touch >>
+    this.factory = this.newFactory(config.factoryAddress);
+    this.uniswapV2Factory = this.newUniswapV2Factory(config.uniswapV2FactoryAddress);
+    this.simpleUniswapOracle = this.newSimpleUniswapOracle(config.simpleUniswapOracleAddress);
+    this.merkleDistributor = this.newMerkleDistributor(config.merkleDistributorAddress);
+    this.claimAggregator = this.newClaimAggregator(config.claimAggregatorAddress);
+    this.airdropUrl = config.airdropUrl;
+    this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
     this.imxCache = {};
     this.claimableCache = {};
