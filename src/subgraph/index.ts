@@ -11,18 +11,12 @@ import * as utils from './utils';
 import * as account from './account';
 
 export interface SubgraphCfgInterface {
-  // ray test touch <<
-  // impermaxSubgraphUrl: string;
-  // ray test touch >>
   chainId: number;
   WETH: Address;
   uniswapV2FactoryAddress: Address;
 }
 
 export default class Subgraph {
-  // ray test touch <<
-  // impermaxSubgraphUrl: string;
-  // ray test touch >>
   uniswapSubgraphUrl: string;
   blocklyticsSubgraphUrl: string;
   chainId: number;
@@ -37,9 +31,6 @@ export default class Subgraph {
   tvlData: Promise<TvlData>
 
   constructor(cfg: SubgraphCfgInterface) {
-    // ray test touch <<
-    // this.impermaxSubgraphUrl = cfg.impermaxSubgraphUrl;
-    // ray test touch >>
     this.uniswapSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2';
     this.blocklyticsSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks';
     this.chainId = cfg.chainId;

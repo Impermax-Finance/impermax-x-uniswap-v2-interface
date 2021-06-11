@@ -96,10 +96,8 @@ async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
       }
     }
   }`;
-  // ray test touch <<
   const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
   const result = await this.apolloFetcher(impermaxSubgraphUrl, query);
-  // ray test touch >>
   return result.data.lendingPools;
 }
 
@@ -208,10 +206,8 @@ async function initializeTvlData(this: Subgraph) : Promise<TvlData> {
       totalBorrowsUSD
     }
   }`;
-  // ray test touch <<
   const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
   const result = await this.apolloFetcher(impermaxSubgraphUrl, query);
-  // ray test touch >>
   return result.data.impermaxFactories[0];
 }
 async function getTvlData(this: Subgraph) : Promise<TvlData> {
@@ -260,10 +256,8 @@ async function fetchUserData(this: Subgraph, account: Address) : Promise<{
       }
     }
   }`;
-  // ray test touch <<
   const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
   const result = await this.apolloFetcher(impermaxSubgraphUrl, query);
-  // ray test touch >>
   return result.data.user;
 }
 async function initializeUserData(this: Subgraph, account: Address) : Promise<UserData> {

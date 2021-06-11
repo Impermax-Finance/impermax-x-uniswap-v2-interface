@@ -11,13 +11,6 @@ export type DistributorDetails = {
   name: string,
 }
 
-// ray test touch <<
-// export const IMPERMAX_SUBGRAPH_URL: NetworkIndex = {
-//   [Networks.Ropsten]: 'https://api.thegraph.com/subgraphs/name/impermax-finance/impermax-x-uniswap-v2-ropsten',
-//   [Networks.Mainnet]: 'https://api.thegraph.com/subgraphs/name/impermax-finance/impermax-x-uniswap-v2'
-// };
-// ray test touch >>
-
 // TODO: should keep as environment variables
 export const RPC_URLS = {
   1: 'wss://mainnet.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158',

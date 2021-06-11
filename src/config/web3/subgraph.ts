@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { CHAIN_IDS } from 'config/web3/networks';
 
 const IMPERMAX_SUBGRAPH_URL: {
@@ -12,4 +11,3 @@ const IMPERMAX_SUBGRAPH_URL: {
 export {
   IMPERMAX_SUBGRAPH_URL
 };
-// ray test touch >>
