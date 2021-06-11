@@ -3,23 +3,24 @@
 // @ts-nocheck
 // TODO: >
 
-import { LendingPoolData, Address, TvlData, UserData } from '../impermax-router/interfaces';
-
+import {
+  LendingPoolData,
+  Address,
+  TvlData,
+  UserData
+} from 'impermax-router/interfaces';
 import * as initializer from './initializer';
 import * as cacheData from './cacheData';
 import * as utils from './utils';
 import * as account from './account';
 
-export interface SubgraphCfgInterface {
-  chainId: number;
-  uniswapV2FactoryAddress: Address;
-}
-
-export default class Subgraph {
+class Subgraph {
   uniswapSubgraphUrl: string;
   blocklyticsSubgraphUrl: string;
   chainId: number;
-  uniswapV2FactoryAddress: Address;
+  // ray test touch <<
+  // uniswapV2FactoryAddress: Address;
+  // ray test touch >>
   lendingPoolsData: Promise<{
     [key in Address]?: LendingPoolData
   }>;
@@ -28,15 +29,18 @@ export default class Subgraph {
   };
   tvlData: Promise<TvlData>
 
-  constructor(cfg: SubgraphCfgInterface) {
+  constructor(config: SubgraphConfigInterface) {
+    // TODO: hardcoded
     this.uniswapSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2';
     this.blocklyticsSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks';
-    this.chainId = cfg.chainId;
-    this.uniswapV2FactoryAddress = cfg.uniswapV2FactoryAddress;
+    this.chainId = config.chainId;
+    // ray test touch <<
+    // this.uniswapV2FactoryAddress = config.uniswapV2FactoryAddress;
+    // ray test touch >>
     this.usersData = {};
   }
 
-  cleanCache() {
+  cleanCache(): void {
     this.lendingPoolsData = null;
     this.usersData = null;
     this.tvlData = null;
@@ -117,3 +121,12 @@ export default class Subgraph {
   public toAPY = utils.toAPY;
   public getPairAddress = utils.getPairAddress;
 }
+
+export interface SubgraphConfigInterface {
+  chainId: number;
+  // ray test touch <<
+  // uniswapV2FactoryAddress: Address;
+  // ray test touch >>
+}
+
+export default Subgraph;

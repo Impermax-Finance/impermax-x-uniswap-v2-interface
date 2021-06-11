@@ -43,6 +43,7 @@ import * as imx from './imx';
 import Subgraph from 'subgraph';
 import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
 import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
+import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
 
 class ImpermaxRouter {
   subgraph: Subgraph;
@@ -99,7 +100,9 @@ class ImpermaxRouter {
     this.dust = 1.000001;
     this.router = this.newRouter(ROUTER_ADDRESSES[config.chainId]);
     this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
-    this.uniswapV2Factory = this.newUniswapV2Factory(config.uniswapV2FactoryAddress);
+    // ray test touch <<
+    this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
+    // ray test touch >>
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(config.simpleUniswapOracleAddress);
     this.merkleDistributor = this.newMerkleDistributor(config.merkleDistributorAddress);
     this.claimAggregator = this.newClaimAggregator(config.claimAggregatorAddress);

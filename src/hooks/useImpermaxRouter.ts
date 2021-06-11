@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { ImpermaxRouterContext } from '../contexts/ImpermaxRouterProvider';
+import { ImpermaxRouterContext } from 'contexts/ImpermaxRouterProvider';
 import ImpermaxRouter from '../impermax-router';
 
 export default function useImpermaxRouter() {

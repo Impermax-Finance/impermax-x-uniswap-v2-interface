@@ -4,7 +4,9 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import Subgraph from 'subgraph';
-import { useUniswapV2FactoryAddress } from 'hooks/useNetwork';
+// ray test touch <<
+// import { useUniswapV2FactoryAddress } from 'hooks/useNetwork';
+// ray test touch >>
 
 const SubgraphContext = React.createContext<SubgraphContextInterface>({});
 
@@ -16,15 +18,20 @@ const SubgraphProvider = ({
   children
 }: SubgraphProviderProps): JSX.Element | null => {
   const { chainId } = useWeb3React<Web3Provider>();
-  const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
 
   if (!chainId) {
     throw new Error('Invalid chain ID!');
   }
 
+  // ray test touch <<
+  // const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
+  // ray test touch >>
+
   const subgraph = new Subgraph({
-    chainId,
-    uniswapV2FactoryAddress
+    chainId
+    // ray test touch <<
+    // uniswapV2FactoryAddress
+    // ray test touch >>
   });
 
   return (

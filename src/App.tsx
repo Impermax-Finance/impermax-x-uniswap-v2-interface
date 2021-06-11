@@ -15,7 +15,7 @@ import CreateNewPair from 'pages/CreateNewPair';
 import Account from 'pages/Account';
 import LanguageProvider from 'contexts/LanguageProvider';
 import NetworkProvider from 'contexts/NetworkProvider';
-import { ImpermaxRouterProvider } from 'contexts/ImpermaxRouterProvider';
+import ImpermaxRouterProvider from 'contexts/ImpermaxRouterProvider';
 import SubgraphProvider from 'contexts/SubgraphProvider';
 import Updater from 'store/transactions/updater';
 import { PAGES } from 'utils/constants/links';

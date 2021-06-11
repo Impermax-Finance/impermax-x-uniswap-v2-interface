@@ -16,32 +16,25 @@ import {
   useSimpleUniswapOracleAddress,
   useAirdropUrl,
   useMerkleDistributorAddress,
-  useClaimAggregatorAddress,
-  useUniswapV2FactoryAddress
+  useClaimAggregatorAddress
+  // ray test touch <<
+  // useUniswapV2FactoryAddress
+  // ray test touch >>
 } from 'hooks/useNetwork';
 import useSubgraph from 'hooks/useSubgraph';
 
-export interface ImpermaxRouterContextInterface {
-  impermaxRouter?: ImpermaxRouter;
-  routerAccount?: string;
-  routerUpdate?: number;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  doUpdate?: Function;
-  priceInverted?: boolean;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  togglePriceInverted?: Function;
-}
+const ImpermaxRouterContext = createContext<ImpermaxRouterContextInterface>({});
 
-export const ImpermaxRouterContext = createContext<ImpermaxRouterContextInterface>({});
-
-export const ImpermaxRouterProvider: React.FC = ({ children }) => {
+const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const {
     account,
     chainId,
     library
   } = useWeb3React<Web3Provider>();
   const subgraph = useSubgraph();
-  const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
+  // ray test touch <<
+  // const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
+  // ray test touch >>
   const simpleUniswapOracleAddress = useSimpleUniswapOracleAddress();
   const merkleDistributorAddress = useMerkleDistributorAddress();
   const claimAggregatorAddress = useClaimAggregatorAddress();
@@ -74,16 +67,22 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     // if (!priceInverted) return;
     if (!simpleUniswapOracleAddress) return;
     if (!subgraph) return;
-    if (!uniswapV2FactoryAddress) return;
+    // ray test touch <<
+    // if (!uniswapV2FactoryAddress) return;
+    // ray test touch >>
     if (!library) return;
 
     if (!impermaxRouter) {
       const impermaxRouter = new ImpermaxRouter({
         subgraph,
         library,
-        web3,
+        // ray test touch <<
+        // web3,
+        // ray test touch >>
         chainId,
-        uniswapV2FactoryAddress,
+        // ray test touch <<
+        // uniswapV2FactoryAddress,
+        // ray test touch >>
         simpleUniswapOracleAddress,
         merkleDistributorAddress,
         claimAggregatorAddress,
@@ -110,7 +109,9 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     priceInverted,
     simpleUniswapOracleAddress,
     subgraph,
-    uniswapV2FactoryAddress,
+    // ray test touch <<
+    // uniswapV2FactoryAddress,
+    // ray test touch >>
     library
   ]);
 
@@ -128,3 +129,20 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
     </ImpermaxRouterContext.Provider>
   );
 };
+
+export interface ImpermaxRouterContextInterface {
+  impermaxRouter?: ImpermaxRouter;
+  routerAccount?: string;
+  routerUpdate?: number;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  doUpdate?: Function;
+  priceInverted?: boolean;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  togglePriceInverted?: Function;
+}
+
+export {
+  ImpermaxRouterContext
+};
+
+export default ImpermaxRouterProvider;

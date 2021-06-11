@@ -17,10 +17,12 @@ export const RPC_URLS = {
   3: 'wss://ropsten.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158'
 };
 
-export const UNISWAP_V2_FACTORY: NetworkIndex = {
-  [Networks.Ropsten]: '0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f',
-  [Networks.Mainnet]: '0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f'
-};
+// ray test touch <<
+// export const UNISWAP_V2_FACTORY: NetworkIndex = {
+//   [Networks.Ropsten]: '0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f',
+//   [Networks.Mainnet]: '0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f'
+// };
+// ray test touch >>
 
 export const SIMPLE_UNISWAP_ORACLE: NetworkIndex = {
   [Networks.Ropsten]: '0xc53bb18028feA1B413057e2b2474F9838c465Fc3',
