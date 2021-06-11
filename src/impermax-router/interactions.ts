@@ -1,11 +1,13 @@
 /* eslint-disable no-invalid-this */
+import { BigNumber } from '@ethersproject/bignumber';
+
 import ImpermaxRouter from '.';
 import { Address, PoolTokenType, AirdropData } from './interfaces';
-import { BigNumber } from '@ethersproject/bignumber';
 import { PermitData } from '../hooks/useApprove';
 import { impermanentLoss } from '../utils';
 import { DistributorDetails } from '../utils/constants';
 import { CreatePairStep } from '../hooks/useCreateNewPair';
+import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 
 export async function deposit(
   this: ImpermaxRouter,
@@ -20,7 +22,10 @@ export async function deposit(
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
-    if (token.address === this.WETH) {
+    // ray test touch <<
+    const wethAddress = WETH_ADDRESSES[this.chainId];
+    // ray test touch >>
+    if (token.address === wethAddress) {
       const overrides = { value: amount };
       const tx = await this.router.mintETH(poolToken.address, this.account, deadline, overrides);
       await tx.wait();
@@ -51,7 +56,10 @@ export async function withdraw(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
 
   try {
-    if (token.address === this.WETH) {
+    // ray test touch <<
+    const wethAddress = WETH_ADDRESSES[this.chainId];
+    // ray test touch >>
+    if (token.address === wethAddress) {
       const tx = await this.router.redeemETH(poolToken.address, tokens, this.account, deadline, data);
       await tx.wait();
     } else {
@@ -78,7 +86,10 @@ export async function borrow(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
 
   try {
-    if (token.address === this.WETH) {
+    // ray test touch <<
+    const wethAddress = WETH_ADDRESSES[this.chainId];
+    // ray test touch >>
+    if (token.address === wethAddress) {
       const tx = await this.router.borrowETH(borrowable.address, amount, this.account, deadline, data);
       await tx.wait();
     } else {
@@ -103,7 +114,10 @@ export async function repay(
   const deadline = this.getDeadline();
 
   try {
-    if (token.address === this.WETH) {
+    // ray test touch <<
+    const wethAddress = WETH_ADDRESSES[this.chainId];
+    // ray test touch >>
+    if (token.address === wethAddress) {
       const overrides = { value: amount };
       const tx = await this.router.repayETH(borrowable.address, this.account, deadline, overrides);
       await tx.wait();

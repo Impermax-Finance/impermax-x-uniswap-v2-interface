@@ -2,6 +2,9 @@
 import { Address, PoolTokenType, BorrowableData } from '../impermax-router/interfaces';
 import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
+// ray test touch <<
+import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+// ray test touch >>
 
 // Pair List
 export async function getPairList(this: Subgraph) : Promise<Address[]> {
@@ -17,7 +20,10 @@ export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poo
     return nameA + '-' + nameB + ' LP';
   }
   const underlying = await this.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType);
-  if (underlying === this.WETH.toLowerCase()) return 'Ethereum';
+  // ray test touch <<
+  const wethAddress = WETH_ADDRESSES[this.chainId];
+  // ray test touch >>
+  if (underlying === wethAddress.toLowerCase()) return 'Ethereum';
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return lendingPoolData[poolTokenType].underlying.name;
 }
@@ -30,7 +36,10 @@ export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, p
     return symbolA + '-' + symbolB;
   }
   const underlying = await this.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType);
-  if (underlying === this.WETH.toLowerCase()) return 'ETH';
+  // ray test touch <<
+  const wethAddress = WETH_ADDRESSES[this.chainId];
+  // ray test touch >>
+  if (underlying === wethAddress.toLowerCase()) return 'ETH';
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return lendingPoolData[poolTokenType].underlying.symbol;
 }
@@ -65,7 +74,10 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
 }
 export async function getImxPrice(this: Subgraph) : Promise<number> {
   const imxAddress = IMX_ADDRESSES[this.chainId];
-  const IMXPair = this.getPairAddress(this.WETH, imxAddress);
+  // ray test touch <<
+  const wethAddress = WETH_ADDRESSES[this.chainId];
+  // ray test touch >>
+  const IMXPair = this.getPairAddress(wethAddress, imxAddress);
   const AAddress = await this.getUnderlyingAddress(IMXPair, PoolTokenType.BorrowableA);
   const poolTokenType = AAddress.toLowerCase() === imxAddress.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
   return this.getTokenPrice(IMXPair, poolTokenType);

@@ -7,7 +7,13 @@
 import { formatUnits } from '@ethersproject/units';
 
 import ImpermaxRouter from '.';
-import { Address, PoolTokenType, Changes, NO_CHANGES } from './interfaces';
+import {
+  Address,
+  PoolTokenType,
+  Changes,
+  NO_CHANGES
+} from './interfaces';
+import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 
 // Exchange rate
 export async function initializeExchangeRate(
@@ -34,7 +40,10 @@ export async function initializeAvailableBalance(
   poolTokenType: PoolTokenType
 ) : Promise<number> {
   const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  if (token.address === this.WETH) {
+  // ray test touch <<
+  const wethAddress = WETH_ADDRESSES[this.chainId];
+  // ray test touch >>
+  if (token.address === wethAddress) {
     const bigBalance = await this.library.getBalance(this.account);
     const availableBalance = parseFloat(formatUnits(bigBalance)) / this.dust;
     return availableBalance;

@@ -37,10 +37,10 @@ export const SIMPLE_UNISWAP_ORACLE: NetworkIndex = {
   [Networks.Mainnet]: '0x5671B249391cA5E6a8FE28CEb1e85Dc41c12Ba7D'
 };
 
-export const WETH: NetworkIndex = {
-  [Networks.Ropsten]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
-  [Networks.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
-};
+// export const WETH: NetworkIndex = {
+//   [Networks.Ropsten]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+//   [Networks.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+// };
 
 export const CLAIM_AGGREGATOR: NetworkIndex = {
   [Networks.Ropsten]: '0x2078270ae9956f1298f8bfd8be43306bbd4ab551',

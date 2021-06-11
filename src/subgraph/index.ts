@@ -12,7 +12,9 @@ import * as account from './account';
 
 export interface SubgraphCfgInterface {
   chainId: number;
-  WETH: Address;
+  // ray test touch <<
+  // WETH: Address;
+  // ray test touch >>
   uniswapV2FactoryAddress: Address;
 }
 
@@ -20,7 +22,9 @@ export default class Subgraph {
   uniswapSubgraphUrl: string;
   blocklyticsSubgraphUrl: string;
   chainId: number;
-  WETH: Address;
+  // ray test touch <<
+  // WETH: Address;
+  // ray test touch >>
   uniswapV2FactoryAddress: Address;
   lendingPoolsData: Promise<{
     [key in Address]?: LendingPoolData
@@ -34,7 +38,9 @@ export default class Subgraph {
     this.uniswapSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2';
     this.blocklyticsSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks';
     this.chainId = cfg.chainId;
-    this.WETH = cfg.WETH;
+    // ray test touch <<
+    // this.WETH = cfg.WETH;
+    // ray test touch >>
     this.uniswapV2FactoryAddress = cfg.uniswapV2FactoryAddress;
     this.usersData = {};
   }

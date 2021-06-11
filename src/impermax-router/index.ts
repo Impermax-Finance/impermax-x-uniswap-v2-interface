@@ -102,7 +102,9 @@ class ImpermaxRouter {
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
     this.merkleDistributor = this.newMerkleDistributor(cfg.merkleDistributorAddress);
     this.claimAggregator = this.newClaimAggregator(cfg.claimAggregatorAddress);
-    this.WETH = cfg.WETH;
+    // ray test touch <<
+    // this.WETH = cfg.WETH;
+    // ray test touch >>
     this.airdropUrl = cfg.airdropUrl;
     this.priceInverted = cfg.priceInverted;
     this.lendingPoolCache = {};
