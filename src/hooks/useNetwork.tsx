@@ -3,13 +3,6 @@ import { useContext } from 'react';
 
 import { NetworkContext } from 'contexts/NetworkProvider';
 
-// ray test touch <<
-// export function useUniswapV2FactoryAddress() {
-//   const { uniswapV2FactoryAddress } = useContext(NetworkContext);
-//   return uniswapV2FactoryAddress;
-// }
-// ray test touch >>
-
 export function useSimpleUniswapOracleAddress() {
   const { simpleUniswapOracleAddress } = useContext(NetworkContext);
   return simpleUniswapOracleAddress;

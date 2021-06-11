@@ -9,18 +9,12 @@ import {
   CLAIM_AGGREGATOR,
   DistributorDetails,
   DISTRIBUTORS
-  // ray test touch <<
-  // UNISWAP_V2_FACTORY
-  // ray test touch >>
 } from 'utils/constants';
 
 // ray test touch <
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkInterface = {
-  // ray test touch <<
-  // uniswapV2FactoryAddress: UNISWAP_V2_FACTORY[NETWORK],
-  // ray test touch >>
   simpleUniswapOracleAddress: SIMPLE_UNISWAP_ORACLE[NETWORK],
   merkleDistributorAddress: MERKLE_DISTRIBUTOR[NETWORK],
   claimAggregatorAddress: CLAIM_AGGREGATOR[NETWORK],
@@ -36,9 +30,6 @@ const NetworkProvider: React.FC = ({ children }) => {
 };
 
 export interface NetworkInterface {
-  // ray test touch <<
-  // uniswapV2FactoryAddress: Address;
-  // ray test touch >>
   simpleUniswapOracleAddress: Address;
   merkleDistributorAddress: Address;
   claimAggregatorAddress: Address;

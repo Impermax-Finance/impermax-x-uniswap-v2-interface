@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { CHAIN_IDS } from 'config/web3/networks';
 
 const UNISWAP_V2_FACTORY_ADDRESSES: {
@@ -12,4 +11,3 @@ const UNISWAP_V2_FACTORY_ADDRESSES: {
 export {
   UNISWAP_V2_FACTORY_ADDRESSES
 };
-// ray test touch >>

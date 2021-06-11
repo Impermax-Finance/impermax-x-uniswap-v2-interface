@@ -1,18 +1,11 @@
 
-// ray test touch <<
 import { keccak256 } from '@ethersproject/keccak256';
 import { pack } from '@ethersproject/solidity';
 import { getCreate2Address } from '@ethersproject/address';
-// import {
-// keccak256,
-// solidityPack,
-// getCreate2Address
-// } from 'ethers/lib/utils';
-// ray test touch >>
 
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
 import Subgraph from '.';
-import { Address } from '../utils/constants';
+import { Address } from 'utils/constants';
 
 export function getPairAddress(
   this: Subgraph,
@@ -25,11 +18,9 @@ export function getPairAddress(
   // eslint-disable-next-line no-invalid-this
   const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[this.chainId];
   return getCreate2Address(
-    // ray test touch <<
     uniswapV2FactoryAddress,
-    // this.uniswapV2FactoryAddress,
-    // ray test touch >>
     salt,
+    // TODO: hardcoded
     '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f'
   );
 }

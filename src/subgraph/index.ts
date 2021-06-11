@@ -18,9 +18,6 @@ class Subgraph {
   uniswapSubgraphUrl: string;
   blocklyticsSubgraphUrl: string;
   chainId: number;
-  // ray test touch <<
-  // uniswapV2FactoryAddress: Address;
-  // ray test touch >>
   lendingPoolsData: Promise<{
     [key in Address]?: LendingPoolData
   }>;
@@ -34,9 +31,6 @@ class Subgraph {
     this.uniswapSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2';
     this.blocklyticsSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks';
     this.chainId = config.chainId;
-    // ray test touch <<
-    // this.uniswapV2FactoryAddress = config.uniswapV2FactoryAddress;
-    // ray test touch >>
     this.usersData = {};
   }
 
@@ -124,9 +118,6 @@ class Subgraph {
 
 export interface SubgraphConfigInterface {
   chainId: number;
-  // ray test touch <<
-  // uniswapV2FactoryAddress: Address;
-  // ray test touch >>
 }
 
 export default Subgraph;

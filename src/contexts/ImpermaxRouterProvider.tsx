@@ -17,9 +17,6 @@ import {
   useAirdropUrl,
   useMerkleDistributorAddress,
   useClaimAggregatorAddress
-  // ray test touch <<
-  // useUniswapV2FactoryAddress
-  // ray test touch >>
 } from 'hooks/useNetwork';
 import useSubgraph from 'hooks/useSubgraph';
 
@@ -32,9 +29,6 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     library
   } = useWeb3React<Web3Provider>();
   const subgraph = useSubgraph();
-  // ray test touch <<
-  // const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
-  // ray test touch >>
   const simpleUniswapOracleAddress = useSimpleUniswapOracleAddress();
   const merkleDistributorAddress = useMerkleDistributorAddress();
   const claimAggregatorAddress = useClaimAggregatorAddress();
@@ -67,22 +61,13 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     // if (!priceInverted) return;
     if (!simpleUniswapOracleAddress) return;
     if (!subgraph) return;
-    // ray test touch <<
-    // if (!uniswapV2FactoryAddress) return;
-    // ray test touch >>
     if (!library) return;
 
     if (!impermaxRouter) {
       const impermaxRouter = new ImpermaxRouter({
         subgraph,
         library,
-        // ray test touch <<
-        // web3,
-        // ray test touch >>
         chainId,
-        // ray test touch <<
-        // uniswapV2FactoryAddress,
-        // ray test touch >>
         simpleUniswapOracleAddress,
         merkleDistributorAddress,
         claimAggregatorAddress,
@@ -109,9 +94,6 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     priceInverted,
     simpleUniswapOracleAddress,
     subgraph,
-    // ray test touch <<
-    // uniswapV2FactoryAddress,
-    // ray test touch >>
     library
   ]);
 
