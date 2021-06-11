@@ -26,11 +26,9 @@ const SubgraphProvider = ({
   // ray test touch >>
   const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
 
-  // ray test touch <<
   if (!chainId) {
     throw new Error('Invalid chain ID!');
   }
-  // ray test touch >>
 
   const subgraph = new Subgraph({
     chainId,

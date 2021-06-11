@@ -24,9 +24,6 @@ export function useToken(poolTokenTypeArg?: PoolTokenType) {
 
 // ray test touch <
 export function usePairList() : Address[] {
-  // ray test touch <<
-  console.log('ray : ***** usePairList');
-  // ray test touch >>
   const [pairList, setPairList] = useState<Address[]>();
   useSubgraphCallback(async subgraph => setPairList(await subgraph.getPairList()));
   return pairList;

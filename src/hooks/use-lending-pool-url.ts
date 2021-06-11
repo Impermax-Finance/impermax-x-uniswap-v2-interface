@@ -12,7 +12,6 @@ const useLendingPoolURL = () : string => {
   const uniswapV2PairAddress = usePairAddress();
   const { chainId } = useWeb3React<Web3Provider>();
 
-  // ray test touch <<
   if (!chainId) {
     throw new Error('Invalid Chain ID!');
   }
@@ -23,7 +22,6 @@ const useLendingPoolURL = () : string => {
         .replace(`:${PARAMETERS.CHAIN_ID}`, chainId.toString())
         .replace(`:${PARAMETERS.UNISWAP_V2_PAIR_ADDRESS}`, uniswapV2PairAddress) :
       '';
-  // ray test touch >>
 
   return lendingPoolURL;
 };
