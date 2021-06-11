@@ -23,7 +23,7 @@ import {
   Address,
   LendingPool,
   PoolTokenType,
-  ImpermaxRouterCfg,
+  ImpermaxRouterCfgInterface,
   Factory,
   SimpleUniswapOracle,
   AirdropData,
@@ -55,7 +55,6 @@ class ImpermaxRouter {
   merkleDistributor: MerkleDistributor;
   claimAggregator: ClaimAggregator;
   account: Address;
-  IMX: Address;
   WETH: Address;
   airdropUrl: string;
   priceInverted: boolean;
@@ -91,7 +90,7 @@ class ImpermaxRouter {
     }
   };
 
-  constructor(cfg: ImpermaxRouterCfg) {
+  constructor(cfg: ImpermaxRouterCfgInterface) {
     this.subgraph = cfg.subgraph;
     this.library = cfg.library;
     this.chainId = cfg.chainId;
@@ -103,7 +102,6 @@ class ImpermaxRouter {
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
     this.merkleDistributor = this.newMerkleDistributor(cfg.merkleDistributorAddress);
     this.claimAggregator = this.newClaimAggregator(cfg.claimAggregatorAddress);
-    this.IMX = cfg.IMX;
     this.WETH = cfg.WETH;
     this.airdropUrl = cfg.airdropUrl;
     this.priceInverted = cfg.priceInverted;

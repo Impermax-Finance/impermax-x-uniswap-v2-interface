@@ -13,7 +13,6 @@ import * as account from './account';
 export interface SubgraphCfg {
   impermaxSubgraphUrl: string;
   chainId: number;
-  IMX: Address;
   WETH: Address;
   uniswapV2FactoryAddress: Address;
 }
@@ -23,7 +22,6 @@ export default class Subgraph {
   uniswapSubgraphUrl: string;
   blocklyticsSubgraphUrl: string;
   chainId: number;
-  IMX: Address;
   WETH: Address;
   uniswapV2FactoryAddress: Address;
   lendingPoolsData: Promise<{
@@ -39,7 +37,6 @@ export default class Subgraph {
     this.uniswapSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2';
     this.blocklyticsSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks';
     this.chainId = cfg.chainId;
-    this.IMX = cfg.IMX;
     this.WETH = cfg.WETH;
     this.uniswapV2FactoryAddress = cfg.uniswapV2FactoryAddress;
     this.usersData = {};

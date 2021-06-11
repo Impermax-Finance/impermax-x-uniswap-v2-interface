@@ -3,7 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import React, {
+import {
   createContext,
   useEffect,
   useState
@@ -18,14 +18,13 @@ import {
   useFactoryAddress,
   useSimpleUniswapOracleAddress,
   useAirdropUrl,
-  useIMX,
   useMerkleDistributorAddress,
   useClaimAggregatorAddress,
   useUniswapV2FactoryAddress
 } from 'hooks/useNetwork';
 import useSubgraph from 'hooks/useSubgraph';
 
-export interface ImpermaxRouterContextI {
+export interface ImpermaxRouterContextInterface {
   impermaxRouter?: ImpermaxRouter;
   routerAccount?: string;
   routerUpdate?: number;
@@ -36,7 +35,7 @@ export interface ImpermaxRouterContextI {
   togglePriceInverted?: Function;
 }
 
-export const ImpermaxRouterContext = createContext<ImpermaxRouterContextI>({});
+export const ImpermaxRouterContext = createContext<ImpermaxRouterContextInterface>({});
 
 export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const {
@@ -52,7 +51,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const merkleDistributorAddress = useMerkleDistributorAddress();
   const claimAggregatorAddress = useClaimAggregatorAddress();
   const WETH = useWETH();
-  const IMX = useIMX();
   const airdropUrl = useAirdropUrl();
   const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
   const [routerAccount, setRouterAccount] = useState<string>();
@@ -74,7 +72,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     // TODO: double-check
-    if (!IMX) return;
     if (!WETH) return;
     if (!airdropUrl) return;
     if (!chainId) return;
@@ -102,7 +99,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
         merkleDistributorAddress,
         claimAggregatorAddress,
         WETH,
-        IMX,
         airdropUrl,
         priceInverted
       });
@@ -118,7 +114,6 @@ export const ImpermaxRouterProvider: React.FC = ({ children }) => {
   }, [
     account,
     // TODO: double-check
-    IMX,
     WETH,
     airdropUrl,
     chainId,

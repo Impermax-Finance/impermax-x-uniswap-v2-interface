@@ -1,6 +1,7 @@
 /* eslint-disable no-invalid-this */
 import { Address, PoolTokenType, BorrowableData } from '../impermax-router/interfaces';
 import Subgraph from '.';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
 
 // Pair List
 export async function getPairList(this: Subgraph) : Promise<Address[]> {
@@ -63,10 +64,10 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
   return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).underlying.derivedUSD);
 }
 export async function getImxPrice(this: Subgraph) : Promise<number> {
-  const IMXPair = this.getPairAddress(this.WETH, this.IMX);
-  console.log(IMXPair);
+  const imxAddress = IMX_ADDRESSES[this.chainId];
+  const IMXPair = this.getPairAddress(this.WETH, imxAddress);
   const AAddress = await this.getUnderlyingAddress(IMXPair, PoolTokenType.BorrowableA);
-  const poolTokenType = AAddress.toLowerCase() === this.IMX.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
+  const poolTokenType = AAddress.toLowerCase() === imxAddress.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
   return this.getTokenPrice(IMXPair, poolTokenType);
 }
 

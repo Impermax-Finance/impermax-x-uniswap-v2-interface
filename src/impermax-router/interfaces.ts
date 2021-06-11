@@ -53,7 +53,7 @@ export const NO_CHANGES = {
   changeCollateral: 0
 };
 
-export interface ImpermaxRouterCfg {
+export interface ImpermaxRouterCfgInterface {
   subgraph: Subgraph;
   web3: any;
   chainId: number;
@@ -63,7 +63,6 @@ export interface ImpermaxRouterCfg {
   simpleUniswapOracleAddress: Address;
   merkleDistributorAddress: Address;
   claimAggregatorAddress: Address;
-  IMX: Address;
   WETH: Address;
   airdropUrl: string;
   priceInverted: boolean;

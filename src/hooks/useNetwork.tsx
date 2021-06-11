@@ -8,11 +8,6 @@ export function useImpermaxSubgraphUrl() {
   return impermaxSubgraphUrl;
 }
 
-export function useIMX() {
-  const { IMX } = useContext(NetworkContext);
-  return IMX;
-}
-
 export function useWETH() {
   const { WETH } = useContext(NetworkContext);
   return WETH;
