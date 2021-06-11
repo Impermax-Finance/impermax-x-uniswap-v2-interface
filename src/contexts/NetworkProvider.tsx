@@ -12,7 +12,9 @@ import {
   CLAIM_AGGREGATOR,
   DistributorDetails,
   DISTRIBUTORS,
-  IMPERMAX_SUBGRAPH_URL,
+  // ray test touch <<
+  // IMPERMAX_SUBGRAPH_URL,
+  // ray test touch >>
   UNISWAP_V2_FACTORY
 } from 'utils/constants';
 
@@ -20,7 +22,9 @@ import {
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkInterface = {
-  impermaxSubgraphUrl: IMPERMAX_SUBGRAPH_URL[NETWORK],
+  // ray test touch <<
+  // impermaxSubgraphUrl: IMPERMAX_SUBGRAPH_URL[NETWORK],
+  // ray test touch >>
   WETH: WETH[NETWORK],
   routerAddress: ROUTER[NETWORK],
   factoryAddress: FACTORY[NETWORK],
@@ -38,7 +42,9 @@ const NetworkProvider: React.FC = ({ children }) => {
 };
 
 export interface NetworkInterface {
-  impermaxSubgraphUrl: string;
+  // ray test touch <<
+  // impermaxSubgraphUrl: string;
+  // ray test touch >>
   WETH: Address;
   routerAddress: Address;
   factoryAddress: Address;

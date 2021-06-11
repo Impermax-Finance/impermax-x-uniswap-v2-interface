@@ -21,6 +21,7 @@ import {
   BorrowPosition
 } from 'impermax-router/interfaces';
 import Subgraph from '.';
+import { IMPERMAX_SUBGRAPH_URL } from 'config/web3/subgraph';
 
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;
 const UNISWAP_FEE = 0.003;
@@ -95,7 +96,10 @@ async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
       }
     }
   }`;
-  const result = await this.apolloFetcher(this.impermaxSubgraphUrl, query);
+  // ray test touch <<
+  const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
+  const result = await this.apolloFetcher(impermaxSubgraphUrl, query);
+  // ray test touch >>
   return result.data.lendingPools;
 }
 
@@ -204,7 +208,10 @@ async function initializeTvlData(this: Subgraph) : Promise<TvlData> {
       totalBorrowsUSD
     }
   }`;
-  const result = await this.apolloFetcher(this.impermaxSubgraphUrl, query);
+  // ray test touch <<
+  const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
+  const result = await this.apolloFetcher(impermaxSubgraphUrl, query);
+  // ray test touch >>
   return result.data.impermaxFactories[0];
 }
 async function getTvlData(this: Subgraph) : Promise<TvlData> {
@@ -253,7 +260,10 @@ async function fetchUserData(this: Subgraph, account: Address) : Promise<{
       }
     }
   }`;
-  const result = await this.apolloFetcher(this.impermaxSubgraphUrl, query);
+  // ray test touch <<
+  const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
+  const result = await this.apolloFetcher(impermaxSubgraphUrl, query);
+  // ray test touch >>
   return result.data.user;
 }
 async function initializeUserData(this: Subgraph, account: Address) : Promise<UserData> {
