@@ -17,13 +17,6 @@ export const RPC_URLS = {
   3: 'wss://ropsten.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158'
 };
 
-// ray test touch <<
-// export const AIRDROP_URL: NetworkIndex = {
-//   [Networks.Ropsten]: 'https://wispy-truth-7af9.impermax.workers.dev',
-//   [Networks.Mainnet]: 'https://old-feather-0b99.impermax.workers.dev'
-// };
-// ray test touch >>
-
 export const DISTRIBUTORS: NetworkIndex = {
   [Networks.Ropsten]: [
     { claimableAddress: '0x9192b53fe173025733beb33467d730a4e6bb7f36', name: 'Private Sale' },

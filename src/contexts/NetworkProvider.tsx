@@ -2,9 +2,6 @@
 import React, { createContext } from 'react';
 import { Networks } from 'utils/connections';
 import {
-  // ray test touch <<
-  // AIRDROP_URL,
-  // ray test touch >>
   DistributorDetails,
   DISTRIBUTORS
 } from 'utils/constants';
@@ -13,9 +10,6 @@ import {
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkInterface = {
-  // ray test touch <<
-  // airdropUrl: AIRDROP_URL[NETWORK],
-  // ray test touch >>
   distributors: DISTRIBUTORS[NETWORK]
 };
 // ray test touch >
@@ -27,9 +21,6 @@ const NetworkProvider: React.FC = ({ children }) => {
 };
 
 export interface NetworkInterface {
-  // ray test touch <<
-  // airdropUrl: string;
-  // ray test touch >>
   distributors: DistributorDetails[];
 }
 

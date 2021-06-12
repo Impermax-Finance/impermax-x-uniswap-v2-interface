@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { CHAIN_IDS } from 'config/web3/networks';
 
 const AIR_DROP_URLS: {
@@ -12,4 +11,3 @@ const AIR_DROP_URLS: {
 export {
   AIR_DROP_URLS
 };
-// ray test touch >>
