@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { CHAIN_IDS } from 'config/web3/networks';
 
 const DISTRIBUTOR_ADDRESSES = {
@@ -44,4 +43,3 @@ const DISTRIBUTOR_ADDRESSES = {
 export {
   DISTRIBUTOR_ADDRESSES
 };
-// ray test touch >>
