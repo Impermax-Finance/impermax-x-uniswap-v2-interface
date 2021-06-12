@@ -2,13 +2,7 @@
 import React, { createContext } from 'react';
 import { Networks } from 'utils/connections';
 import {
-  // ray test touch <<
-  // Address,
-  // ray test touch >>
   AIRDROP_URL,
-  // ray test touch <<
-  // CLAIM_AGGREGATOR,
-  // ray test touch >>
   DistributorDetails,
   DISTRIBUTORS
 } from 'utils/constants';
@@ -17,9 +11,6 @@ import {
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkInterface = {
-  // ray test touch <<
-  // claimAggregatorAddress: CLAIM_AGGREGATOR[NETWORK],
-  // ray test touch >>
   airdropUrl: AIRDROP_URL[NETWORK],
   distributors: DISTRIBUTORS[NETWORK]
 };
@@ -32,9 +23,6 @@ const NetworkProvider: React.FC = ({ children }) => {
 };
 
 export interface NetworkInterface {
-  // ray test touch <<
-  // claimAggregatorAddress: Address;
-  // ray test touch >>
   airdropUrl: string;
   distributors: DistributorDetails[];
 }

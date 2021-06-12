@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { CHAIN_IDS } from 'config/web3/networks';
 
 const CLAIM_AGGREGATOR_ADDRESSES: {
@@ -12,4 +11,3 @@ const CLAIM_AGGREGATOR_ADDRESSES: {
 export {
   CLAIM_AGGREGATOR_ADDRESSES
 };
-// ray test touch >>
