@@ -3,7 +3,9 @@ import React, { createContext } from 'react';
 import { Networks } from 'utils/connections';
 import {
   Address,
-  SIMPLE_UNISWAP_ORACLE,
+  // ray test touch <<
+  // SIMPLE_UNISWAP_ORACLE,
+  // ray test touch >>
   AIRDROP_URL,
   MERKLE_DISTRIBUTOR,
   CLAIM_AGGREGATOR,
@@ -15,7 +17,9 @@ import {
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkInterface = {
-  simpleUniswapOracleAddress: SIMPLE_UNISWAP_ORACLE[NETWORK],
+  // ray test touch <<
+  // simpleUniswapOracleAddress: SIMPLE_UNISWAP_ORACLE[NETWORK],
+  // ray test touch >>
   merkleDistributorAddress: MERKLE_DISTRIBUTOR[NETWORK],
   claimAggregatorAddress: CLAIM_AGGREGATOR[NETWORK],
   airdropUrl: AIRDROP_URL[NETWORK],
@@ -30,7 +34,9 @@ const NetworkProvider: React.FC = ({ children }) => {
 };
 
 export interface NetworkInterface {
-  simpleUniswapOracleAddress: Address;
+  // ray test touch <<
+  // simpleUniswapOracleAddress: Address;
+  // ray test touch >>
   merkleDistributorAddress: Address;
   claimAggregatorAddress: Address;
   airdropUrl: string;

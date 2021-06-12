@@ -3,10 +3,12 @@ import { useContext } from 'react';
 
 import { NetworkContext } from 'contexts/NetworkProvider';
 
-export function useSimpleUniswapOracleAddress() {
-  const { simpleUniswapOracleAddress } = useContext(NetworkContext);
-  return simpleUniswapOracleAddress;
-}
+// ray test touch <<
+// export function useSimpleUniswapOracleAddress() {
+//   const { simpleUniswapOracleAddress } = useContext(NetworkContext);
+//   return simpleUniswapOracleAddress;
+// }
+// ray test touch >>
 
 export function useMerkleDistributorAddress() {
   const { merkleDistributorAddress } = useContext(NetworkContext);

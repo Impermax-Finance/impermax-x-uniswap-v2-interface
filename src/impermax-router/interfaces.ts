@@ -56,7 +56,9 @@ export const NO_CHANGES = {
 export interface ImpermaxRouterConfigInterface {
   subgraph: Subgraph;
   chainId: number;
-  simpleUniswapOracleAddress: Address;
+  // ray test touch <<
+  // simpleUniswapOracleAddress: Address;
+  // ray test touch >>
   merkleDistributorAddress: Address;
   claimAggregatorAddress: Address;
   airdropUrl: string;
