@@ -102,9 +102,7 @@ class ImpermaxRouter {
     this.router = this.newRouter(ROUTER_ADDRESSES[config.chainId]);
     this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
     this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
-    // ray test touch <<
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(SIMPLE_UNISWAP_ORACLE_ADDRESSES[config.chainId]);
-    // ray test touch >>
     this.merkleDistributor = this.newMerkleDistributor(config.merkleDistributorAddress);
     this.claimAggregator = this.newClaimAggregator(config.claimAggregatorAddress);
     this.airdropUrl = config.airdropUrl;

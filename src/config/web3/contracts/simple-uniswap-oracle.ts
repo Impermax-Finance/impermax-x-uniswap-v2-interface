@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { CHAIN_IDS } from 'config/web3/networks';
 
 const SIMPLE_UNISWAP_ORACLE_ADDRESSES: {
@@ -12,4 +11,3 @@ const SIMPLE_UNISWAP_ORACLE_ADDRESSES: {
 export {
   SIMPLE_UNISWAP_ORACLE_ADDRESSES
 };
-// ray test touch >>
