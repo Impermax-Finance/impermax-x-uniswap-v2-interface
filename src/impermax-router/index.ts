@@ -45,9 +45,7 @@ import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
 import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
 import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracle';
-// ray test touch <<
 import { MERKLE_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/merkle-distributor-addresses';
-// ray test touch >>
 
 class ImpermaxRouter {
   subgraph: Subgraph;
@@ -106,9 +104,7 @@ class ImpermaxRouter {
     this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
     this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(SIMPLE_UNISWAP_ORACLE_ADDRESSES[config.chainId]);
-    // ray test touch <<
     this.merkleDistributor = this.newMerkleDistributor(MERKLE_DISTRIBUTOR_ADDRESSES[config.chainId]);
-    // ray test touch >>
     this.claimAggregator = this.newClaimAggregator(config.claimAggregatorAddress);
     this.airdropUrl = config.airdropUrl;
     this.priceInverted = config.priceInverted;

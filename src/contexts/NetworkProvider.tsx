@@ -4,9 +4,6 @@ import { Networks } from 'utils/connections';
 import {
   Address,
   AIRDROP_URL,
-  // ray test touch <<
-  // MERKLE_DISTRIBUTOR,
-  // ray test touch >>
   CLAIM_AGGREGATOR,
   DistributorDetails,
   DISTRIBUTORS
@@ -16,9 +13,6 @@ import {
 const NETWORK = process.env.REACT_APP_NETWORK as Networks;
 
 const context : NetworkInterface = {
-  // ray test touch <<
-  // merkleDistributorAddress: MERKLE_DISTRIBUTOR[NETWORK],
-  // ray test touch >>
   claimAggregatorAddress: CLAIM_AGGREGATOR[NETWORK],
   airdropUrl: AIRDROP_URL[NETWORK],
   distributors: DISTRIBUTORS[NETWORK]
@@ -32,9 +26,6 @@ const NetworkProvider: React.FC = ({ children }) => {
 };
 
 export interface NetworkInterface {
-  // ray test touch <<
-  // merkleDistributorAddress: Address;
-  // ray test touch >
   claimAggregatorAddress: Address;
   airdropUrl: string;
   distributors: DistributorDetails[];

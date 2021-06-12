@@ -22,13 +22,6 @@ export const CLAIM_AGGREGATOR: NetworkIndex = {
   [Networks.Mainnet]: '0x5287cac629be59997602b4177cb4420165264b69'
 };
 
-// ray test touch <<
-// export const MERKLE_DISTRIBUTOR: NetworkIndex = {
-//   [Networks.Ropsten]: '0x3039c26f9126833baca8edbf61c761cd909f461f',
-//   [Networks.Mainnet]: '0x2011b5d4d5287cc9d3462b4e8af0e4daf29e3c1d'
-// };
-// ray test touch >>
-
 export const AIRDROP_URL: NetworkIndex = {
   [Networks.Ropsten]: 'https://wispy-truth-7af9.impermax.workers.dev',
   [Networks.Mainnet]: 'https://old-feather-0b99.impermax.workers.dev'

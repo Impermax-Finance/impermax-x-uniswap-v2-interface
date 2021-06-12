@@ -3,13 +3,6 @@ import { useContext } from 'react';
 
 import { NetworkContext } from 'contexts/NetworkProvider';
 
-// ray test touch <<
-// export function useMerkleDistributorAddress() {
-//   const { merkleDistributorAddress } = useContext(NetworkContext);
-//   return merkleDistributorAddress;
-// }
-// ray test touch >>
-
 export function useClaimAggregatorAddress() {
   const { claimAggregatorAddress } = useContext(NetworkContext);
   return claimAggregatorAddress;

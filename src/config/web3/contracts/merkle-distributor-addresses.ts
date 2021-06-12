@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { CHAIN_IDS } from 'config/web3/networks';
 
 const MERKLE_DISTRIBUTOR_ADDRESSES: {
@@ -12,4 +11,3 @@ const MERKLE_DISTRIBUTOR_ADDRESSES: {
 export {
   MERKLE_DISTRIBUTOR_ADDRESSES
 };
-// ray test touch >>
