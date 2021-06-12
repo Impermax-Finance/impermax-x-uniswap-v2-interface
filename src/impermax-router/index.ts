@@ -61,7 +61,9 @@ class ImpermaxRouter {
   merkleDistributor: MerkleDistributor;
   claimAggregator: ClaimAggregator;
   account: Address;
-  airdropUrl: string;
+  // ray test touch <<
+  // airdropUrl: string;
+  // ray test touch >>
   priceInverted: boolean;
   lendingPoolCache: {
     [key in Address]?: {
@@ -107,7 +109,9 @@ class ImpermaxRouter {
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(SIMPLE_UNISWAP_ORACLE_ADDRESSES[config.chainId]);
     this.merkleDistributor = this.newMerkleDistributor(MERKLE_DISTRIBUTOR_ADDRESSES[config.chainId]);
     this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
-    this.airdropUrl = config.airdropUrl;
+    // ray test touch <<
+    // this.airdropUrl = config.airdropUrl;
+    // ray test touch >>l
     this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
     this.imxCache = {};

@@ -12,7 +12,9 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import ImpermaxRouter from 'impermax-router';
-import { useAirdropUrl } from 'hooks/useNetwork';
+// ray test touch <<
+// import { useAirdropUrl } from 'hooks/useNetwork';
+// ray test touch >>
 import useSubgraph from 'hooks/useSubgraph';
 
 const ImpermaxRouterContext = createContext<ImpermaxRouterContextInterface>({});
@@ -24,7 +26,9 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     library
   } = useWeb3React<Web3Provider>();
   const subgraph = useSubgraph();
-  const airdropUrl = useAirdropUrl();
+  // ray test touch <<
+  // const airdropUrl = useAirdropUrl();
+  // ray test touch >>
   const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
   const [routerAccount, setRouterAccount] = useState<string>();
   const [routerUpdate, setRouterUpdate] = useState<number>(0);
@@ -45,7 +49,9 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     // TODO: double-check
-    if (!airdropUrl) return;
+    // ray test touch <<
+    // if (!airdropUrl) return;
+    // ray test touch >>
     if (!chainId) return;
     // if (!impermaxRouter) return;
     // if (!priceInverted) return;
@@ -57,7 +63,9 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
         subgraph,
         library,
         chainId,
-        airdropUrl,
+        // ray test touch <<
+        // airdropUrl,
+        // ray test touch >>
         priceInverted
       });
       if (account) {
@@ -72,7 +80,9 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
   }, [
     account,
     // TODO: double-check
-    airdropUrl,
+    // ray test touch <<
+    // airdropUrl,
+    // ray test touch >>
     chainId,
     impermaxRouter,
     priceInverted,

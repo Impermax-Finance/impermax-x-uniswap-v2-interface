@@ -4,14 +4,26 @@
 // @ts-nocheck
 // TODO: >
 
-import ImpermaxRouter from '.';
-import { Address, AirdropData, PoolTokenType, ClaimEvent } from './interfaces';
 import { BigNumber } from '@ethersproject/bignumber';
+
+import ImpermaxRouter from '.';
+import {
+  Address,
+  AirdropData,
+  PoolTokenType,
+  ClaimEvent
+} from './interfaces';
+// ray test touch <<
+import { AIR_DROP_URLS } from 'config/web3/endpoints/air-drop';
+// ray test touch >>
 
 // Airdrop Data
 export async function initializeAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
   try {
-    const json = await fetch(this.airdropUrl + '/' + this.account);
+    // ray test touch <<
+    const airDropURL = AIR_DROP_URLS[this.chainId];
+    const json = await fetch(airDropURL + '/' + this.account);
+    // ray test touch >>
     const data = await json.json();
     if (data) {
       data.amount = BigNumber.from(data.amount);
