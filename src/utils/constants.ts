@@ -17,10 +17,12 @@ export const RPC_URLS = {
   3: 'wss://ropsten.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158'
 };
 
-export const CLAIM_AGGREGATOR: NetworkIndex = {
-  [Networks.Ropsten]: '0x2078270ae9956f1298f8bfd8be43306bbd4ab551',
-  [Networks.Mainnet]: '0x5287cac629be59997602b4177cb4420165264b69'
-};
+// ray test touch <<
+// export const CLAIM_AGGREGATOR: NetworkIndex = {
+//   [Networks.Ropsten]: '0x2078270ae9956f1298f8bfd8be43306bbd4ab551',
+//   [Networks.Mainnet]: '0x5287cac629be59997602b4177cb4420165264b69'
+// };
+// ray test touch >>
 
 export const AIRDROP_URL: NetworkIndex = {
   [Networks.Ropsten]: 'https://wispy-truth-7af9.impermax.workers.dev',

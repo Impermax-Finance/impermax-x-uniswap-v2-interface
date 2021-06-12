@@ -13,8 +13,10 @@ import { Web3Provider } from '@ethersproject/providers';
 
 import ImpermaxRouter from 'impermax-router';
 import {
-  useAirdropUrl,
-  useClaimAggregatorAddress
+  useAirdropUrl
+  // ray test touch <<
+  // useClaimAggregatorAddress
+  // ray test touch >>
 } from 'hooks/useNetwork';
 import useSubgraph from 'hooks/useSubgraph';
 
@@ -27,7 +29,9 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     library
   } = useWeb3React<Web3Provider>();
   const subgraph = useSubgraph();
-  const claimAggregatorAddress = useClaimAggregatorAddress();
+  // ray test touch <<
+  // const claimAggregatorAddress = useClaimAggregatorAddress();
+  // ray test touch >>
   const airdropUrl = useAirdropUrl();
   const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
   const [routerAccount, setRouterAccount] = useState<string>();
@@ -51,7 +55,9 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     // TODO: double-check
     if (!airdropUrl) return;
     if (!chainId) return;
-    if (!claimAggregatorAddress) return;
+    // ray test touch <<
+    // if (!claimAggregatorAddress) return;
+    // ray test touch >>
     // if (!impermaxRouter) return;
     // if (!priceInverted) return;
     if (!subgraph) return;
@@ -62,7 +68,9 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
         subgraph,
         library,
         chainId,
-        claimAggregatorAddress,
+        // ray test touch <<
+        // claimAggregatorAddress,
+        // ray test touch >>
         airdropUrl,
         priceInverted
       });
@@ -80,7 +88,9 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     // TODO: double-check
     airdropUrl,
     chainId,
-    claimAggregatorAddress,
+    // ray test touch <<
+    // claimAggregatorAddress,
+    // ray test touch >>
     impermaxRouter,
     priceInverted,
     subgraph,
