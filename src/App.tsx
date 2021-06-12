@@ -14,7 +14,9 @@ import Claim from 'pages/Claim';
 import CreateNewPair from 'pages/CreateNewPair';
 import Account from 'pages/Account';
 import LanguageProvider from 'contexts/LanguageProvider';
-import NetworkProvider from 'contexts/NetworkProvider';
+// ray test touch <<
+// import NetworkProvider from 'contexts/NetworkProvider';
+// ray test touch >>
 import ImpermaxRouterProvider from 'contexts/ImpermaxRouterProvider';
 import SubgraphProvider from 'contexts/SubgraphProvider';
 import Updater from 'store/transactions/updater';
@@ -28,46 +30,48 @@ const App = (): JSX.Element | null => {
   return (
     <Layout>
       {chainId ? (
-        <NetworkProvider>
-          <LanguageProvider>
-            <Updater />
-            <SubgraphProvider>
-              <ImpermaxRouterProvider>
-                <Switch>
-                  <Route path={PAGES.CREATE_NEW_PAIR}>
-                    <CreateNewPair />
-                  </Route>
-                  <Route path={PAGES.LENDING_POOL}>
-                    <LendingPool />
-                  </Route>
-                  <Route path={PAGES.ACCOUNT}>
-                    <Account />
-                  </Route>
-                  <Route path={PAGES.CLAIM}>
-                    <Claim />
-                  </Route>
-                  <Route path={PAGES.RISKS}>
-                    <Risks />
-                  </Route>
-                  {/* ray test touch < */}
-                  <Route
-                    path={PAGES.USER_GUIDE}
-                    component={() => {
-                      // TODO: should use <a /> with security attributes
-                      window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
-                      return null;
-                    }} />
-                  {/* ray test touch > */}
-                  <Route
-                    path={PAGES.HOME}
-                    exact>
-                    <Home />
-                  </Route>
-                </Switch>
-              </ImpermaxRouterProvider>
-            </SubgraphProvider>
-          </LanguageProvider>
-        </NetworkProvider>
+        <LanguageProvider>
+          <Updater />
+          <SubgraphProvider>
+            <ImpermaxRouterProvider>
+              <Switch>
+                <Route path={PAGES.CREATE_NEW_PAIR}>
+                  <CreateNewPair />
+                </Route>
+                <Route path={PAGES.LENDING_POOL}>
+                  <LendingPool />
+                </Route>
+                <Route path={PAGES.ACCOUNT}>
+                  <Account />
+                </Route>
+                <Route path={PAGES.CLAIM}>
+                  <Claim />
+                </Route>
+                <Route path={PAGES.RISKS}>
+                  <Risks />
+                </Route>
+                {/* ray test touch < */}
+                <Route
+                  path={PAGES.USER_GUIDE}
+                  component={() => {
+                    // TODO: should use <a /> with security attributes
+                    window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
+                    return null;
+                  }} />
+                {/* ray test touch > */}
+                <Route
+                  path={PAGES.HOME}
+                  exact>
+                  <Home />
+                </Route>
+              </Switch>
+            </ImpermaxRouterProvider>
+          </SubgraphProvider>
+        </LanguageProvider>
+        // ray test touch <<
+        // <NetworkProvider>
+        // </NetworkProvider>
+        // ray test touch >>
       // TODO: could add more obvious UX
       ) : null}
     </Layout>

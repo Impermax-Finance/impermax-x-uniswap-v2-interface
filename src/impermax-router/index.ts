@@ -45,8 +45,8 @@ import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
 import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
 import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracle';
-import { MERKLE_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/merkle-distributor-addresses';
-import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregator-addresses';
+import { MERKLE_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/merkle-distributors';
+import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
 
 class ImpermaxRouter {
   subgraph: Subgraph;

@@ -1,8 +1,10 @@
-import { Networks } from './connections';
 
-export type NetworkIndex = {
-  [key in Networks]: any
-};
+// ray test touch <<
+// import { Networks } from './connections';
+// export type NetworkIndex = {
+//   [key in Networks]: any
+// };
+// ray test touch >>
 
 export type Address = string;
 
@@ -17,20 +19,22 @@ export const RPC_URLS = {
   3: 'wss://ropsten.infura.io/ws/v3/2644163ee7bc4f2eb8dae1f58642d158'
 };
 
-export const DISTRIBUTORS: NetworkIndex = {
-  [Networks.Ropsten]: [
-    { claimableAddress: '0x9192b53fe173025733beb33467d730a4e6bb7f36', name: 'Private Sale' },
-    { claimableAddress: '0xb9f3413e206f1d658d4dafb233873dde56cf94fc', name: 'Advisor Allocation' },
-    { claimableAddress: '0x175608ea84b38d7df7a4358cf679eccb49b8203c', name: 'Protocol Growth And Development' },
-    { claimableAddress: '0x8ab3567aba5151a3ab4c1aff2fc9192178ded78d', name: 'Core Contributor' }
-  ],
-  [Networks.Mainnet]: [
-    { claimableAddress: '0x434547433e383c505e76f22f4174d7ba68b7686c', name: 'Private Sale' },
-    { claimableAddress: '0x0f528f19521fde0140668b9eb14025054bfec29e', name: 'Advisor Allocation' },
-    { claimableAddress: '0x34c8f7a53e10c17fddf7ee5048c097569d99de59', name: 'Protocol Growth And Development' },
-    { claimableAddress: '0x87da8bab9fbd09593f2368dc2f6fac3f80c2a845', name: 'Core Contributor' }
-  ]
-};
+// ray test touch <<
+// export const DISTRIBUTORS: NetworkIndex = {
+//   [Networks.Ropsten]: [
+//     { claimableAddress: '0x9192b53fe173025733beb33467d730a4e6bb7f36', name: 'Private Sale' },
+//     { claimableAddress: '0xb9f3413e206f1d658d4dafb233873dde56cf94fc', name: 'Advisor Allocation' },
+//     { claimableAddress: '0x175608ea84b38d7df7a4358cf679eccb49b8203c', name: 'Protocol Growth And Development' },
+//     { claimableAddress: '0x8ab3567aba5151a3ab4c1aff2fc9192178ded78d', name: 'Core Contributor' }
+//   ],
+//   [Networks.Mainnet]: [
+//     { claimableAddress: '0x434547433e383c505e76f22f4174d7ba68b7686c', name: 'Private Sale' },
+//     { claimableAddress: '0x0f528f19521fde0140668b9eb14025054bfec29e', name: 'Advisor Allocation' },
+//     { claimableAddress: '0x34c8f7a53e10c17fddf7ee5048c097569d99de59', name: 'Protocol Growth And Development' },
+//     { claimableAddress: '0x87da8bab9fbd09593f2368dc2f6fac3f80c2a845', name: 'Core Contributor' }
+//   ]
+// };
+// ray test touch >>
 /* export const ROPSTEN_ETH_IMX: Address = '0x0Efc0766F46E1AD825CE18F54F0793dd6814a947';
 export const ROPSTEN_ETH_DAI: Address = '0x1c5DEe94a34D795f9EEeF830B68B80e44868d316';
 export const ROPSTEN_ETH_UNI: Address = '0x4E99615101cCBB83A462dC4DE2bc1362EF1365e5';
