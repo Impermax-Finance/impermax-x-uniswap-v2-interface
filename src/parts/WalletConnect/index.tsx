@@ -2,9 +2,7 @@
 import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import clsx from 'clsx';
 
-import ConnectedWalletInfo from './ConnectedWalletInfo';
 import ErrorModal from 'components/ErrorModal';
 import JadeContainedButton from 'components/JadeContainedButton';
 import useEagerConnect from 'utils/hooks/web3/use-eager-connect';
@@ -14,7 +12,6 @@ import getBlockchainNetworkErrorMessage from 'utils/helpers/web3/get-blockchain-
 
 const WalletConnect = (): JSX.Element => {
   const {
-    account,
     connector,
     activate,
     deactivate,
@@ -56,28 +53,18 @@ const WalletConnect = (): JSX.Element => {
 
   return (
     <>
-      <div
-        className={clsx(
-          'flex',
-          'items-center',
-          'space-x-2'
-        )}>
-        {account && (
-          <ConnectedWalletInfo account={account} />
-        )}
-        {(active || error) ? (
-          <JadeContainedButton
-            onClick={handleDeactivate}>
-            Disconnect Wallet
-          </JadeContainedButton>
-        ) : (
-          <JadeContainedButton
-            disabled={connectDisabled || activating}
-            onClick={handleActivate}>
-            Connect Wallet
-          </JadeContainedButton>
-        )}
-      </div>
+      {(active || error) ? (
+        <JadeContainedButton
+          onClick={handleDeactivate}>
+          Disconnect Wallet
+        </JadeContainedButton>
+      ) : (
+        <JadeContainedButton
+          disabled={connectDisabled || activating}
+          onClick={handleActivate}>
+          Connect Wallet
+        </JadeContainedButton>
+      )}
       {!!error && (
         <ErrorModal
           open={!!error}

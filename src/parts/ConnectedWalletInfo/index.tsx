@@ -1,6 +1,8 @@
 
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 
 import ButtonGroup, { JadeButtonGroupItem } from 'components/ButtonGroup';
 import AccountModal from 'components/InteractionModal/AccountModal';
@@ -15,13 +17,7 @@ import {
   PARAMETERS
 } from 'utils/constants/links';
 
-interface Props {
-  account: string;
-}
-
-function ConnectedWalletInfo({ account } : Props): JSX.Element {
-  const accountPageURL = PAGES.ACCOUNT.replace(`:${PARAMETERS.ACCOUNT}`, account);
-
+const ConnectedWalletInfo = (): JSX.Element | null => {
   const allTransactions = useAllTransactions();
 
   const sortedRecentTransactions = React.useMemo(() => {
@@ -32,21 +28,26 @@ function ConnectedWalletInfo({ account } : Props): JSX.Element {
     });
   }, [allTransactions]);
 
-  const pendingTransactions = sortedRecentTransactions.filter(transaction => !transaction.receipt);
-  const confirmedTransactions = sortedRecentTransactions.filter(transaction => transaction.receipt);
-
   const [accountModalOpen, setAccountModalOpen] = React.useState(false);
 
-  const handleOpenAccountModal = () => {
+  const { account } = useWeb3React<Web3Provider>();
+  if (!account) return null;
+
+  const handleAccountModalOpen = () => {
     setAccountModalOpen(true);
   };
+
+  const accountPageURL = PAGES.ACCOUNT.replace(`:${PARAMETERS.ACCOUNT}`, account);
+
+  const pendingTransactions = sortedRecentTransactions.filter(transaction => !transaction.receipt);
+  const confirmedTransactions = sortedRecentTransactions.filter(transaction => transaction.receipt);
 
   return (
     <>
       <ButtonGroup>
         <JadeButtonGroupItem
           pending={pendingTransactions.length > 0}
-          onClick={handleOpenAccountModal}>
+          onClick={handleAccountModalOpen}>
           Transactions
         </JadeButtonGroupItem>
         <JadeButtonGroupItem>
@@ -62,6 +63,6 @@ function ConnectedWalletInfo({ account } : Props): JSX.Element {
         confirmed={confirmedTransactions} />
     </>
   );
-}
+};
 
 export default ConnectedWalletInfo;
