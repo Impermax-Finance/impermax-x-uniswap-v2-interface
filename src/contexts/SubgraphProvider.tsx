@@ -5,7 +5,7 @@ import { Web3Provider } from '@ethersproject/providers';
 
 import Subgraph from 'subgraph';
 
-const SubgraphContext = React.createContext<SubgraphContextInterface>({});
+const SubgraphContext = React.createContext<SubgraphContextInterface | undefined>(undefined);
 
 interface SubgraphProviderProps {
   children: React.ReactNode;
@@ -30,7 +30,7 @@ const SubgraphProvider = ({
 };
 
 export interface SubgraphContextInterface {
-  subgraph?: Subgraph;
+  subgraph: Subgraph;
 }
 
 export {

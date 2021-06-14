@@ -39,6 +39,7 @@ const NetworkConnectModal = ({
 
       const networkDetail = NETWORK_DETAILS[newChainID];
       await library.send('wallet_addEthereumChain', [networkDetail, account]);
+
       onClose();
     } catch (error) {
       console.log('[handleNetworkConnect] error.message => ', error.message);
