@@ -1,18 +1,21 @@
-import { useContext, useEffect } from 'react';
-import { SubgraphContext } from '../contexts/SubgraphProvider';
-import Subgraph from '../subgraph';
+
+import * as React from 'react';
+
+import { SubgraphContext } from 'contexts/SubgraphProvider';
+import Subgraph from 'subgraph';
 import { useRouterUpdate } from './useImpermaxRouter';
 
-export default function useSubgraph() {
-  const { subgraph } = useContext(SubgraphContext);
+export default function useSubgraph(): Subgraph | undefined {
+  const { subgraph } = React.useContext(SubgraphContext);
+
   return subgraph;
 }
 
 // ray test touch <
 export function useSubgraphCallback(f: (subgraph: Subgraph) => void, a?: Array<any>) {
-  const { subgraph } = useContext(SubgraphContext);
+  const { subgraph } = React.useContext(SubgraphContext);
   const routerUpdate = useRouterUpdate();
-  return useEffect(() => {
+  return React.useEffect(() => {
     if (subgraph) f(subgraph);
   }, [subgraph, routerUpdate].concat(a));
 }

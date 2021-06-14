@@ -13,7 +13,7 @@ interface SubgraphProviderProps {
 
 const SubgraphProvider = ({
   children
-}: SubgraphProviderProps): JSX.Element | null => {
+}: SubgraphProviderProps): JSX.Element => {
   const { chainId } = useWeb3React<Web3Provider>();
 
   if (!chainId) {

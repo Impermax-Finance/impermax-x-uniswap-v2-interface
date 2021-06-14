@@ -3,18 +3,14 @@
 // @ts-nocheck
 // TODO: >
 
-import {
-  createContext,
-  useEffect,
-  useState
-} from 'react';
+import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import ImpermaxRouter from 'impermax-router';
 import useSubgraph from 'hooks/useSubgraph';
 
-const ImpermaxRouterContext = createContext<ImpermaxRouterContextInterface>({});
+const ImpermaxRouterContext = React.createContext<ImpermaxRouterContextInterface>({});
 
 const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const {
@@ -23,10 +19,10 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     library
   } = useWeb3React<Web3Provider>();
   const subgraph = useSubgraph();
-  const [impermaxRouter, setImpermaxRouter] = useState<ImpermaxRouter>();
-  const [routerAccount, setRouterAccount] = useState<string>();
-  const [routerUpdate, setRouterUpdate] = useState<number>(0);
-  const [priceInverted, setPriceInverted] = useState<boolean>(false);
+  const [impermaxRouter, setImpermaxRouter] = React.useState<ImpermaxRouter>();
+  const [routerAccount, setRouterAccount] = React.useState<string>();
+  const [routerUpdate, setRouterUpdate] = React.useState<number>(0);
+  const [priceInverted, setPriceInverted] = React.useState<boolean>(false);
   // ray test touch <
   const doUpdate = () => {
     if (!impermaxRouter) return;
@@ -41,11 +37,8 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     setPriceInverted(!priceInverted);
   };
 
-  useEffect(() => {
-    // TODO: double-check
+  React.useEffect(() => {
     if (!chainId) return;
-    // if (!impermaxRouter) return;
-    // if (!priceInverted) return;
     if (!subgraph) return;
     if (!library) return;
 
@@ -67,7 +60,6 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
     }
   }, [
     account,
-    // TODO: double-check
     chainId,
     impermaxRouter,
     priceInverted,

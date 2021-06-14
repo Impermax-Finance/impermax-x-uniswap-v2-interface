@@ -32,11 +32,11 @@ const NetworkConnectModal = ({
   } = useWeb3React<Web3Provider>();
 
   const handleNetworkConnect = (newChainID: number) => async () => {
-    if (!library) {
-      throw new Error('Invalid library!');
-    }
-
     try {
+      if (!library) {
+        throw new Error('Invalid library!');
+      }
+
       const networkDetail = NETWORK_DETAILS[newChainID];
       await library.send('wallet_addEthereumChain', [networkDetail, account]);
       onClose();
