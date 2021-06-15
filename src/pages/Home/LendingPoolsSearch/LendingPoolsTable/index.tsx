@@ -4,21 +4,18 @@
 // TODO: >
 
 import { useContext } from 'react';
-import { LanguageContext } from 'contexts/LanguageProvider';
-import phrases from './translations';
-import './index.scss';
-import LendingPoolsRow from './LendingPoolsRow';
-import PairAddressContext from '../../contexts/PairAddress';
-import QuestionHelper from '../QuestionHelper';
-import { usePairList } from '../../hooks/useData';
 import { Spinner } from 'react-bootstrap';
 
-/**
- * Generate a searchable lending pools table.
- */
+import { LanguageContext } from 'contexts/LanguageProvider';
+import PairAddressContext from 'contexts/PairAddress';
+import LendingPoolsRow from './LendingPoolsRow';
+import QuestionHelper from 'components/QuestionHelper';
+import { usePairList } from 'hooks/useData';
+import phrases from './translations';
+import './index.scss';
 
 // ray test touch <
-export function LendingPoolsTable(): JSX.Element {
+const LendingPoolsTable = (): JSX.Element => {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const pairList = usePairList();
@@ -58,5 +55,7 @@ export function LendingPoolsTable(): JSX.Element {
       })}
     </div>
   );
-}
+};
+
+export default LendingPoolsTable;
 // ray test touch >
