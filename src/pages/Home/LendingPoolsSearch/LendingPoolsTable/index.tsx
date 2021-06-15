@@ -14,7 +14,6 @@ import { usePairList } from 'hooks/useData';
 import phrases from './translations';
 import './index.scss';
 
-// ray test touch <
 const LendingPoolsTable = (): JSX.Element => {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
@@ -58,4 +57,3 @@ const LendingPoolsTable = (): JSX.Element => {
 };
 
 export default LendingPoolsTable;
-// ray test touch >
