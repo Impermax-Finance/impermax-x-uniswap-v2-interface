@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import NetworkConnectModal from './NetworkConnectModal';
-import JadeContainedButton from 'components/JadeContainedButton';
+import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 
 const NetworkConnect = (): JSX.Element | null => {
   const [networkModalOpen, setNetworkModalOpen] = React.useState(false);
@@ -22,9 +22,9 @@ const NetworkConnect = (): JSX.Element | null => {
 
   return (
     <>
-      <JadeContainedButton onClick={handleNetworkModalOpen}>
+      <ImpermaxJadeContainedButton onClick={handleNetworkModalOpen}>
         Select a Network
-      </JadeContainedButton>
+      </ImpermaxJadeContainedButton>
       <NetworkConnectModal
         open={networkModalOpen}
         onClose={handleNetworkModalClose} />

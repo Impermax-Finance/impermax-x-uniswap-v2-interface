@@ -1,7 +1,7 @@
 
-import LendingPoolsSearch from 'components/LendingPoolsSearch';
-import OverallStats from 'components/OverallStats';
-import CreateNewMarketButton from 'components/CreateNewMarketButton';
+import OverallStats from './OverallStats';
+import CreateNewMarketButton from './CreateNewMarketButton';
+import LendingPoolsSearch from './LendingPoolsSearch';
 
 const Home = (): JSX.Element => {
   return (

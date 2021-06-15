@@ -10,7 +10,7 @@ import {
 
 import './index.scss';
 
-function CreateNewMarketButton(): JSX.Element | null {
+const CreateNewMarketButton = (): JSX.Element | null => {
   const { account } = useWeb3React<Web3Provider>();
 
   if (!account) return null;
@@ -26,6 +26,6 @@ function CreateNewMarketButton(): JSX.Element | null {
       </Row>
     </Container>
   );
-}
+};
 
 export default CreateNewMarketButton;

@@ -15,15 +15,25 @@ export default function useSubgraph(): Subgraph {
 }
 
 // ray test touch <
-export function useSubgraphCallback(f: (subgraph: Subgraph) => void, a?: Array<any>) {
+export function useSubgraphCallback(f: (subgraph: Subgraph) => void, additionalDeps: Array<any> = []): void {
   const context = React.useContext(SubgraphContext);
   if (context === undefined) {
     throw new Error('useSubgraphCallback must be used within a SubgraphProvider!');
   }
 
   const routerUpdate = useRouterUpdate();
-  return React.useEffect(() => {
-    if (context.subgraph) f(context.subgraph);
-  }, [context.subgraph, routerUpdate].concat(a));
+
+  // TODO: error-prone
+  React.useEffect(() => {
+    if (!context.subgraph) return;
+    // if (!f) return;
+
+    f(context.subgraph);
+  }, [
+    context.subgraph,
+    routerUpdate,
+    // f,
+    ...additionalDeps
+  ]);
 }
 // ray test touch >

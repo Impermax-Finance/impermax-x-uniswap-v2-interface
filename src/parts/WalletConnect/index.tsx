@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import ErrorModal from 'components/ErrorModal';
-import JadeContainedButton from 'components/JadeContainedButton';
+import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 import useEagerConnect from 'utils/hooks/web3/use-eager-connect';
 import useInactiveListener from 'utils/hooks/web3/use-inactive-listener';
 import { injected } from 'utils/helpers/web3/connectors';
@@ -54,16 +54,16 @@ const WalletConnect = (): JSX.Element => {
   return (
     <>
       {(active || error) ? (
-        <JadeContainedButton
+        <ImpermaxJadeContainedButton
           onClick={handleDeactivate}>
           Disconnect Wallet
-        </JadeContainedButton>
+        </ImpermaxJadeContainedButton>
       ) : (
-        <JadeContainedButton
+        <ImpermaxJadeContainedButton
           disabled={connectDisabled || activating}
           onClick={handleActivate}>
           Connect Wallet
-        </JadeContainedButton>
+        </ImpermaxJadeContainedButton>
       )}
       {!!error && (
         <ErrorModal

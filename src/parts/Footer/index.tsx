@@ -3,7 +3,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { GlobeAltIcon } from '@heroicons/react/outline';
 
-import JadeContainedButton from 'components/JadeContainedButton';
+import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 import {
   IMPERMAX_TELEGRAM_LINK,
   IMPERMAX_TWITTER_LINK,
@@ -396,9 +396,9 @@ const Footer = React.forwardRef<Ref, Props>(({
                 'sm:ml-3',
                 'sm:flex-shrink-0'
               )}>
-              <JadeContainedButton type='submit'>
+              <ImpermaxJadeContainedButton type='submit'>
                 Subscribe
-              </JadeContainedButton>
+              </ImpermaxJadeContainedButton>
             </div>
           </form>
         </div>

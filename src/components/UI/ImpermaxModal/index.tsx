@@ -12,7 +12,6 @@ const ImpermaxModalTitle = (props: PropsOf<typeof Dialog.Title>): JSX.Element =>
 );
 
 type Ref = HTMLDivElement;
-
 const ImpermaxModalInnerWrapper = React.forwardRef<Ref, React.ComponentPropsWithRef<'div'>>(({
   className,
   ...rest

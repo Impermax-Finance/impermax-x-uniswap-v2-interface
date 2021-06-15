@@ -10,7 +10,7 @@ interface CustomProps {
   pending?: boolean;
 }
 
-const JadeContainedButton = ({
+const ImpermaxDefaultOutlinedButton = ({
   className,
   children,
   startIcon,
@@ -32,21 +32,21 @@ const JadeContainedButton = ({
         'focus:ring-opacity-50',
 
         'border',
-        'border-transparent',
         'font-medium',
-        'shadow-sm',
 
         disabledOrPending ? clsx(
-          'bg-black',
-          'bg-opacity-10',
+          'border-black',
+          'border-opacity-10',
           'text-black',
           'text-opacity-25',
           'dark:text-white',
           'dark:text-opacity-30'
         ) : clsx(
-          'text-white',
-          'bg-impermaxJade-600',
-          'hover:bg-impermaxJade-700'
+          'text-textPrimary',
+          'border-black',
+          'border-opacity-25',
+          'hover:bg-black',
+          'hover:bg-opacity-5'
         ),
 
         'rounded-md',
@@ -79,4 +79,4 @@ const JadeContainedButton = ({
 
 export type Props = CustomProps & ImpermaxButtonBaseProps;
 
-export default JadeContainedButton;
+export default ImpermaxDefaultOutlinedButton;
