@@ -1,8 +1,8 @@
+
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { PoolTokenType } from 'impermax-router/interfaces';
-import { formatUSD, formatPercentage } from 'utils/format';
 import {
   useSupplyUSD,
   useTotalBorrowsUSD,
@@ -13,15 +13,15 @@ import {
   useFarmingAPY
 } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
+import {
+  formatUSD,
+  formatPercentage
+} from 'utils/format';
 import useLendingPoolURL from 'hooks/use-lending-pool-url';
 
 const LEVERAGE = 5;
 
-/**
- * Component for a single Lending Pool row.
- */
-
-export default function LendingPoolsRow(): JSX.Element {
+const LendingPoolsRow = (): JSX.Element => {
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const supplyUSDA = useSupplyUSD(PoolTokenType.BorrowableA);
@@ -101,4 +101,6 @@ export default function LendingPoolsRow(): JSX.Element {
       </div>
     </Link>
   );
-}
+};
+
+export default LendingPoolsRow;

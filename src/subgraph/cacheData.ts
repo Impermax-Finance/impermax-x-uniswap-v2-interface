@@ -7,6 +7,7 @@ import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 // Pair List
 export async function getPairList(this: Subgraph) : Promise<Address[]> {
   const lendingPoolData = await this.getLendingPoolsData();
+
   return Object.keys(lendingPoolData);
 }
 
@@ -52,9 +53,15 @@ export async function getExchangeRate(this: Subgraph, uniswapV2PairAddress: Addr
 }
 
 // Underlying Address
-export async function getUnderlyingAddress(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Address> {
+export async function getUnderlyingAddress(
+  this: Subgraph,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType
+) : Promise<Address> {
   if (poolTokenType === PoolTokenType.Collateral) return uniswapV2PairAddress;
+
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
+
   return lendingPoolData[poolTokenType].underlying.id;
 }
 

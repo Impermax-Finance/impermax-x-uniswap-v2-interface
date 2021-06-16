@@ -23,14 +23,12 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const [routerAccount, setRouterAccount] = React.useState<string>();
   const [routerUpdate, setRouterUpdate] = React.useState<number>(0);
   const [priceInverted, setPriceInverted] = React.useState<boolean>(false);
-  // ray test touch <
   const doUpdate = () => {
     if (!impermaxRouter) return;
     impermaxRouter.cleanCache();
     impermaxRouter.subgraph.cleanCache();
     setRouterUpdate(routerUpdate + 1);
   };
-  // ray test touch >
   const togglePriceInverted = () => {
     if (!impermaxRouter) return;
     impermaxRouter.setPriceInverted(!priceInverted);

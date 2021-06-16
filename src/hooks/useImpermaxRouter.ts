@@ -12,12 +12,10 @@ export function useRouterAccount() {
   return routerAccount;
 }
 
-// ray test touch <
 export function useRouterUpdate() {
   const { routerUpdate } = useContext(ImpermaxRouterContext);
   return routerUpdate;
 }
-// ray test touch >
 
 export function useDoUpdate() {
   const { doUpdate } = useContext(ImpermaxRouterContext);

@@ -29,7 +29,8 @@ const App = (): JSX.Element | null => {
       {chainId ? (
         <LanguageProvider>
           <Updater />
-          <SubgraphProvider>
+          {/* TODO: should fix properly */}
+          <SubgraphProvider key={chainId}>
             <ImpermaxRouterProvider>
               <Switch>
                 <Route path={PAGES.CREATE_NEW_PAIR}>
@@ -47,7 +48,6 @@ const App = (): JSX.Element | null => {
                 <Route path={PAGES.RISKS}>
                   <Risks />
                 </Route>
-                {/* ray test touch < */}
                 <Route
                   path={PAGES.USER_GUIDE}
                   component={() => {
@@ -55,7 +55,6 @@ const App = (): JSX.Element | null => {
                     window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
                     return null;
                   }} />
-                {/* ray test touch > */}
                 <Route
                   path={PAGES.HOME}
                   exact>

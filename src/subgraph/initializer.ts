@@ -73,6 +73,7 @@ async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
       }
     }
   }`;
+
   const query = gql`{
     lendingPools(first: 1000, orderBy: totalBorrowsUSD, orderDirection: desc) {
       id
@@ -96,8 +97,10 @@ async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
       }
     }
   }`;
+
   const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
   const result = await this.apolloFetcher(impermaxSubgraphUrl, query);
+
   return result.data.lendingPools;
 }
 
@@ -176,25 +179,41 @@ async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: string[],
 
 // LendingPool Data
 async function initializeLendingPoolsData(this: Subgraph) : Promise<{[key in Address]?: LendingPoolData}> {
-  const lendingPoolsData: {[key in Address]?: LendingPoolData} = {};
-  const lendingPools = await this.fetchLendingPools();
-  const uniswapV2PairAddresses = [];
-  for (const lendingPool of lendingPools) {
-    lendingPoolsData[lendingPool.id] = lendingPool;
-    uniswapV2PairAddresses.push(lendingPool.id);
+  const lendingPoolsData: { [key in Address]?: LendingPoolData } = {};
+  try {
+    const lendingPools = await this.fetchLendingPools();
+    const uniswapV2PairAddresses = [];
+    for (const lendingPool of lendingPools) {
+      lendingPoolsData[lendingPool.id] = lendingPool;
+      uniswapV2PairAddresses.push(lendingPool.id);
+    }
+
+    const uniswapAPY = await this.fetchUniswapAPY(uniswapV2PairAddresses);
+    for (const lendingPool of lendingPools) {
+      lendingPoolsData[lendingPool.id].pair.uniswapAPY = uniswapAPY[lendingPool.id];
+    }
+  } catch (error) {
+    console.log('[initializeLendingPoolsData] error.message => ', error.message);
   }
-  const uniswapAPY = await this.fetchUniswapAPY(uniswapV2PairAddresses);
-  for (const lendingPool of lendingPools) {
-    lendingPoolsData[lendingPool.id].pair.uniswapAPY = uniswapAPY[lendingPool.id];
-  }
+
   return lendingPoolsData;
 }
 async function getLendingPoolsData(this: Subgraph) : Promise<{[key in Address]: LendingPoolData}> {
-  if (!this.lendingPoolsData) this.lendingPoolsData = this.initializeLendingPoolsData();
+  if (!this.lendingPoolsData) {
+    this.lendingPoolsData = await this.initializeLendingPoolsData();
+  }
+
   return this.lendingPoolsData;
 }
-async function getLendingPoolData(this: Subgraph, uniswapV2PairAddress: Address) : Promise<LendingPoolData> {
-  return (await this.getLendingPoolsData())[uniswapV2PairAddress.toLowerCase()];
+async function getLendingPoolData(
+  this: Subgraph,
+  uniswapV2PairAddress: Address
+) : Promise<LendingPoolData> {
+  const lendingPoolsData = await this.getLendingPoolsData();
+  const lowerCasedUniswapV2PairAddress = uniswapV2PairAddress.toLowerCase();
+  const lendingPoolData = lendingPoolsData[lowerCasedUniswapV2PairAddress];
+
+  return lendingPoolData;
 }
 
 // TVL Data
