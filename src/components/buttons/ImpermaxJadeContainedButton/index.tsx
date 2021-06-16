@@ -49,11 +49,11 @@ const ImpermaxJadeContainedButton = ({
           'hover:bg-impermaxJade-700'
         ),
 
-        'rounded-md',
+        'rounded',
         'px-4',
         'py-2',
         'text-sm',
-        'space-x-1',
+        'space-x-1.5',
         'justify-center',
         className
       )}
