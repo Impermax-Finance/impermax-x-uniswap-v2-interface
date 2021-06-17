@@ -5,7 +5,6 @@ import {
   useTotalValueSupplied,
   useTotalValueBorrowed
 } from 'hooks/useData';
-import './index.scss';
 
 const OverallStats = (): JSX.Element => {
   const totalValueLocked = useTotalValueLocked();

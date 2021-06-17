@@ -2,7 +2,6 @@
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
 // import Button from 'react-bootstrap/Button';
 // import InputGroup from 'react-bootstrap/InputGroup';
 // import FormControl from 'react-bootstrap/FormControl';
@@ -25,23 +24,17 @@ import LendingPoolsTable from './LendingPoolsTable';
 //   );
 // };
 
-const LendingPoolsSearch = (): JSX.Element => {
-  return (
-    <div className='my-8'>
-      <Container>
-        <Row>
-          <Col sm={12}>
-            <Card className='overflow-hidden'>
-              <Card.Body>
-                {/* <SearchForm />*/}
-                <LendingPoolsTable />
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
-  );
-};
+const LendingPoolsSearch = (): JSX.Element => (
+  <Row>
+    <Col sm={12}>
+      <Card className='overflow-hidden'>
+        <Card.Body>
+          {/* <SearchForm />*/}
+          <LendingPoolsTable />
+        </Card.Body>
+      </Card>
+    </Col>
+  </Row>
+);
 
 export default LendingPoolsSearch;
