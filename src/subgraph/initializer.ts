@@ -200,7 +200,7 @@ async function initializeLendingPoolsData(this: Subgraph) : Promise<{[key in Add
 }
 async function getLendingPoolsData(this: Subgraph) : Promise<{[key in Address]: LendingPoolData}> {
   if (!this.lendingPoolsData) {
-    this.lendingPoolsData = await this.initializeLendingPoolsData();
+    this.lendingPoolsData = this.initializeLendingPoolsData();
   }
 
   return this.lendingPoolsData;
