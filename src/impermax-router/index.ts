@@ -14,7 +14,6 @@ import BorrowableJSON from 'abis/contracts/IBorrowable.json';
 import CollateralSON from 'abis/contracts/ICollateral.json';
 import FactoryJSON from 'abis/contracts/IFactory.json';
 import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
-import MerkleDistributorJSON from 'abis/contracts/IMerkleDistributor.json';
 import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
 import ClaimAggregatorJSON from 'abis/contracts/ClaimAggregator.json';
 import ClaimableJSON from 'abis/contracts/IClaimable.json';
@@ -45,7 +44,6 @@ import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
 import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
 import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracle';
-import { MERKLE_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/merkle-distributors';
 import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
 
 class ImpermaxRouter {
@@ -104,9 +102,6 @@ class ImpermaxRouter {
     this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
     this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(SIMPLE_UNISWAP_ORACLE_ADDRESSES[config.chainId]);
-    // ray test touch <<
-    this.merkleDistributor = this.newMerkleDistributor(MERKLE_DISTRIBUTOR_ADDRESSES[config.chainId]);
-    // ray test touch >>
     this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
     this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
@@ -144,10 +139,6 @@ class ImpermaxRouter {
 
   newBorrowable(address: Address): Contract {
     return new Contract(address, BorrowableJSON.abi, this.library);
-  }
-
-  newMerkleDistributor(address: Address): Contract {
-    return new Contract(address, MerkleDistributorJSON.abi, this.library.getSigner(this.account));
   }
 
   newFarmingPool(address: Address): Contract {
@@ -247,13 +238,10 @@ class ImpermaxRouter {
   public getMaxDeleverage = account.getMaxDeleverage;
 
   // IMX
-  public initializeAirdropData = imx.initializeAirdropData;
   public initializeFarmingShares = imx.initializeFarmingShares
   public initializeAvailableReward = imx.initializeAvailableReward;
   public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
-  public getAirdropData = imx.getAirdropData;
-  public hasClaimableAirdrop = imx.hasClaimableAirdrop;
   public getFarmingShares = imx.getFarmingShares;
   public getAvailableReward = imx.getAvailableReward;
   public getClaimHistory = imx.getClaimHistory;
@@ -279,7 +267,6 @@ class ImpermaxRouter {
   public leverage = interactions.leverage;
   public getDeleverageAmounts = interactions.getDeleverageAmounts;
   public deleverage = interactions.deleverage;
-  public claimAirdrop = interactions.claimAirdrop;
   public trackBorrows = interactions.trackBorrows;
   public claims = interactions.claims;
   public claimDistributor = interactions.claimDistributor;

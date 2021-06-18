@@ -4,58 +4,12 @@
 // @ts-nocheck
 // TODO: >
 
-import { BigNumber } from '@ethersproject/bignumber';
-
 import ImpermaxRouter from '.';
 import {
   Address,
-  AirdropData,
   PoolTokenType,
   ClaimEvent
 } from './interfaces';
-import { AIRDROP_URLS } from 'config/web3/endpoints/airdrop';
-
-// ray test touch <<
-// Airdrop Data
-export async function initializeAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
-  try {
-    const airdropURL = AIRDROP_URLS[this.chainId];
-    const json = await fetch(`${airdropURL}/${this.account}`);
-    const data = await json.json();
-    if (data) {
-      data.amount = BigNumber.from(data.amount);
-      const isClaimed = await this.merkleDistributor.isClaimed(data.index);
-      if (!isClaimed) return data;
-    }
-  } catch (error) {
-    console.log('[initializeAirdropData] error.message => ', error.message);
-  }
-  return {
-    index: -1,
-    amount: null,
-    proof: []
-  };
-}
-// ray test touch >>
-
-// ray test touch <<
-export async function getAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
-  if (!this.imxCache.airdropData) {
-    this.imxCache.airdropData = await this.initializeAirdropData();
-  }
-
-  return this.imxCache.airdropData;
-}
-// ray test touch >>
-
-// ray test touch <<
-export async function hasClaimableAirdrop(this: ImpermaxRouter) : Promise<boolean> {
-  const airdropData = await this.getAirdropData();
-  // TODO: double-check
-  if (airdropData?.amount) return true;
-  return false;
-}
-// ray test touch >>
 
 // Farming Shares
 export async function initializeFarmingShares(

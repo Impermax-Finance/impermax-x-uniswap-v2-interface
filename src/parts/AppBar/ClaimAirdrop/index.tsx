@@ -15,7 +15,7 @@ import { formatAmount } from 'utils/format';
 import MerkleDistributorJSON from 'abis/contracts/IMerkleDistributor.json';
 import { MERKLE_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/merkle-distributors';
 import { useTransactionAdder } from 'store/transactions/hooks';
-import { AirdropData } from 'impermax-router/interfaces';
+import { AirdropData } from 'types/airdrop';
 import STATUSES from 'utils/constants/statuses';
 
 const useMerkleDistributorContract = () => {

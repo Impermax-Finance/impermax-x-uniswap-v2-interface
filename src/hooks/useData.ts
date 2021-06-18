@@ -3,7 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { PoolTokenType, Changes, AirdropData, ClaimEvent, Address } from '../impermax-router/interfaces';
+import { PoolTokenType, Changes, ClaimEvent, Address } from '../impermax-router/interfaces';
 import usePoolToken from './usePoolToken';
 import usePairAddress from './usePairAddress';
 import { useState, useEffect } from 'react';
@@ -417,22 +417,6 @@ export function useClaimHistory() : ClaimEvent[] {
   useRouterCallback(async router => setClaimHistory(await router.getClaimHistory(uniswapV2PairAddress)));
   return claimHistory;
 }
-
-// ray test touch <<
-export function useAirdropData() : AirdropData {
-  const [airdropData, setAirdropData] = useState<AirdropData>();
-  useRouterCallback(async router => setAirdropData(await router.getAirdropData()));
-  return airdropData;
-}
-// ray test touch >>
-
-// ray test touch <<
-export function useHasClaimableAirdrop() : boolean {
-  const [hasClaimableAirdrop, setHasClaimableAirdrop] = useState<boolean>(false);
-  useRouterCallback(async router => setHasClaimableAirdrop(await router.hasClaimableAirdrop()));
-  return hasClaimableAirdrop;
-}
-// ray test touch >>
 
 export function useAvailableClaimable(claimableAddress: Address) : number {
   const [availableClaimable, setAvailableClaimable] = useState<number>();

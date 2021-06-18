@@ -2,7 +2,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
 
 import ImpermaxRouter from '.';
-import { Address, PoolTokenType, AirdropData } from './interfaces';
+import { Address, PoolTokenType } from './interfaces';
 import { PermitData } from '../hooks/useApprove';
 import { impermanentLoss } from '../utils';
 import { DistributorDetails } from '../utils/constants';
@@ -226,24 +226,6 @@ export async function deleverage(
     console.error('[deleverage] error.message => ', error.message);
   }
 }
-
-// ray test touch <<
-export async function claimAirdrop(
-  this: ImpermaxRouter,
-  airdropData: AirdropData,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  onTransactionHash: Function
-): Promise<void> {
-  try {
-    const tx =
-      await this.merkleDistributor.claim(airdropData.index, this.account, airdropData.amount, airdropData.proof);
-    await tx.wait();
-    onTransactionHash();
-  } catch (error) {
-    console.error('[claimAirdrop] error.message => ', error.message);
-  }
-}
-// ray test touch >>
 
 export async function trackBorrows(
   this: ImpermaxRouter,

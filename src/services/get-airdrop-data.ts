@@ -1,9 +1,8 @@
 
-// ray test touch <<
 import { BigNumber } from '@ethersproject/bignumber';
 
 import { AIRDROP_URLS } from 'config/web3/endpoints/airdrop';
-import { AirdropData } from 'impermax-router/interfaces';
+import { AirdropData } from 'types/airdrop';
 
 /**
  * TODO:
@@ -22,4 +21,3 @@ const getAirdropData = async (chainID: number, account: string): Promise<Airdrop
 };
 
 export default getAirdropData;
-// ray test touch >>

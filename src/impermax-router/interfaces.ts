@@ -1,5 +1,4 @@
 
-import { BigNumber } from '@ethersproject/bignumber';
 import { Web3Provider } from '@ethersproject/providers';
 import { Contract } from '@ethersproject/contracts';
 
@@ -162,12 +161,6 @@ export interface TvlData {
   totalBalanceUSD: string;
   totalBorrowsUSD: string;
   totalSupplyUSD: string;
-}
-
-export interface AirdropData {
-  index: number;
-  amount: BigNumber;
-  proof: Array<string>;
 }
 
 export interface ClaimEvent {
