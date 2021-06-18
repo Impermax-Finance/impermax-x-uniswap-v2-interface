@@ -10,7 +10,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import ImpermaxRouter from 'impermax-router';
 import useSubgraph from 'hooks/useSubgraph';
 
-const ImpermaxRouterContext = React.createContext<ImpermaxRouterContextInterface>({});
+const ImpermaxRouterContext = React.createContext<ImpermaxRouterContextInterface>();
 
 const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const {
@@ -81,14 +81,14 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
 };
 
 export interface ImpermaxRouterContextInterface {
-  impermaxRouter?: ImpermaxRouter;
-  routerAccount?: string;
-  routerUpdate?: number;
+  impermaxRouter: ImpermaxRouter;
+  routerAccount: string;
+  routerUpdate: number;
   // eslint-disable-next-line @typescript-eslint/ban-types
-  doUpdate?: Function;
-  priceInverted?: boolean;
+  doUpdate: Function;
+  priceInverted: boolean;
   // eslint-disable-next-line @typescript-eslint/ban-types
-  togglePriceInverted?: Function;
+  togglePriceInverted: Function;
 }
 
 export {

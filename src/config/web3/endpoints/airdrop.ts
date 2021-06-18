@@ -1,7 +1,7 @@
 
 import { CHAIN_IDS } from 'config/web3/networks';
 
-const AIR_DROP_URLS: {
+const AIRDROP_URLS: {
   [chainId: number]: string;
 } = {
   [CHAIN_IDS.ROPSTEN]: 'https://wispy-truth-7af9.impermax.workers.dev',
@@ -9,5 +9,5 @@ const AIR_DROP_URLS: {
 };
 
 export {
-  AIR_DROP_URLS
+  AIRDROP_URLS
 };

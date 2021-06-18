@@ -104,7 +104,9 @@ class ImpermaxRouter {
     this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
     this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(SIMPLE_UNISWAP_ORACLE_ADDRESSES[config.chainId]);
+    // ray test touch <<
     this.merkleDistributor = this.newMerkleDistributor(MERKLE_DISTRIBUTOR_ADDRESSES[config.chainId]);
+    // ray test touch >>
     this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
     this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};

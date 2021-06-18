@@ -13,13 +13,14 @@ import {
   PoolTokenType,
   ClaimEvent
 } from './interfaces';
-import { AIR_DROP_URLS } from 'config/web3/endpoints/air-drop';
+import { AIRDROP_URLS } from 'config/web3/endpoints/airdrop';
 
+// ray test touch <<
 // Airdrop Data
 export async function initializeAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
   try {
-    const airDropURL = AIR_DROP_URLS[this.chainId];
-    const json = await fetch(`${airDropURL}/${this.account}`);
+    const airdropURL = AIRDROP_URLS[this.chainId];
+    const json = await fetch(`${airdropURL}/${this.account}`);
     const data = await json.json();
     if (data) {
       data.amount = BigNumber.from(data.amount);
@@ -35,18 +36,26 @@ export async function initializeAirdropData(this: ImpermaxRouter) : Promise<Aird
     proof: []
   };
 }
+// ray test touch >>
 
+// ray test touch <<
 export async function getAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
-  if (!this.imxCache.airdropData) this.imxCache.airdropData = await this.initializeAirdropData();
+  if (!this.imxCache.airdropData) {
+    this.imxCache.airdropData = await this.initializeAirdropData();
+  }
+
   return this.imxCache.airdropData;
 }
+// ray test touch >>
 
+// ray test touch <<
 export async function hasClaimableAirdrop(this: ImpermaxRouter) : Promise<boolean> {
   const airdropData = await this.getAirdropData();
   // TODO: double-check
   if (airdropData?.amount) return true;
   return false;
 }
+// ray test touch >>
 
 // Farming Shares
 export async function initializeFarmingShares(
@@ -71,8 +80,10 @@ export async function initializeAvailableReward(this: ImpermaxRouter, uniswapV2P
   const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   let totalAmount = 0;
+  // ray test touch <
   if (farmingPoolA) totalAmount += await farmingPoolA.methods.claim().call({ from: this.account }) / 1e18;
   if (farmingPoolB) totalAmount += await farmingPoolB.methods.claim().call({ from: this.account }) / 1e18;
+  // ray test touch >
   return totalAmount;
 }
 export async function getAvailableReward(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {

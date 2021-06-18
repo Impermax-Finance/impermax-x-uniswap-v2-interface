@@ -18,7 +18,9 @@ import NetworkConnect from 'parts/NetworkConnect';
 import ConnectedWalletInfo from 'parts/ConnectedWalletInfo';
 import { CHAIN_IDS } from 'config/web3/networks';
 import { ReactComponent as ImpermaxLogoIcon } from 'assets/images/icons/impermax-logo.svg';
-import { useHasClaimableAirdrop } from 'hooks/useData';
+// ray test touch <<
+// import { useHasClaimableAirdrop } from 'hooks/useData';
+// ray test touch >>
 import {
   PAGES,
   PARAMETERS
@@ -38,7 +40,9 @@ const AppBar = ({
     account
   } = useWeb3React<Web3Provider>();
 
-  const hasClaimableAirdrop = useHasClaimableAirdrop();
+  // ray test touch <<
+  // const hasClaimableAirdrop = useHasClaimableAirdrop();
+  // ray test touch >>
 
   const NAVIGATION_ITEMS = [
     {
@@ -164,9 +168,12 @@ const AppBar = ({
                   'sm:items-center',
                   'space-x-2'
                 )}>
-                {hasClaimableAirdrop && (
+                {/* ray test touch << */}
+                <ClaimAirdrop />
+                {/* {hasClaimableAirdrop && (
                   <ClaimAirdrop />
-                )}
+                )} */}
+                {/* ray test touch >> */}
                 <NetworkConnect />
                 <ConnectedWalletInfo />
                 <WalletConnect />
@@ -249,9 +256,12 @@ const AppBar = ({
             </div>
             <div className='pt-4 pb-3 border-t border-gray-200'>
               <div className='flex items-center px-4'>
-                {hasClaimableAirdrop && (
+                {/* ray test touch << */}
+                <ClaimAirdrop />
+                {/* {hasClaimableAirdrop && (
                   <ClaimAirdrop />
-                )}
+                )} */}
+                {/* ray test touch >> */}
                 <WalletConnect />
               </div>
             </div>

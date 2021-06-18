@@ -54,8 +54,7 @@ const WalletConnect = (): JSX.Element => {
   return (
     <>
       {(active || error) ? (
-        <ImpermaxJadeContainedButton
-          onClick={handleDeactivate}>
+        <ImpermaxJadeContainedButton onClick={handleDeactivate}>
           Disconnect Wallet
         </ImpermaxJadeContainedButton>
       ) : (

@@ -227,6 +227,7 @@ export async function deleverage(
   }
 }
 
+// ray test touch <<
 export async function claimAirdrop(
   this: ImpermaxRouter,
   airdropData: AirdropData,
@@ -242,6 +243,7 @@ export async function claimAirdrop(
     console.error('[claimAirdrop] error.message => ', error.message);
   }
 }
+// ray test touch >>
 
 export async function trackBorrows(
   this: ImpermaxRouter,
@@ -277,8 +279,10 @@ export async function claims(
   const toClaim = [];
   const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
+  // ray test touch <
   const claimAmountA = await farmingPoolA.methods.claim().call({ from: this.account }) / 1e18;
   const claimAmountB = await farmingPoolB.methods.claim().call({ from: this.account }) / 1e18;
+  // ray test touch >
   if (claimAmountA * 1 > 0) toClaim.push(farmingPoolA.address);
   if (claimAmountB * 1 > 0) toClaim.push(farmingPoolB.address);
   try {

@@ -10,6 +10,7 @@ import { ButtonState } from '../components/InteractionButton';
 import { useAirdropData } from './useData';
 import { formatAmount } from '../utils/format';
 
+// ray test touch <<
 export default function useClaimAirdrop(): [ButtonState, () => Promise<void>] {
   const airdropData = useAirdropData();
   const impermaxRouter = useImpermaxRouter();
@@ -39,3 +40,4 @@ export default function useClaimAirdrop(): [ButtonState, () => Promise<void>] {
 
   return [claimAirdropState, claimAirdrop];
 }
+// ray test touch >>

@@ -3,7 +3,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Web3Provider } from '@ethersproject/providers';
 import { Contract } from '@ethersproject/contracts';
 
-import Subgraph from '../subgraph';
+import Subgraph from 'subgraph';
 
 export type Address = string;
 export type Router = Contract;
