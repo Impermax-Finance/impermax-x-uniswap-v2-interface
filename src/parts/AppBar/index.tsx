@@ -12,10 +12,10 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
-import ClaimAirdropButton from './ClaimAirdropButton';
-import WalletConnect from 'parts/WalletConnect';
-import NetworkConnect from 'parts/NetworkConnect';
-import ConnectedWalletInfo from 'parts/ConnectedWalletInfo';
+import ClaimAirdropButton from 'containers/ClaimAirdropButton';
+import WalletConnect from 'containers/WalletConnect';
+import NetworkConnect from 'containers/NetworkConnect';
+import ConnectedWalletInfo from 'containers/ConnectedWalletInfo';
 import { CHAIN_IDS } from 'config/web3/networks';
 import { ReactComponent as ImpermaxLogoIcon } from 'assets/images/icons/impermax-logo.svg';
 import {
