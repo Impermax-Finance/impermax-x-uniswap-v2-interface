@@ -1,3 +1,4 @@
+
 import { Dictionary } from 'utils/languages';
 
 const translations = {

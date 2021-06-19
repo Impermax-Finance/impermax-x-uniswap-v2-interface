@@ -9,13 +9,13 @@ import clsx from 'clsx';
 
 import { LanguageContext } from 'contexts/LanguageProvider';
 import PairAddressContext from 'contexts/PairAddress';
-import LendingPoolsRow from './LendingPoolsRow';
+import LendingPool from './LendingPool';
 import QuestionHelper from 'components/QuestionHelper';
 import { usePairList } from 'hooks/useData';
 import phrases from './translations';
 import './index.scss';
 
-const LendingPoolsTable = (): JSX.Element => {
+const LendingPools = (): JSX.Element => {
   const languages = useContext(LanguageContext);
   const language = languages.state.selected;
   const pairList = usePairList();
@@ -57,7 +57,7 @@ const LendingPoolsTable = (): JSX.Element => {
           <PairAddressContext.Provider
             value={pair}
             key={key}>
-            <LendingPoolsRow />
+            <LendingPool />
           </PairAddressContext.Provider>
         );
       })}
@@ -65,4 +65,4 @@ const LendingPoolsTable = (): JSX.Element => {
   );
 };
 
-export default LendingPoolsTable;
+export default LendingPools;

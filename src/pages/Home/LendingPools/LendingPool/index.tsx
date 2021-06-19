@@ -23,7 +23,7 @@ import useLendingPoolURL from 'hooks/use-lending-pool-url';
 
 const LEVERAGE = 5;
 
-const LendingPoolsRow = (): JSX.Element => {
+const LendingPool = (): JSX.Element => {
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const supplyUSDA = useSupplyUSD(PoolTokenType.BorrowableA);
@@ -210,4 +210,4 @@ const LendingPoolsRow = (): JSX.Element => {
   );
 };
 
-export default LendingPoolsRow;
+export default LendingPool;
