@@ -12,7 +12,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
-import ClaimAirdrop from './ClaimAirdrop';
+import ClaimAirdropButton from './ClaimAirdropButton';
 import WalletConnect from 'parts/WalletConnect';
 import NetworkConnect from 'parts/NetworkConnect';
 import ConnectedWalletInfo from 'parts/ConnectedWalletInfo';
@@ -161,7 +161,7 @@ const AppBar = ({
                   'sm:items-center',
                   'space-x-2'
                 )}>
-                <ClaimAirdrop />
+                <ClaimAirdropButton />
                 <NetworkConnect />
                 <ConnectedWalletInfo />
                 <WalletConnect />
@@ -250,7 +250,7 @@ const AppBar = ({
                 'border-gray-200'
               )}>
               <div className='flex items-center px-4'>
-                <ClaimAirdrop />
+                <ClaimAirdropButton />
                 <WalletConnect />
               </div>
             </div>

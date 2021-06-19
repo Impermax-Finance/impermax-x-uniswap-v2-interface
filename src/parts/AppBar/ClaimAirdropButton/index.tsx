@@ -42,7 +42,7 @@ const useMerkleDistributorContract = () => {
   return merkleDistributorContract;
 };
 
-const ClaimAirdrop = (): JSX.Element | null => {
+const ClaimAirdropButton = (): JSX.Element | null => {
   const {
     chainId,
     account
@@ -134,4 +134,4 @@ const ClaimAirdrop = (): JSX.Element | null => {
   );
 };
 
-export default ClaimAirdrop;
+export default ClaimAirdropButton;
