@@ -9,7 +9,7 @@ const Home = (): JSX.Element => {
   return (
     <div
       className={clsx(
-        // TODO: should be styled at `Layout` level
+        // TODO: could be styled at `Layout` level
         'container',
         'mx-auto',
         'p-8',
