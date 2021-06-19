@@ -12,7 +12,8 @@ const Home = (): JSX.Element => {
         // TODO: could be styled at `Layout` level
         'container',
         'mx-auto',
-        'p-8',
+        'py-8',
+        'sm:px-8',
         'space-y-12'
       )}>
       <OverallStats />

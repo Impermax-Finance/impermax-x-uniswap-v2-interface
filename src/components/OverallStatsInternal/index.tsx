@@ -5,6 +5,7 @@ import {
   ArrowSmUpIcon
 } from '@heroicons/react/solid';
 
+import Panel from 'components/Panel';
 import { formatUSD } from 'utils/format';
 
 interface Props {
@@ -44,14 +45,10 @@ const OverallStatsInternal = ({
 
   return (
     <>
-      <dl
+      <Panel
         className={clsx(
           'grid',
           'grid-cols-1',
-          'rounded-lg',
-          'bg-white',
-          'overflow-hidden',
-          'shadow',
           'divide-y',
           'divide-gray-200',
           'md:grid-cols-3',
@@ -89,7 +86,7 @@ const OverallStatsInternal = ({
                   'items-baseline',
                   'text-2xl',
                   'font-semibold',
-                  'text-indigo-600'
+                  'text-impermaxAstral-600'
                 )}>
                 {item.stat}
                 <span
@@ -97,7 +94,7 @@ const OverallStatsInternal = ({
                     'ml-2',
                     'text-sm',
                     'font-medium',
-                    'text-gray-500'
+                    'text-textSecondary'
                   )}>
                   from {item.previousStat}
                 </span>
@@ -150,7 +147,7 @@ const OverallStatsInternal = ({
             </dd>
           </div>
         ))}
-      </dl>
+      </Panel>
     </>
   );
 };

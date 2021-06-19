@@ -2,6 +2,8 @@
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
+import Panel from 'components/Panel';
+import ImpermaxImage from 'components/UI/ImpermaxImage';
 import { PoolTokenType } from 'impermax-router/interfaces';
 import {
   useSupplyUSD,
@@ -34,9 +36,9 @@ const LendingPoolsRow = (): JSX.Element => {
   const borrowAPYB = useBorrowAPY(PoolTokenType.BorrowableB);
   const farmingPoolAPYA = useFarmingAPY(PoolTokenType.BorrowableA);
   const farmingPoolAPYB = useFarmingAPY(PoolTokenType.BorrowableB);
-  const lendingPoolUrl = useLendingPoolURL();
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
+  const lendingPoolUrl = useLendingPoolURL();
   const uniAPY = useUniswapAPY();
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
@@ -44,61 +46,166 @@ const LendingPoolsRow = (): JSX.Element => {
   return (
     <Link
       to={lendingPoolUrl}
-      className='row lending-pools-row'>
-      <div className='col-7 col-md-5 col-lg-4'>
-        <div className='currency-name'>
-          <div className='combined'>
-            <div className='currency-overlapped'>
-              <img
-                className='inline-block'
-                src={tokenIconA} />
-              <img
-                className='inline-block'
-                src={tokenIconB} />
-            </div>
-            {symbolA}/{symbolB}
+      className='block'>
+      <Panel
+        className={clsx(
+          'px-4',
+          'py-5',
+          'md:p-6',
+          'space-y-2',
+          'hover:bg-gray-50'
+        )}>
+        <div
+          className={clsx(
+            'grid',
+            'grid-cols-3',
+            'gap-x-4'
+          )}>
+          <div
+            className={clsx(
+              'flex',
+              'flex-shrink-0',
+              'items-center',
+              '-space-x-1.5'
+            )}>
+            <ImpermaxImage
+              width={32}
+              height={32}
+              className={clsx(
+                'inline-block',
+                'rounded-full',
+                'ring-2',
+                'ring-white'
+              )}
+              src={tokenIconA}
+              alt='' />
+            <ImpermaxImage
+              width={32}
+              height={32}
+              className={clsx(
+                'inline-block',
+                'rounded-full',
+                'ring-2',
+                'ring-white'
+              )}
+              src={tokenIconB}
+              alt='' />
           </div>
-          <div className='d-none d-md-block'>
-            <div>
-              <img
-                className={clsx(
-                  'currency-icon',
-                  'inline-block'
-                )}
-                src={tokenIconA} />
-              {symbolA}
-            </div>
-            <div>
-              <img
-                className={clsx(
-                  'currency-icon',
-                  'inline-block'
-                )}
-                src={tokenIconB} />
-              {symbolB}
-            </div>
+          <div
+            className={clsx(
+              'flex',
+              'flex-shrink-0',
+              'items-center',
+              'space-x-1.5'
+            )}>
+            <ImpermaxImage
+              width={20}
+              height={20}
+              className='inline-block'
+              src={tokenIconA}
+              alt='' />
+            <span className='font-medium'>{symbolA}</span>
+          </div>
+          <div
+            className={clsx(
+              'flex',
+              'flex-shrink-0',
+              'items-center',
+              'space-x-1.5'
+            )}>
+            <ImpermaxImage
+              width={20}
+              height={20}
+              className='inline-block'
+              src={tokenIconB}
+              alt='' />
+            <span className='font-medium'>{symbolB}</span>
           </div>
         </div>
-      </div>
-      <div className='col d-none d-md-block'>
-        <div>{formatUSD(supplyUSDA)}</div>
-        <div>{formatUSD(supplyUSDB)}</div>
-      </div>
-      <div className='col d-none d-md-block'>
-        <div>{formatUSD(totalBorrowsUSDA)}</div>
-        <div>{formatUSD(totalBorrowsUSDB)}</div>
-      </div>
-      <div className='col d-none d-lg-block'>
-        <div>{formatPercentage(supplyAPYA)}</div>
-        <div>{formatPercentage(supplyAPYB)}</div>
-      </div>
-      <div className='col d-none d-lg-block'>
-        <div>{formatPercentage(borrowAPYA)}</div>
-        <div>{formatPercentage(borrowAPYB)}</div>
-      </div>
-      <div className='col-5 col-md-3 col-lg-2 leveraged-apy'>
-        <div>{formatPercentage(leveragedAPY)}</div>
-      </div>
+        <div
+          className={clsx(
+            'grid',
+            'grid-cols-3',
+            'gap-x-4',
+            'gap-y-1.5'
+          )}>
+          <>
+            {/* TODO: could componentize */}
+            <h5
+              className={clsx(
+                'text-textSecondary',
+                'font-medium',
+                'text-sm',
+                'self-center'
+              )}>
+              Total supply
+            </h5>
+            {/* TODO: could componentize */}
+            <span>{formatUSD(supplyUSDA)}</span>
+            <span>{formatUSD(supplyUSDB)}</span>
+          </>
+          <>
+            <h5
+              className={clsx(
+                'text-textSecondary',
+                'font-medium',
+                'text-sm',
+                'self-center'
+              )}>
+              Total borrowed
+            </h5>
+            <span>{formatUSD(totalBorrowsUSDA)}</span>
+            <span>{formatUSD(totalBorrowsUSDB)}</span>
+          </>
+          <>
+            <h5
+              className={clsx(
+                'text-textSecondary',
+                'font-medium',
+                'text-sm',
+                'self-center'
+              )}>
+              Supply APY
+            </h5>
+            <span>{formatPercentage(supplyAPYA)}</span>
+            <span>{formatPercentage(supplyAPYB)}</span>
+          </>
+          <>
+            <h5
+              className={clsx(
+                'text-textSecondary',
+                'font-medium',
+                'text-sm',
+                'self-center'
+              )}>
+              Borrow APY
+            </h5>
+            <span>{formatPercentage(borrowAPYA)}</span>
+            <span>{formatPercentage(borrowAPYB)}</span>
+          </>
+          <>
+            <h5
+              className={clsx(
+                'text-textSecondary',
+                'font-medium',
+                'text-sm',
+                'self-center'
+              )}>
+              Leveraged LP APY
+            </h5>
+            <span
+              className={clsx(
+                'col-span-2',
+                'justify-self-center',
+                'text-lg',
+                'font-medium',
+                'text-impermaxAstral'
+              )}>
+              {formatPercentage(leveragedAPY)}
+            </span>
+          </>
+        </div>
+      </Panel>
     </Link>
   );
 };
