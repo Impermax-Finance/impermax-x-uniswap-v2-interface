@@ -143,20 +143,32 @@ module.exports = {
       borderRadius: [
         'first',
         'last'
-      ]
+      ],
+      margin: ['important']
     }
   },
   plugins: [
     require('@tailwindcss/forms'),
     plugin(function ({
       addBase,
-      theme
+      theme,
+      addVariant
     }) {
       // MEMO: inspired by https://tailwindcss.com/docs/adding-base-styles#using-a-plugin
       addBase({
         body: {
           color: theme('textColor.textPrimary')
         }
+      });
+
+      // MEMO: inspired by https://github.com/tailwindlabs/tailwindcss/issues/493#issuecomment-610907147
+      addVariant('important', ({ container }) => {
+        container.walkRules(rule => {
+          rule.selector = `.\\!${rule.selector.slice(1)}`;
+          rule.walkDecls(decl => {
+            decl.important = true;
+          });
+        });
       });
     })
   ]

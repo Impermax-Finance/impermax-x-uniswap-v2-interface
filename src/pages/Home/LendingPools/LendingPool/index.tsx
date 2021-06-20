@@ -25,21 +25,27 @@ import { BREAKPOINTS } from 'utils/constants/styles';
 
 const LEVERAGE = 5;
 
-interface PairCellProps {
+interface PairCellCustomProps {
   tokenIconA: string;
   tokenIconB: string;
+  symbolA: string;
+  symbolB: string;
 }
 
 const TokenPairLabel = ({
   tokenIconA,
-  tokenIconB
-}: PairCellProps): JSX.Element => (
+  tokenIconB,
+  symbolA,
+  symbolB,
+  className
+}: PairCellCustomProps & React.ComponentPropsWithRef<'div'>): JSX.Element => (
   <div
     className={clsx(
       'flex',
       'flex-shrink-0',
       'items-center',
-      '-space-x-1.5'
+      '-space-x-1.5',
+      className
     )}>
     <ImpermaxImage
       width={32}
@@ -64,6 +70,14 @@ const TokenPairLabel = ({
       )}
       src={tokenIconB}
       alt='' />
+    <span
+      className={clsx(
+        'font-medium',
+        'text-textSecondary',
+        '!ml-1.5'
+      )}>
+      {symbolA}/{symbolB}
+    </span>
   </div>
 );
 
@@ -94,7 +108,13 @@ const TokenLabel = ({
       )}
       src={tokenIcon}
       alt='' />
-    <span className='font-medium'>{symbol}</span>
+    <span
+      className={clsx(
+        'font-medium',
+        'text-textSecondary'
+      )}>
+      {symbol}
+    </span>
   </div>
 );
 
@@ -172,12 +192,15 @@ const LendingPool = (): JSX.Element => {
           <div
             className={clsx(
               'grid',
-              'grid-cols-7',
+              'grid-cols-8',
               'gap-x-4'
             )}>
             <TokenPairLabel
+              className='col-span-2'
               tokenIconA={tokenIconA}
-              tokenIconB={tokenIconB} />
+              tokenIconB={tokenIconB}
+              symbolA={symbolA}
+              symbolB={symbolB} />
             <SetWrapper>
               <TokenLabel
                 tokenIcon={tokenIconA}
@@ -223,7 +246,9 @@ const LendingPool = (): JSX.Element => {
               )}>
               <TokenPairLabel
                 tokenIconA={tokenIconA}
-                tokenIconB={tokenIconB} />
+                tokenIconB={tokenIconB}
+                symbolA={symbolA}
+                symbolB={symbolB} />
               <TokenLabel
                 tokenIcon={tokenIconA}
                 symbol={symbolA} />
