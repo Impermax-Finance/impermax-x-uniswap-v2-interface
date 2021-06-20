@@ -10,7 +10,7 @@ const Panel = ({
       'bg-white',
       'shadow',
       'overflow-hidden',
-      'md:rounded-md',
+      'md:rounded',
       className
     )}
     {...rest} />

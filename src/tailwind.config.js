@@ -2,6 +2,8 @@
 const plugin = require('tailwindcss/plugin');
 const colors = require('tailwindcss/colors');
 
+const { BREAKPOINTS } = require('./utils/constants/styles');
+
 const IMPERMAX_BLACK_HAZE = Object.freeze({
   500: '#f5f6f7'
 });
@@ -61,6 +63,7 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    screens: BREAKPOINTS,
     extend: {
       colors: {
         impermaxBlackHaze: {
