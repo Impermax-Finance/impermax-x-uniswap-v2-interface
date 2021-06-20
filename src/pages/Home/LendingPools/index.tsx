@@ -1,22 +1,31 @@
 
-import { Spinner } from 'react-bootstrap';
+import clsx from 'clsx';
 
 import LendingPool from './LendingPool';
 import LendingPoolsHeader from './LendingPoolsHeader';
 import PairAddressContext from 'contexts/PairAddress';
 import { usePairList } from 'hooks/useData';
-import './index.scss';
+import { ReactComponent as SpinIcon } from 'assets/images/icons/spin.svg';
 
 const LendingPools = (): JSX.Element => {
   const pairList = usePairList();
 
   if (!pairList) {
     return (
-      // ray test touch <<
-      <div className='spinner-container'>
-        <Spinner animation='border' />
+      <div
+        className={clsx(
+          'p-7',
+          'flex',
+          'justify-center'
+        )}>
+        <SpinIcon
+          className={clsx(
+            'animate-spin',
+            'w-8',
+            'h-8',
+            'text-impermaxJade'
+          )} />
       </div>
-      // ray test touch >>
     );
   }
 
