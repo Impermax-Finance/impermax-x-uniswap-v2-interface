@@ -1,57 +1,28 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
-import { useContext } from 'react';
 import { Spinner } from 'react-bootstrap';
-import clsx from 'clsx';
 
-import { LanguageContext } from 'contexts/LanguageProvider';
-import PairAddressContext from 'contexts/PairAddress';
 import LendingPool from './LendingPool';
-import QuestionHelper from 'components/QuestionHelper';
+import LendingPoolsHeader from './LendingPoolsHeader';
+import PairAddressContext from 'contexts/PairAddress';
 import { usePairList } from 'hooks/useData';
-import phrases from './translations';
 import './index.scss';
 
 const LendingPools = (): JSX.Element => {
-  const languages = useContext(LanguageContext);
-  const language = languages.state.selected;
   const pairList = usePairList();
-  const t = (s: string) => (phrases[s][language]);
 
   if (!pairList) {
     return (
+      // ray test touch <<
       <div className='spinner-container'>
-        <Spinner
-          animation='border'
-          size='lg' />
+        <Spinner animation='border' />
       </div>
+      // ray test touch >>
     );
   }
 
   return (
-    <div
-      className={clsx(
-        'lending-pools-table',
-        // ray test touch <<
-        'space-y-3'
-        // ray test touch >>
-      )}>
-      <div className='lending-pools-header row'>
-        <div className='col-7 col-md-5 col-lg-4'>{t('Market')}</div>
-        <div className='col d-none d-md-block'>{t('Total Supply')}</div>
-        <div className='col d-none d-md-block'>{t('Total Borrowed')}</div>
-        <div className='col d-none d-lg-block'>{t('Supply APY')}</div>
-        <div className='col d-none d-lg-block'>{t('Borrow APY')}</div>
-        <div className='col-5 col-md-3 col-lg-2 text-center'>
-          {t('Leveraged LP APY')}
-          <QuestionHelper
-            placement='left'
-            text='Based on last 7 days trading fees assuming a 5x leverage' />
-        </div>
-      </div>
+    <div className='space-y-3'>
+      <LendingPoolsHeader className='px-4' />
       {pairList.map((pair: string, key: any) => {
         return (
           <PairAddressContext.Provider

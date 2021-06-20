@@ -190,6 +190,9 @@ const LendingPool = (): JSX.Element => {
         )}>
         {greaterThanMd ? (
           <div
+            // ray test touch <<
+            // TODO: could componentize
+            // ray test touch >>
             className={clsx(
               'grid',
               'grid-cols-8',
@@ -239,6 +242,9 @@ const LendingPool = (): JSX.Element => {
         ) : (
           <>
             <div
+              // ray test touch <<
+              // TODO: could componentize
+              // ray test touch >>
               className={clsx(
                 'grid',
                 'grid-cols-3',
@@ -257,6 +263,9 @@ const LendingPool = (): JSX.Element => {
                 symbol={symbolB} />
             </div>
             <div
+              // ray test touch <<
+              // TODO: could componentize
+              // ray test touch >>
               className={clsx(
                 'grid',
                 'grid-cols-3',
