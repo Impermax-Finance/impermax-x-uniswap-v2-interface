@@ -113,9 +113,7 @@ const ClaimAirdropButton = (): JSX.Element | null => {
       const summary = `Claim ${formatAmount(amount)} IMX`;
       addTransaction({ hash: receipt.transactionHash }, { summary });
       setClaimStatus(STATUSES.RESOLVED);
-      // ray test touch <
       setClaimed(true);
-      // ray test touch >
     } catch (error) {
       setClaimStatus(STATUSES.REJECTED);
       console.log('[handleClaim] error.message => ', error.message);
