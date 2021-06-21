@@ -26,6 +26,7 @@ import { IMPERMAX_SUBGRAPH_URL } from 'config/web3/subgraph';
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;
 const UNISWAP_FEE = 0.003;
 
+// ray test touch <<
 async function apolloFetcher(subgraphUrl: string, query: DocumentNode) {
   const client = new ApolloClient({
     link: new HttpLink({
@@ -38,8 +39,9 @@ async function apolloFetcher(subgraphUrl: string, query: DocumentNode) {
     fetchPolicy: 'cache-first'
   });
 }
+// ray test touch >>
 
-// Fetch Lending Pools
+// ray test touch <<
 async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
   const borrowableStr = `{
     id
@@ -103,6 +105,7 @@ async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
 
   return result.data.lendingPools;
 }
+// ray test touch >>
 
 // Uniswap APY
 async function fetchBlockByTimestamp(this: Subgraph, timestamp: number) : Promise<number> {
@@ -177,7 +180,7 @@ async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: string[],
   return uniswapAPY;
 }
 
-// LendingPool Data
+// ray test touch <<
 async function initializeLendingPoolsData(this: Subgraph) : Promise<{[key in Address]?: LendingPoolData}> {
   const lendingPoolsData: { [key in Address]?: LendingPoolData } = {};
   try {
@@ -198,6 +201,8 @@ async function initializeLendingPoolsData(this: Subgraph) : Promise<{[key in Add
 
   return lendingPoolsData;
 }
+// ray test touch >>
+// ray test touch <<
 async function getLendingPoolsData(this: Subgraph) : Promise<{[key in Address]: LendingPoolData}> {
   if (!this.lendingPoolsData) {
     this.lendingPoolsData = this.initializeLendingPoolsData();
@@ -215,6 +220,7 @@ async function getLendingPoolData(
 
   return lendingPoolData;
 }
+// ray test touch >>
 
 // TVL Data
 async function initializeTvlData(this: Subgraph) : Promise<TvlData> {

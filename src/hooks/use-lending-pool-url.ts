@@ -8,6 +8,7 @@ import {
   PARAMETERS
 } from 'utils/constants/links';
 
+// ray test touch <<
 const useLendingPoolURL = () : string => {
   const uniswapV2PairAddress = usePairAddress();
   const { chainId } = useWeb3React<Web3Provider>();
@@ -25,5 +26,6 @@ const useLendingPoolURL = () : string => {
 
   return lendingPoolURL;
 };
+// ray test touch >>
 
 export default useLendingPoolURL;

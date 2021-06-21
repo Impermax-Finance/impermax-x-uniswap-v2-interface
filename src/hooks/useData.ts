@@ -22,12 +22,14 @@ export function useToken(poolTokenTypeArg?: PoolTokenType) {
   return { uniswapV2PairAddress, poolTokenType };
 }
 
+// ray test touch <<
 export function usePairList() : Address[] {
   const [pairList, setPairList] = useState<Address[]>();
   useSubgraphCallback(async subgraph => setPairList(await subgraph.getPairList()));
 
   return pairList;
 }
+// ray test touch >>
 
 export function useDecimals(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
@@ -119,12 +121,14 @@ export function usePriceDenomLP() : [number, number] {
   return priceDenomLP;
 }
 
+// ray test touch <<
 export function useUnderlyingAddress(poolTokenTypeArg?: PoolTokenType) : string {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [tokenAddress, setTokenAddress] = useState<string>('');
   useSubgraphCallback(async subgraph => setTokenAddress(await subgraph.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType)));
   return tokenAddress;
 }
+// ray test touch >>
 
 export function useTotalBalanceUSD(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
@@ -133,19 +137,23 @@ export function useTotalBalanceUSD(poolTokenTypeArg?: PoolTokenType) : number {
   return totalBalanceUSD;
 }
 
+// ray test touch <<
 export function useSupplyUSD(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [supplyUSD, setSupplyUSD] = useState<number>(0);
   useSubgraphCallback(async subgraph => setSupplyUSD(await subgraph.getSupplyUSD(uniswapV2PairAddress, poolTokenType)));
   return supplyUSD;
 }
+// ray test touch >>
 
+// ray test touch <<
 export function useTotalBorrowsUSD(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [totalBorrowsUSD, setTotalBorrowsUSD] = useState<number>(0);
   useSubgraphCallback(async subgraph => setTotalBorrowsUSD(await subgraph.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType)));
   return totalBorrowsUSD;
 }
+// ray test touch >>
 
 export function useUtilizationRate(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
@@ -154,26 +162,32 @@ export function useUtilizationRate(poolTokenTypeArg?: PoolTokenType) : number {
   return utilizationRate;
 }
 
+// ray test touch <<
 export function useSupplyAPY(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [supplyAPY, setSupplyAPY] = useState<number>(0);
   useSubgraphCallback(async subgraph => setSupplyAPY(await subgraph.getSupplyAPY(uniswapV2PairAddress, poolTokenType)));
   return supplyAPY;
 }
+// ray test touch >>
 
+// ray test touch <<
 export function useBorrowAPY(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [borrowAPY, setBorrowAPY] = useState<number>(0);
   useSubgraphCallback(async subgraph => setBorrowAPY(await subgraph.getBorrowAPY(uniswapV2PairAddress, poolTokenType)));
   return borrowAPY;
 }
+// ray test touch >>
 
+// ray test touch <<
 export function useUniswapAPY() : number {
   const uniswapV2PairAddress = usePairAddress();
   const [uniswapAPY, setUniswapAPY] = useState<number>(0);
   useSubgraphCallback(async subgraph => setUniswapAPY(await subgraph.getUniswapAPY(uniswapV2PairAddress)));
   return uniswapAPY;
 }
+// ray test touch >>
 
 export function useTotalValueLocked() : number {
   const [totalValueLocked, setTotalValueLocked] = useState<number>(0);
@@ -193,12 +207,14 @@ export function useTotalValueBorrowed() : number {
   return totalValueBorrowed;
 }
 
+// ray test touch <<
 export function useFarmingAPY(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [farmingAPY, setFarmingAPY] = useState<number>(0);
   useSubgraphCallback(async subgraph => setFarmingAPY(await subgraph.getFarmingAPY(uniswapV2PairAddress, poolTokenType)));
   return farmingAPY;
 }
+// ray test touch >>
 
 export function useHasFarming(poolTokenTypeArg?: PoolTokenType) : boolean {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);

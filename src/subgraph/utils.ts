@@ -7,6 +7,7 @@ import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-f
 import Subgraph from '.';
 import { Address } from 'utils/constants';
 
+// ray test touch <<
 export function getPairAddress(
   this: Subgraph,
   tokenA: Address,
@@ -24,8 +25,11 @@ export function getPairAddress(
     '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f'
   );
 }
+// ray test touch >>
 
+// ray test touch <<
 export function toAPY(this: Subgraph, n: number) : number {
   const SECONDS_IN_YEAR = 365 * 24 * 3600;
   return n * SECONDS_IN_YEAR;
 }
+// ray test touch >>

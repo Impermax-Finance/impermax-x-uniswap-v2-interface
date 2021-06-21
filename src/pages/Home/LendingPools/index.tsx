@@ -6,12 +6,20 @@ import LendingPool from './LendingPool';
 import LendingPoolsHeader from './LendingPoolsHeader';
 import PairAddressContext from 'contexts/PairAddress';
 import { usePairList } from 'hooks/useData';
+// ray test touch <<
+import useLendingPools from 'services/hooks/use-lending-pools';
+// ray test touch >>
 import { BREAKPOINTS } from 'utils/constants/styles';
 import { ReactComponent as SpinIcon } from 'assets/images/icons/spin.svg';
 
 const LendingPools = (): JSX.Element => {
   const greaterThanMd = useMedia(`(min-width: ${BREAKPOINTS.md})`);
+  // ray test touch <<
+  const lendingPools = useLendingPools(); // TODO: directly write the hook here for managing statuses
   const pairList = usePairList();
+  console.log('ray : ***** pairList => ', pairList);
+  console.log('ray : ***** lendingPools => ', lendingPools);
+  // ray test touch >>
 
   if (!pairList) {
     return (
