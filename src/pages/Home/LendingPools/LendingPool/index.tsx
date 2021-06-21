@@ -1,8 +1,9 @@
 
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { useMedia } from 'react-use';
 
+import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
+import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import { PoolTokenType } from 'impermax-router/interfaces';
@@ -21,7 +22,6 @@ import {
   formatPercentage
 } from 'utils/format';
 import useLendingPoolURL from 'hooks/use-lending-pool-url';
-import { BREAKPOINTS } from 'utils/constants/styles';
 
 const LEVERAGE = 5;
 
@@ -154,9 +154,13 @@ const SetWrapper = ({
   </div>
 );
 
-const LendingPool = (): JSX.Element => {
-  const greaterThanMd = useMedia(`(min-width: ${BREAKPOINTS.md})`);
+interface Props {
+  greaterThanMd: boolean;
+}
 
+const LendingPool = ({
+  greaterThanMd
+}: Props): JSX.Element => {
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const supplyUSDA = useSupplyUSD(PoolTokenType.BorrowableA);
@@ -185,19 +189,10 @@ const LendingPool = (): JSX.Element => {
           'px-4',
           'py-5',
           'md:p-6',
-          'space-y-2',
           'hover:bg-gray-50'
         )}>
         {greaterThanMd ? (
-          <div
-            // ray test touch <<
-            // TODO: could componentize
-            // ray test touch >>
-            className={clsx(
-              'grid',
-              'grid-cols-8',
-              'gap-x-4'
-            )}>
+          <LendingPoolDesktopGridWrapper>
             <TokenPairLabel
               className='col-span-2'
               tokenIconA={tokenIconA}
@@ -238,18 +233,10 @@ const LendingPool = (): JSX.Element => {
               )}>
               {formatPercentage(leveragedAPY)}
             </Value>
-          </div>
+          </LendingPoolDesktopGridWrapper>
         ) : (
           <>
-            <div
-              // ray test touch <<
-              // TODO: could componentize
-              // ray test touch >>
-              className={clsx(
-                'grid',
-                'grid-cols-3',
-                'gap-x-4'
-              )}>
+            <LendingPoolMobileGridWrapper>
               <TokenPairLabel
                 tokenIconA={tokenIconA}
                 tokenIconB={tokenIconB}
@@ -261,16 +248,11 @@ const LendingPool = (): JSX.Element => {
               <TokenLabel
                 tokenIcon={tokenIconB}
                 symbol={symbolB} />
-            </div>
-            <div
-              // ray test touch <<
-              // TODO: could componentize
-              // ray test touch >>
+            </LendingPoolMobileGridWrapper>
+            <LendingPoolMobileGridWrapper
               className={clsx(
-                'grid',
-                'grid-cols-3',
-                'gap-x-4',
-                'gap-y-1.5'
+                'gap-y-1.5',
+                'mt-2.5'
               )}>
               <>
                 <PropertyLabel className='self-center'>
@@ -315,7 +297,7 @@ const LendingPool = (): JSX.Element => {
                   {formatPercentage(leveragedAPY)}
                 </Value>
               </>
-            </div>
+            </LendingPoolMobileGridWrapper>
           </>
         )}
       </Panel>

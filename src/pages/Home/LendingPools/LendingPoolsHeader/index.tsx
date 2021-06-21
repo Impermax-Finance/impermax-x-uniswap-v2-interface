@@ -2,6 +2,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 
+import LendingPoolDesktopGridWrapper from 'pages/Home/LendingPools/LendingPool/LendingPoolDesktopGridWrapper';
 import QuestionHelper from 'components/QuestionHelper';
 import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
@@ -35,14 +36,8 @@ const LendingPoolsHeader = ({
   const t = (s: string) => (phrases[s][language]);
 
   return (
-    <div
-      // ray test touch <<
-      // TODO: could componentize
-      // ray test touch >>
+    <LendingPoolDesktopGridWrapper
       className={clsx(
-        'grid',
-        'grid-cols-8',
-        'gap-x-4',
         'text-textSecondary',
         'text-sm',
         className
@@ -66,7 +61,7 @@ const LendingPoolsHeader = ({
           placement='left'
           text='Based on last 7 days trading fees assuming a 5x leverage' />
       </Heading>
-    </div>
+    </LendingPoolDesktopGridWrapper>
   );
 };
 
