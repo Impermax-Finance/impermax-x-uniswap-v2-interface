@@ -4,6 +4,8 @@
 // @ts-nocheck
 // TODO: >
 
+import { formatUnits } from '@ethersproject/units';
+
 import ImpermaxRouter from '.';
 import {
   Address,
@@ -34,10 +36,14 @@ export async function initializeAvailableReward(this: ImpermaxRouter, uniswapV2P
   const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   let totalAmount = 0;
-  // ray test touch <
-  if (farmingPoolA) totalAmount += await farmingPoolA.methods.claim().call({ from: this.account }) / 1e18;
-  if (farmingPoolB) totalAmount += await farmingPoolB.methods.claim().call({ from: this.account }) / 1e18;
-  // ray test touch >
+  if (farmingPoolA) {
+    const bigTotalAmount = await farmingPoolA.claim();
+    totalAmount += parseFloat(formatUnits(bigTotalAmount));
+  }
+  if (farmingPoolB) {
+    const bigTotalAmount = await farmingPoolB.claim();
+    totalAmount += parseFloat(formatUnits(bigTotalAmount));
+  }
   return totalAmount;
 }
 export async function getAvailableReward(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {

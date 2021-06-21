@@ -1,5 +1,6 @@
 /* eslint-disable no-invalid-this */
 import { BigNumber } from '@ethersproject/bignumber';
+import { formatUnits } from '@ethersproject/units';
 
 import ImpermaxRouter from '.';
 import { Address, PoolTokenType } from './interfaces';
@@ -260,10 +261,10 @@ export async function claims(
   const toClaim = [];
   const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  // ray test touch <
-  const claimAmountA = await farmingPoolA.methods.claim().call({ from: this.account }) / 1e18;
-  const claimAmountB = await farmingPoolB.methods.claim().call({ from: this.account }) / 1e18;
-  // ray test touch >
+  const bigClaimAmountA = await farmingPoolA.claim();
+  const claimAmountA = parseFloat(formatUnits(bigClaimAmountA));
+  const bigClaimAmountB = await farmingPoolB.claim();
+  const claimAmountB = parseFloat(formatUnits(bigClaimAmountB));
   if (claimAmountA * 1 > 0) toClaim.push(farmingPoolA.address);
   if (claimAmountB * 1 > 0) toClaim.push(farmingPoolB.address);
   try {
