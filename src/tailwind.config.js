@@ -5,7 +5,16 @@ const colors = require('tailwindcss/colors');
 const { BREAKPOINTS } = require('./utils/constants/styles');
 
 const IMPERMAX_BLACK_HAZE = Object.freeze({
-  500: '#f5f6f7'
+  50: '#ffffff',
+  100: '#fefefe',
+  200: '#fdfdfd',
+  300: '#fbfbfc',
+  400: '#f8f9f9',
+  500: '#f5f6f7',
+  600: '#ddddde',
+  700: '#b8b9b9',
+  800: '#939494',
+  900: '#787979'
 });
 const IMPERMAX_JADE = Object.freeze({
   50: '#f2fbf8',
@@ -67,7 +76,16 @@ module.exports = {
     extend: {
       colors: {
         impermaxBlackHaze: {
-          DEFAULT: IMPERMAX_BLACK_HAZE[500]
+          50: IMPERMAX_BLACK_HAZE[50],
+          100: IMPERMAX_BLACK_HAZE[100],
+          200: IMPERMAX_BLACK_HAZE[200],
+          300: IMPERMAX_BLACK_HAZE[300],
+          400: IMPERMAX_BLACK_HAZE[400],
+          DEFAULT: IMPERMAX_BLACK_HAZE[500],
+          600: IMPERMAX_BLACK_HAZE[600],
+          700: IMPERMAX_BLACK_HAZE[700],
+          800: IMPERMAX_BLACK_HAZE[800],
+          900: IMPERMAX_BLACK_HAZE[900]
         },
         impermaxJade: {
           50: IMPERMAX_JADE[50],
@@ -78,7 +96,8 @@ module.exports = {
           DEFAULT: IMPERMAX_JADE[500],
           600: IMPERMAX_JADE[600],
           700: IMPERMAX_JADE[700],
-          800: IMPERMAX_JADE[800]
+          800: IMPERMAX_JADE[800],
+          900: IMPERMAX_JADE[900]
         },
         impermaxCarnation: {
           50: IMPERMAX_CARNATION[50],
@@ -89,7 +108,8 @@ module.exports = {
           DEFAULT: IMPERMAX_CARNATION[500],
           600: IMPERMAX_CARNATION[600],
           700: IMPERMAX_CARNATION[700],
-          800: IMPERMAX_CARNATION[800]
+          800: IMPERMAX_CARNATION[800],
+          900: IMPERMAX_CARNATION[900]
         },
         impermaxAstral: {
           50: IMPERMAX_ASTRAL[50],
@@ -101,10 +121,21 @@ module.exports = {
           DEFAULT: IMPERMAX_ASTRAL[500],
           600: IMPERMAX_ASTRAL[600],
           700: IMPERMAX_ASTRAL[700],
-          800: IMPERMAX_ASTRAL[800]
+          800: IMPERMAX_ASTRAL[800],
+          900: IMPERMAX_ASTRAL[900]
         },
         impermaxMercury: {
-          DEFAULT: IMPERMAX_MERCURY[500]
+          50: IMPERMAX_MERCURY[50],
+          100: IMPERMAX_MERCURY[100],
+          200: IMPERMAX_MERCURY[200],
+          300: IMPERMAX_MERCURY[300],
+          400: IMPERMAX_MERCURY[400],
+          500: IMPERMAX_MERCURY[500],
+          DEFAULT: IMPERMAX_MERCURY[500],
+          600: IMPERMAX_MERCURY[600],
+          700: IMPERMAX_MERCURY[700],
+          800: IMPERMAX_MERCURY[800],
+          900: IMPERMAX_MERCURY[900]
         },
         primary: {
           50: IMPERMAX_JADE[50],
@@ -116,6 +147,7 @@ module.exports = {
           600: IMPERMAX_JADE[600],
           700: IMPERMAX_JADE[700],
           800: IMPERMAX_JADE[800],
+          900: IMPERMAX_JADE[900],
           contrastText: '#333333'
         }
       },
