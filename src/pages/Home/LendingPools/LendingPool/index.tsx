@@ -12,8 +12,8 @@ import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import { PoolTokenType } from 'impermax-router/interfaces';
 import {
-  useBorrowAPY,
   // ray test touch <<
+  // useBorrowAPY,
   // useSupplyAPY,
   // useTotalBorrowsUSD,
   // useSupplyUSD,
@@ -249,6 +249,16 @@ const getLendingPoolSupplyAPY = (
 
   return supplyAPY;
 };
+
+const getLendingPoolBorrowAPY = (
+  lendingPool: any,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): number => {
+  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
+  const borrowAPY = toAPY(borrowRate);
+
+  return borrowAPY;
+};
 // ray test touch >>
 
 const LendingPool = ({
@@ -266,9 +276,9 @@ const LendingPool = ({
   const totalBorrowsUSDB = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableB);
   const supplyAPYA = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableA);
   const supplyAPYB = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableB);
+  const borrowAPYA = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableA);
+  const borrowAPYB = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
   // ray test touch >>
-  const borrowAPYA = useBorrowAPY(PoolTokenType.BorrowableA);
-  const borrowAPYB = useBorrowAPY(PoolTokenType.BorrowableB);
   const farmingPoolAPYA = useFarmingAPY(PoolTokenType.BorrowableA);
   const farmingPoolAPYB = useFarmingAPY(PoolTokenType.BorrowableB);
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
