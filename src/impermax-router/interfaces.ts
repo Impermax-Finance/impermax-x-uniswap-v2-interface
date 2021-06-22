@@ -63,6 +63,7 @@ export interface ImpermaxRouterConfigInterface {
   library: Web3Provider;
 }
 
+// ray test touch <<
 export interface BorrowableData {
   id: Address,
   underlying: TokenData,
@@ -78,6 +79,7 @@ export interface BorrowableData {
   totalBalanceUSD: string,
   farmingPool: FarmingPoolData,
 }
+// ray test touch >>
 
 export interface CollateralData {
   id: Address,

@@ -12,11 +12,11 @@ import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import { PoolTokenType } from 'impermax-router/interfaces';
 import {
-  useSupplyUSD,
   useTotalBorrowsUSD,
   useSupplyAPY,
   useBorrowAPY,
   // ray test touch <<
+  // useSupplyUSD,
   // useSymbol,
   // ray test touch >>
   useUniswapAPY,
@@ -194,6 +194,25 @@ const useLendingPoolSymbol = (
 
   return symbol;
 };
+
+const getLendingPoolSupplyUSD = (
+  lendingPool: any,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): number => {
+  const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
+  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
+  const storedAmount = totalBalance + totalBorrows;
+  const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
+  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
+  const utilizationRate = storedAmount === 0 ? 0 : totalBorrows / storedAmount;
+  const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
+  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor);
+  const currentSupply = storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
+  const tokenPrice = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
+  const supplyUSD = currentSupply * tokenPrice;
+
+  return supplyUSD;
+};
 // ray test touch >>
 
 const LendingPool = ({
@@ -205,9 +224,9 @@ const LendingPool = ({
   // ray test touch <<
   const symbolA = useLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableA);
   const symbolB = useLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableB);
+  const supplyUSDA = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableA);
+  const supplyUSDB = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableB);
   // ray test touch >>
-  const supplyUSDA = useSupplyUSD(PoolTokenType.BorrowableA);
-  const supplyUSDB = useSupplyUSD(PoolTokenType.BorrowableB);
   const totalBorrowsUSDA = useTotalBorrowsUSD(PoolTokenType.BorrowableA);
   const totalBorrowsUSDB = useTotalBorrowsUSD(PoolTokenType.BorrowableB);
   const supplyAPYA = useSupplyAPY(PoolTokenType.BorrowableA);
