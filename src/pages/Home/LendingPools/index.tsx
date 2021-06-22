@@ -21,7 +21,9 @@ const LendingPools = (): JSX.Element => {
   console.log('ray : ***** lendingPools => ', lendingPools);
   // ray test touch >>
 
-  if (!pairList) {
+  // ray test touch <<
+  if (!lendingPools) {
+  // ray test touch >>
     return (
       <div
         className={clsx(
@@ -45,15 +47,29 @@ const LendingPools = (): JSX.Element => {
       {greaterThanMd && (
         <LendingPoolsHeader className='px-4' />
       )}
-      {pairList.map((pair: string, key: any) => {
+      {/* ray test touch << */}
+      {lendingPools.map(lendingPool => {
         return (
           <PairAddressContext.Provider
-            value={pair}
-            key={key}>
-            <LendingPool greaterThanMd={greaterThanMd} />
+            value={lendingPool.id}
+            key={lendingPool.id}>
+            <LendingPool
+              lendingPool={lendingPool}
+              greaterThanMd={greaterThanMd} />
           </PairAddressContext.Provider>
         );
       })}
+      {/* {pairList.map((pair: string, index: number) => {
+        return (
+          <PairAddressContext.Provider
+            value={pair}
+            key={index}>
+            <LendingPool
+              greaterThanMd={greaterThanMd} />
+          </PairAddressContext.Provider>
+        );
+      })} */}
+      {/* ray test touch >> */}
     </div>
   );
 };

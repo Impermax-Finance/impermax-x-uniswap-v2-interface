@@ -38,12 +38,14 @@ export function useDecimals(poolTokenTypeArg?: PoolTokenType) : number {
   return decimals;
 }
 
+// ray test touch <<
 export function useSymbol(poolTokenTypeArg?: PoolTokenType) : string {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [symbol, setSymbol] = useState<string>('');
   useSubgraphCallback(async subgraph => setSymbol(await subgraph.getSymbol(uniswapV2PairAddress, poolTokenType)));
   return symbol;
 }
+// ray test touch >>
 
 export function useName(poolTokenTypeArg?: PoolTokenType) : string {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);

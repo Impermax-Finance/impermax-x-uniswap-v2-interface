@@ -1,6 +1,10 @@
 
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
+// ray test touch <<
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
+// ray test touch >>
 
 import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
 import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
@@ -12,7 +16,9 @@ import {
   useTotalBorrowsUSD,
   useSupplyAPY,
   useBorrowAPY,
-  useSymbol,
+  // ray test touch <<
+  // useSymbol,
+  // ray test touch >>
   useUniswapAPY,
   useFarmingAPY
 } from 'hooks/useData';
@@ -22,6 +28,9 @@ import {
   formatPercentage
 } from 'utils/format';
 import useLendingPoolURL from 'hooks/use-lending-pool-url';
+// ray test touch <<
+import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+// ray test touch >>
 
 const LEVERAGE = 5;
 
@@ -155,14 +164,48 @@ const SetWrapper = ({
 );
 
 interface Props {
+  // ray test touch <<
+  // TODO: should type properly
+  lendingPool: any;
+  // ray test touch >>
   greaterThanMd: boolean;
 }
 
+// ray test touch <<
+// TODO: should type properly
+const useLendingPoolSymbol = (
+  lendingPool: any,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): string => {
+  const { chainId } = useWeb3React<Web3Provider>();
+
+  if (!chainId) {
+    throw new Error('Invalid chain ID!');
+  }
+
+  const underlying = lendingPool[poolTokenType].underlying;
+  const wethAddress = WETH_ADDRESSES[chainId];
+  let symbol;
+  if (underlying.id === wethAddress.toLowerCase()) {
+    symbol = 'ETH';
+  } else {
+    symbol = underlying.symbol;
+  }
+
+  return symbol;
+};
+// ray test touch >>
+
 const LendingPool = ({
+  // ray test touch <<
+  lendingPool,
+  // ray test touch >>
   greaterThanMd
 }: Props): JSX.Element => {
-  const symbolA = useSymbol(PoolTokenType.BorrowableA);
-  const symbolB = useSymbol(PoolTokenType.BorrowableB);
+  // ray test touch <<
+  const symbolA = useLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableA);
+  const symbolB = useLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableB);
+  // ray test touch >>
   const supplyUSDA = useSupplyUSD(PoolTokenType.BorrowableA);
   const supplyUSDB = useSupplyUSD(PoolTokenType.BorrowableB);
   const totalBorrowsUSDA = useTotalBorrowsUSD(PoolTokenType.BorrowableA);
