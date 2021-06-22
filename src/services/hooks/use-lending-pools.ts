@@ -77,8 +77,8 @@ const useLendingPools = () : Array<any> | undefined => {
     (async () => {
       try {
         const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[chainId];
-        const response = await apolloFetcher(impermaxSubgraphUrl, query);
-        const theLendingPools = response.data.lendingPools;
+        const result = await apolloFetcher(impermaxSubgraphUrl, query);
+        const theLendingPools = result.data.lendingPools;
         setLendingPools(theLendingPools);
       } catch (error) {
         console.log('[useLendingPools useEffect] error.message => ', error.message);

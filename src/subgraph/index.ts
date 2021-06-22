@@ -13,6 +13,10 @@ import * as initializer from './initializer';
 import * as cacheData from './cacheData';
 import * as utils from './utils';
 import * as account from './account';
+import {
+  UNISWAP_SUBGRAPH_URL,
+  BLOCKLYTICS_SUBGRAPH_URL
+} from 'config/web3/subgraph';
 
 class Subgraph {
   uniswapSubgraphUrl: string;
@@ -27,9 +31,10 @@ class Subgraph {
   tvlData: Promise<TvlData>
 
   constructor(config: SubgraphConfigInterface) {
-    // TODO: hardcoded
-    this.uniswapSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2';
-    this.blocklyticsSubgraphUrl = 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks';
+    // ray test touch <<
+    this.uniswapSubgraphUrl = UNISWAP_SUBGRAPH_URL;
+    this.blocklyticsSubgraphUrl = BLOCKLYTICS_SUBGRAPH_URL;
+    // ray test touch >>
     this.chainId = config.chainId;
     this.usersData = {};
   }

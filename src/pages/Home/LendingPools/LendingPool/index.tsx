@@ -10,7 +10,6 @@ import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
 import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
-import { PoolTokenType } from 'impermax-router/interfaces';
 import {
   // ray test touch <<
   // useBorrowAPY,
@@ -18,9 +17,9 @@ import {
   // useTotalBorrowsUSD,
   // useSupplyUSD,
   // useSymbol,
+  // useFarmingAPY,
   // ray test touch >>
-  useUniswapAPY,
-  useFarmingAPY
+  useUniswapAPY
 } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 import {
@@ -31,6 +30,13 @@ import useLendingPoolURL from 'hooks/use-lending-pool-url';
 // ray test touch <<
 import toAPY from 'services/to-apy';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import getPairAddress from 'services/get-pair-address';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
+import {
+  Address,
+  PoolTokenType,
+  LendingPoolData
+} from 'impermax-router/interfaces';
 // ray test touch >>
 
 const LEVERAGE = 5;
@@ -166,6 +172,8 @@ const SetWrapper = ({
 
 interface Props {
   // ray test touch <<
+  chainID: number;
+  lendingPoolsData: { [key in Address]: LendingPoolData };
   // TODO: should type properly
   lendingPool: any;
   // ray test touch >>
@@ -219,6 +227,7 @@ const getLendingPoolSupplyUSD = (
 };
 
 const getLendingPoolTotalBorrowsUSD = (
+  // TODO: should type properly
   lendingPool: any,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
@@ -233,6 +242,7 @@ const getLendingPoolTotalBorrowsUSD = (
 };
 
 const getLendingPoolSupplyAPY = (
+  // TODO: should type properly
   lendingPool: any,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
@@ -251,6 +261,7 @@ const getLendingPoolSupplyAPY = (
 };
 
 const getLendingPoolBorrowAPY = (
+  // TODO: should type properly
   lendingPool: any,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
@@ -263,6 +274,8 @@ const getLendingPoolBorrowAPY = (
 
 const LendingPool = ({
   // ray test touch <<
+  chainID,
+  lendingPoolsData,
   lendingPool,
   // ray test touch >>
   greaterThanMd
@@ -278,9 +291,52 @@ const LendingPool = ({
   const supplyAPYB = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableB);
   const borrowAPYA = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableA);
   const borrowAPYB = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
+
+  const imxAddress = IMX_ADDRESSES[chainID];
+  const wethAddress = WETH_ADDRESSES[chainID];
+  const imxPair = getPairAddress(wethAddress, imxAddress, chainID).toLowerCase();
+  const aAddress = lendingPoolsData[imxPair][PoolTokenType.BorrowableA].underlying.id;
+  const poolTokenType =
+    aAddress.toLowerCase() === imxAddress.toLowerCase() ?
+      PoolTokenType.BorrowableA :
+      PoolTokenType.BorrowableB;
+  const imxLendingPoolData = lendingPoolsData[imxPair];
+  const imxPrice = Number(imxLendingPoolData[poolTokenType].underlying.derivedUSD);
+
+  let rewardSpeed;
+  const lendingPoolData = lendingPoolsData[lendingPool.id];
+  const farmingPoolData = lendingPoolData[poolTokenType].farmingPool;
+  if (farmingPoolData === null) {
+    rewardSpeed = 0;
+  } else {
+    const segmentLength = parseInt(farmingPoolData.segmentLength);
+    const epochBegin = parseInt(farmingPoolData.epochBegin);
+    const epochAmount = parseFloat(farmingPoolData.epochAmount);
+    const epochEnd = epochBegin + segmentLength;
+    const timestamp = (new Date()).getTime() / 1000;
+    if (timestamp > epochEnd) {
+      // How to manage better this case? Maybe check shares on distributor
+      rewardSpeed = 0;
+    } else {
+      rewardSpeed = epochAmount / segmentLength;
+    }
+  }
+
+  let farmingPoolAPYA;
+  if (totalBorrowsUSDA === 0) {
+    farmingPoolAPYA = 0;
+  } else {
+    farmingPoolAPYA = toAPY(imxPrice * rewardSpeed / totalBorrowsUSDA);
+  }
+  let farmingPoolAPYB;
+  if (totalBorrowsUSDA === 0) {
+    farmingPoolAPYB = 0;
+  } else {
+    farmingPoolAPYB = toAPY(imxPrice * rewardSpeed / totalBorrowsUSDB);
+  }
+  // const farmingPoolAPYA = useFarmingAPY(PoolTokenType.BorrowableA);
+  // const farmingPoolAPYB = useFarmingAPY(PoolTokenType.BorrowableB);
   // ray test touch >>
-  const farmingPoolAPYA = useFarmingAPY(PoolTokenType.BorrowableA);
-  const farmingPoolAPYB = useFarmingAPY(PoolTokenType.BorrowableB);
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
   const lendingPoolUrl = useLendingPoolURL();

@@ -107,6 +107,7 @@ async function fetchLendingPools(this: Subgraph) : Promise<any[]> {
 }
 // ray test touch >>
 
+// ray test touch <<
 // Uniswap APY
 async function fetchBlockByTimestamp(this: Subgraph, timestamp: number) : Promise<number> {
   const query = gql`{
@@ -117,12 +118,16 @@ async function fetchBlockByTimestamp(this: Subgraph, timestamp: number) : Promis
   const result = await this.apolloFetcher(this.blocklyticsSubgraphUrl, query);
   return result.data.blocks[0].number;
 }
+// ray test touch >>
 
-async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number) : Promise<{[key in Address]: number}> {
+// ray test touch <<
+async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number): Promise<{[key in Address]: number}> {
   const timestamp = Math.floor((new Date()).getTime() / 1000);
   const blockNumber = await this.fetchBlockByTimestamp(timestamp - seconds);
   let addressString = '';
-  for (const uniswapV2PairAddress of uniswapV2PairAddresses) addressString += `"${uniswapV2PairAddress.toLowerCase()}",`;
+  for (const uniswapV2PairAddress of uniswapV2PairAddresses) {
+    addressString += `"${uniswapV2PairAddress.toLowerCase()}",`;
+  }
   const query = gql`{
     pairs ( block: {number: ${blockNumber}} where: { id_in: [${addressString}]} ) {
       id
@@ -136,13 +141,17 @@ async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: string[],
   }
   return pastVolume;
 }
+// ray test touch >>
 
+// ray test touch <<
 async function fetchCurrentVolumeAndReserves(this: Subgraph, uniswapV2PairAddresses: string[]) : Promise<{
   currentVolume: {[key in Address]: number},
   currentReserve: {[key in Address]: number},
 }> {
   let addressString = '';
-  for (const uniswapV2PairAddress of uniswapV2PairAddresses) addressString += `"${uniswapV2PairAddress.toLowerCase()}",`;
+  for (const uniswapV2PairAddress of uniswapV2PairAddresses) {
+    addressString += `"${uniswapV2PairAddress.toLowerCase()}",`;
+  }
   const query = gql`{
     pairs ( where: { id_in: [${addressString}]} ) {
       id
@@ -159,8 +168,10 @@ async function fetchCurrentVolumeAndReserves(this: Subgraph, uniswapV2PairAddres
   }
   return { currentReserve, currentVolume };
 }
+// ray test touch >>
 
-async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number = 60 * 60 * 24 * 7) : Promise<{[key in Address]: number}> {
+// ray test touch <<
+async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number = 60 * 60 * 24 * 7): Promise<{ [key in Address]: number }> {
   const pastVolume = await this.fetchPastVolume(uniswapV2PairAddresses, seconds);
   const { currentVolume, currentReserve } = await this.fetchCurrentVolumeAndReserves(uniswapV2PairAddresses);
   const uniswapAPY: {[key in Address]: number} = {};
@@ -179,6 +190,7 @@ async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: string[],
   }
   return uniswapAPY;
 }
+// ray test touch >>
 
 // ray test touch <<
 async function initializeLendingPoolsData(this: Subgraph) : Promise<{[key in Address]?: LendingPoolData}> {
