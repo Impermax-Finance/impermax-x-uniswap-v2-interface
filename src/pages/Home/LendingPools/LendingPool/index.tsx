@@ -12,10 +12,10 @@ import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import { PoolTokenType } from 'impermax-router/interfaces';
 import {
-  useTotalBorrowsUSD,
   useSupplyAPY,
   useBorrowAPY,
   // ray test touch <<
+  // useTotalBorrowsUSD,
   // useSupplyUSD,
   // useSymbol,
   // ray test touch >>
@@ -172,8 +172,8 @@ interface Props {
 }
 
 // ray test touch <<
-// TODO: should type properly
 const useLendingPoolSymbol = (
+  // TODO: should type properly
   lendingPool: any,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): string => {
@@ -196,22 +196,37 @@ const useLendingPoolSymbol = (
 };
 
 const getLendingPoolSupplyUSD = (
+  // TODO: should type properly
   lendingPool: any,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
   const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const storedAmount = totalBalance + totalBorrows;
+  const supply = totalBalance + totalBorrows;
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const utilizationRate = storedAmount === 0 ? 0 : totalBorrows / storedAmount;
+  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply;
   const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
   const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor);
-  const currentSupply = storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
+  const currentSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
   const tokenPrice = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
   const supplyUSD = currentSupply * tokenPrice;
 
   return supplyUSD;
+};
+
+const getLendingPoolTotalBorrowsUSD = (
+  lendingPool: any,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): number => {
+  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
+  const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
+  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
+  const currentTotalBorrows = totalBorrows * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
+  const tokenPrice = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
+  const totalBorrowsUSD = currentTotalBorrows * tokenPrice;
+
+  return totalBorrowsUSD;
 };
 // ray test touch >>
 
@@ -226,9 +241,10 @@ const LendingPool = ({
   const symbolB = useLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableB);
   const supplyUSDA = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableA);
   const supplyUSDB = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableB);
+
+  const totalBorrowsUSDA = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableA);
+  const totalBorrowsUSDB = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableB);
   // ray test touch >>
-  const totalBorrowsUSDA = useTotalBorrowsUSD(PoolTokenType.BorrowableA);
-  const totalBorrowsUSDB = useTotalBorrowsUSD(PoolTokenType.BorrowableB);
   const supplyAPYA = useSupplyAPY(PoolTokenType.BorrowableA);
   const supplyAPYB = useSupplyAPY(PoolTokenType.BorrowableB);
   const borrowAPYA = useBorrowAPY(PoolTokenType.BorrowableA);
