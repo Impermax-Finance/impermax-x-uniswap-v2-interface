@@ -26,7 +26,11 @@ import {
   formatUSD,
   formatPercentage
 } from 'utils/format';
-import useLendingPoolURL from 'hooks/use-lending-pool-url';
+// import useLendingPoolURL from 'hooks/use-lending-pool-url';
+import {
+  PAGES,
+  PARAMETERS
+} from 'utils/constants/links';
 // ray test touch <<
 import toAPY from 'services/to-apy';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
@@ -334,19 +338,20 @@ const LendingPool = ({
   } else {
     farmingPoolAPYB = toAPY(imxPrice * rewardSpeed / totalBorrowsUSDB);
   }
-  // const farmingPoolAPYA = useFarmingAPY(PoolTokenType.BorrowableA);
-  // const farmingPoolAPYB = useFarmingAPY(PoolTokenType.BorrowableB);
+  const lendingPoolURL =
+    PAGES.LENDING_POOL
+      .replace(`:${PARAMETERS.CHAIN_ID}`, chainID.toString())
+      .replace(`:${PARAMETERS.UNISWAP_V2_PAIR_ADDRESS}`, lendingPool.id);
   // ray test touch >>
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
-  const lendingPoolUrl = useLendingPoolURL();
   const uniAPY = useUniswapAPY();
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
 
   return (
     <Link
-      to={lendingPoolUrl}
+      to={lendingPoolURL}
       className='block'>
       <Panel
         className={clsx(
