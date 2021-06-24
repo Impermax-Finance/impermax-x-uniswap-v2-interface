@@ -1,10 +1,6 @@
 
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-// ray test touch <<
-import { useWeb3React } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
-// ray test touch >>
 
 import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
 import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
@@ -185,19 +181,14 @@ interface Props {
 }
 
 // ray test touch <<
-const useLendingPoolSymbol = (
+const getLendingPoolSymbol = (
   // TODO: should type properly
   lendingPool: any,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
+  chainID: number
 ): string => {
-  const { chainId } = useWeb3React<Web3Provider>();
-
-  if (!chainId) {
-    throw new Error('Invalid chain ID!');
-  }
-
   const underlying = lendingPool[poolTokenType].underlying;
-  const wethAddress = WETH_ADDRESSES[chainId];
+  const wethAddress = WETH_ADDRESSES[chainID];
   let symbol;
   if (underlying.id === wethAddress.toLowerCase()) {
     symbol = 'ETH';
@@ -285,8 +276,8 @@ const LendingPool = ({
   greaterThanMd
 }: Props): JSX.Element => {
   // ray test touch <<
-  const symbolA = useLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableA);
-  const symbolB = useLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableB);
+  const symbolA = getLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
+  const symbolB = getLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
   const supplyUSDA = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableA);
   const supplyUSDB = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableB);
   const totalBorrowsUSDA = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableA);
@@ -306,7 +297,6 @@ const LendingPool = ({
       PoolTokenType.BorrowableB;
   const imxLendingPoolData = lendingPoolsData[imxPair];
   const imxPrice = Number(imxLendingPoolData[poolTokenType].underlying.derivedUSD);
-
   let rewardSpeed;
   const lendingPoolData = lendingPoolsData[lendingPool.id];
   const farmingPoolData = lendingPoolData[poolTokenType].farmingPool;
@@ -325,7 +315,6 @@ const LendingPool = ({
       rewardSpeed = epochAmount / segmentLength;
     }
   }
-
   let farmingPoolAPYA;
   if (totalBorrowsUSDA === 0) {
     farmingPoolAPYA = 0;
@@ -338,16 +327,18 @@ const LendingPool = ({
   } else {
     farmingPoolAPYB = toAPY(imxPrice * rewardSpeed / totalBorrowsUSDB);
   }
+
   const lendingPoolURL =
     PAGES.LENDING_POOL
       .replace(`:${PARAMETERS.CHAIN_ID}`, chainID.toString())
       .replace(`:${PARAMETERS.UNISWAP_V2_PAIR_ADDRESS}`, lendingPool.id);
+
   const uniswapAPY = lendingPoolsData[lendingPool.id].pair.uniswapAPY;
+  const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
+  const leveragedAPY = uniswapAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
   // ray test touch >>
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
-  const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
-  const leveragedAPY = uniswapAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
 
   return (
     <Link
