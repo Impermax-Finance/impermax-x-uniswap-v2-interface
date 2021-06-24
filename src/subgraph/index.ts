@@ -13,14 +13,8 @@ import * as initializer from './initializer';
 import * as cacheData from './cacheData';
 import * as utils from './utils';
 import * as account from './account';
-import {
-  UNISWAP_SUBGRAPH_URL,
-  BLOCKLYTICS_SUBGRAPH_URL
-} from 'config/web3/subgraph';
 
 class Subgraph {
-  uniswapSubgraphUrl: string;
-  blocklyticsSubgraphUrl: string;
   chainId: number;
   lendingPoolsData: Promise<{
     [key in Address]?: LendingPoolData
@@ -31,10 +25,6 @@ class Subgraph {
   tvlData: Promise<TvlData>
 
   constructor(config: SubgraphConfigInterface) {
-    // ray test touch <<
-    this.uniswapSubgraphUrl = UNISWAP_SUBGRAPH_URL;
-    this.blocklyticsSubgraphUrl = BLOCKLYTICS_SUBGRAPH_URL;
-    // ray test touch >>
     this.chainId = config.chainId;
     this.usersData = {};
   }
@@ -46,7 +36,6 @@ class Subgraph {
   }
 
   // Fetchers
-  public apolloFetcher = initializer.apolloFetcher;
   public fetchLendingPools = initializer.fetchLendingPools;
   public fetchPastVolume = initializer.fetchPastVolume;
   public fetchCurrentVolumeAndReserves = initializer.fetchCurrentVolumeAndReserves;
