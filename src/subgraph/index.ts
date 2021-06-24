@@ -11,7 +11,6 @@ import {
 } from 'impermax-router/interfaces';
 import * as initializer from './initializer';
 import * as cacheData from './cacheData';
-import * as utils from './utils';
 import * as account from './account';
 
 class Subgraph {
@@ -104,9 +103,6 @@ class Subgraph {
   public getAccountTotalValueLocked = account.getAccountTotalValueLocked;
   public getAccountTotalValueSupplied = account.getAccountTotalValueSupplied;
   public getAccountTotalValueBorrowed = account.getAccountTotalValueBorrowed;
-
-  // Utils
-  public getPairAddress = utils.getPairAddress;
 }
 
 export interface SubgraphConfigInterface {

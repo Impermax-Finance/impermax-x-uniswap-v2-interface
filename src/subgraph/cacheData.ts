@@ -4,6 +4,7 @@ import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 import toAPY from 'services/to-apy';
+import getPairAddress from 'services/get-pair-address';
 
 // Pair List
 export async function getPairList(this: Subgraph) : Promise<Address[]> {
@@ -84,7 +85,7 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
 export async function getImxPrice(this: Subgraph) : Promise<number> {
   const imxAddress = IMX_ADDRESSES[this.chainId];
   const wethAddress = WETH_ADDRESSES[this.chainId];
-  const IMXPair = this.getPairAddress(wethAddress, imxAddress);
+  const IMXPair = getPairAddress(wethAddress, imxAddress, this.chainId);
   const AAddress = await this.getUnderlyingAddress(IMXPair, PoolTokenType.BorrowableA);
   const poolTokenType = AAddress.toLowerCase() === imxAddress.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
   return this.getTokenPrice(IMXPair, poolTokenType);
