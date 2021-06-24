@@ -4,14 +4,50 @@ import { Contract } from '@ethersproject/contracts';
 
 import Subgraph from 'subgraph';
 
+type Borrowable = Contract;
+type UniswapV2Pair = Contract;
+type ERC20 = Contract;
+
+interface CollateralData {
+  id: Address,
+  totalBalance: string,
+  safetyMargin: string,
+  liquidationIncentive: string,
+  exchangeRate: string,
+  totalBalanceUSD: string,
+}
+
+interface TokenData {
+  id: Address,
+  symbol: string,
+  name: string,
+  decimals: string,
+  derivedUSD: string,
+}
+
+interface PairData {
+  reserve0: string,
+  reserve1: string,
+  reserveUSD: string,
+  token0Price: string,
+  token1Price: string,
+  derivedUSD: string,
+  uniswapAPY: number,
+}
+
+interface FarmingPoolData {
+  epochAmount: string,
+  epochBegin: string,
+  segmentLength: string,
+  vestingBegin: string,
+  sharePercentage: string,
+}
+
 export type Address = string;
 export type Router = Contract;
 export type Factory = Contract;
 export type SimpleUniswapOracle = Contract;
-export type ERC20 = Contract;
-export type UniswapV2Pair = Contract;
 export type UniswapV2Factory = Contract;
-export type Borrowable = Contract;
 export type Collateral = Contract;
 export type MerkleDistributor = Contract;
 export type FarmingPool = Contract;
@@ -73,41 +109,6 @@ export interface BorrowableData {
   exchangeRate: string,
   totalBalanceUSD: string,
   farmingPool: FarmingPoolData,
-}
-
-export interface CollateralData {
-  id: Address,
-  totalBalance: string,
-  safetyMargin: string,
-  liquidationIncentive: string,
-  exchangeRate: string,
-  totalBalanceUSD: string,
-}
-
-export interface TokenData {
-  id: Address,
-  symbol: string,
-  name: string,
-  decimals: string,
-  derivedUSD: string,
-}
-
-export interface PairData {
-  reserve0: string,
-  reserve1: string,
-  reserveUSD: string,
-  token0Price: string,
-  token1Price: string,
-  derivedUSD: string,
-  uniswapAPY: number,
-}
-
-export interface FarmingPoolData {
-  epochAmount: string,
-  epochBegin: string,
-  segmentLength: string,
-  vestingBegin: string,
-  sharePercentage: string,
 }
 
 export interface LendingPoolData {
