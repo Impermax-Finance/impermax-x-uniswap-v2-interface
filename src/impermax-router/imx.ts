@@ -11,7 +11,7 @@ import {
   Address,
   PoolTokenType,
   ClaimEvent
-} from './interfaces';
+} from '../types/interfaces';
 
 // Farming Shares
 export async function initializeFarmingShares(

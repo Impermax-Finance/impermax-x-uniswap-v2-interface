@@ -8,7 +8,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import { getAddress } from '@ethersproject/address';
 
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
-import { PoolTokenType } from '../impermax-router/interfaces';
+import { PoolTokenType } from '../types/interfaces';
 import { useUnderlyingAddress } from './useData';
 
 export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {

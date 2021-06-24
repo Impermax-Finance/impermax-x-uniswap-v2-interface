@@ -26,7 +26,7 @@ import {
   usePairSymbols
 } from 'hooks/useData';
 import useCreateNewPair, { CreatePairStep } from 'hooks/useCreateNewPair';
-import { PoolTokenType } from 'impermax-router/interfaces';
+import { PoolTokenType } from 'types/interfaces';
 import './create-new-pair.scss';
 
 const CreateNewPair = (): JSX.Element | null => {

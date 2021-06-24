@@ -11,7 +11,7 @@ import { formatUSD } from '../../utils/format';
 import DetailsRow from '../DetailsRow';
 import { useDebtUSD, useDepositedUSD, useLPEquityUSD } from '../../hooks/useData';
 import RiskMetrics from '../RiskMetrics';
-import { PoolTokenType } from '../../impermax-router/interfaces';
+import { PoolTokenType } from '../../types/interfaces';
 
 /**
  * Generates lending pool aggregate details.

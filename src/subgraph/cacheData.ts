@@ -1,5 +1,5 @@
 /* eslint-disable no-invalid-this */
-import { Address, PoolTokenType, BorrowableData } from '../impermax-router/interfaces';
+import { Address, PoolTokenType, BorrowableData } from '../types/interfaces';
 import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';

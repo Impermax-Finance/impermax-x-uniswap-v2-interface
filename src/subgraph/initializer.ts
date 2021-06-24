@@ -17,7 +17,7 @@ import {
   CollateralPosition,
   SupplyPosition,
   BorrowPosition
-} from 'impermax-router/interfaces';
+} from 'types/interfaces';
 import Subgraph from '.';
 import {
   IMPERMAX_SUBGRAPH_URL,

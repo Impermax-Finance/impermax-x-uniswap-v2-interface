@@ -14,7 +14,7 @@ import getUniswapAPY from 'services/get-uniswap-apy';
 import {
   Address,
   LendingPoolData
-} from 'impermax-router/interfaces';
+} from 'types/interfaces';
 // ray test touch >>
 import apolloFetcher from 'services/apollo-fetcher';
 import { IMPERMAX_SUBGRAPH_URL } from 'config/web3/subgraph';

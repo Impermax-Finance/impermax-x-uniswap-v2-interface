@@ -9,7 +9,7 @@ import { useTokenIcon } from 'hooks/useUrlGenerator';
 import useLendingPoolURL from 'hooks/use-lending-pool-url';
 import { useSymbol } from 'hooks/useData';
 import { useCollateralValue, useBorrowedValue, useBorrowerEquityValue } from 'hooks/useAccountData';
-import { PoolTokenType } from 'impermax-router/interfaces';
+import { PoolTokenType } from 'types/interfaces';
 import { formatUSD } from 'utils/format';
 
 const BorrowPosition = (): JSX.Element => {

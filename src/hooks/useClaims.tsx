@@ -9,7 +9,7 @@ import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { useSymbol } from './useData';
 import usePairAddress from './usePairAddress';
-import { PoolTokenType } from '../impermax-router/interfaces';
+import { PoolTokenType } from '../types/interfaces';
 
 export default function useClaims(): [ButtonState, () => Promise<void>] {
   const uniswapV2PairAddress = usePairAddress();

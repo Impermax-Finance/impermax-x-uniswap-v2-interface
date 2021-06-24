@@ -3,7 +3,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { formatUnits } from '@ethersproject/units';
 
 import ImpermaxRouter from '.';
-import { Address, PoolTokenType } from './interfaces';
+import { Address, PoolTokenType } from '../types/interfaces';
 import { PermitData } from '../hooks/useApprove';
 import { impermanentLoss } from '../utils';
 import { DistributorDetails } from '../utils/constants';

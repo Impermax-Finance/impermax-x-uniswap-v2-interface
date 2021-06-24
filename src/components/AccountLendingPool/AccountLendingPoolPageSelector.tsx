@@ -1,5 +1,5 @@
 import { AccountLendingPoolPage } from '.';
-import { PoolTokenType } from '../../impermax-router/interfaces';
+import { PoolTokenType } from '../../types/interfaces';
 import { useHasFarming } from '../../hooks/useData';
 
 function AccountLendingPoolPageSelector({

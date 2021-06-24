@@ -8,7 +8,7 @@ import {
   UNISWAP_SUBGRAPH_URL
 } from 'config/web3/subgraph';
 // ray test touch <<
-import { Address } from 'impermax-router/interfaces';
+import { Address } from 'types/interfaces';
 // ray test touch >>
 
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;

@@ -4,7 +4,7 @@
 // TODO: >
 
 import ImpermaxRouter from '.';
-import { Address, PoolTokenType } from './interfaces';
+import { Address, PoolTokenType } from '../types/interfaces';
 import { BigNumber } from '@ethersproject/bignumber';
 
 export async function normalize(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: number) : Promise<number> {

@@ -4,7 +4,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { Address, PoolTokenType } from '../impermax-router/interfaces';
+import { Address, PoolTokenType } from '../types/interfaces';
 import Subgraph from '.';
 
 export async function getBorrowPositions(this: Subgraph, account: Address) : Promise<Address[]> {

@@ -1,7 +1,7 @@
 import './index.scss';
 import { Row, Col, Card } from 'react-bootstrap';
 import BorrowableDetails from './BorrowableDetails';
-import { PoolTokenType } from '../../impermax-router/interfaces';
+import { PoolTokenType } from '../../types/interfaces';
 import PoolTokenContext from '../../contexts/PoolToken';
 import { useTotalBalanceUSD } from '../../hooks/useData';
 import { formatUSD } from '../../utils/format';

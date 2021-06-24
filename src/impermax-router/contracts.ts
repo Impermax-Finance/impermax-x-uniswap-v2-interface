@@ -5,7 +5,7 @@
 // TODO: >
 
 import ImpermaxRouter from '.';
-import { Address, LendingPool, PoolTokenType, Contract, FarmingPool, Claimable } from './interfaces';
+import { Address, LendingPool, PoolTokenType, Contract, FarmingPool, Claimable } from '../types/interfaces';
 
 export function getLendingPoolCache(this: ImpermaxRouter, uniswapV2PairAddress: Address) {
   if (!(uniswapV2PairAddress in this.lendingPoolCache)) {

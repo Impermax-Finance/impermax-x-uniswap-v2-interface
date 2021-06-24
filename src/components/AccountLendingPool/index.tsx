@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 
 import { injected } from 'utils/helpers/web3/connectors';
 import { useRouterAccount } from '../../hooks/useImpermaxRouter';
-import { PoolTokenType } from '../../impermax-router/interfaces';
+import { PoolTokenType } from '../../types/interfaces';
 import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
 import PoolTokenContext from '../../contexts/PoolToken';
 import AccountLendingPoolPageSelector from './AccountLendingPoolPageSelector';

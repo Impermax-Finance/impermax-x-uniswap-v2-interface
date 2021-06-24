@@ -12,7 +12,7 @@ import {
   PoolTokenType,
   Changes,
   NO_CHANGES
-} from './interfaces';
+} from '../types/interfaces';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 
 // Exchange rate

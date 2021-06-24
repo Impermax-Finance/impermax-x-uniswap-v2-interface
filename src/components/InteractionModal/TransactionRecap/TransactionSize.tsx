@@ -1,5 +1,5 @@
 import { Row, Col } from 'react-bootstrap';
-import { PoolTokenType } from '../../../impermax-router/interfaces';
+import { PoolTokenType } from '../../../types/interfaces';
 import usePoolToken from '../../../hooks/usePoolToken';
 import { formatFloat } from '../../../utils/format';
 import { useSymbol, usePriceDenomLP } from '../../../hooks/useData';

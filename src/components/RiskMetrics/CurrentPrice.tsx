@@ -6,7 +6,7 @@
 import { useContext } from 'react';
 import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
-import { PoolTokenType } from '../../impermax-router/interfaces';
+import { PoolTokenType } from '../../types/interfaces';
 import { useTogglePriceInverted, usePriceInverted } from '../../hooks/useImpermaxRouter';
 import { formatFloat } from '../../utils/format';
 import { DetailsRowCustom } from '../DetailsRow';

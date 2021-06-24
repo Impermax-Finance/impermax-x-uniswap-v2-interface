@@ -8,7 +8,7 @@ import {
   Address,
   TvlData,
   UserData
-} from 'impermax-router/interfaces';
+} from 'types/interfaces';
 import * as initializer from './initializer';
 import * as cacheData from './cacheData';
 import * as account from './account';

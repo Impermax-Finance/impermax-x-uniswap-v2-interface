@@ -11,7 +11,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { useCallback, useMemo, useState } from 'react';
 import { useTransactionAdder } from 'store/transactions/hooks';
 import useAllowance from './useAllowance';
-import { ApprovalType, PoolTokenType } from '../impermax-router/interfaces';
+import { ApprovalType, PoolTokenType } from '../types/interfaces';
 import usePairAddress from './usePairAddress';
 import usePoolToken from './usePoolToken';
 import useImpermaxRouter from './useImpermaxRouter';

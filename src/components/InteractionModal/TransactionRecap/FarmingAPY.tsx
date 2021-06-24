@@ -1,5 +1,5 @@
 import { Row, Col } from 'react-bootstrap';
-import { PoolTokenType } from '../../../impermax-router/interfaces';
+import { PoolTokenType } from '../../../types/interfaces';
 import usePoolToken from '../../../hooks/usePoolToken';
 import { formatPercentage } from '../../../utils/format';
 import { useNextFarmingAPY } from '../../../hooks/useData';

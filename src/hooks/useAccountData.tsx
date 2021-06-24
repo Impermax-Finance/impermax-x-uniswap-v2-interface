@@ -6,7 +6,7 @@
 import useAccount from './useAccount';
 import { useState } from 'react';
 import { useSubgraphCallback } from './useSubgraph';
-import { UserData, Address, PoolTokenType } from '../impermax-router/interfaces';
+import { UserData, Address, PoolTokenType } from '../types/interfaces';
 import usePairAddress from './usePairAddress';
 
 export function useUserData() : UserData {

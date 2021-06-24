@@ -24,7 +24,7 @@ import {
   Address,
   PoolTokenType,
   LendingPoolData
-} from 'impermax-router/interfaces';
+} from 'types/interfaces';
 // ray test touch >>
 
 const LEVERAGE = 5;

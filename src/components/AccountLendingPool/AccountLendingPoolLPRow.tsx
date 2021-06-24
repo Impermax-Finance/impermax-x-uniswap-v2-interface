@@ -7,7 +7,7 @@ import { useContext, useState } from 'react';
 import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { Row, Col, Button } from 'react-bootstrap';
-import { PoolTokenType } from '../../impermax-router/interfaces';
+import { PoolTokenType } from '../../types/interfaces';
 import InlineAccountTokenInfo from './InlineAccountTokenInfo';
 import DepositInteractionModal from '../InteractionModal/DepositInteractionModal';
 import LeverageInteractionModal from '../InteractionModal/LeverageInteractionModal';

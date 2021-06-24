@@ -1,5 +1,5 @@
 import { formatFloat } from '../../utils/format';
-import { Changes } from '../../impermax-router/interfaces';
+import { Changes } from '../../types/interfaces';
 import { useTWAPPrice, useSafetyMargin, useLiquidationPrices } from '../../hooks/useData';
 
 const LIQ_K = 1.7;

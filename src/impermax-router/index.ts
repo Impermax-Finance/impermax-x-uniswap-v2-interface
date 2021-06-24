@@ -31,7 +31,7 @@ import {
   ClaimEvent,
   Claimable,
   UniswapV2Factory
-} from './interfaces';
+} from '../types/interfaces';
 import * as contracts from './contracts';
 import * as fetchers from './fetchers';
 import * as utils from './utils';

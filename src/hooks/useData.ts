@@ -3,7 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { PoolTokenType, Changes, ClaimEvent, Address } from '../impermax-router/interfaces';
+import { PoolTokenType, Changes, ClaimEvent, Address } from '../types/interfaces';
 import usePoolToken from './usePoolToken';
 import usePairAddress from './usePairAddress';
 import { useState, useEffect } from 'react';
