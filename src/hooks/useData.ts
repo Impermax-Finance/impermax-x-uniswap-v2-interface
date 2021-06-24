@@ -78,12 +78,6 @@ export function useTokenPrice(poolTokenTypeArg?: PoolTokenType) : number {
   return tokenPrice;
 }
 
-export function useImxPrice() : number {
-  const [imxPrice, setImxPrice] = useState<number>(null);
-  useSubgraphCallback(async subgraph => setImxPrice(await subgraph.getImxPrice()));
-  return imxPrice;
-}
-
 export function useMarketPrice() : number {
   const uniswapV2PairAddress = usePairAddress();
   const [marketPrice, setMarketPrice] = useState<number>(null);

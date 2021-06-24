@@ -9,25 +9,13 @@ import { useTransactionUrlGenerator } from '../../hooks/useUrlGenerator';
 
 export default function AccountLendingPoolFarming(): JSX.Element {
   const symbol = useSymbol(PoolTokenType.Collateral);
-  // TODO: <
-  // const imxPrice = useImxPrice();
-  // TODO: >
   const borrowedA = useBorrowedUSD(PoolTokenType.BorrowableA);
   const borrowedB = useBorrowedUSD(PoolTokenType.BorrowableB);
-  // TODO: <
-  // const totalBorrowedA = useTotalBorrowsUSD(PoolTokenType.BorrowableA);
-  // const totalBorrowedB = useTotalBorrowsUSD(PoolTokenType.BorrowableB);
-  // const rewardSpeedA = useRewardSpeed(PoolTokenType.BorrowableA);
-  // const rewardSpeedB = useRewardSpeed(PoolTokenType.BorrowableB);
-  // TODO: >
   const farmingSharesA = useFarmingShares(PoolTokenType.BorrowableA);
   const farmingSharesB = useFarmingShares(PoolTokenType.BorrowableB);
   const availableReward = useAvailableReward();
   const claimHistory = useClaimHistory();
   const urlGenerator = useTransactionUrlGenerator();
-  // TODO: <
-  // const userRewardPerMonth = (rewardSpeedA * borrowedA / totalBorrowedA + rewardSpeedB * borrowedB / totalBorrowedB) * 24 * 3600 * 30;
-  // TODO: >
 
   const [trackBorrowsState, onTrackBorrows] = useTrackBorrows();
   const [claimsState, onClaims] = useClaims();
