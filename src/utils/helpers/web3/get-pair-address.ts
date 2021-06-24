@@ -7,9 +7,7 @@ import { pack } from '@ethersproject/solidity';
 import { getCreate2Address } from '@ethersproject/address';
 
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
-// ray test touch <<
-import { Address } from 'utils/constants'; // TODO: double-check
-// ray test touch >>
+import { Address } from 'types/interfaces';
 
 const getPairAddress = (
   tokenA: Address,

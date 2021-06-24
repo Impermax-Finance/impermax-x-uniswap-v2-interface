@@ -10,12 +10,10 @@ import LendingPool from './LendingPool';
 import LendingPoolsHeader from './LendingPoolsHeader';
 import PairAddressContext from 'contexts/PairAddress';
 import getUniswapAPY from 'services/get-uniswap-apy';
-// ray test touch <<
 import {
   Address,
   LendingPoolData
 } from 'types/interfaces';
-// ray test touch >>
 import apolloFetcher from 'services/apollo-fetcher';
 import { IMPERMAX_SUBGRAPH_URL } from 'config/web3/subgraph';
 import { BREAKPOINTS } from 'utils/constants/styles';

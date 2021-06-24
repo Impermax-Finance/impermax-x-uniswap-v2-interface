@@ -19,13 +19,11 @@ import {
 } from 'utils/constants/links';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
-// ray test touch <<
 import {
   Address,
   PoolTokenType,
   LendingPoolData
 } from 'types/interfaces';
-// ray test touch >>
 
 const LEVERAGE = 5;
 

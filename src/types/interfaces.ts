@@ -18,7 +18,6 @@ export type FarmingPool = Contract;
 export type ClaimAggregator = Contract;
 export type Claimable = Contract;
 
-// ray test touch <<
 export type LendingPool = {
   uniswapV2Pair: UniswapV2Pair,
   tokenA: ERC20,
@@ -29,15 +28,12 @@ export type LendingPool = {
   farmingPoolA: FarmingPool,
   farmingPoolB: FarmingPool,
 }
-// ray test touch >>
 
-// ray test touch <<
 export enum PoolTokenType {
   Collateral = 'collateral',
   BorrowableA = 'borrowable0',
   BorrowableB = 'borrowable1',
 }
-// ray test touch >>
 
 export enum ApprovalType {
   POOL_TOKEN,
@@ -63,7 +59,6 @@ export interface ImpermaxRouterConfigInterface {
   library: Web3Provider;
 }
 
-// ray test touch <<
 export interface BorrowableData {
   id: Address,
   underlying: TokenData,
@@ -79,7 +74,6 @@ export interface BorrowableData {
   totalBalanceUSD: string,
   farmingPool: FarmingPoolData,
 }
-// ray test touch >>
 
 export interface CollateralData {
   id: Address,
@@ -116,14 +110,12 @@ export interface FarmingPoolData {
   sharePercentage: string,
 }
 
-// ray test touch <<
 export interface LendingPoolData {
   [PoolTokenType.Collateral]: CollateralData,
   [PoolTokenType.BorrowableA]: BorrowableData,
   [PoolTokenType.BorrowableB]: BorrowableData,
   pair: PairData,
 }
-// ray test touch >>
 
 export interface CollateralPosition {
   balance: string,
