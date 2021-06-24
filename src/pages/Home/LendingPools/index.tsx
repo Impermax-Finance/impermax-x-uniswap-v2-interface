@@ -15,7 +15,6 @@ import {
   Address,
   LendingPoolData
 } from 'impermax-router/interfaces';
-// import { usePairList } from 'hooks/useData';
 // ray test touch >>
 import apolloFetcher from 'services/apollo-fetcher';
 import { IMPERMAX_SUBGRAPH_URL } from 'config/web3/subgraph';
@@ -100,27 +99,17 @@ const LendingPools = (): JSX.Element => {
       try {
         const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[chainId];
         const result = await apolloFetcher(impermaxSubgraphUrl, query);
-        const theLendingPools = result.data.lendingPools;
+        const theLendingPools = result.data.lendingPools || []; // TODO: should type properly
         setLendingPools(theLendingPools);
-      } catch (error) {
-        console.log('[useLendingPools useEffect] error.message => ', error.message);
-      }
-    })();
-  }, [chainId]);
 
-  // TODO: should add abort-controller
-  React.useEffect(() => {
-    if (!lendingPools) return;
-
-    (async () => {
-      try {
-        const uniswapV2PairAddresses = lendingPools.map(lendingPool => lendingPool.id);
+        // TODO: should type properly
+        const uniswapV2PairAddresses = theLendingPools.map((theLendingPool: { id: any; }) => theLendingPool.id);
         const uniswapAPYs = await getUniswapAPY(uniswapV2PairAddresses);
 
         const theLendingPoolsData: { [key in Address]: LendingPoolData } = {};
-        for (const lendingPool of lendingPools) {
-          theLendingPoolsData[lendingPool.id] = lendingPool;
-          theLendingPoolsData[lendingPool.id].pair.uniswapAPY = uniswapAPYs[lendingPool.id];
+        for (const theLendingPool of theLendingPools) {
+          theLendingPoolsData[theLendingPool.id] = theLendingPool;
+          theLendingPoolsData[theLendingPool.id].pair.uniswapAPY = uniswapAPYs[theLendingPool.id];
         }
 
         setLendingPoolsData(theLendingPoolsData);
@@ -128,10 +117,10 @@ const LendingPools = (): JSX.Element => {
         // ray test touch <<
         // TODO: should add error handling UX
         // ray test touch >>
-        console.log('[LendingPools useEffect] error.message => ', error.message);
+        console.log('[useLendingPools useEffect] error.message => ', error.message);
       }
     })();
-  }, [lendingPools]);
+  }, [chainId]);
 
   if (!lendingPools || !lendingPoolsData) {
     // ray test touch <<

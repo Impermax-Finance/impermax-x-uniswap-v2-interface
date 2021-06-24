@@ -50,7 +50,6 @@ class Subgraph {
   public getUserData = initializer.getUserData;
 
   // Data Getters
-  public getPairList = cacheData.getPairList;
   public getName = cacheData.getName;
   public getSymbol = cacheData.getSymbol;
   public getDecimals = cacheData.getDecimals;

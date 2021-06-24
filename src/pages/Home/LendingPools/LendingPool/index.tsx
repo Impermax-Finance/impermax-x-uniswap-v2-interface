@@ -7,21 +7,8 @@ import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
 import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
-// ray test touch <<
-// import {
-//   useBorrowAPY,
-//   useSupplyAPY,
-//   useTotalBorrowsUSD,
-//   useSupplyUSD,
-//   useSymbol,
-//   useFarmingAPY,
-//   useUniswapAPY
-// } from 'hooks/useData';
-// import { useTokenIcon } from 'hooks/useUrlGenerator';
-// import useLendingPoolURL from 'hooks/use-lending-pool-url';
 import toAPY from 'services/to-apy';
 import getPairAddress from 'services/get-pair-address';
-// ray test touch >>
 import {
   formatUSD,
   formatPercentage

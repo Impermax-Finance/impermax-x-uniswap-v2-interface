@@ -11,7 +11,6 @@ import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 import { PoolTokenType } from '../impermax-router/interfaces';
 import { useUnderlyingAddress } from './useData';
 
-// ray test touch <<
 export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   const tokenAddress = useUnderlyingAddress(poolTokenTypeArg);
   if (!tokenAddress) return '';
@@ -25,7 +24,6 @@ export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
     // TODO: >
   }
 }
-// ray test touch >>
 
 export function useAddLiquidityUrl() : string {
   const { chainId } = useWeb3React<Web3Provider>();

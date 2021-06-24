@@ -6,13 +6,6 @@ import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 import toAPY from 'services/to-apy';
 import getPairAddress from 'services/get-pair-address';
 
-// Pair List
-export async function getPairList(this: Subgraph) : Promise<Address[]> {
-  const lendingPoolData = await this.getLendingPoolsData();
-
-  return Object.keys(lendingPoolData);
-}
-
 // Name
 export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
   if (poolTokenType === PoolTokenType.Collateral) {
