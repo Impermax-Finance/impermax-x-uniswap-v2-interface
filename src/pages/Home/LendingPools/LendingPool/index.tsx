@@ -1,6 +1,9 @@
 
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
+// ray test touch <<
+import { getAddress } from '@ethersproject/address';
+// ray test touch >>
 
 import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
 import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
@@ -16,8 +19,8 @@ import ImpermaxImage from 'components/UI/ImpermaxImage';
 //   useFarmingAPY,
 //   useUniswapAPY
 // } from 'hooks/useData';
+// import { useTokenIcon } from 'hooks/useUrlGenerator';
 // ray test touch >>
-import { useTokenIcon } from 'hooks/useUrlGenerator';
 import {
   formatUSD,
   formatPercentage
@@ -63,6 +66,8 @@ const TokenPairLabel = ({
       '-space-x-1.5',
       className
     )}>
+    {/* eslint-disable-next-line max-len */}
+    {/* TODO: https://stackoverflow.com/questions/33958429/fallback-image-with-css#:~:text=Place%20your%20image%20in%20a,image%20of%20your%20img%20tag. */}
     <ImpermaxImage
       width={32}
       height={32}
@@ -265,6 +270,17 @@ const getLendingPoolBorrowAPY = (
 
   return borrowAPY;
 };
+
+const getLendingPoolTokenIcon = (
+  // TODO: should type properly
+  lendingPool: any,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): string => {
+  const tokenAddress = lendingPool[poolTokenType].underlying.id;
+  const convertedAddress = getAddress(tokenAddress);
+
+  return `/assets/icons/${convertedAddress}.png`;
+};
 // ray test touch >>
 
 const LendingPool = ({
@@ -337,8 +353,8 @@ const LendingPool = ({
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniswapAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
   // ray test touch >>
-  const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
-  const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
+  const tokenIconA = getLendingPoolTokenIcon(lendingPool, PoolTokenType.BorrowableA);
+  const tokenIconB = getLendingPoolTokenIcon(lendingPool, PoolTokenType.BorrowableB);
 
   return (
     <Link

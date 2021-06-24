@@ -46,16 +46,13 @@ const LendingPools = (): JSX.Element => {
 
     (async () => {
       try {
+        const uniswapV2PairAddresses = lendingPools.map(lendingPool => lendingPool.id);
+        const uniswapAPYs = await getUniswapAPY(uniswapV2PairAddresses);
+
         const theLendingPoolsData: { [key in Address]: LendingPoolData } = {};
-        const uniswapV2PairAddresses = [];
         for (const lendingPool of lendingPools) {
           theLendingPoolsData[lendingPool.id] = lendingPool;
-          uniswapV2PairAddresses.push(lendingPool.id);
-        }
-
-        const uniswapAPY = await getUniswapAPY(uniswapV2PairAddresses);
-        for (const lendingPool of lendingPools) {
-          theLendingPoolsData[lendingPool.id].pair.uniswapAPY = uniswapAPY[lendingPool.id];
+          theLendingPoolsData[lendingPool.id].pair.uniswapAPY = uniswapAPYs[lendingPool.id];
         }
 
         setLendingPoolsData(theLendingPoolsData);
