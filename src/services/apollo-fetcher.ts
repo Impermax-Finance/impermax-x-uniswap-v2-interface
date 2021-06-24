@@ -1,11 +1,12 @@
 
-// ray test touch <<
 import ApolloClient, { ApolloQueryResult } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { DocumentNode } from 'graphql';
 
+// ray test touch <<
 // TODO: should type properly (`any`)
+// ray test touch >>
 const apolloFetcher = (
   subgraphUrl: string,
   query: DocumentNode
@@ -24,4 +25,3 @@ const apolloFetcher = (
 };
 
 export default apolloFetcher;
-// ray test touch >>

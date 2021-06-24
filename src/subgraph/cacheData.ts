@@ -3,6 +3,7 @@ import { Address, PoolTokenType, BorrowableData } from '../impermax-router/inter
 import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import toAPY from 'services/to-apy';
 
 // Pair List
 export async function getPairList(this: Subgraph) : Promise<Address[]> {
@@ -181,7 +182,7 @@ export async function getBorrowRate(this: Subgraph, uniswapV2PairAddress: Addres
 // ray test touch <<
 export async function getBorrowAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
-  return this.toAPY(borrowRate);
+  return toAPY(borrowRate);
 }
 // ray test touch >>
 export async function getNextBorrowRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
@@ -195,7 +196,7 @@ export async function getNextBorrowRate(this: Subgraph, uniswapV2PairAddress: Ad
 }
 export async function getNextBorrowAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
   const borrowRate = await this.getNextBorrowRate(uniswapV2PairAddress, poolTokenType, borrowAmount);
-  return this.toAPY(borrowRate);
+  return toAPY(borrowRate);
 }
 
 // ray test touch <<
@@ -240,7 +241,7 @@ export async function getSupplyRate(this: Subgraph, uniswapV2PairAddress: Addres
 // ray test touch <<
 export async function getSupplyAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const supplyRate = await this.getSupplyRate(uniswapV2PairAddress, poolTokenType);
-  return this.toAPY(supplyRate);
+  return toAPY(supplyRate);
 }
 // ray test touch >>
 export async function getNextSupplyRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, supplyAmount: number) : Promise<number> {
@@ -255,7 +256,7 @@ export async function getNextSupplyRate(this: Subgraph, uniswapV2PairAddress: Ad
 }
 export async function getNextSupplyAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, supplyAmount: number) : Promise<number> {
   const supplyRate = await this.getNextSupplyRate(uniswapV2PairAddress, poolTokenType, supplyAmount);
-  return this.toAPY(supplyRate);
+  return toAPY(supplyRate);
 }
 
 // ray test touch <<
@@ -314,6 +315,6 @@ export async function getNextFarmingAPY(this: Subgraph, uniswapV2PairAddress: Ad
   const additionalBorrowsUSD = borrowAmount * tokenPrice;
   const totalBorrowedUSD = currentBorrowedUSD + additionalBorrowsUSD;
   if (totalBorrowedUSD === 0) return 0;
-  return this.toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
+  return toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
 }
 // ray test touch >>

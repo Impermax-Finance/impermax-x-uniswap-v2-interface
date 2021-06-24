@@ -1,5 +1,4 @@
 
-// ray test touch <<
 // TODO: should go to utils
 const SECONDS_IN_YEAR = 365 * 24 * 3600;
 
@@ -10,4 +9,3 @@ const toAPY = (value: number) : number => {
 };
 
 export default toAPY;
-// ray test touch >>

@@ -16,8 +16,3 @@ export async function normalize(this: ImpermaxRouter, uniswapV2PairAddress: Addr
 export function getDeadline(this: ImpermaxRouter) {
   return BigNumber.from(Math.floor(Date.now() / 1000) + 3600 * 4); // 4 hour deadline
 }
-
-export function toAPY(this: ImpermaxRouter, n: number) : number {
-  const SECONDS_IN_YEAR = 365 * 24 * 3600;
-  return n * SECONDS_IN_YEAR;
-}

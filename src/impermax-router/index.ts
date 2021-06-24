@@ -250,7 +250,6 @@ class ImpermaxRouter {
   // Utils
   public normalize = utils.normalize;
   public getDeadline = utils.getDeadline;
-  public toAPY = utils.toAPY;
 
   // Approve
   public getOwnerSpender = approve.getOwnerSpender;

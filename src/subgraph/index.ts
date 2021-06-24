@@ -106,7 +106,6 @@ class Subgraph {
   public getAccountTotalValueBorrowed = account.getAccountTotalValueBorrowed;
 
   // Utils
-  public toAPY = utils.toAPY;
   public getPairAddress = utils.getPairAddress;
 }
 
