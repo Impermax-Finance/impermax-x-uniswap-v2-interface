@@ -14,6 +14,7 @@ export default function useSubgraph(): Subgraph {
   return context.subgraph;
 }
 
+// ray test touch <<
 export function useSubgraphCallback(f: (subgraph: Subgraph) => void, additionalDeps: Array<any> = []): void {
   const context = React.useContext(SubgraphContext);
   if (context === undefined) {
@@ -35,3 +36,4 @@ export function useSubgraphCallback(f: (subgraph: Subgraph) => void, additionalD
     ...additionalDeps
   ]);
 }
+// ray test touch >>

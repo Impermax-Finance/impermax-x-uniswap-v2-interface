@@ -10,17 +10,17 @@ import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
 import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
-import {
-  // ray test touch <<
-  // useBorrowAPY,
-  // useSupplyAPY,
-  // useTotalBorrowsUSD,
-  // useSupplyUSD,
-  // useSymbol,
-  // useFarmingAPY,
-  // ray test touch >>
-  useUniswapAPY
-} from 'hooks/useData';
+// ray test touch <<
+// import {
+//   useBorrowAPY,
+//   useSupplyAPY,
+//   useTotalBorrowsUSD,
+//   useSupplyUSD,
+//   useSymbol,
+//   useFarmingAPY,
+//   useUniswapAPY
+// } from 'hooks/useData';
+// ray test touch >>
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 import {
   formatUSD,
@@ -342,12 +342,12 @@ const LendingPool = ({
     PAGES.LENDING_POOL
       .replace(`:${PARAMETERS.CHAIN_ID}`, chainID.toString())
       .replace(`:${PARAMETERS.UNISWAP_V2_PAIR_ADDRESS}`, lendingPool.id);
+  const uniswapAPY = lendingPoolsData[lendingPool.id].pair.uniswapAPY;
   // ray test touch >>
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
-  const uniAPY = useUniswapAPY();
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
-  const leveragedAPY = uniAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
+  const leveragedAPY = uniswapAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
 
   return (
     <Link
