@@ -8,7 +8,7 @@ import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import toAPY from 'services/to-apy';
-import getPairAddress from 'services/get-pair-address';
+import getPairAddress from 'utils/helpers/web3/get-pair-address';
 import {
   formatUSD,
   formatPercentage

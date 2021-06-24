@@ -4,7 +4,7 @@ import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 import toAPY from 'services/to-apy';
-import getPairAddress from 'services/get-pair-address';
+import getPairAddress from 'utils/helpers/web3/get-pair-address';
 
 // Name
 export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
