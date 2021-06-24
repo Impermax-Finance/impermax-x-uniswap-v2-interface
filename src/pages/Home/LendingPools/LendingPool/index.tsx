@@ -1,9 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-// ray test touch <<
 import { getAddress } from '@ethersproject/address';
-// ray test touch >>
 
 import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
 import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
@@ -20,21 +18,21 @@ import ImpermaxImage from 'components/UI/ImpermaxImage';
 //   useUniswapAPY
 // } from 'hooks/useData';
 // import { useTokenIcon } from 'hooks/useUrlGenerator';
+// import useLendingPoolURL from 'hooks/use-lending-pool-url';
+import toAPY from 'services/to-apy';
+import getPairAddress from 'services/get-pair-address';
 // ray test touch >>
 import {
   formatUSD,
   formatPercentage
 } from 'utils/format';
-// import useLendingPoolURL from 'hooks/use-lending-pool-url';
 import {
   PAGES,
   PARAMETERS
 } from 'utils/constants/links';
-// ray test touch <<
-import toAPY from 'services/to-apy';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
-import getPairAddress from 'services/get-pair-address';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
+// ray test touch <<
 import {
   Address,
   PoolTokenType,
@@ -176,16 +174,15 @@ const SetWrapper = ({
 );
 
 interface Props {
-  // ray test touch <<
   chainID: number;
   lendingPoolsData: { [key in Address]: LendingPoolData };
+  // ray test touch <<
   // TODO: should type properly
   lendingPool: any;
   // ray test touch >>
   greaterThanMd: boolean;
 }
 
-// ray test touch <<
 const getLendingPoolSymbol = (
   // TODO: should type properly
   lendingPool: any,
@@ -205,8 +202,10 @@ const getLendingPoolSymbol = (
 };
 
 const getLendingPoolSupplyUSD = (
+  // ray test touch <<
   // TODO: should type properly
   lendingPool: any,
+  // ray test touch >>
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
@@ -227,8 +226,10 @@ const getLendingPoolSupplyUSD = (
 };
 
 const getLendingPoolTotalBorrowsUSD = (
+  // ray test touch <<
   // TODO: should type properly
   lendingPool: any,
+  // ray test touch >>
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
@@ -242,8 +243,10 @@ const getLendingPoolTotalBorrowsUSD = (
 };
 
 const getLendingPoolSupplyAPY = (
+  // ray test touch <<
   // TODO: should type properly
   lendingPool: any,
+  // ray test touch >>
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
@@ -261,8 +264,10 @@ const getLendingPoolSupplyAPY = (
 };
 
 const getLendingPoolBorrowAPY = (
+  // ray test touch <<
   // TODO: should type properly
   lendingPool: any,
+  // ray test touch >>
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
@@ -272,8 +277,10 @@ const getLendingPoolBorrowAPY = (
 };
 
 const getLendingPoolTokenIcon = (
+  // ray test touch <<
   // TODO: should type properly
   lendingPool: any,
+  // ray test touch >>
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): string => {
   const tokenAddress = lendingPool[poolTokenType].underlying.id;
@@ -281,17 +288,13 @@ const getLendingPoolTokenIcon = (
 
   return `/assets/icons/${convertedAddress}.png`;
 };
-// ray test touch >>
 
 const LendingPool = ({
-  // ray test touch <<
   chainID,
   lendingPoolsData,
   lendingPool,
-  // ray test touch >>
   greaterThanMd
 }: Props): JSX.Element => {
-  // ray test touch <<
   const symbolA = getLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
   const symbolB = getLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
   const supplyUSDA = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableA);
@@ -352,7 +355,6 @@ const LendingPool = ({
   const uniswapAPY = lendingPoolsData[lendingPool.id].pair.uniswapAPY;
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniswapAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
-  // ray test touch >>
   const tokenIconA = getLendingPoolTokenIcon(lendingPool, PoolTokenType.BorrowableA);
   const tokenIconB = getLendingPoolTokenIcon(lendingPool, PoolTokenType.BorrowableB);
 

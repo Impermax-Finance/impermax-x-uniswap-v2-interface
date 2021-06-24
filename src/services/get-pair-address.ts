@@ -2,12 +2,15 @@
 // ray test touch <<
 // TODO: could be a hook
 // TODO: should go to utils
+// ray test touch >>
 import { keccak256 } from '@ethersproject/keccak256';
 import { pack } from '@ethersproject/solidity';
 import { getCreate2Address } from '@ethersproject/address';
 
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
+// ray test touch <<
 import { Address } from 'utils/constants'; // TODO: double-check
+// ray test touch >>
 
 const getPairAddress = (
   tokenA: Address,
@@ -27,4 +30,3 @@ const getPairAddress = (
 };
 
 export default getPairAddress;
-// ray test touch >>

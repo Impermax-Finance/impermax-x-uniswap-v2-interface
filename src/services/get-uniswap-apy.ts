@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 
-// ray test touch <<
 import gql from 'graphql-tag';
 
 import apolloFetcher from './apollo-fetcher';
@@ -8,15 +7,19 @@ import {
   BLOCKLYTICS_SUBGRAPH_URL,
   UNISWAP_SUBGRAPH_URL
 } from 'config/web3/subgraph';
+// ray test touch <<
 import { Address } from 'impermax-router/interfaces';
+// ray test touch >>
 
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;
 const UNISWAP_FEE = 0.003;
 
+// ray test touch <<
 /**
  * TODO:
  * - double-check/improve naming
  */
+// ray test touch >>
 
 const getBlockByTimestamp = async (timestamp: number) : Promise<number> => {
   const query = gql`{
@@ -109,4 +112,3 @@ const getUniswapAPY = async (
 };
 
 export default getUniswapAPY;
-// ray test touch >>
