@@ -9,38 +9,38 @@ type UniswapV2Pair = Contract;
 type ERC20 = Contract;
 
 interface CollateralData {
-  id: Address,
-  totalBalance: string,
-  safetyMargin: string,
-  liquidationIncentive: string,
-  exchangeRate: string,
-  totalBalanceUSD: string,
+  id: Address;
+  totalBalance: string;
+  safetyMargin: string;
+  liquidationIncentive: string;
+  exchangeRate: string;
+  totalBalanceUSD: string;
 }
 
 interface TokenData {
-  id: Address,
-  symbol: string,
-  name: string,
-  decimals: string,
-  derivedUSD: string,
+  id: Address;
+  symbol: string;
+  name: string;
+  decimals: string;
+  derivedUSD: string;
 }
 
 interface PairData {
-  reserve0: string,
-  reserve1: string,
-  reserveUSD: string,
-  token0Price: string,
-  token1Price: string,
-  derivedUSD: string,
-  uniswapAPY: number,
+  reserve0: string;
+  reserve1: string;
+  reserveUSD: string;
+  token0Price: string;
+  token1Price: string;
+  derivedUSD: string;
+  uniswapAPY: number;
 }
 
 interface FarmingPoolData {
-  epochAmount: string,
-  epochBegin: string,
-  segmentLength: string,
-  vestingBegin: string,
-  sharePercentage: string,
+  epochAmount: string;
+  epochBegin: string;
+  segmentLength: string;
+  vestingBegin: string;
+  sharePercentage: string;
 }
 
 export type Address = string;
@@ -55,26 +55,26 @@ export type ClaimAggregator = Contract;
 export type Claimable = Contract;
 
 export type LendingPool = {
-  uniswapV2Pair: UniswapV2Pair,
-  tokenA: ERC20,
-  tokenB: ERC20,
-  collateral: Collateral,
-  borrowableA: Borrowable,
-  borrowableB: Borrowable,
-  farmingPoolA: FarmingPool,
-  farmingPoolB: FarmingPool,
+  uniswapV2Pair: UniswapV2Pair;
+  tokenA: ERC20;
+  tokenB: ERC20;
+  collateral: Collateral;
+  borrowableA: Borrowable;
+  borrowableB: Borrowable;
+  farmingPoolA: FarmingPool;
+  farmingPoolB: FarmingPool;
 }
 
 export enum PoolTokenType {
   Collateral = 'collateral',
   BorrowableA = 'borrowable0',
-  BorrowableB = 'borrowable1',
+  BorrowableB = 'borrowable1'
 }
 
 export enum ApprovalType {
   POOL_TOKEN,
   UNDERLYING,
-  BORROW,
+  BORROW
 }
 
 export interface Changes {
@@ -96,66 +96,66 @@ export interface ImpermaxRouterConfigInterface {
 }
 
 export interface BorrowableData {
-  id: Address,
-  underlying: TokenData,
-  totalBalance: string,
-  totalBorrows: string,
-  borrowRate: string,
-  reserveFactor: string,
-  kinkBorrowRate: string,
-  kinkUtilizationRate: string,
-  borrowIndex: string,
-  accrualTimestamp: string,
-  exchangeRate: string,
-  totalBalanceUSD: string,
-  farmingPool: FarmingPoolData,
+  id: Address;
+  underlying: TokenData;
+  totalBalance: string;
+  totalBorrows: string;
+  borrowRate: string;
+  reserveFactor: string;
+  kinkBorrowRate: string;
+  kinkUtilizationRate: string;
+  borrowIndex: string;
+  accrualTimestamp: string;
+  exchangeRate: string;
+  totalBalanceUSD: string;
+  farmingPool: FarmingPoolData;
 }
 
 export interface LendingPoolData {
-  [PoolTokenType.Collateral]: CollateralData,
-  [PoolTokenType.BorrowableA]: BorrowableData,
-  [PoolTokenType.BorrowableB]: BorrowableData,
-  pair: PairData,
+  [PoolTokenType.Collateral]: CollateralData;
+  [PoolTokenType.BorrowableA]: BorrowableData;
+  [PoolTokenType.BorrowableB]: BorrowableData;
+  pair: PairData;
 }
 
 export interface CollateralPosition {
-  balance: string,
+  balance: string;
   collateral: {
     lendingPool: {
-      id: Address,
+      id: Address;
     }
   }
 }
 
 export interface SupplyPosition {
-  balance: string,
+  balance: string;
   borrowable: {
     underlying: {
       id: Address
-    },
+    };
     lendingPool: {
-      id: Address,
+      id: Address;
     }
   }
 }
 
 export interface BorrowPosition {
-  borrowBalance: string,
-  borrowIndex: string,
+  borrowBalance: string;
+  borrowIndex: string;
   borrowable: {
     underlying: {
       id: Address
-    },
+    };
     lendingPool: {
-      id: Address,
+      id: Address;
     }
   }
 }
 
 export interface UserData {
-  collateralPositions: { [key in Address]: CollateralPosition },
-  supplyPositions: { [key in Address]: { [key in PoolTokenType]?: SupplyPosition } },
-  borrowPositions: { [key in Address]: { [key in PoolTokenType]?: BorrowPosition } },
+  collateralPositions: { [key in Address]: CollateralPosition };
+  supplyPositions: { [key in Address]: { [key in PoolTokenType]?: SupplyPosition } };
+  borrowPositions: { [key in Address]: { [key in PoolTokenType]?: BorrowPosition } };
 }
 
 export interface TvlData {

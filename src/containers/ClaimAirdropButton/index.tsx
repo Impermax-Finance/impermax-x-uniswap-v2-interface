@@ -66,6 +66,7 @@ const ClaimAirdropButton = (): JSX.Element | null => {
 
         setAirdropData(theAirdropData);
       } catch (error) {
+        // TODO: should add error handling UX
         console.log('[ClaimAirdrop useEffect] error.message => ', error.message);
       }
     })();
@@ -84,9 +85,8 @@ const ClaimAirdropButton = (): JSX.Element | null => {
         setClaimed(!!theClaimed);
       })();
     } catch (error) {
-      // ray test touch <<
+      // TODO: should add error handling UX
       console.log('[ClaimAirdrop useEffect] error.message => ', error.message);
-      // ray test touch >>
     }
   }, [
     airdropData,
@@ -118,9 +118,8 @@ const ClaimAirdropButton = (): JSX.Element | null => {
       setClaimed(true);
     } catch (error) {
       setClaimStatus(STATUSES.REJECTED);
-      // ray test touch <<
+      // TODO: should add error handling UX
       console.log('[handleClaim] error.message => ', error.message);
-      // ray test touch >>
     }
   };
 
