@@ -84,7 +84,9 @@ const ClaimAirdropButton = (): JSX.Element | null => {
         setClaimed(!!theClaimed);
       })();
     } catch (error) {
+      // ray test touch <<
       console.log('[ClaimAirdrop useEffect] error.message => ', error.message);
+      // ray test touch >>
     }
   }, [
     airdropData,
@@ -116,7 +118,9 @@ const ClaimAirdropButton = (): JSX.Element | null => {
       setClaimed(true);
     } catch (error) {
       setClaimStatus(STATUSES.REJECTED);
+      // ray test touch <<
       console.log('[handleClaim] error.message => ', error.message);
+      // ray test touch >>
     }
   };
 

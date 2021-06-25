@@ -5,6 +5,10 @@ import { Web3Provider } from '@ethersproject/providers';
 import gql from 'graphql-tag';
 import clsx from 'clsx';
 import { useMedia } from 'react-use';
+import {
+  useErrorHandler,
+  withErrorBoundary
+} from 'react-error-boundary';
 
 import LendingPool from './LendingPool';
 import LendingPoolsHeader from './LendingPoolsHeader';
@@ -18,6 +22,8 @@ import apolloFetcher from 'services/apollo-fetcher';
 import { IMPERMAX_SUBGRAPH_URL } from 'config/web3/subgraph';
 import { BREAKPOINTS } from 'utils/constants/styles';
 import { ReactComponent as SpinIcon } from 'assets/images/icons/spin.svg';
+import STATUSES from 'utils/constants/statuses';
+import ErrorFallback from 'components/ErrorFallback';
 
 const borrowableStr = `{
   id
@@ -76,7 +82,7 @@ const query = gql`{
   }
 }`;
 
-const LendingPools = (): JSX.Element => {
+const LendingPools = (): JSX.Element | null => {
   const { chainId } = useWeb3React<Web3Provider>();
 
   if (!chainId) {
@@ -86,15 +92,22 @@ const LendingPools = (): JSX.Element => {
   const greaterThanMd = useMedia(`(min-width: ${BREAKPOINTS.md})`);
 
   const [lendingPoolsData, setLendingPoolsData] = React.useState<{ [key in Address]: LendingPoolData }>();
+  // ray test touch <<
   // TODO: should type properly
+  // ray test touch >>
   const [lendingPools, setLendingPools] = React.useState<Array<any>>();
+
+  const [status, setStatus] = React.useState(STATUSES.IDLE);
+  const handleError = useErrorHandler();
 
   // TODO: should add abort-controller
   React.useEffect(() => {
     if (!chainId) return;
+    if (!handleError) return;
 
     (async () => {
       try {
+        setStatus(STATUSES.PENDING);
         const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[chainId];
         const result = await apolloFetcher(impermaxSubgraphUrl, query);
         const theLendingPools = result.data.lendingPools || []; // TODO: should type properly
@@ -111,19 +124,19 @@ const LendingPools = (): JSX.Element => {
         }
 
         setLendingPoolsData(theLendingPoolsData);
+        setStatus(STATUSES.RESOLVED);
       } catch (error) {
-        // ray test touch <<
-        // TODO: should add error handling UX
-        // ray test touch >>
+        setStatus(STATUSES.REJECTED);
+        handleError(error);
         console.log('[useLendingPools useEffect] error.message => ', error.message);
       }
     })();
-  }, [chainId]);
+  }, [
+    chainId,
+    handleError
+  ]);
 
-  if (!lendingPools || !lendingPoolsData) {
-    // ray test touch <<
-    // TODO: should add loading UX
-    // ray test touch >>
+  if (status === STATUSES.IDLE || status === STATUSES.PENDING) {
     return (
       <div
         className={clsx(
@@ -142,26 +155,42 @@ const LendingPools = (): JSX.Element => {
     );
   }
 
-  return (
-    <div className='space-y-3'>
-      {greaterThanMd && (
-        <LendingPoolsHeader className='px-4' />
-      )}
-      {lendingPools.map(lendingPool => {
-        return (
-          <PairAddressContext.Provider
-            value={lendingPool.id}
-            key={lendingPool.id}>
-            <LendingPool
-              chainID={chainId}
-              lendingPoolsData={lendingPoolsData}
-              lendingPool={lendingPool}
-              greaterThanMd={greaterThanMd} />
-          </PairAddressContext.Provider>
-        );
-      })}
-    </div>
-  );
+  if (status === STATUSES.RESOLVED) {
+    if (!lendingPools) {
+      throw new Error('Invalid lendingPools!');
+    }
+    if (!lendingPoolsData) {
+      throw new Error('Invalid lendingPoolsData!');
+    }
+
+    return (
+      <div className='space-y-3'>
+        {greaterThanMd && (
+          <LendingPoolsHeader className='px-4' />
+        )}
+        {lendingPools.map(lendingPool => {
+          return (
+            <PairAddressContext.Provider
+              value={lendingPool.id}
+              key={lendingPool.id}>
+              <LendingPool
+                chainID={chainId}
+                lendingPoolsData={lendingPoolsData}
+                lendingPool={lendingPool}
+                greaterThanMd={greaterThanMd} />
+            </PairAddressContext.Provider>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return null;
 };
 
-export default LendingPools;
+export default withErrorBoundary(LendingPools, {
+  FallbackComponent: ErrorFallback,
+  onReset: () => {
+    window.location.reload();
+  }
+});
