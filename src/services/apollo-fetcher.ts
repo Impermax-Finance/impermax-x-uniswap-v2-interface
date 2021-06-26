@@ -4,11 +4,11 @@ import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { DocumentNode } from 'graphql';
 
-const apolloFetcher = (
+// TODO: should type properly (`any`)
+function apolloFetcher<T = any>(
   subgraphUrl: string,
   query: DocumentNode
-  // TODO: should type properly (`any`)
-): Promise<ApolloQueryResult<any>> => {
+): Promise<ApolloQueryResult<T>> {
   const client = new ApolloClient({
     link: new HttpLink({
       uri: subgraphUrl
@@ -20,6 +20,6 @@ const apolloFetcher = (
     query: query,
     fetchPolicy: 'cache-first'
   });
-};
+}
 
 export default apolloFetcher;

@@ -161,10 +161,7 @@ const SetWrapper = ({
 interface Props {
   chainID: number;
   lendingPoolsData: { [key in Address]: LendingPoolData };
-  // ray test touch <<
-  // TODO: should type properly
-  lendingPool: any;
-  // ray test touch >>
+  lendingPool: LendingPoolData;
   greaterThanMd: boolean;
 }
 
@@ -187,10 +184,7 @@ const getLendingPoolSymbol = (
 };
 
 const getLendingPoolSupplyUSD = (
-  // ray test touch <<
-  // TODO: should type properly
-  lendingPool: any,
-  // ray test touch >>
+  lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
@@ -211,10 +205,7 @@ const getLendingPoolSupplyUSD = (
 };
 
 const getLendingPoolTotalBorrowsUSD = (
-  // ray test touch <<
-  // TODO: should type properly
-  lendingPool: any,
-  // ray test touch >>
+  lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
@@ -228,10 +219,7 @@ const getLendingPoolTotalBorrowsUSD = (
 };
 
 const getLendingPoolSupplyAPY = (
-  // ray test touch <<
-  // TODO: should type properly
-  lendingPool: any,
-  // ray test touch >>
+  lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
@@ -249,10 +237,7 @@ const getLendingPoolSupplyAPY = (
 };
 
 const getLendingPoolBorrowAPY = (
-  // ray test touch <<
-  // TODO: should type properly
-  lendingPool: any,
-  // ray test touch >>
+  lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
@@ -262,10 +247,7 @@ const getLendingPoolBorrowAPY = (
 };
 
 const getLendingPoolTokenIcon = (
-  // ray test touch <<
-  // TODO: should type properly
-  lendingPool: any,
-  // ray test touch >>
+  lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): string => {
   const tokenAddress = lendingPool[poolTokenType].underlying.id;

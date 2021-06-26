@@ -92,10 +92,7 @@ const LendingPools = (): JSX.Element | null => {
   const greaterThanMd = useMedia(`(min-width: ${BREAKPOINTS.md})`);
 
   const [lendingPoolsData, setLendingPoolsData] = React.useState<{ [key in Address]: LendingPoolData }>();
-  // ray test touch <<
-  // TODO: should type properly
-  // ray test touch >>
-  const [lendingPools, setLendingPools] = React.useState<Array<any>>();
+  const [lendingPools, setLendingPools] = React.useState<Array<LendingPoolData>>();
 
   const [status, setStatus] = React.useState(STATUSES.IDLE);
   const handleError = useErrorHandler();
@@ -110,7 +107,7 @@ const LendingPools = (): JSX.Element | null => {
         setStatus(STATUSES.PENDING);
         const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[chainId];
         const result = await apolloFetcher(impermaxSubgraphUrl, query);
-        const theLendingPools = result.data.lendingPools || []; // TODO: should type properly
+        const theLendingPools = result.data.lendingPools;
         setLendingPools(theLendingPools);
 
         // TODO: should type properly

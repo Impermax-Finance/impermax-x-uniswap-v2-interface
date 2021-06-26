@@ -36,11 +36,9 @@ interface Pair {
 }
 
 interface FarmingPool {
-  // ray test touch <<
   distributor: {
     id: string;
   };
-  // ray test touch >>
   epochAmount: string;
   epochBegin: string;
   segmentLength: string;
@@ -121,6 +119,7 @@ export interface LendingPoolData {
   [PoolTokenType.BorrowableA]: Borrowable;
   [PoolTokenType.BorrowableB]: Borrowable;
   [PoolTokenType.Collateral]: Collateral;
+  id: string;
   pair: Pair;
 }
 
