@@ -12,13 +12,6 @@ import { Address } from 'types/interfaces';
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;
 const UNISWAP_FEE = 0.003;
 
-// ray test touch <<
-/**
- * TODO:
- * - double-check/improve naming
- */
-// ray test touch >>
-
 const getBlockByTimestamp = async (timestamp: number) : Promise<number> => {
   const query = gql`{
     blocks (first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp + 600} }) {
@@ -33,7 +26,9 @@ const getBlockByTimestamp = async (timestamp: number) : Promise<number> => {
 const getPastVolume = async (
   uniswapV2PairAddresses: Array<string>,
   seconds: number
-): Promise<{ [key in Address]: number }> => {
+): Promise<{
+  [key in Address]: number;
+}> => {
   const timestamp = Math.floor((new Date()).getTime() / 1000);
   const blockNumber = await getBlockByTimestamp(timestamp - seconds);
   let addressString = '';
@@ -55,9 +50,16 @@ const getPastVolume = async (
   return pastVolume;
 };
 
-const getCurrentVolumeAndReserves = async (
+const getCurrentVolumesAndCurrentReserves = async (
   uniswapV2PairAddresses: Array<string>
-) : Promise<{ currentVolume: {[key in Address]: number}; currentReserve: {[key in Address]: number}; }> => {
+) : Promise<{
+  currentVolumes: {
+    [key in Address]: number;
+  };
+  currentReserves: {
+    [key in Address]: number;
+  };
+}> => {
   let addressString = '';
   for (const uniswapV2PairAddress of uniswapV2PairAddresses) {
     addressString += `"${uniswapV2PairAddress.toLowerCase()}",`;
@@ -70,37 +72,37 @@ const getCurrentVolumeAndReserves = async (
     }
   }`;
   const result = await apolloFetcher(UNISWAP_SUBGRAPH_URL, query);
-  const currentVolume: {[key in Address]: number} = {};
-  const currentReserve: {[key in Address]: number} = {};
+  const currentVolumes: {[key in Address]: number} = {};
+  const currentReserves: {[key in Address]: number} = {};
   for (const pair of result.data.pairs) {
-    currentVolume[pair.id] = parseInt(pair.volumeUSD);
-    currentReserve[pair.id] = parseInt(pair.reserveUSD);
+    currentVolumes[pair.id] = parseInt(pair.volumeUSD);
+    currentReserves[pair.id] = parseInt(pair.reserveUSD);
   }
 
   return {
-    currentReserve,
-    currentVolume
+    currentReserves,
+    currentVolumes
   };
 };
 
-const getUniswapAPY = async (
+const getUniswapAPYs = async (
   uniswapV2PairAddresses: Array<string>,
   seconds: number = 60 * 60 * 24 * 7
 ): Promise<{ [key in Address]: number }> => {
   const pastVolume = await getPastVolume(uniswapV2PairAddresses, seconds);
   const {
-    currentVolume,
-    currentReserve
-  } = await getCurrentVolumeAndReserves(uniswapV2PairAddresses);
+    currentVolumes,
+    currentReserves
+  } = await getCurrentVolumesAndCurrentReserves(uniswapV2PairAddresses);
   const uniswapAPY: {[key in Address]: number} = {};
   for (const uniswapV2PairAddress of uniswapV2PairAddresses) {
-    if (!currentReserve[uniswapV2PairAddress]) {
+    if (!currentReserves[uniswapV2PairAddress]) {
       uniswapAPY[uniswapV2PairAddress] = 0;
       continue;
     }
-    const cumVolumePast = pastVolume[uniswapV2PairAddress] ? pastVolume[uniswapV2PairAddress] : 0;
-    const cumVolumeNow = currentVolume[uniswapV2PairAddress];
-    const reserveUSD = currentReserve[uniswapV2PairAddress];
+    const cumVolumePast = pastVolume[uniswapV2PairAddress] ?? 0;
+    const cumVolumeNow = currentVolumes[uniswapV2PairAddress];
+    const reserveUSD = currentReserves[uniswapV2PairAddress];
     const volumeUSD = cumVolumeNow - cumVolumePast;
     const yearlyVolume = volumeUSD * SECONDS_IN_YEAR / seconds;
     const yearlyFee = yearlyVolume * UNISWAP_FEE;
@@ -110,4 +112,4 @@ const getUniswapAPY = async (
   return uniswapAPY;
 };
 
-export default getUniswapAPY;
+export default getUniswapAPYs;

@@ -13,7 +13,7 @@ import {
 import LendingPool from './LendingPool';
 import LendingPoolsHeader from './LendingPoolsHeader';
 import PairAddressContext from 'contexts/PairAddress';
-import getUniswapAPY from 'services/get-uniswap-apy';
+import getUniswapAPYs from 'services/get-uniswap-apys';
 import {
   Address,
   LendingPoolData
@@ -97,9 +97,9 @@ const LendingPools = (): JSX.Element | null => {
   const [status, setStatus] = React.useState(STATUSES.IDLE);
   const handleError = useErrorHandler();
 
-  // ray test touch <<
+  // ray test touch <
   // TODO: should add abort-controller
-  // ray test touch >>
+  // ray test touch >
   React.useEffect(() => {
     if (!chainId) return;
     if (!handleError) return;
@@ -114,7 +114,7 @@ const LendingPools = (): JSX.Element | null => {
 
         // TODO: should type properly
         const uniswapV2PairAddresses = theLendingPools.map((theLendingPool: { id: any; }) => theLendingPool.id);
-        const uniswapAPYs = await getUniswapAPY(uniswapV2PairAddresses);
+        const uniswapAPYs = await getUniswapAPYs(uniswapV2PairAddresses);
 
         const theLendingPoolsData: { [key in Address]: LendingPoolData } = {};
         for (const theLendingPool of theLendingPools) {
