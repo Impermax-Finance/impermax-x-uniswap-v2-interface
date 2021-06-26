@@ -128,6 +128,9 @@ const ClaimAirdropButton = (): JSX.Element | null => {
 
   return (
     <ImpermaxJadeContainedButton
+      style={{
+        height: 36
+      }}
       pending={claimStatus === STATUSES.PENDING}
       onClick={handleClaim}>
       Claim {formatAmount(parseFloat(formatUnits(airdropData.amount)))} IMX

@@ -174,6 +174,7 @@ const LendingPools = (): JSX.Element | null => {
               key={lendingPool.id}>
               <LendingPool
                 chainID={chainId}
+                // TODO: could combine `lendingPoolsData` and `lendingPool`
                 lendingPoolsData={lendingPoolsData}
                 lendingPool={lendingPool}
                 greaterThanMd={greaterThanMd} />

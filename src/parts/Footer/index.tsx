@@ -396,7 +396,11 @@ const Footer = React.forwardRef<Ref, Props>(({
                 'sm:ml-3',
                 'sm:flex-shrink-0'
               )}>
-              <ImpermaxJadeContainedButton type='submit'>
+              <ImpermaxJadeContainedButton
+                style={{
+                  height: '100%'
+                }}
+                type='submit'>
                 Subscribe
               </ImpermaxJadeContainedButton>
             </div>

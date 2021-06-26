@@ -35,6 +35,9 @@ const NetworkConnect = (): JSX.Element | null => {
   return (
     <>
       <ImpermaxDefaultOutlinedButton
+        style={{
+          height: 36
+        }}
         onClick={handleNetworkModalOpen}
         startIcon={
           <ImpermaxImage

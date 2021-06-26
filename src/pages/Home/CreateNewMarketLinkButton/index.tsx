@@ -20,7 +20,10 @@ const CreateNewMarketLinkButton = (): JSX.Element | null => {
       )}>
       <Link to={PAGES.CREATE_NEW_PAIR}>
         {/* TODO: should be a link instead of a button */}
-        <ImpermaxJadeContainedButton>
+        <ImpermaxJadeContainedButton
+          style={{
+            height: 36
+          }}>
           Create New Market
         </ImpermaxJadeContainedButton>
       </Link>

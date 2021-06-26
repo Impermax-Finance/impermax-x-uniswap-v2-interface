@@ -190,11 +190,11 @@ const getLendingPoolSupplyUSD = (
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
   const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
   const supply = totalBalance + totalBorrows;
-  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply;
+  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply; // TODO: could be a function
 
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
-  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor);
+  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
 
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
   const currentSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
@@ -213,6 +213,7 @@ const getLendingPoolTotalBorrowsUSD = (
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const currentTotalBorrows = totalBorrows * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
   const tokenPrice = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
+  // TODO: it's also from lendingPool[poolTokenType].totalBorrowsUSD. What is different?
   const totalBorrowsUSD = currentTotalBorrows * tokenPrice;
 
   return totalBorrowsUSD;
@@ -225,11 +226,11 @@ const getLendingPoolSupplyAPY = (
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
   const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
   const supply = totalBalance + totalBorrows;
-  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply;
+  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply; // TODO: could be a function
 
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
-  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor);
+  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
 
   const supplyAPY = toAPY(supplyRate);
 

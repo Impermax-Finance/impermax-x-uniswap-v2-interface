@@ -34,6 +34,9 @@ const JadeButtonGroupItem = ({
 
   return (
     <ImpermaxButtonBase
+      style={{
+        height: 38
+      }}
       type='button'
       className={clsx(
         'focus:outline-none',
@@ -50,8 +53,8 @@ const JadeButtonGroupItem = ({
         'bg-impermaxJade-600',
         'hover:bg-impermaxJade-700',
 
-        'first:rounded-l-md',
-        'last:rounded-r-md',
+        'first:rounded-l',
+        'last:rounded-r',
         'px-4',
         'py-2',
         'text-sm',
