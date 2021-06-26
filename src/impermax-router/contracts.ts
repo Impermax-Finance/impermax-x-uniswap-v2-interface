@@ -5,7 +5,7 @@
 // TODO: >
 
 import ImpermaxRouter from '.';
-import { Address, LendingPool, PoolTokenType, Contract, FarmingPool, Claimable } from '../types/interfaces';
+import { Address, LendingPool, PoolTokenType, Contract, FarmingPoolContract, ClaimableContract } from '../types/interfaces';
 
 export function getLendingPoolCache(this: ImpermaxRouter, uniswapV2PairAddress: Address) {
   if (!(uniswapV2PairAddress in this.lendingPoolCache)) {
@@ -104,7 +104,7 @@ export async function getFarmingPool(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
   poolTokenType: PoolTokenType
-) : Promise<FarmingPool> {
+) : Promise<FarmingPoolContract> {
   const lendingPool = await this.getLendingPool(uniswapV2PairAddress);
 
   if (poolTokenType === PoolTokenType.BorrowableA) {
@@ -128,13 +128,13 @@ export function getClaimableCache(this: ImpermaxRouter, claimableAddress: Addres
 export async function initializeClaimable(
   this: ImpermaxRouter,
   claimableAddress: Address
-) : Promise<Claimable> {
+) : Promise<ClaimableContract> {
   return this.newClaimable(claimableAddress);
 }
 export async function getClaimable(
   this: ImpermaxRouter,
   claimableAddress: Address
-) : Promise<Claimable> {
+) : Promise<ClaimableContract> {
   const cache = this.getClaimableCache(claimableAddress);
   if (!cache.contract) cache.contract = this.initializeClaimable(claimableAddress);
   return cache.contract;

@@ -18,19 +18,19 @@ import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
 import ClaimAggregatorJSON from 'abis/contracts/ClaimAggregator.json';
 import ClaimableJSON from 'abis/contracts/IClaimable.json';
 import {
-  Router,
+  RouterContract,
   Address,
   LendingPool,
   PoolTokenType,
   ImpermaxRouterConfigInterface,
-  Factory,
-  SimpleUniswapOracle,
+  FactoryContract,
+  SimpleUniswapOracleContract,
   AirdropData,
-  MerkleDistributor,
-  ClaimAggregator,
+  MerkleDistributorContract,
+  ClaimAggregatorContract,
   ClaimEvent,
-  Claimable,
-  UniswapV2Factory
+  ClaimableContract,
+  UniswapV2FactoryContract
 } from '../types/interfaces';
 import * as contracts from './contracts';
 import * as fetchers from './fetchers';
@@ -52,12 +52,12 @@ class ImpermaxRouter {
   chainId: number;
   uiMargin: number;
   dust: number;
-  router: Router;
-  factory: Factory;
-  uniswapV2Factory: UniswapV2Factory;
-  simpleUniswapOracle: SimpleUniswapOracle;
-  merkleDistributor: MerkleDistributor;
-  claimAggregator: ClaimAggregator;
+  router: RouterContract;
+  factory: FactoryContract;
+  uniswapV2Factory: UniswapV2FactoryContract;
+  simpleUniswapOracle: SimpleUniswapOracleContract;
+  merkleDistributor: MerkleDistributorContract;
+  claimAggregator: ClaimAggregatorContract;
   account: Address;
   priceInverted: boolean;
   lendingPoolCache: {
@@ -87,7 +87,7 @@ class ImpermaxRouter {
   };
   claimableCache: {
     [key in Address]?: {
-      contract?: Claimable,
+      contract?: ClaimableContract,
       availableClaimable?: number,
     }
   };

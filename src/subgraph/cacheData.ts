@@ -1,5 +1,5 @@
 /* eslint-disable no-invalid-this */
-import { Address, PoolTokenType, BorrowableData } from '../types/interfaces';
+import { Address, PoolTokenType, Borrowable } from '../types/interfaces';
 import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
 import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
@@ -66,7 +66,7 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
   if (poolTokenType === PoolTokenType.Collateral) {
     return parseFloat(lendingPoolData.pair.derivedUSD);
   }
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).underlying.derivedUSD);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).underlying.derivedUSD);
 }
 export async function getImxPrice(this: Subgraph) : Promise<number> {
   const imxAddress = IMX_ADDRESSES[this.chainId];
@@ -102,37 +102,37 @@ export async function getLiquidationIncentive(this: Subgraph, uniswapV2PairAddre
 // Reserve Factor
 export async function getReserveFactor(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).reserveFactor);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).reserveFactor);
 }
 
 // Kink Borrow Rate
 export async function getKinkBorrowRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).kinkBorrowRate);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).kinkBorrowRate);
 }
 
 // Kink Utilization Rate
 export async function getKinkUtilizationRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).kinkUtilizationRate);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).kinkUtilizationRate);
 }
 
 // Borrow Index
 export async function getBorrowIndex(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).borrowIndex);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).borrowIndex);
 }
 
 // Accrue Timestamp
 export async function getAccrualTimestamp(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).accrualTimestamp);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).accrualTimestamp);
 }
 
 // Total borrows
 export async function getTotalBorrows(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).totalBorrows);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).totalBorrows);
 }
 export async function getCurrentTotalBorrows(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const storedAmount = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
@@ -149,7 +149,7 @@ export async function getTotalBorrowsUSD(this: Subgraph, uniswapV2PairAddress: A
 // Borrow rate
 export async function getBorrowRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).borrowRate);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).borrowRate);
 }
 export async function getBorrowAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
@@ -244,7 +244,7 @@ export async function getTotalValueBorrowed(this: Subgraph) : Promise<number> {
 // Reward Speed
 export async function getRewardSpeed(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  const farmingPoolData = (lendingPoolData[poolTokenType] as BorrowableData).farmingPool;
+  const farmingPoolData = (lendingPoolData[poolTokenType] as Borrowable).farmingPool;
   if (farmingPoolData === null) return 0;
   const segmentLength = parseInt(farmingPoolData.segmentLength);
   const epochBegin = parseInt(farmingPoolData.epochBegin);

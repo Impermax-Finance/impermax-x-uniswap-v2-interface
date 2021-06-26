@@ -4,65 +4,70 @@ import { Contract } from '@ethersproject/contracts';
 
 import Subgraph from 'subgraph';
 
-type Borrowable = Contract;
-type UniswapV2Pair = Contract;
-type ERC20 = Contract;
+type BorrowableContract = Contract;
+type UniswapV2PairContract = Contract;
+type ERC20Contract = Contract;
 
-interface CollateralData {
-  id: Address;
-  totalBalance: string;
-  safetyMargin: string;
-  liquidationIncentive: string;
+interface Collateral {
   exchangeRate: string;
+  id: Address;
+  liquidationIncentive: string;
+  safetyMargin: string;
+  totalBalance: string;
   totalBalanceUSD: string;
 }
 
-interface TokenData {
-  id: Address;
-  symbol: string;
-  name: string;
+interface Underlying {
   decimals: string;
   derivedUSD: string;
+  id: Address;
+  name: string;
+  symbol: string;
 }
 
-interface PairData {
+interface Pair {
+  derivedUSD: string;
   reserve0: string;
   reserve1: string;
   reserveUSD: string;
   token0Price: string;
   token1Price: string;
-  derivedUSD: string;
   uniswapAPY: number;
 }
 
-interface FarmingPoolData {
+interface FarmingPool {
+  // ray test touch <<
+  distributor: {
+    id: string;
+  };
+  // ray test touch >>
   epochAmount: string;
   epochBegin: string;
   segmentLength: string;
-  vestingBegin: string;
   sharePercentage: string;
+  vestingBegin: string;
 }
 
 export type Address = string;
-export type Router = Contract;
-export type Factory = Contract;
-export type SimpleUniswapOracle = Contract;
-export type UniswapV2Factory = Contract;
-export type Collateral = Contract;
-export type MerkleDistributor = Contract;
-export type FarmingPool = Contract;
-export type ClaimAggregator = Contract;
-export type Claimable = Contract;
+export type RouterContract = Contract;
+export type FactoryContract = Contract;
+export type SimpleUniswapOracleContract = Contract;
+export type UniswapV2FactoryContract = Contract;
+export type CollateralContract = Contract;
+export type MerkleDistributorContract = Contract;
+export type FarmingPoolContract = Contract;
+export type ClaimAggregatorContract = Contract;
+export type ClaimableContract = Contract;
 
 export type LendingPool = {
-  uniswapV2Pair: UniswapV2Pair;
-  tokenA: ERC20;
-  tokenB: ERC20;
-  collateral: Collateral;
-  borrowableA: Borrowable;
-  borrowableB: Borrowable;
-  farmingPoolA: FarmingPool;
-  farmingPoolB: FarmingPool;
+  uniswapV2Pair: UniswapV2PairContract;
+  tokenA: ERC20Contract;
+  tokenB: ERC20Contract;
+  collateral: CollateralContract;
+  borrowableA: BorrowableContract;
+  borrowableB: BorrowableContract;
+  farmingPoolA: FarmingPoolContract;
+  farmingPoolB: FarmingPoolContract;
 }
 
 export enum PoolTokenType {
@@ -95,27 +100,28 @@ export interface ImpermaxRouterConfigInterface {
   library: Web3Provider;
 }
 
-export interface BorrowableData {
-  id: Address;
-  underlying: TokenData;
-  totalBalance: string;
-  totalBorrows: string;
+export interface Borrowable {
+  accrualTimestamp: string;
+  borrowIndex: string;
   borrowRate: string;
-  reserveFactor: string;
+  exchangeRate: string;
+  farmingPool: FarmingPool;
+  id: Address;
   kinkBorrowRate: string;
   kinkUtilizationRate: string;
-  borrowIndex: string;
-  accrualTimestamp: string;
-  exchangeRate: string;
+  reserveFactor: string;
+  totalBalance: string;
   totalBalanceUSD: string;
-  farmingPool: FarmingPoolData;
+  totalBorrows: string;
+  totalBorrowsUSD: string;
+  underlying: Underlying;
 }
 
 export interface LendingPoolData {
-  [PoolTokenType.Collateral]: CollateralData;
-  [PoolTokenType.BorrowableA]: BorrowableData;
-  [PoolTokenType.BorrowableB]: BorrowableData;
-  pair: PairData;
+  [PoolTokenType.BorrowableA]: Borrowable;
+  [PoolTokenType.BorrowableB]: Borrowable;
+  [PoolTokenType.Collateral]: Collateral;
+  pair: Pair;
 }
 
 export interface CollateralPosition {
