@@ -1,7 +1,5 @@
 
-// ray test touch <<
 // TODO: could be a hook
-// ray test touch >>
 import { keccak256 } from '@ethersproject/keccak256';
 import { pack } from '@ethersproject/solidity';
 import { getCreate2Address } from '@ethersproject/address';

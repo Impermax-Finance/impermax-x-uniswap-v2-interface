@@ -26,6 +26,7 @@ const getBlockByTimestamp = async (timestamp: number) : Promise<number> => {
     }
   }`;
   const result = await apolloFetcher(BLOCKLYTICS_SUBGRAPH_URL, query);
+
   return result.data.blocks[0].number;
 };
 

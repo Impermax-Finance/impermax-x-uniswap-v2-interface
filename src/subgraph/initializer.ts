@@ -28,7 +28,6 @@ import {
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;
 const UNISWAP_FEE = 0.003;
 
-// ray test touch <<
 async function fetchLendingPools(this: Subgraph): Promise<any[]> {
   const borrowableStr = `{
     id
@@ -92,9 +91,7 @@ async function fetchLendingPools(this: Subgraph): Promise<any[]> {
 
   return result.data.lendingPools;
 }
-// ray test touch >>
 
-// ray test touch <<
 // Uniswap APY
 async function fetchBlockByTimestamp(this: Subgraph, timestamp: number): Promise<number> {
   const query = gql`{
@@ -105,9 +102,7 @@ async function fetchBlockByTimestamp(this: Subgraph, timestamp: number): Promise
   const result = await apolloFetcher(BLOCKLYTICS_SUBGRAPH_URL, query);
   return result.data.blocks[0].number;
 }
-// ray test touch >>
 
-// ray test touch <<
 async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number): Promise<{ [key in Address]: number }> {
   const timestamp = Math.floor((new Date()).getTime() / 1000);
   const blockNumber = await this.fetchBlockByTimestamp(timestamp - seconds);
@@ -128,9 +123,7 @@ async function fetchPastVolume(this: Subgraph, uniswapV2PairAddresses: string[],
   }
   return pastVolume;
 }
-// ray test touch >>
 
-// ray test touch <<
 async function fetchCurrentVolumeAndReserves(this: Subgraph, uniswapV2PairAddresses: string[]): Promise<{
   currentVolume: { [key in Address]: number },
   currentReserve: { [key in Address]: number },
@@ -155,9 +148,7 @@ async function fetchCurrentVolumeAndReserves(this: Subgraph, uniswapV2PairAddres
   }
   return { currentReserve, currentVolume };
 }
-// ray test touch >>
 
-// ray test touch <<
 async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: string[], seconds: number = 60 * 60 * 24 * 7): Promise<{ [key in Address]: number }> {
   const pastVolume = await this.fetchPastVolume(uniswapV2PairAddresses, seconds);
   const { currentVolume, currentReserve } = await this.fetchCurrentVolumeAndReserves(uniswapV2PairAddresses);
@@ -177,9 +168,7 @@ async function fetchUniswapAPY(this: Subgraph, uniswapV2PairAddresses: string[],
   }
   return uniswapAPY;
 }
-// ray test touch >>
 
-// ray test touch <<
 async function initializeLendingPoolsData(this: Subgraph): Promise<{ [key in Address]?: LendingPoolData }> {
   const lendingPoolsData: { [key in Address]?: LendingPoolData } = {};
   try {
@@ -200,8 +189,6 @@ async function initializeLendingPoolsData(this: Subgraph): Promise<{ [key in Add
 
   return lendingPoolsData;
 }
-// ray test touch >>
-// ray test touch <<
 async function getLendingPoolsData(this: Subgraph): Promise<{ [key in Address]: LendingPoolData }> {
   if (!this.lendingPoolsData) {
     this.lendingPoolsData = this.initializeLendingPoolsData();
@@ -219,7 +206,6 @@ async function getLendingPoolData(
 
   return lendingPoolData;
 }
-// ray test touch >>
 
 // TVL Data
 async function initializeTvlData(this: Subgraph): Promise<TvlData> {

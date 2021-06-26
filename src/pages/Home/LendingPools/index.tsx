@@ -97,7 +97,9 @@ const LendingPools = (): JSX.Element | null => {
   const [status, setStatus] = React.useState(STATUSES.IDLE);
   const handleError = useErrorHandler();
 
+  // ray test touch <<
   // TODO: should add abort-controller
+  // ray test touch >>
   React.useEffect(() => {
     if (!chainId) return;
     if (!handleError) return;
