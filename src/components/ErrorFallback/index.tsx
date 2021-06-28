@@ -5,7 +5,7 @@ import ImpermaxLink from 'components/UI/ImpermaxLink';
 
 interface Props {
   error: Error;
-  resetErrorBoundary: () => void;
+  resetErrorBoundary?: () => void;
 }
 
 const handleRefresh = () => {
@@ -29,10 +29,10 @@ const ErrorFallback = ({
         className={clsx(
           'underline',
           'cursor-pointer'
-        )}
-        style={{ textDecoration: 'underline' }}>
+        )}>
         refresh
-      </ImpermaxLink>.
+      </ImpermaxLink>
+      .
     </span>
   </p>
 );
