@@ -49,8 +49,6 @@ const TokenPairLabel = ({
       '-space-x-1.5',
       className
     )}>
-    {/* eslint-disable-next-line max-len */}
-    {/* TODO: https://stackoverflow.com/questions/33958429/fallback-image-with-css#:~:text=Place%20your%20image%20in%20a,image%20of%20your%20img%20tag. */}
     <ImpermaxImage
       width={32}
       height={32}
@@ -62,7 +60,9 @@ const TokenPairLabel = ({
         'ring-white'
       )}
       src={tokenIconA}
-      alt='' />
+      placeholder='/assets/default.png'
+      error='/assets/default.png'
+      alt='Token A' />
     <ImpermaxImage
       width={32}
       height={32}
@@ -73,7 +73,9 @@ const TokenPairLabel = ({
         'ring-white'
       )}
       src={tokenIconB}
-      alt='' />
+      placeholder='/assets/default.png'
+      error='/assets/default.png'
+      alt='Token B' />
     <span
       className={clsx(
         'font-medium',
@@ -111,7 +113,9 @@ const TokenLabel = ({
         'ring-white'
       )}
       src={tokenIcon}
-      alt='' />
+      placeholder='/assets/default.png'
+      error='/assets/default.png'
+      alt='Token' />
     <span
       className={clsx(
         'font-medium',
