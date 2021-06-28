@@ -16,11 +16,11 @@ export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   if (!tokenAddress) return '';
   const convertedAddress = getAddress(tokenAddress);
   try {
-    return `/assets/icons/${convertedAddress}.png`;
+    return `/assets/images/token-icons/${convertedAddress}.png`;
   } catch {
     // TODO: <
     // TODO: not working
-    return '/assets/default.png';
+    return '/assets/images/default.png';
     // TODO: >
   }
 }

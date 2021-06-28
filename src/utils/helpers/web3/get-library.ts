@@ -1,7 +1,7 @@
 
 import { Web3Provider } from '@ethersproject/providers';
 
-import { POLLING_INTERVAL } from 'config/web3/networks';
+import { POLLING_INTERVAL } from 'config/web3/chains';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function getLibrary(provider: any): Web3Provider {

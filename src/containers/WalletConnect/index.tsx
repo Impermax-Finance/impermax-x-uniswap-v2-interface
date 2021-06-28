@@ -8,7 +8,7 @@ import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContaine
 import useEagerConnect from 'utils/hooks/web3/use-eager-connect';
 import useInactiveListener from 'utils/hooks/web3/use-inactive-listener';
 import { injected } from 'utils/helpers/web3/connectors';
-import getBlockchainNetworkErrorMessage from 'utils/helpers/web3/get-blockchain-network-error-message';
+import getChainErrorMessage from 'utils/helpers/web3/get-chain-error-message';
 
 const WalletConnect = (): JSX.Element => {
   const {
@@ -76,7 +76,7 @@ const WalletConnect = (): JSX.Element => {
           open={!!error}
           onClose={handleDeactivate}
           title='Connection Failed'
-          description={getBlockchainNetworkErrorMessage(error)} />
+          description={getChainErrorMessage(error)} />
       )}
     </>
   );

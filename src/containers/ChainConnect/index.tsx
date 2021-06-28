@@ -3,16 +3,16 @@ import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
-import NetworkConnectModal from './NetworkConnectModal';
+import ChainConnectModal from './ChainConnectModal';
 import ImpermaxDefaultOutlinedButton from 'components/buttons/ImpermaxDefaultOutlinedButton';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import {
-  NETWORK_ICON_PATHS,
-  NETWORK_LABELS
-} from 'config/web3/networks';
+  CHAIN_ICON_PATHS,
+  CHAIN_LABELS
+} from 'config/web3/chains';
 
-const NetworkConnect = (): JSX.Element | null => {
-  const [networkModalOpen, setNetworkModalOpen] = React.useState(false);
+const ChainConnect = (): JSX.Element | null => {
+  const [chainModalOpen, setChainModalOpen] = React.useState(false);
 
   const {
     active,
@@ -24,12 +24,12 @@ const NetworkConnect = (): JSX.Element | null => {
     throw new Error('Invalid chain ID!');
   }
 
-  const handleNetworkModalOpen = () => {
-    setNetworkModalOpen(true);
+  const handleChainModalOpen = () => {
+    setChainModalOpen(true);
   };
 
-  const handleNetworkModalClose = () => {
-    setNetworkModalOpen(false);
+  const handleChainModalClose = () => {
+    setChainModalOpen(false);
   };
 
   return (
@@ -38,7 +38,7 @@ const NetworkConnect = (): JSX.Element | null => {
         style={{
           height: 36
         }}
-        onClick={handleNetworkModalOpen}
+        onClick={handleChainModalOpen}
         startIcon={
           <ImpermaxImage
             className='rounded'
@@ -46,16 +46,16 @@ const NetworkConnect = (): JSX.Element | null => {
               width: 18,
               height: 18
             }}
-            src={NETWORK_ICON_PATHS[chainId]}
-            alt='Switch Network' />
+            src={CHAIN_ICON_PATHS[chainId]}
+            alt='Switch Chain' />
         }>
-        {NETWORK_LABELS[chainId]}
+        {CHAIN_LABELS[chainId]}
       </ImpermaxDefaultOutlinedButton>
-      <NetworkConnectModal
-        open={networkModalOpen}
-        onClose={handleNetworkModalClose} />
+      <ChainConnectModal
+        open={chainModalOpen}
+        onClose={handleChainModalClose} />
     </>
   );
 };
 
-export default NetworkConnect;
+export default ChainConnect;

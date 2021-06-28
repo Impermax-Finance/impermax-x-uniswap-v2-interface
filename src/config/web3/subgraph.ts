@@ -1,5 +1,5 @@
 
-import { CHAIN_IDS } from 'config/web3/networks';
+import { CHAIN_IDS } from 'config/web3/chains';
 
 const IMPERMAX_SUBGRAPH_URL: {
   [chainId: number]: string;

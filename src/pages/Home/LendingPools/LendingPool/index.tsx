@@ -60,8 +60,8 @@ const TokenPairLabel = ({
         'ring-white'
       )}
       src={tokenIconA}
-      placeholder='/assets/default.png'
-      error='/assets/default.png'
+      placeholder='/assets/images/default.png'
+      error='/assets/images/default.png'
       alt='Token A' />
     <ImpermaxImage
       width={32}
@@ -73,8 +73,8 @@ const TokenPairLabel = ({
         'ring-white'
       )}
       src={tokenIconB}
-      placeholder='/assets/default.png'
-      error='/assets/default.png'
+      placeholder='/assets/images/default.png'
+      error='/assets/images/default.png'
       alt='Token B' />
     <span
       className={clsx(
@@ -113,8 +113,8 @@ const TokenLabel = ({
         'ring-white'
       )}
       src={tokenIcon}
-      placeholder='/assets/default.png'
-      error='/assets/default.png'
+      placeholder='/assets/images/default.png'
+      error='/assets/images/default.png'
       alt='Token' />
     <span
       className={clsx(
@@ -258,7 +258,7 @@ const getLendingPoolTokenIcon = (
   const tokenAddress = lendingPool[poolTokenType].underlying.id;
   const convertedAddress = getAddress(tokenAddress);
 
-  return `/assets/icons/${convertedAddress}.png`;
+  return `/assets/images/token-icons/${convertedAddress}.png`;
 };
 
 const LendingPool = ({

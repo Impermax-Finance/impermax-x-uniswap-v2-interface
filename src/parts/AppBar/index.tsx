@@ -14,9 +14,9 @@ import clsx from 'clsx';
 
 import ClaimAirdropButton from 'containers/ClaimAirdropButton';
 import WalletConnect from 'containers/WalletConnect';
-import NetworkConnect from 'containers/NetworkConnect';
+import ChainConnect from 'containers/ChainConnect';
 import ConnectedWalletInfo from 'containers/ConnectedWalletInfo';
-import { CHAIN_IDS } from 'config/web3/networks';
+import { CHAIN_IDS } from 'config/web3/chains';
 import { ReactComponent as ImpermaxLogoIcon } from 'assets/images/icons/impermax-logo.svg';
 import {
   PAGES,
@@ -162,7 +162,7 @@ const AppBar = ({
                   'space-x-2'
                 )}>
                 <ClaimAirdropButton />
-                <NetworkConnect />
+                <ChainConnect />
                 <ConnectedWalletInfo />
                 <WalletConnect />
               </div>

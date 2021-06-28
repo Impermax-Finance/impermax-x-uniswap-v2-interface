@@ -1,5 +1,5 @@
 
-import { CHAIN_IDS } from 'config/web3/networks';
+import { CHAIN_IDS } from 'config/web3/chains';
 
 const FACTORY_ADDRESSES: {
   [chainId: number]: string;

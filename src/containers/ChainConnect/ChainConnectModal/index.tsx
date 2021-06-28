@@ -14,13 +14,13 @@ import ImpermaxModal, {
 import ImpermaxImage from 'components/UI/ImpermaxImage'; // TODO: should use next/image component (ideally)
 import {
   CHAIN_IDS,
-  NETWORK_LABELS,
-  NETWORK_ICON_PATHS,
-  NETWORK_DETAILS
-} from 'config/web3/networks';
+  CHAIN_LABELS,
+  CHAIN_ICON_PATHS,
+  CHAIN_DETAILS
+} from 'config/web3/chains';
 import { ReactComponent as CloseIcon } from 'assets/images/icons/close.svg';
 
-const NetworkConnectModal = ({
+const ChainConnectModal = ({
   open,
   onClose
 }: Props): JSX.Element => {
@@ -31,18 +31,18 @@ const NetworkConnectModal = ({
     library
   } = useWeb3React<Web3Provider>();
 
-  const handleNetworkConnect = (newChainID: number) => async () => {
+  const handleChainConnect = (newChainID: number) => async () => {
     try {
       if (!library) {
         throw new Error('Invalid library!');
       }
 
-      const networkDetail = NETWORK_DETAILS[newChainID];
-      await library.send('wallet_addEthereumChain', [networkDetail, account]);
+      const chainDetail = CHAIN_DETAILS[newChainID];
+      await library.send('wallet_addEthereumChain', [chainDetail, account]);
 
       onClose();
     } catch (error) {
-      console.log('[handleNetworkConnect] error.message => ', error.message);
+      console.log('[handleChainConnect] error.message => ', error.message);
     }
   };
 
@@ -62,7 +62,7 @@ const NetworkConnectModal = ({
             'text-lg',
             'font-medium'
           )}>
-          Select a Network
+          Select a Chain
         </ImpermaxModalTitle>
         <IconButton
           className={clsx(
@@ -115,16 +115,16 @@ const NetworkConnectModal = ({
                     'space-x-3'
                   )}
                   aria-current={selected ? 'page' : undefined}
-                  onClick={handleNetworkConnect(chainID)}>
+                  onClick={handleChainConnect(chainID)}>
                   <ImpermaxImage
                     className={clsx(
                       'rounded-md',
                       'w-8',
                       'h-8'
                     )}
-                    src={NETWORK_ICON_PATHS[chainID]} />
+                    src={CHAIN_ICON_PATHS[chainID]} />
                   <span className='truncate'>
-                    {NETWORK_LABELS[chainID]}
+                    {CHAIN_LABELS[chainID]}
                   </span>
                 </a>
               </ListItem>
@@ -138,4 +138,4 @@ const NetworkConnectModal = ({
 
 export type Props = Omit<ImpermaxModalProps, 'children'>;
 
-export default NetworkConnectModal;
+export default ChainConnectModal;
