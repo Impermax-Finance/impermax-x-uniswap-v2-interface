@@ -1,4 +1,5 @@
 
+import * as React from 'react';
 import clsx from 'clsx';
 
 import ImpermaxButtonBase, { Props as ImpermaxButtonBaseProps } from 'components/UI/ImpermaxButtonBase';
@@ -10,7 +11,8 @@ interface CustomProps {
   pending?: boolean;
 }
 
-const ImpermaxJadeContainedButton = ({
+type Ref = HTMLButtonElement;
+const ImpermaxJadeContainedButton = React.forwardRef<Ref, Props>(({
   className,
   children,
   startIcon,
@@ -18,11 +20,12 @@ const ImpermaxJadeContainedButton = ({
   disabled = false,
   pending = false,
   ...rest
-}: Props): JSX.Element => {
+}, ref): JSX.Element => {
   const disabledOrPending = disabled || pending;
 
   return (
     <ImpermaxButtonBase
+      ref={ref}
       type='button'
       className={clsx(
         'focus:outline-none',
@@ -75,7 +78,8 @@ const ImpermaxJadeContainedButton = ({
       {endIcon}
     </ImpermaxButtonBase>
   );
-};
+});
+ImpermaxJadeContainedButton.displayName = 'InterlayDefaultContainedButton';
 
 export type Props = CustomProps & ImpermaxButtonBaseProps;
 
