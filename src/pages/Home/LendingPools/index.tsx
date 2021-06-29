@@ -12,7 +12,7 @@ import {
 
 import LendingPool from './LendingPool';
 import LendingPoolsHeader from './LendingPoolsHeader';
-import PairAddressContext from 'contexts/PairAddress';
+import ErrorFallback from 'components/ErrorFallback';
 import getUniswapAPYs from 'services/get-uniswap-apys';
 import {
   Address,
@@ -23,7 +23,6 @@ import { IMPERMAX_SUBGRAPH_URL } from 'config/web3/subgraph';
 import { BREAKPOINTS } from 'utils/constants/styles';
 import { ReactComponent as SpinIcon } from 'assets/images/icons/spin.svg';
 import STATUSES from 'utils/constants/statuses';
-import ErrorFallback from 'components/ErrorFallback';
 
 const borrowableStr = `{
   id
@@ -84,10 +83,6 @@ const query = gql`{
 
 const LendingPools = (): JSX.Element | null => {
   const { chainId } = useWeb3React<Web3Provider>();
-
-  if (!chainId) {
-    throw new Error('Invalid Chain ID!');
-  }
 
   const greaterThanMd = useMedia(`(min-width: ${BREAKPOINTS.md})`);
 
@@ -161,6 +156,9 @@ const LendingPools = (): JSX.Element | null => {
     if (!lendingPoolsData) {
       throw new Error('Invalid lendingPoolsData!');
     }
+    if (!chainId) {
+      throw new Error('Invalid chain ID!');
+    }
 
     return (
       <div className='space-y-3'>
@@ -169,16 +167,13 @@ const LendingPools = (): JSX.Element | null => {
         )}
         {lendingPools.map(lendingPool => {
           return (
-            <PairAddressContext.Provider
-              value={lendingPool.id}
-              key={lendingPool.id}>
-              <LendingPool
-                chainID={chainId}
-                // TODO: could combine `lendingPoolsData` and `lendingPool`
-                lendingPoolsData={lendingPoolsData}
-                lendingPool={lendingPool}
-                greaterThanMd={greaterThanMd} />
-            </PairAddressContext.Provider>
+            <LendingPool
+              key={lendingPool.id}
+              chainID={chainId}
+              // TODO: could combine `lendingPoolsData` and `lendingPool`
+              lendingPoolsData={lendingPoolsData}
+              lendingPool={lendingPool}
+              greaterThanMd={greaterThanMd} />
           );
         })}
       </div>

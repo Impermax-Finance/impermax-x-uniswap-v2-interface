@@ -43,8 +43,6 @@ class Subgraph {
   public initializeLendingPoolsData = initializer.initializeLendingPoolsData;
   public getLendingPoolsData = initializer.getLendingPoolsData;
   public getLendingPoolData = initializer.getLendingPoolData;
-  public initializeTvlData = initializer.initializeTvlData;
-  public getTvlData = initializer.getTvlData;
   public fetchUserData = initializer.fetchUserData;
   public initializeUserData = initializer.initializeUserData;
   public getUserData = initializer.getUserData;
@@ -82,9 +80,6 @@ class Subgraph {
   public getNextSupplyRate = cacheData.getNextSupplyRate;
   public getNextSupplyAPY = cacheData.getNextSupplyAPY;
   public getUniswapAPY = cacheData.getUniswapAPY;
-  public getTotalValueLocked = cacheData.getTotalValueLocked;
-  public getTotalValueSupplied = cacheData.getTotalValueSupplied;
-  public getTotalValueBorrowed = cacheData.getTotalValueBorrowed;
   public getRewardSpeed = cacheData.getRewardSpeed;
   public getFarmingAPY = cacheData.getFarmingAPY;
   public getNextFarmingAPY = cacheData.getNextFarmingAPY;

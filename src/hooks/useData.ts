@@ -162,24 +162,6 @@ export function useUniswapAPY() : number {
   return uniswapAPY;
 }
 
-export function useTotalValueLocked() : number {
-  const [totalValueLocked, setTotalValueLocked] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setTotalValueLocked(await subgraph.getTotalValueLocked()));
-  return totalValueLocked;
-}
-
-export function useTotalValueSupplied() : number {
-  const [totalValueSupplied, setTotalValueSupplied] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setTotalValueSupplied(await subgraph.getTotalValueSupplied()));
-  return totalValueSupplied;
-}
-
-export function useTotalValueBorrowed() : number {
-  const [totalValueBorrowed, setTotalValueBorrowed] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setTotalValueBorrowed(await subgraph.getTotalValueBorrowed()));
-  return totalValueBorrowed;
-}
-
 export function useFarmingAPY(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [farmingAPY, setFarmingAPY] = useState<number>(0);

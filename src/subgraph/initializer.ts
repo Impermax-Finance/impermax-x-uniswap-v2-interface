@@ -12,7 +12,6 @@ import {
   Address,
   PoolTokenType,
   LendingPoolData,
-  TvlData,
   UserData,
   CollateralPosition,
   SupplyPosition,
@@ -207,24 +206,6 @@ async function getLendingPoolData(
   return lendingPoolData;
 }
 
-// TVL Data
-async function initializeTvlData(this: Subgraph): Promise<TvlData> {
-  const query = gql`{
-    impermaxFactories(first: 1) {
-      totalBalanceUSD
-      totalSupplyUSD
-      totalBorrowsUSD
-    }
-  }`;
-  const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
-  const result = await apolloFetcher(impermaxSubgraphUrl, query);
-  return result.data.impermaxFactories[0];
-}
-async function getTvlData(this: Subgraph): Promise<TvlData> {
-  if (!this.tvlData) this.tvlData = this.initializeTvlData();
-  return this.tvlData;
-}
-
 // User Data
 async function fetchUserData(this: Subgraph, account: Address): Promise<{
   collateralPositions: CollateralPosition[],
@@ -313,8 +294,6 @@ export {
   initializeLendingPoolsData,
   getLendingPoolsData,
   getLendingPoolData,
-  initializeTvlData,
-  getTvlData,
   fetchUserData,
   initializeUserData,
   getUserData

@@ -20,52 +20,77 @@ import Updater from 'store/transactions/updater';
 import { PAGES } from 'utils/constants/links';
 import './app.scss';
 
-const App = (): JSX.Element | null => {
-  // TODO: double-check
+const App = (): JSX.Element => {
   const { chainId } = useWeb3React<Web3Provider>();
 
   return (
     <Layout>
-      {chainId ? (
-        <LanguageProvider>
-          <Updater />
-          {/* TODO: should fix properly */}
-          <SubgraphProvider key={chainId}>
-            <ImpermaxRouterProvider>
-              <Switch>
-                <Route path={PAGES.CREATE_NEW_PAIR}>
+      <LanguageProvider>
+        <Updater />
+        {/* ray test touch << */}
+        <Switch>
+          <Route path={PAGES.CREATE_NEW_PAIR}>
+            {/* TODO: should fix properly */}
+            {chainId ? (
+              <SubgraphProvider key={chainId}>
+                <ImpermaxRouterProvider>
                   <CreateNewPair />
-                </Route>
-                <Route path={PAGES.LENDING_POOL}>
+                </ImpermaxRouterProvider>
+              </SubgraphProvider>
+            // TODO: could add more obvious UX
+            ) : null}
+          </Route>
+          <Route path={PAGES.LENDING_POOL}>
+            {chainId ? (
+              <SubgraphProvider key={chainId}>
+                <ImpermaxRouterProvider>
                   <LendingPool />
-                </Route>
-                <Route path={PAGES.ACCOUNT}>
+                </ImpermaxRouterProvider>
+              </SubgraphProvider>
+            ) : null}
+          </Route>
+          <Route path={PAGES.ACCOUNT}>
+            {chainId ? (
+              <SubgraphProvider key={chainId}>
+                <ImpermaxRouterProvider>
                   <Account />
-                </Route>
-                <Route path={PAGES.CLAIM}>
+                </ImpermaxRouterProvider>
+              </SubgraphProvider>
+            ) : null}
+          </Route>
+          <Route path={PAGES.CLAIM}>
+            {chainId ? (
+              <SubgraphProvider key={chainId}>
+                <ImpermaxRouterProvider>
                   <Claim />
-                </Route>
-                <Route path={PAGES.RISKS}>
+                </ImpermaxRouterProvider>
+              </SubgraphProvider>
+            ) : null}
+          </Route>
+          <Route path={PAGES.RISKS}>
+            {chainId ? (
+              <SubgraphProvider key={chainId}>
+                <ImpermaxRouterProvider>
                   <Risks />
-                </Route>
-                <Route
-                  path={PAGES.USER_GUIDE}
-                  component={() => {
-                    // TODO: should use <a /> with security attributes
-                    window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
-                    return null;
-                  }} />
-                <Route
-                  path={PAGES.HOME}
-                  exact>
-                  <Home />
-                </Route>
-              </Switch>
-            </ImpermaxRouterProvider>
-          </SubgraphProvider>
-        </LanguageProvider>
-      // TODO: could add more obvious UX
-      ) : null}
+                </ImpermaxRouterProvider>
+              </SubgraphProvider>
+            ) : null}
+          </Route>
+          <Route
+            path={PAGES.USER_GUIDE}
+            component={() => {
+              // TODO: should use <a /> with security attributes
+              window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
+              return null;
+            }} />
+          <Route
+            path={PAGES.HOME}
+            exact>
+            {chainId ? <Home key={chainId} /> : null}
+          </Route>
+        </Switch>
+        {/* ray test touch >> */}
+      </LanguageProvider>
     </Layout>
   );
 };

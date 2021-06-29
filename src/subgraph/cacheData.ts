@@ -227,20 +227,6 @@ export async function getUniswapAPY(this: Subgraph, uniswapV2PairAddress: Addres
   return lendingPoolData.pair.uniswapAPY;
 }
 
-// TVL Data
-export async function getTotalValueLocked(this: Subgraph) : Promise<number> {
-  const tvlData = await this.getTvlData();
-  return parseInt(tvlData.totalBalanceUSD);
-}
-export async function getTotalValueSupplied(this: Subgraph) : Promise<number> {
-  const tvlData = await this.getTvlData();
-  return parseInt(tvlData.totalSupplyUSD);
-}
-export async function getTotalValueBorrowed(this: Subgraph) : Promise<number> {
-  const tvlData = await this.getTvlData();
-  return parseInt(tvlData.totalBorrowsUSD);
-}
-
 // Reward Speed
 export async function getRewardSpeed(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
