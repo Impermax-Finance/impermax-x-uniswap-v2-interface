@@ -84,19 +84,24 @@ export async function approve(
     token
   ] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
 
+  // ray test touch <<
+  let txReceipt;
+  // ray test touch >>
   if (approvalType === ApprovalType.POOL_TOKEN) {
-    const tx = await poolToken.approve(spender, amount);
-    await tx.wait();
+    const txResponse = await poolToken.approve(spender, amount);
+    txReceipt = await txResponse.wait();
   }
   if (approvalType === ApprovalType.UNDERLYING) {
-    const tx = await token.approve(spender, amount);
-    await tx.wait();
+    const txResponse = await token.approve(spender, amount);
+    txReceipt = await txResponse.wait();
   }
   if (approvalType === ApprovalType.BORROW) {
-    const tx = await poolToken.borrowApprove(spender, amount);
-    await tx.wait();
+    const txResponse = await poolToken.borrowApprove(spender, amount);
+    txReceipt = await txResponse.wait();
   }
-  onTransactionHash();
+  // ray test touch <<
+  onTransactionHash(txReceipt.transactionHash);
+  // ray test touch >>
 }
 
 export async function getPermitData(

@@ -4,10 +4,6 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
 import { Contract } from '@ethersproject/contracts';
-import {
-  TransactionResponse,
-  TransactionReceipt
-} from '@ethersproject/abstract-provider';
 
 import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 import getAirdropData from 'services/get-airdrop-data';
@@ -106,14 +102,14 @@ const ClaimAirdropButton = (): JSX.Element | null => {
       }
 
       setClaimStatus(STATUSES.PENDING);
-      const tx: TransactionResponse =
+      const txResponse =
         await merkleDistributorContract.claim(airdropData.index, account, airdropData.amount, airdropData.proof);
-      const receipt: TransactionReceipt = await tx.wait();
+      const txReceipt = await txResponse.wait();
 
       // const amount = parseFloat(airdropData.amount.toString()) / 1e18; // TODO: update other cases
       const amount = parseFloat(formatUnits(airdropData.amount));
       const summary = `Claim ${formatAmount(amount)} IMX`;
-      addTransaction({ hash: receipt.transactionHash }, { summary });
+      addTransaction({ hash: txReceipt.transactionHash }, { summary });
       setClaimStatus(STATUSES.RESOLVED);
       setClaimed(true);
     } catch (error) {
