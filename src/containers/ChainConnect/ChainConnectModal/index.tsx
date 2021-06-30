@@ -42,6 +42,12 @@ const ChainConnectModal = ({
 
       onClose();
     } catch (error) {
+      /**
+       * TODO:
+       * - https://github.com/MetaMask/metamask-extension/issues/10597
+       * - https://ethereum.stackexchange.com/questions/95058/where-can-i-find-a-documentation-of-all-wallet-rpc-calls
+       * - https://docs.metamask.io/guide/rpc-api.html#other-rpc-methods
+       */
       console.log('[handleChainConnect] error.message => ', error.message);
     }
   };
