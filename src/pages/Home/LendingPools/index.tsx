@@ -92,12 +92,15 @@ const LendingPools = (): JSX.Element | null => {
   const [status, setStatus] = React.useState(STATUSES.IDLE);
   const handleError = useErrorHandler();
 
-  // ray test touch <
-  // TODO: should add abort-controller
-  // ray test touch >
   React.useEffect(() => {
     if (!chainId) return;
     if (!handleError) return;
+    /**
+     * TODO:
+     * - https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component
+     * - https://github.com/streamich/react-use/blob/master/src/useAsyncFn.ts
+     */
+    let mounted = true;
 
     (async () => {
       try {
@@ -117,14 +120,22 @@ const LendingPools = (): JSX.Element | null => {
           theLendingPoolsData[theLendingPool.id].pair.uniswapAPY = uniswapAPYs[theLendingPool.id];
         }
 
-        setLendingPoolsData(theLendingPoolsData);
-        setStatus(STATUSES.RESOLVED);
+        if (mounted) {
+          setLendingPoolsData(theLendingPoolsData);
+          setStatus(STATUSES.RESOLVED);
+        }
       } catch (error) {
-        setStatus(STATUSES.REJECTED);
-        handleError(error);
+        if (mounted) {
+          setStatus(STATUSES.REJECTED);
+          handleError(error);
+        }
         console.log('[useLendingPools useEffect] error.message => ', error.message);
       }
     })();
+
+    return () => {
+      mounted = false;
+    };
   }, [
     chainId,
     handleError
