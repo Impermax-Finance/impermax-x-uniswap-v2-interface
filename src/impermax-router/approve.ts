@@ -84,9 +84,7 @@ export async function approve(
     token
   ] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
 
-  // ray test touch <<
   let txReceipt;
-  // ray test touch >>
   if (approvalType === ApprovalType.POOL_TOKEN) {
     const txResponse = await poolToken.approve(spender, amount);
     txReceipt = await txResponse.wait();
@@ -99,9 +97,7 @@ export async function approve(
     const txResponse = await poolToken.borrowApprove(spender, amount);
     txReceipt = await txResponse.wait();
   }
-  // ray test touch <<
   onTransactionHash(txReceipt.transactionHash);
-  // ray test touch >>
 }
 
 export async function getPermitData(

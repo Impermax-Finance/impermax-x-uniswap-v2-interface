@@ -24,9 +24,7 @@ export async function deposit(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    // ray test touch <<
     let txReceipt;
-    // ray test touch >>
     if (token.address === wethAddress) {
       const overrides = { value: amount };
       const txResponse = await this.router.mintETH(poolToken.address, this.account, deadline, overrides);
@@ -38,9 +36,7 @@ export async function deposit(
       const txResponse = this.router.mint(poolToken.address, amount, this.account, deadline);
       txReceipt = await txResponse.wait();
     }
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[deposit] error.message => ', error.message);
   }
@@ -59,9 +55,7 @@ export async function withdraw(
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
 
-  // ray test touch <<
   let txReceipt;
-  // ray test touch >>
   try {
     const wethAddress = WETH_ADDRESSES[this.chainId];
     if (token.address === wethAddress) {
@@ -71,9 +65,7 @@ export async function withdraw(
       const txResponse = await this.router.redeem(poolToken.address, tokens, this.account, deadline, data);
       txReceipt = await txResponse.wait();
     }
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[withdraw] error.message => ', error.message);
   }
@@ -94,9 +86,7 @@ export async function borrow(
 
   try {
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    // ray test touch <<
     let txReceipt;
-    // ray test touch >>
     if (token.address === wethAddress) {
       const txResponse = await this.router.borrowETH(borrowable.address, amount, this.account, deadline, data);
       txReceipt = await txResponse.wait();
@@ -104,9 +94,7 @@ export async function borrow(
       const txResponse = await this.router.borrow(borrowable.address, amount, this.account, deadline, data);
       txReceipt = await txResponse.wait();
     }
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[borrow] error.message => ', error.message);
   }
@@ -125,9 +113,7 @@ export async function repay(
 
   try {
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    // ray test touch <<
     let txReceipt;
-    // ray test touch >>
     if (token.address === wethAddress) {
       const overrides = { value: amount };
       const txResponse = await this.router.repayETH(borrowable.address, this.account, deadline, overrides);
@@ -136,9 +122,7 @@ export async function repay(
       const txResponse = await this.router.repay(borrowable.address, amount, this.account, deadline);
       txReceipt = await txResponse.wait();
     }
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[repay] error.message => ', error.message);
   }
@@ -203,9 +187,7 @@ export async function leverage(
         dataB
       );
     const txReceipt = await txResponse.wait();
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[leverage] error.message => ', error.message);
   }
@@ -245,9 +227,7 @@ export async function deleverage(
     const txResponse =
       await this.router.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data);
     const txReceipt = await txResponse.wait();
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[deleverage] error.message => ', error.message);
   }
@@ -271,9 +251,7 @@ export async function trackBorrows(
   try {
     const txResponse = await this.claimAggregator.trackBorrows(this.account, toTrack);
     const txReceipt = await txResponse.wait();
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[trackBorrows] error.message => ', error.message);
   }
@@ -297,9 +275,7 @@ export async function claims(
   try {
     const txResponse = this.claimAggregator.claims(this.account, toClaim);
     const txReceipt = await txResponse.wait();
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[claims] error.message => ', error.message);
   }
@@ -315,9 +291,7 @@ export async function claimDistributor(
   try {
     const txResponse = await claimable.claim();
     const txReceipt = await txResponse.wait();
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[claimDistributor] error.message => ', error.message);
   }
@@ -331,9 +305,7 @@ export async function createNewPair(
   onTransactionHash: Function
 ): Promise<void> {
   try {
-    // ray test touch <<
     let txReceipt;
-    // ray test touch >>
     if (createPairStep === CreatePairStep.BORROWABLE0) {
       const txResponse = await this.factory.createBorrowable0(uniswapV2PairAddress);
       txReceipt = await txResponse.wait();
@@ -350,9 +322,7 @@ export async function createNewPair(
       const txResponse = await this.factory.initializeLendingPool(uniswapV2PairAddress);
       txReceipt = await txResponse.wait();
     }
-    // ray test touch <<
     onTransactionHash(txReceipt.transactionHash);
-    // ray test touch >>
   } catch (error) {
     console.error('[createNewPair] error.message => ', error.message);
   }
