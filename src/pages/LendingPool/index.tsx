@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
 import PairAddressContext from 'contexts/PairAddress';
-import LendingPoolPage from 'components/LendingPoolPage';
+import LendingPoolContent from './LendingPoolContent';
 import { PARAMETERS } from 'utils/constants/links';
 
 const LendingPool = (): JSX.Element => {
@@ -12,7 +12,7 @@ const LendingPool = (): JSX.Element => {
   return (
     <Container>
       <PairAddressContext.Provider value={uniswapV2PairAddress}>
-        <LendingPoolPage />
+        <LendingPoolContent />
       </PairAddressContext.Provider>
     </Container>
   );

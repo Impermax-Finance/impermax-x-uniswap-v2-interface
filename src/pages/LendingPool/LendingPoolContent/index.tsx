@@ -1,9 +1,9 @@
-import { useOracleIsInitialized } from '../../hooks/useData';
-import BorrowablesDetails from '../BorrowablesDetails';
-import AccountLendingPool from '../AccountLendingPool';
+import { useOracleIsInitialized } from '../../../hooks/useData';
+import BorrowablesDetails from '../../../components/BorrowablesDetails';
+import AccountLendingPool from '../../../components/AccountLendingPool';
 import './index.scss';
 
-export default function LendingPoolPage(): JSX.Element {
+export default function LendingPoolContent(): JSX.Element {
   const oracleIsInitialized = useOracleIsInitialized();
 
   if (!oracleIsInitialized) {
