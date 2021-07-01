@@ -88,8 +88,8 @@ const LendingPools = (): JSX.Element | null => {
 
   const [lendingPoolsData, setLendingPoolsData] = React.useState<{ [key in Address]: LendingPoolData }>();
   const [lendingPools, setLendingPools] = React.useState<Array<LendingPoolData>>();
-
   const [status, setStatus] = React.useState(STATUSES.IDLE);
+
   const handleError = useErrorHandler();
 
   React.useEffect(() => {
