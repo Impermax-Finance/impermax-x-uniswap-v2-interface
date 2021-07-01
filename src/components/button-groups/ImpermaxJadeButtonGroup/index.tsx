@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import ImpermaxButtonBase, { Props as ImpermaxButtonBaseProps } from 'components/UI/ImpermaxButtonBase';
 import { ReactComponent as SpinIcon } from 'assets/images/icons/spin.svg';
 
-const ButtonGroup = ({
+const ImpermaxJadeButtonGroup = ({
   className,
   ...rest
 }: React.ComponentPropsWithRef<'span'>): JSX.Element => (
@@ -19,17 +19,17 @@ const ButtonGroup = ({
     {...rest} />
 );
 
-interface CustomJadeButtonGroupItemProps {
+interface CustomImpermaxJadeButtonGroupItem {
   pending?: boolean;
 }
 
-const JadeButtonGroupItem = ({
+const ImpermaxJadeButtonGroupItem = ({
   className,
   children,
   disabled = false,
   pending = false,
   ...rest
-}: CustomJadeButtonGroupItemProps & ImpermaxButtonBaseProps): JSX.Element => {
+}: CustomImpermaxJadeButtonGroupItem & ImpermaxButtonBaseProps): JSX.Element => {
   const disabledOrPending = disabled || pending;
 
   return (
@@ -41,8 +41,8 @@ const JadeButtonGroupItem = ({
       className={clsx(
         'focus:outline-none',
         'focus:ring-2',
-        'focus:border-primary-300',
-        'focus:ring-primary-200',
+        'focus:border-impermaxJade-300',
+        'focus:ring-impermaxJade-200',
         'focus:ring-opacity-50',
 
         'border',
@@ -78,7 +78,7 @@ const JadeButtonGroupItem = ({
 };
 
 export {
-  JadeButtonGroupItem
+  ImpermaxJadeButtonGroupItem
 };
 
-export default ButtonGroup;
+export default ImpermaxJadeButtonGroup;

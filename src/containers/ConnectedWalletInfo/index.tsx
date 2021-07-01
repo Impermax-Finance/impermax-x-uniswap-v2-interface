@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
-import ButtonGroup, { JadeButtonGroupItem } from 'components/ButtonGroup';
+import ImpermaxJadeButtonGroup, { ImpermaxJadeButtonGroupItem } from 'components/button-groups/ImpermaxJadeButtonGroup';
 import AccountModal from 'components/InteractionModal/AccountModal';
 import shortenAddress from 'utils/helpers/web3/shorten-address';
 import {
@@ -44,18 +44,18 @@ const ConnectedWalletInfo = (): JSX.Element | null => {
 
   return (
     <>
-      <ButtonGroup>
-        <JadeButtonGroupItem
+      <ImpermaxJadeButtonGroup>
+        <ImpermaxJadeButtonGroupItem
           pending={pendingTransactions.length > 0}
           onClick={handleAccountModalOpen}>
           Transactions
-        </JadeButtonGroupItem>
-        <JadeButtonGroupItem>
+        </ImpermaxJadeButtonGroupItem>
+        <ImpermaxJadeButtonGroupItem>
           <Link to={accountPageURL}>
             {shortenAddress(account)}
           </Link>
-        </JadeButtonGroupItem>
-      </ButtonGroup>
+        </ImpermaxJadeButtonGroupItem>
+      </ImpermaxJadeButtonGroup>
       <AccountModal
         show={accountModalOpen}
         toggleShow={setAccountModalOpen}
