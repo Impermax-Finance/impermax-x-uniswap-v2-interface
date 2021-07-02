@@ -4,11 +4,12 @@ import BorrowableDetails from './BorrowableDetails';
 import { PoolTokenType } from '../../../../types/interfaces';
 import PoolTokenContext from '../../../../contexts/PoolToken';
 import { useTotalBalanceUSD } from '../../../../hooks/useData';
-import { formatUSD } from '../../../../utils/format';
 
 export default function BorrowablesDetails(): JSX.Element {
   const lpTokenLocked = useTotalBalanceUSD(PoolTokenType.Collateral);
-  if (lpTokenLocked > 0) console.log('LP Tokens locked:', formatUSD(lpTokenLocked));
+  if (lpTokenLocked > 0) {
+    console.log('[BorrowablesDetails] lpTokenLocked => ', lpTokenLocked);
+  }
   return (
     <div className='borrowables-details'>
       <Row>

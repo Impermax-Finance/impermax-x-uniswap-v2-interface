@@ -89,7 +89,11 @@ export async function getDeposited(this: ImpermaxRouter, uniswapV2PairAddress: A
   if (!cache.deposited) cache.deposited = this.initializeDeposited(uniswapV2PairAddress, poolTokenType);
   return cache.deposited;
 }
-export async function getDepositedUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+export async function getDepositedUSD(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType
+) : Promise<number> {
   const deposited = await this.getDeposited(uniswapV2PairAddress, poolTokenType);
   const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
   return deposited * tokenPrice;

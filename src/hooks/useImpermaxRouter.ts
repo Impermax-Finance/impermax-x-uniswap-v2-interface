@@ -79,7 +79,7 @@ export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, a
   } = context;
 
   return useEffect(() => {
-    if (impermaxRouter) return;
+    if (!impermaxRouter) return;
     // if (!f) return;
 
     f(impermaxRouter);

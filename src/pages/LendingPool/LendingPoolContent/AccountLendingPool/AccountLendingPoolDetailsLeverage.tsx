@@ -22,9 +22,9 @@ export default function AccountLendingPoolDetailsLeverage(): JSX.Element {
   const language = languages.state.selected;
   const t = (s: string) => (phrases[s][language]);
 
-  const LPEquityUSD = useLPEquityUSD();
   const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
   const debtUSD = useDebtUSD();
+  const LPEquityUSD = useLPEquityUSD();
   // TODO: <
   // const currentLeverage = useCurrentLeverage();
   // TODO: >
