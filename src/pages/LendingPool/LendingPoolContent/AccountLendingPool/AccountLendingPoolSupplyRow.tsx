@@ -8,11 +8,11 @@ import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { Row, Col, Button } from 'react-bootstrap';
 import InlineAccountTokenInfo from './InlineAccountTokenInfo';
-import DepositInteractionModal from '../InteractionModal/DepositInteractionModal';
-import { useSymbol, useDeposited, useDepositedUSD, useMaxWithdrawable } from '../../hooks/useData';
-import { useTokenIcon } from '../../hooks/useUrlGenerator';
-import DisabledButtonHelper from '../DisabledButtonHelper';
-import WithdrawInteractionModal from '../InteractionModal/WithdrawInteractionModal';
+import DepositInteractionModal from '../../../../components/InteractionModal/DepositInteractionModal';
+import { useSymbol, useDeposited, useDepositedUSD, useMaxWithdrawable } from '../../../../hooks/useData';
+import { useTokenIcon } from '../../../../hooks/useUrlGenerator';
+import DisabledButtonHelper from '../../../../components/DisabledButtonHelper';
+import WithdrawInteractionModal from '../../../../components/InteractionModal/WithdrawInteractionModal';
 
 export default function AccountLendingPoolSupplyRow(): JSX.Element {
   const languages = useContext(LanguageContext);

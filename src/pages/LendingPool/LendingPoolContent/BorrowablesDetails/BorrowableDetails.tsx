@@ -7,10 +7,10 @@ import { useContext } from 'react';
 import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { Table } from 'react-bootstrap';
-import { formatUSD, formatPercentage } from '../../utils/format';
+import { formatUSD, formatPercentage } from '../../../../utils/format';
 import BorrowableDetailsRow from './BorrowableDetailsRow';
-import { useSymbol, useName, useSupplyUSD, useTotalBorrowsUSD, useUtilizationRate, useSupplyAPY, useBorrowAPY, useFarmingAPY, useHasFarming } from '../../hooks/useData';
-import { useTokenIcon } from '../../hooks/useUrlGenerator';
+import { useSymbol, useName, useSupplyUSD, useTotalBorrowsUSD, useUtilizationRate, useSupplyAPY, useBorrowAPY, useFarmingAPY, useHasFarming } from '../../../../hooks/useData';
+import { useTokenIcon } from '../../../../hooks/useUrlGenerator';
 import clsx from 'clsx';
 
 /**

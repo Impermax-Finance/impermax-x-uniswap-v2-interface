@@ -7,11 +7,11 @@ import { useContext } from 'react';
 import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { Row, Col } from 'react-bootstrap';
-import { formatUSD } from '../../utils/format';
-import DetailsRow from '../DetailsRow';
-import { useDebtUSD, useDepositedUSD, useLPEquityUSD } from '../../hooks/useData';
-import RiskMetrics from '../RiskMetrics';
-import { PoolTokenType } from '../../types/interfaces';
+import { formatUSD } from '../../../../utils/format';
+import DetailsRow from '../../../../components/DetailsRow';
+import { useDebtUSD, useDepositedUSD, useLPEquityUSD } from '../../../../hooks/useData';
+import RiskMetrics from '../../../../components/RiskMetrics';
+import { PoolTokenType } from '../../../../types/interfaces';
 
 /**
  * Generates lending pool aggregate details.

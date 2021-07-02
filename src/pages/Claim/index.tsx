@@ -6,7 +6,7 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
-import ClaimDistributor from 'components/ClaimDistributor';
+import ClaimDistributor from 'pages/Claim/ClaimDistributor';
 import { DistributorDetails } from 'utils/constants';
 import { DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/distributors';
 
@@ -22,9 +22,11 @@ const Claim = (): JSX.Element => {
     <Container>
       <Card className='mt-5'>
         {distributors.map(
-          (distributor: DistributorDetails, key: any) => (<ClaimDistributor
-            distributor={distributor}
-            key={key} />)
+          (distributor: DistributorDetails, key: any) => (
+            <ClaimDistributor
+              distributor={distributor}
+              key={key} />
+          )
         )}
       </Card>
     </Container>

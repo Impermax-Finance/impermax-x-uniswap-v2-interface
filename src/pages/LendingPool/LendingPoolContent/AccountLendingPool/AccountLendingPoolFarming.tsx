@@ -1,11 +1,11 @@
 import { Row, Col } from 'react-bootstrap';
-import { formatAmount } from '../../utils/format';
-import { useSymbol, useBorrowedUSD, useFarmingShares, useAvailableReward, useClaimHistory } from '../../hooks/useData';
-import { PoolTokenType, ClaimEvent } from '../../types/interfaces';
-import useTrackBorrows from '../../hooks/useTrackBorrows';
-import InteractionButton from '../InteractionButton';
-import useClaims from '../../hooks/useClaims';
-import { useTransactionUrlGenerator } from '../../hooks/useUrlGenerator';
+import { formatAmount } from '../../../../utils/format';
+import { useSymbol, useBorrowedUSD, useFarmingShares, useAvailableReward, useClaimHistory } from '../../../../hooks/useData';
+import { PoolTokenType, ClaimEvent } from '../../../../types/interfaces';
+import useTrackBorrows from '../../../../hooks/useTrackBorrows';
+import InteractionButton from '../../../../components/InteractionButton';
+import useClaims from '../../../../hooks/useClaims';
+import { useTransactionUrlGenerator } from '../../../../hooks/useUrlGenerator';
 
 export default function AccountLendingPoolFarming(): JSX.Element {
   const symbol = useSymbol(PoolTokenType.Collateral);

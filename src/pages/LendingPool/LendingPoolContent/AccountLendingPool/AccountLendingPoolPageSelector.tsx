@@ -1,6 +1,6 @@
 import { AccountLendingPoolPage } from '.';
-import { PoolTokenType } from '../../types/interfaces';
-import { useHasFarming } from '../../hooks/useData';
+import { PoolTokenType } from '../../../../types/interfaces';
+import { useHasFarming } from '../../../../hooks/useData';
 
 function AccountLendingPoolPageSelector({
   pageSelected,

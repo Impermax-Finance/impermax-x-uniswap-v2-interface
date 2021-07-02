@@ -1,9 +1,9 @@
 import './index.scss';
-import { DistributorDetails } from '../../utils/constants';
-import { useAvailableClaimable } from '../../hooks/useData';
-import InteractionButton from '../InteractionButton';
-import useClaimDistributor from '../../hooks/useClaimDistributor';
-import { formatAmount } from '../../utils/format';
+import { DistributorDetails } from '../../../utils/constants';
+import { useAvailableClaimable } from '../../../hooks/useData';
+import InteractionButton from '../../../components/InteractionButton';
+import useClaimDistributor from '../../../hooks/useClaimDistributor';
+import { formatAmount } from '../../../utils/format';
 
 export default function ClaimDistributor({ distributor }: { distributor: DistributorDetails }): JSX.Element | null {
   const availableClaimable = useAvailableClaimable(distributor.claimableAddress);

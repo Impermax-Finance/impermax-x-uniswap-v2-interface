@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { InputGroup } from 'react-bootstrap';
-import NumericalInput from '../NumericalInput';
+import NumericalInput from './NumericalInput';
 import { formatFloat } from '../../utils/format';
 import './index.scss';
 

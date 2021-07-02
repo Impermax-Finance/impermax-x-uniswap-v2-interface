@@ -1,6 +1,6 @@
 import { useOracleIsInitialized } from '../../../hooks/useData';
-import BorrowablesDetails from '../../../components/BorrowablesDetails';
-import AccountLendingPool from '../../../components/AccountLendingPool';
+import BorrowablesDetails from './BorrowablesDetails';
+import AccountLendingPool from './AccountLendingPool';
 import './index.scss';
 
 export default function LendingPoolContent(): JSX.Element {

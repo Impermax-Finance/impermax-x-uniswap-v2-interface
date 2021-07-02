@@ -7,13 +7,13 @@ import { useContext, useState } from 'react';
 import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { Row, Col, Button } from 'react-bootstrap';
-import { PoolTokenType } from '../../types/interfaces';
+import { PoolTokenType } from '../../../../types/interfaces';
 import InlineAccountTokenInfo from './InlineAccountTokenInfo';
-import RepayInteractionModal from '../InteractionModal/RepayInteractionModal';
-import { useBorrowed, useSymbol, useBorrowedUSD, useDepositedUSD } from '../../hooks/useData';
-import { useTokenIcon } from '../../hooks/useUrlGenerator';
-import DisabledButtonHelper from '../DisabledButtonHelper';
-import BorrowInteractionModal from '../InteractionModal/BorrowInteractionModal';
+import RepayInteractionModal from '../../../../components/InteractionModal/RepayInteractionModal';
+import { useBorrowed, useSymbol, useBorrowedUSD, useDepositedUSD } from '../../../../hooks/useData';
+import { useTokenIcon } from '../../../../hooks/useUrlGenerator';
+import DisabledButtonHelper from '../../../../components/DisabledButtonHelper';
+import BorrowInteractionModal from '../../../../components/InteractionModal/BorrowInteractionModal';
 
 export default function AccountLendingPoolBorrowRow(): JSX.Element {
   const languages = useContext(LanguageContext);

@@ -7,9 +7,9 @@ import { useContext } from 'react';
 import { LanguageContext } from 'contexts/LanguageProvider';
 import phrases from './translations';
 import { Row, Col } from 'react-bootstrap';
-import { formatUSD, formatPercentage } from '../../utils/format';
-import DetailsRow from '../DetailsRow';
-import { useSuppliedUSD, useAccountAPY } from '../../hooks/useData';
+import { formatUSD, formatPercentage } from '../../../../utils/format';
+import DetailsRow from '../../../../components/DetailsRow';
+import { useSuppliedUSD, useAccountAPY } from '../../../../hooks/useData';
 
 /**
  * Generates lending pool aggregate details.
