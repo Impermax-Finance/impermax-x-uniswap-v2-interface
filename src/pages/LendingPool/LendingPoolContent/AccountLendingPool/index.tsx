@@ -53,10 +53,8 @@ export default function AccountLendingPool(): JSX.Element {
   } = useWeb3React<Web3Provider>();
   const routerAccount = useRouterAccount();
 
-  // ray test touch <<
   const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
   const suppliedUSD = useSuppliedUSD();
-  // ray test touch >>
   const [pageSelected, setPageSelected] = useState<AccountLendingPoolPage>(AccountLendingPoolPage.UNINITIALIZED);
   const actualPageSelected = pageSelected === AccountLendingPoolPage.UNINITIALIZED ?
     collateralUSD > 0 || suppliedUSD === 0 ?

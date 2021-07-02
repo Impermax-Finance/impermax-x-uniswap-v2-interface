@@ -26,7 +26,6 @@ import {
   FactoryContract,
   SimpleUniswapOracleContract,
   AirdropData,
-  MerkleDistributorContract,
   ClaimAggregatorContract,
   ClaimEvent,
   ClaimableContract,
@@ -56,7 +55,6 @@ class ImpermaxRouter {
   factory: FactoryContract;
   uniswapV2Factory: UniswapV2FactoryContract;
   simpleUniswapOracle: SimpleUniswapOracleContract;
-  merkleDistributor: MerkleDistributorContract;
   claimAggregator: ClaimAggregatorContract;
   account: Address;
   priceInverted: boolean;

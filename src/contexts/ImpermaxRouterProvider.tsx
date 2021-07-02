@@ -6,9 +6,28 @@
 import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
+import clsx from 'clsx';
 
 import ImpermaxRouter from 'impermax-router';
 import useSubgraph from 'hooks/useSubgraph';
+import { ReactComponent as SpinIcon } from 'assets/images/icons/spin.svg';
+
+const LoadingSpinner = () => (
+  <div
+    className={clsx(
+      'p-7',
+      'flex',
+      'justify-center'
+    )}>
+    <SpinIcon
+      className={clsx(
+        'animate-spin',
+        'w-8',
+        'h-8',
+        'text-impermaxJade'
+      )} />
+  </div>
+);
 
 const ImpermaxRouterContext = React.createContext<ImpermaxRouterContextInterface>();
 
@@ -75,7 +94,12 @@ const ImpermaxRouterProvider: React.FC = ({ children }) => {
         priceInverted,
         togglePriceInverted
       }}>
-      {children}
+      {/* TODO: should improve in a more explicit way */}
+      {(impermaxRouter && routerAccount) ? (
+        children
+      ) : (
+        <LoadingSpinner />
+      )}
     </ImpermaxRouterContext.Provider>
   );
 };
