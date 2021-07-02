@@ -24,19 +24,19 @@ export async function deposit(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    let txReceipt;
+    let receipt;
     if (token.address === wethAddress) {
       const overrides = { value: amount };
-      const txResponse = await this.router.mintETH(poolToken.address, this.account, deadline, overrides);
-      txReceipt = await txResponse.wait();
+      const tx = await this.router.mintETH(poolToken.address, this.account, deadline, overrides);
+      receipt = await tx.wait();
     } else if (poolTokenType === PoolTokenType.Collateral) {
-      const txResponse = await this.router.mintCollateral(poolToken.address, amount, this.account, deadline, data);
-      txReceipt = await txResponse.wait();
+      const tx = await this.router.mintCollateral(poolToken.address, amount, this.account, deadline, data);
+      receipt = await tx.wait();
     } else {
-      const txResponse = this.router.mint(poolToken.address, amount, this.account, deadline);
-      txReceipt = await txResponse.wait();
+      const tx = this.router.mint(poolToken.address, amount, this.account, deadline);
+      receipt = await tx.wait();
     }
-    onTransactionHash(txReceipt.transactionHash);
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[deposit] error.message => ', error.message);
   }
@@ -55,17 +55,17 @@ export async function withdraw(
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
 
-  let txReceipt;
+  let receipt;
   try {
     const wethAddress = WETH_ADDRESSES[this.chainId];
     if (token.address === wethAddress) {
-      const txResponse = await this.router.redeemETH(poolToken.address, tokens, this.account, deadline, data);
-      txReceipt = await txResponse.wait();
+      const tx = await this.router.redeemETH(poolToken.address, tokens, this.account, deadline, data);
+      receipt = await tx.wait();
     } else {
-      const txResponse = await this.router.redeem(poolToken.address, tokens, this.account, deadline, data);
-      txReceipt = await txResponse.wait();
+      const tx = await this.router.redeem(poolToken.address, tokens, this.account, deadline, data);
+      receipt = await tx.wait();
     }
-    onTransactionHash(txReceipt.transactionHash);
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[withdraw] error.message => ', error.message);
   }
@@ -86,15 +86,15 @@ export async function borrow(
 
   try {
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    let txReceipt;
+    let receipt;
     if (token.address === wethAddress) {
-      const txResponse = await this.router.borrowETH(borrowable.address, amount, this.account, deadline, data);
-      txReceipt = await txResponse.wait();
+      const tx = await this.router.borrowETH(borrowable.address, amount, this.account, deadline, data);
+      receipt = await tx.wait();
     } else {
-      const txResponse = await this.router.borrow(borrowable.address, amount, this.account, deadline, data);
-      txReceipt = await txResponse.wait();
+      const tx = await this.router.borrow(borrowable.address, amount, this.account, deadline, data);
+      receipt = await tx.wait();
     }
-    onTransactionHash(txReceipt.transactionHash);
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[borrow] error.message => ', error.message);
   }
@@ -113,16 +113,16 @@ export async function repay(
 
   try {
     const wethAddress = WETH_ADDRESSES[this.chainId];
-    let txReceipt;
+    let receipt;
     if (token.address === wethAddress) {
       const overrides = { value: amount };
-      const txResponse = await this.router.repayETH(borrowable.address, this.account, deadline, overrides);
-      txReceipt = await txResponse.wait();
+      const tx = await this.router.repayETH(borrowable.address, this.account, deadline, overrides);
+      receipt = await tx.wait();
     } else {
-      const txResponse = await this.router.repay(borrowable.address, amount, this.account, deadline);
-      txReceipt = await txResponse.wait();
+      const tx = await this.router.repay(borrowable.address, amount, this.account, deadline);
+      receipt = await tx.wait();
     }
-    onTransactionHash(txReceipt.transactionHash);
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[repay] error.message => ', error.message);
   }
@@ -174,7 +174,7 @@ export async function leverage(
   }
   const deadline = permitDataA ? permitDataA.deadline : permitDataB ? permitDataB.deadline : this.getDeadline();
   try {
-    const txResponse =
+    const tx =
       await this.router.leverage(
         uniswapV2PairAddress,
         amountA,
@@ -186,8 +186,8 @@ export async function leverage(
         dataA,
         dataB
       );
-    const txReceipt = await txResponse.wait();
-    onTransactionHash(txReceipt.transactionHash);
+    const receipt = await tx.wait();
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[leverage] error.message => ', error.message);
   }
@@ -224,10 +224,10 @@ export async function deleverage(
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
-    const txResponse =
+    const tx =
       await this.router.deleverage(uniswapV2PairAddress, tokens, amountAMin, amountBMin, deadline, data);
-    const txReceipt = await txResponse.wait();
-    onTransactionHash(txReceipt.transactionHash);
+    const receipt = await tx.wait();
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[deleverage] error.message => ', error.message);
   }
@@ -249,9 +249,9 @@ export async function trackBorrows(
   if (borrowedA > 0 && sharesA === 0) toTrack.push(borrowableA.address);
   if (borrowedB > 0 && sharesB === 0) toTrack.push(borrowableB.address);
   try {
-    const txResponse = await this.claimAggregator.trackBorrows(this.account, toTrack);
-    const txReceipt = await txResponse.wait();
-    onTransactionHash(txReceipt.transactionHash);
+    const tx = await this.claimAggregator.trackBorrows(this.account, toTrack);
+    const receipt = await tx.wait();
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[trackBorrows] error.message => ', error.message);
   }
@@ -273,9 +273,9 @@ export async function claims(
   if (claimAmountA * 1 > 0) toClaim.push(farmingPoolA.address);
   if (claimAmountB * 1 > 0) toClaim.push(farmingPoolB.address);
   try {
-    const txResponse = this.claimAggregator.claims(this.account, toClaim);
-    const txReceipt = await txResponse.wait();
-    onTransactionHash(txReceipt.transactionHash);
+    const tx = this.claimAggregator.claims(this.account, toClaim);
+    const receipt = await tx.wait();
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[claims] error.message => ', error.message);
   }
@@ -289,9 +289,9 @@ export async function claimDistributor(
 ): Promise<void> {
   const claimable = await this.getClaimable(distributorDetails.claimableAddress);
   try {
-    const txResponse = await claimable.claim();
-    const txReceipt = await txResponse.wait();
-    onTransactionHash(txReceipt.transactionHash);
+    const tx = await claimable.claim();
+    const receipt = await tx.wait();
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[claimDistributor] error.message => ', error.message);
   }
@@ -305,24 +305,24 @@ export async function createNewPair(
   onTransactionHash: Function
 ): Promise<void> {
   try {
-    let txReceipt;
+    let receipt;
     if (createPairStep === CreatePairStep.BORROWABLE0) {
-      const txResponse = await this.factory.createBorrowable0(uniswapV2PairAddress);
-      txReceipt = await txResponse.wait();
+      const tx = await this.factory.createBorrowable0(uniswapV2PairAddress);
+      receipt = await tx.wait();
     }
     if (createPairStep === CreatePairStep.BORROWABLE1) {
-      const txResponse = await this.factory.createBorrowable1(uniswapV2PairAddress);
-      txReceipt = await txResponse.wait();
+      const tx = await this.factory.createBorrowable1(uniswapV2PairAddress);
+      receipt = await tx.wait();
     }
     if (createPairStep === CreatePairStep.COLLATERAL) {
-      const txResponse = await this.factory.createCollateral(uniswapV2PairAddress);
-      txReceipt = await txResponse.wait();
+      const tx = await this.factory.createCollateral(uniswapV2PairAddress);
+      receipt = await tx.wait();
     }
     if (createPairStep === CreatePairStep.INITIALIZE) {
-      const txResponse = await this.factory.initializeLendingPool(uniswapV2PairAddress);
-      txReceipt = await txResponse.wait();
+      const tx = await this.factory.initializeLendingPool(uniswapV2PairAddress);
+      receipt = await tx.wait();
     }
-    onTransactionHash(txReceipt.transactionHash);
+    onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[createNewPair] error.message => ', error.message);
   }

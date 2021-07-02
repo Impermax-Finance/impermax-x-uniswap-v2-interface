@@ -1,5 +1,6 @@
 
 import * as React from 'react';
+import { usePromise } from 'react-use';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import gql from 'graphql-tag';
@@ -92,27 +93,28 @@ const LendingPools = (): JSX.Element | null => {
 
   const handleError = useErrorHandler();
 
+  const mounted = usePromise();
+
   React.useEffect(() => {
     if (!chainId) return;
     if (!handleError) return;
+    if (!mounted) return;
     /**
      * TODO:
      * - https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component
      * - https://github.com/streamich/react-use/blob/master/src/useAsyncFn.ts
      */
-    let mounted = true;
-
     (async () => {
       try {
         setStatus(STATUSES.PENDING);
         const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[chainId];
-        const result = await apolloFetcher(impermaxSubgraphUrl, query);
+        const result = await mounted(apolloFetcher(impermaxSubgraphUrl, query));
         const theLendingPools = result.data.lendingPools;
         setLendingPools(theLendingPools);
 
         // TODO: should type properly
         const uniswapV2PairAddresses = theLendingPools.map((theLendingPool: { id: any; }) => theLendingPool.id);
-        const uniswapAPYs = await getUniswapAPYs(uniswapV2PairAddresses);
+        const uniswapAPYs = await mounted(getUniswapAPYs(uniswapV2PairAddresses));
 
         const theLendingPoolsData: { [key in Address]: LendingPoolData } = {};
         for (const theLendingPool of theLendingPools) {
@@ -120,25 +122,18 @@ const LendingPools = (): JSX.Element | null => {
           theLendingPoolsData[theLendingPool.id].pair.uniswapAPY = uniswapAPYs[theLendingPool.id];
         }
 
-        if (mounted) {
-          setLendingPoolsData(theLendingPoolsData);
-          setStatus(STATUSES.RESOLVED);
-        }
+        setLendingPoolsData(theLendingPoolsData);
+        setStatus(STATUSES.RESOLVED);
       } catch (error) {
-        if (mounted) {
-          setStatus(STATUSES.REJECTED);
-          handleError(error);
-        }
+        setStatus(STATUSES.REJECTED);
+        handleError(error);
         console.log('[useLendingPools useEffect] error.message => ', error.message);
       }
     })();
-
-    return () => {
-      mounted = false;
-    };
   }, [
     chainId,
-    handleError
+    handleError,
+    mounted
   ]);
 
   if (status === STATUSES.IDLE || status === STATUSES.PENDING) {

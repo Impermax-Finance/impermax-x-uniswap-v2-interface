@@ -102,14 +102,14 @@ const ClaimAirdropButton = (): JSX.Element | null => {
       }
 
       setClaimStatus(STATUSES.PENDING);
-      const txResponse =
+      const tx =
         await merkleDistributorContract.claim(airdropData.index, account, airdropData.amount, airdropData.proof);
-      const txReceipt = await txResponse.wait();
+      const receipt = await tx.wait();
 
       // const amount = parseFloat(airdropData.amount.toString()) / 1e18; // TODO: update other cases
       const amount = parseFloat(formatUnits(airdropData.amount));
       const summary = `Claim ${formatAmount(amount)} IMX`;
-      addTransaction({ hash: txReceipt.transactionHash }, { summary });
+      addTransaction({ hash: receipt.transactionHash }, { summary });
       setClaimStatus(STATUSES.RESOLVED);
       setClaimed(true);
     } catch (error) {

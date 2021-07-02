@@ -72,6 +72,9 @@ export async function getImxPrice(this: Subgraph) : Promise<number> {
   const imxAddress = IMX_ADDRESSES[this.chainId];
   const wethAddress = WETH_ADDRESSES[this.chainId];
   const IMXPair = getPairAddress(wethAddress, imxAddress, this.chainId);
+  // ray test touch <<
+  console.log(IMXPair);
+  // ray test touch >>
   const AAddress = await this.getUnderlyingAddress(IMXPair, PoolTokenType.BorrowableA);
   const poolTokenType = AAddress.toLowerCase() === imxAddress.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
   return this.getTokenPrice(IMXPair, poolTokenType);
