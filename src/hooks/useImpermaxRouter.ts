@@ -6,7 +6,6 @@ import {
 import { ImpermaxRouterContext } from 'contexts/ImpermaxRouterProvider';
 import ImpermaxRouter from 'impermax-router';
 
-// ray test touch <
 // TODO: should be one hook
 export default function useImpermaxRouter() {
   const context = useContext(ImpermaxRouterContext);
@@ -53,7 +52,6 @@ export function useTogglePriceInverted() {
 
   return context.togglePriceInverted;
 }
-// ray test touch >
 
 export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, additionalDeps: Array<any> = []): void {
   const context = useContext(ImpermaxRouterContext);
