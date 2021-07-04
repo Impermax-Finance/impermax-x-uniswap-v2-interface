@@ -34,7 +34,9 @@ export default function useApprove(approvalType: ApprovalType, amount: BigNumber
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : usePoolToken();
   // TODO: >
+  // ray test touch <<
   const impermaxRouter = useImpermaxRouter();
+  // ray test touch >>
   const addTransaction = useTransactionAdder();
   const [pending, setPending] = useState<boolean>(false);
   const [permitData, setPermitData] = useState<PermitData>(null);

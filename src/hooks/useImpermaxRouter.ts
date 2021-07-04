@@ -4,7 +4,7 @@ import {
   useEffect
 } from 'react';
 import { ImpermaxRouterContext } from 'contexts/ImpermaxRouterProvider';
-import ImpermaxRouter from '../impermax-router';
+import ImpermaxRouter from 'impermax-router';
 
 // ray test touch <
 // TODO: should be one hook
@@ -17,15 +17,15 @@ export default function useImpermaxRouter() {
 
   return context.impermaxRouter;
 }
-export function useRouterAccount() {
-  const context = useContext(ImpermaxRouterContext);
-
-  if (context === undefined) {
-    throw new Error('useRouterAccount must be used within a ImpermaxRouterProvider');
-  }
-
-  return context.routerAccount;
-}
+// ray test touch <<
+// export function useRouterAccount() {
+//   const context = useContext(ImpermaxRouterContext);
+//   if (context === undefined) {
+//     throw new Error('useRouterAccount must be used within a ImpermaxRouterProvider');
+//   }
+//   return context.routerAccount;
+// }
+// ray test touch >>
 export function useRouterUpdate() {
   const context = useContext(ImpermaxRouterContext);
 
@@ -73,7 +73,9 @@ export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, a
 
   const {
     impermaxRouter,
-    routerAccount,
+    // ray test touch <<
+    // routerAccount,
+    // ray test touch >>
     routerUpdate,
     priceInverted
   } = context;
@@ -85,7 +87,9 @@ export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, a
     f(impermaxRouter);
   }, [
     impermaxRouter,
-    routerAccount,
+    // ray test touch <<
+    // routerAccount,
+    // ray test touch >>
     routerUpdate,
     priceInverted,
     // f,
