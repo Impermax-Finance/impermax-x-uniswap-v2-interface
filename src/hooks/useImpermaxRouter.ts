@@ -17,15 +17,6 @@ export default function useImpermaxRouter() {
 
   return context.impermaxRouter;
 }
-// ray test touch <<
-// export function useRouterAccount() {
-//   const context = useContext(ImpermaxRouterContext);
-//   if (context === undefined) {
-//     throw new Error('useRouterAccount must be used within a ImpermaxRouterProvider');
-//   }
-//   return context.routerAccount;
-// }
-// ray test touch >>
 export function useRouterUpdate() {
   const context = useContext(ImpermaxRouterContext);
 
@@ -73,9 +64,6 @@ export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, a
 
   const {
     impermaxRouter,
-    // ray test touch <<
-    // routerAccount,
-    // ray test touch >>
     routerUpdate,
     priceInverted
   } = context;
@@ -87,9 +75,6 @@ export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, a
     f(impermaxRouter);
   }, [
     impermaxRouter,
-    // ray test touch <<
-    // routerAccount,
-    // ray test touch >>
     routerUpdate,
     priceInverted,
     // f,

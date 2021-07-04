@@ -5,9 +5,6 @@ import { Web3Provider } from '@ethersproject/providers';
 import Button from 'react-bootstrap/Button';
 
 import { injected } from 'utils/helpers/web3/connectors';
-// ray test touch <<
-// import { useRouterAccount } from '../../../../hooks/useImpermaxRouter';
-// ray test touch >>
 import { PoolTokenType } from '../../../../types/interfaces';
 import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
 import PoolTokenContext from '../../../../contexts/PoolToken';
@@ -53,9 +50,6 @@ export default function AccountLendingPool(): JSX.Element {
     activate,
     account
   } = useWeb3React<Web3Provider>();
-  // ray test touch <<
-  // const routerAccount = useRouterAccount();
-  // ray test touch >>
 
   const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
   const suppliedUSD = useSuppliedUSD();
@@ -66,10 +60,7 @@ export default function AccountLendingPool(): JSX.Element {
       AccountLendingPoolPage.EARN_INTEREST :
     pageSelected;
 
-  // ray test touch <<
   if (!account) {
-  // if (!account || !routerAccount) {
-  // ray test touch >>
     return (
       <AccountLendingPoolContainer>
         <div className='text-center py-5'>
