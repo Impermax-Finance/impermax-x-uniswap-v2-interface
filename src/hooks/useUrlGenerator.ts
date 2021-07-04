@@ -5,37 +5,33 @@
 
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { useWETH } from './useNetwork';
-import usePairAddress from './usePairAddress';
-import { PoolTokenType } from '../impermax-router/interfaces';
-import { useUnderlyingAddress } from './useData';
 import { getAddress } from '@ethersproject/address';
 
-export function useLendingPoolUrl() : string {
-  const uniswapV2PairAddress = usePairAddress();
-  return '/lending-pool/' + uniswapV2PairAddress;
-}
+import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import { PoolTokenType } from '../types/interfaces';
+import { useUnderlyingAddress } from './useData';
 
 export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   const tokenAddress = useUnderlyingAddress(poolTokenTypeArg);
   if (!tokenAddress) return '';
   const convertedAddress = getAddress(tokenAddress);
   try {
-    return `/assets/icons/${convertedAddress}.png`;
+    return `/assets/images/token-icons/${convertedAddress}.png`;
   } catch {
     // TODO: <
     // TODO: not working
-    return '/assets/default.png';
+    return '/assets/images/default.png';
     // TODO: >
   }
 }
 
 export function useAddLiquidityUrl() : string {
-  const WETH = useWETH();
+  const { chainId } = useWeb3React<Web3Provider>();
+  const wethAddress = WETH_ADDRESSES[chainId];
   const tokenAAddress = useUnderlyingAddress(PoolTokenType.BorrowableA);
   const tokenBAddress = useUnderlyingAddress(PoolTokenType.BorrowableB);
-  const addressA = tokenAAddress === WETH ? 'ETH' : tokenAAddress;
-  const addressB = tokenBAddress === WETH ? 'ETH' : tokenBAddress;
+  const addressA = tokenAAddress === wethAddress ? 'ETH' : tokenAAddress;
+  const addressB = tokenBAddress === wethAddress ? 'ETH' : tokenBAddress;
   return 'https://app.uniswap.org/#/add/' + addressA + '/' + addressB;
 }
 

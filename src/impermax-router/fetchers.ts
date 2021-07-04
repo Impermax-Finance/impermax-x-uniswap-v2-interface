@@ -5,7 +5,7 @@
 // TODO: >
 
 import ImpermaxRouter from '.';
-import { Address, PoolTokenType } from './interfaces';
+import { Address, PoolTokenType } from '../types/interfaces';
 import { address } from '../utils/ether-utils';
 import { isAddress } from 'ethers/lib/utils';
 

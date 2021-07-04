@@ -45,7 +45,7 @@ const Template: Story<Props> = args => {
             <p
               className={clsx(
                 'text-sm',
-                'text-gray-500'
+                'text-textSecondary'
               )}>
               Your payment has been successfully submitted. We’ve sent your
               an email with all of the details of your order.

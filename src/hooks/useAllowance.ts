@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
-import { ApprovalType, PoolTokenType } from '../impermax-router/interfaces';
+import { ApprovalType, PoolTokenType } from '../types/interfaces';
 import usePairAddress from './usePairAddress';
 import usePoolToken from './usePoolToken';
 import { useRouterCallback } from './useImpermaxRouter';

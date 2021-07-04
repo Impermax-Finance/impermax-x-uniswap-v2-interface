@@ -4,7 +4,7 @@
 // TODO: >
 
 import { createContext } from 'react';
-import { PoolTokenType } from '../impermax-router/interfaces';
+import { PoolTokenType } from '../types/interfaces';
 
 const PoolTokenContext = createContext<PoolTokenType>(null);
 export default PoolTokenContext;

@@ -4,41 +4,14 @@
 // @ts-nocheck
 // TODO: >
 
+import { formatUnits } from '@ethersproject/units';
+
 import ImpermaxRouter from '.';
-import { Address, AirdropData, PoolTokenType, ClaimEvent } from './interfaces';
-import { BigNumber } from '@ethersproject/bignumber';
-
-// Airdrop Data
-export async function initializeAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
-  try {
-    const json = await fetch(this.airdropUrl + '/' + this.account);
-    const data = await json.json();
-    if (data) {
-      data.amount = BigNumber.from(data.amount);
-      const isClaimed = await this.merkleDistributor.isClaimed(data.index);
-      if (!isClaimed) return data;
-    }
-  } catch (error) {
-    console.log('[initializeAirdropData] error.message => ', error.message);
-  }
-  return {
-    index: -1,
-    amount: null,
-    proof: []
-  };
-}
-
-export async function getAirdropData(this: ImpermaxRouter) : Promise<AirdropData> {
-  if (!this.imxCache.airdropData) this.imxCache.airdropData = await this.initializeAirdropData();
-  return this.imxCache.airdropData;
-}
-
-export async function hasClaimableAirdrop(this: ImpermaxRouter) : Promise<boolean> {
-  const airdropData = await this.getAirdropData();
-  // TODO: double-check
-  if (airdropData?.amount) return true;
-  return false;
-}
+import {
+  Address,
+  PoolTokenType,
+  ClaimEvent
+} from '../types/interfaces';
 
 // Farming Shares
 export async function initializeFarmingShares(
@@ -63,8 +36,14 @@ export async function initializeAvailableReward(this: ImpermaxRouter, uniswapV2P
   const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   let totalAmount = 0;
-  if (farmingPoolA) totalAmount += await farmingPoolA.methods.claim().call({ from: this.account }) / 1e18;
-  if (farmingPoolB) totalAmount += await farmingPoolB.methods.claim().call({ from: this.account }) / 1e18;
+  if (farmingPoolA) {
+    const bigTotalAmount = await farmingPoolA.claim();
+    totalAmount += parseFloat(formatUnits(bigTotalAmount));
+  }
+  if (farmingPoolB) {
+    const bigTotalAmount = await farmingPoolB.claim();
+    totalAmount += parseFloat(formatUnits(bigTotalAmount));
+  }
   return totalAmount;
 }
 export async function getAvailableReward(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {

@@ -12,11 +12,12 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
-import ClaimAirdrop from './ClaimAirdrop';
-import WalletConnect from 'parts/WalletConnect';
-import { CHAIN_IDS } from 'config/web3/blockchain';
+import ClaimAirdropButton from 'containers/ClaimAirdropButton';
+import WalletConnect from 'containers/WalletConnect';
+import ChainConnect from 'containers/ChainConnect';
+import ConnectedWalletInfo from 'containers/ConnectedWalletInfo';
+import { CHAIN_IDS } from 'config/web3/chains';
 import { ReactComponent as ImpermaxLogoIcon } from 'assets/images/icons/impermax-logo.svg';
-import { useHasClaimableAirdrop } from 'hooks/useData';
 import {
   PAGES,
   PARAMETERS
@@ -36,49 +37,47 @@ const AppBar = ({
     account
   } = useWeb3React<Web3Provider>();
 
-  const hasClaimableAirdrop = useHasClaimableAirdrop();
-
   const NAVIGATION_ITEMS = [
     {
       title: 'Markets',
-      link: PAGES.home.to,
+      link: PAGES.HOME,
       enabled: true,
       matched: (
         useRouteMatch({
-          path: PAGES.home.to,
+          path: PAGES.HOME,
           strict: true
         })
       )?.isExact
     },
     {
       title: 'Dashboard',
-      link: account ? PAGES.account.to.replace(`:${PARAMETERS.ACCOUNT}`, account) : '',
+      link: account ? PAGES.ACCOUNT.replace(`:${PARAMETERS.ACCOUNT}`, account) : '',
       enabled: !!account,
       matched: (
         useRouteMatch({
-          path: PAGES.account.to,
+          path: PAGES.ACCOUNT,
           strict: true
         })
       )?.isExact
     },
     {
       title: 'User Guide',
-      link: PAGES.userGuide.to,
+      link: PAGES.USER_GUIDE,
       enabled: true,
       matched: (
         useRouteMatch({
-          path: PAGES.userGuide.to,
+          path: PAGES.USER_GUIDE,
           strict: true
         })
       )?.isExact
     },
     {
       title: 'Risks',
-      link: PAGES.risks.to,
+      link: PAGES.RISKS,
       enabled: chainId === CHAIN_IDS.ETHEREUM_MAIN_NET,
       matched: (
         useRouteMatch({
-          path: PAGES.risks.to,
+          path: PAGES.RISKS,
           strict: true
         })
       )?.isExact
@@ -117,7 +116,7 @@ const AppBar = ({
                     'flex',
                     'items-center'
                   )}>
-                  <NavLink to={PAGES.home.to}>
+                  <NavLink to={PAGES.HOME}>
                     <ImpermaxLogoIcon
                       className='text-impermaxJade'
                       width={42}
@@ -159,11 +158,12 @@ const AppBar = ({
                   'hidden',
                   'sm:ml-6',
                   'sm:flex',
-                  'sm:items-center'
+                  'sm:items-center',
+                  'space-x-2'
                 )}>
-                {hasClaimableAirdrop && (
-                  <ClaimAirdrop />
-                )}
+                <ClaimAirdropButton />
+                <ChainConnect />
+                <ConnectedWalletInfo />
                 <WalletConnect />
               </div>
               <div
@@ -242,11 +242,15 @@ const AppBar = ({
                 ) : null
               ))}
             </div>
-            <div className='pt-4 pb-3 border-t border-gray-200'>
+            <div
+              className={clsx(
+                'pt-4',
+                'pb-3',
+                'border-t',
+                'border-gray-200'
+              )}>
               <div className='flex items-center px-4'>
-                {hasClaimableAirdrop && (
-                  <ClaimAirdrop />
-                )}
+                <ClaimAirdropButton />
                 <WalletConnect />
               </div>
             </div>

@@ -3,7 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { PoolTokenType, Changes, AirdropData, ClaimEvent, Address } from '../impermax-router/interfaces';
+import { PoolTokenType, Changes, ClaimEvent, Address } from '../types/interfaces';
 import usePoolToken from './usePoolToken';
 import usePairAddress from './usePairAddress';
 import { useState, useEffect } from 'react';
@@ -20,12 +20,6 @@ export function useToken(poolTokenTypeArg?: PoolTokenType) {
   const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : usePoolToken();
   // TODO: >
   return { uniswapV2PairAddress, poolTokenType };
-}
-
-export function usePairList() : Address[] {
-  const [pairList, setPairList] = useState<Address[]>();
-  useSubgraphCallback(async subgraph => setPairList(await subgraph.getPairList()));
-  return pairList;
 }
 
 export function useDecimals(poolTokenTypeArg?: PoolTokenType) : number {
@@ -82,12 +76,6 @@ export function useTokenPrice(poolTokenTypeArg?: PoolTokenType) : number {
   const [tokenPrice, setTokenPrice] = useState<number>(null);
   useSubgraphCallback(async subgraph => setTokenPrice(await subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType)));
   return tokenPrice;
-}
-
-export function useImxPrice() : number {
-  const [imxPrice, setImxPrice] = useState<number>(null);
-  useSubgraphCallback(async subgraph => setImxPrice(await subgraph.getImxPrice()));
-  return imxPrice;
 }
 
 export function useMarketPrice() : number {
@@ -172,24 +160,6 @@ export function useUniswapAPY() : number {
   const [uniswapAPY, setUniswapAPY] = useState<number>(0);
   useSubgraphCallback(async subgraph => setUniswapAPY(await subgraph.getUniswapAPY(uniswapV2PairAddress)));
   return uniswapAPY;
-}
-
-export function useTotalValueLocked() : number {
-  const [totalValueLocked, setTotalValueLocked] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setTotalValueLocked(await subgraph.getTotalValueLocked()));
-  return totalValueLocked;
-}
-
-export function useTotalValueSupplied() : number {
-  const [totalValueSupplied, setTotalValueSupplied] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setTotalValueSupplied(await subgraph.getTotalValueSupplied()));
-  return totalValueSupplied;
-}
-
-export function useTotalValueBorrowed() : number {
-  const [totalValueBorrowed, setTotalValueBorrowed] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setTotalValueBorrowed(await subgraph.getTotalValueBorrowed()));
-  return totalValueBorrowed;
 }
 
 export function useFarmingAPY(poolTokenTypeArg?: PoolTokenType) : number {
@@ -415,18 +385,6 @@ export function useClaimHistory() : ClaimEvent[] {
   const [claimHistory, setClaimHistory] = useState<ClaimEvent[]>([]);
   useRouterCallback(async router => setClaimHistory(await router.getClaimHistory(uniswapV2PairAddress)));
   return claimHistory;
-}
-
-export function useAirdropData() : AirdropData {
-  const [airdropData, setAirdropData] = useState<AirdropData>();
-  useRouterCallback(async router => setAirdropData(await router.getAirdropData()));
-  return airdropData;
-}
-
-export function useHasClaimableAirdrop() : boolean {
-  const [hasClaimableAirdrop, setHasClaimableAirdrop] = useState<boolean>(false);
-  useRouterCallback(async router => setHasClaimableAirdrop(await router.hasClaimableAirdrop()));
-  return hasClaimableAirdrop;
 }
 
 export function useAvailableClaimable(claimableAddress: Address) : number {

@@ -2,24 +2,19 @@
 import { useParams } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
-import Layout from 'parts/Layout';
 import PairAddressContext from 'contexts/PairAddress';
-import LendingPoolPage from 'components/LendingPoolPage';
+import LendingPoolContent from './LendingPoolContent';
+import { PARAMETERS } from 'utils/constants/links';
 
 const LendingPool = (): JSX.Element => {
-  const { uniswapV2PairAddress } = useParams<{ uniswapV2PairAddress: string }>();
-
-  // const doUpdate = useDoUpdate();
-  // useInterval(() => doUpdate(), 60000);
+  const { [PARAMETERS.UNISWAP_V2_PAIR_ADDRESS]: uniswapV2PairAddress } = useParams<Record<string, string>>();
 
   return (
-    <Layout>
-      <Container className='lending-pool'>
-        <PairAddressContext.Provider value={uniswapV2PairAddress}>
-          <LendingPoolPage />
-        </PairAddressContext.Provider>
-      </Container>
-    </Layout>
+    <Container>
+      <PairAddressContext.Provider value={uniswapV2PairAddress}>
+        <LendingPoolContent />
+      </PairAddressContext.Provider>
+    </Container>
   );
 };
 

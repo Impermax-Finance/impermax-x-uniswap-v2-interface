@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { InteractionModalContainer } from '.';
 import { Row, Col } from 'react-bootstrap';
-import { PoolTokenType, ApprovalType } from '../../impermax-router/interfaces';
+import { PoolTokenType, ApprovalType } from '../../types/interfaces';
 import usePoolToken from '../../hooks/usePoolToken';
 import RiskMetrics from '../RiskMetrics';
 import InputAmount from '../InputAmount';

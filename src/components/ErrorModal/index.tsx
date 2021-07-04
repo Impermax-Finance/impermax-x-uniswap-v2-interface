@@ -3,13 +3,12 @@ import * as React from 'react';
 import clsx from 'clsx';
 
 import IconButton from 'components/IconButton';
-import { ReactComponent as CloseIcon } from 'assets/images/icons/close.svg';
-
 import ImpermaxModal, {
-  Props as ModalProps,
+  Props as ImpermaxModalProps,
   ImpermaxModalInnerWrapper,
   ImpermaxModalTitle
 } from 'components/UI/ImpermaxModal';
+import { ReactComponent as CloseIcon } from 'assets/images/icons/close.svg';
 
 interface CustomProps {
   title: string;
@@ -65,6 +64,6 @@ const ErrorModal = ({
   );
 };
 
-export type Props = Omit<ModalProps, 'children'> & CustomProps;
+export type Props = Omit<ImpermaxModalProps, 'children'> & CustomProps;
 
 export default ErrorModal;

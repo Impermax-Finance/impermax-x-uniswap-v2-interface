@@ -1,4 +1,5 @@
 
+import * as React from 'react';
 import clsx from 'clsx';
 
 import ImpermaxButtonBase, { Props as ImpermaxButtonBaseProps } from 'components/UI/ImpermaxButtonBase';
@@ -8,17 +9,19 @@ type CustomProps = {
   pending?: boolean;
 }
 
-const IconButton = ({
+type Ref = HTMLButtonElement;
+const IconButton = React.forwardRef<Ref, Props>(({
   children,
   disabled = false,
   pending = false,
   className,
   ...rest
-}: Props): JSX.Element => {
+}, ref): JSX.Element => {
   const disabledOrPending = disabled || pending;
 
   return (
     <ImpermaxButtonBase
+      ref={ref}
       className={clsx(
         'focus:outline-none',
         'focus:ring',
@@ -46,7 +49,8 @@ const IconButton = ({
       ) : children}
     </ImpermaxButtonBase>
   );
-};
+});
+IconButton.displayName = 'IconButton';
 
 export type Props = CustomProps & ImpermaxButtonBaseProps;
 

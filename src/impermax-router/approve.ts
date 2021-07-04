@@ -14,7 +14,8 @@ import {
   Address,
   PoolTokenType,
   ApprovalType
-} from './interfaces';
+} from '../types/interfaces';
+import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 
 const EIP712DOMAIN = [
   { name: 'name', type: 'string' },
@@ -49,7 +50,8 @@ export async function getAllowance(
   approvalType: ApprovalType
 ) : Promise<BigNumber> {
   const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  if (token.address === this.WETH && approvalType === ApprovalType.UNDERLYING) {
+  const wethAddress = WETH_ADDRESSES[this.chainId];
+  if (token.address === wethAddress && approvalType === ApprovalType.UNDERLYING) {
     return MaxUint256;
   }
 
@@ -82,19 +84,20 @@ export async function approve(
     token
   ] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
 
+  let receipt;
   if (approvalType === ApprovalType.POOL_TOKEN) {
     const tx = await poolToken.approve(spender, amount);
-    await tx.wait();
+    receipt = await tx.wait();
   }
   if (approvalType === ApprovalType.UNDERLYING) {
     const tx = await token.approve(spender, amount);
-    await tx.wait();
+    receipt = await tx.wait();
   }
   if (approvalType === ApprovalType.BORROW) {
     const tx = await poolToken.borrowApprove(spender, amount);
-    await tx.wait();
+    receipt = await tx.wait();
   }
-  onTransactionHash();
+  onTransactionHash(receipt.transactionHash);
 }
 
 export async function getPermitData(

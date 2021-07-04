@@ -12,7 +12,6 @@ const ImpermaxModalTitle = (props: PropsOf<typeof Dialog.Title>): JSX.Element =>
 );
 
 type Ref = HTMLDivElement;
-
 const ImpermaxModalInnerWrapper = React.forwardRef<Ref, React.ComponentPropsWithRef<'div'>>(({
   className,
   ...rest
@@ -52,7 +51,7 @@ const ImpermaxModal = ({
         className={clsx(
           'fixed',
           'inset-0',
-          'z-interlayModal',
+          'z-impermaxModal',
           'overflow-y-auto'
         )}
         open={open}

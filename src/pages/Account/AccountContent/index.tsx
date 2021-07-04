@@ -13,7 +13,7 @@ import {
 
 import BorrowPosition from './BorrowPosition';
 import SupplyPosition from './SupplyPosition';
-import { AccountOverallStats } from 'components/OverallStats';
+import AccountOverallStats from './AccountOverallStats';
 import {
   useBorrowPositions,
   useSupplyPositions

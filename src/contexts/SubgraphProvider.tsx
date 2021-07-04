@@ -1,40 +1,40 @@
-import React, { createContext } from 'react';
-import Subgraph from '../subgraph';
+
+import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import {
-  useImpermaxSubgraphUrl,
-  useWETH,
-  useIMX,
-  useUniswapV2FactoryAddress
-} from '../hooks/useNetwork';
 
-export interface SubgraphContextI {
-  subgraph?: Subgraph;
+import Subgraph from 'subgraph';
+
+const SubgraphContext = React.createContext<SubgraphContextInterface | undefined>(undefined);
+
+interface SubgraphProviderProps {
+  children: React.ReactNode;
 }
 
-export const SubgraphContext = createContext<SubgraphContextI>({});
+const SubgraphProvider = ({
+  children
+}: SubgraphProviderProps): JSX.Element => {
+  const { chainId } = useWeb3React<Web3Provider>();
 
-export const SubgraphProvider: React.FC = ({ children }) => {
-  const { chainId = 0 } = useWeb3React<Web3Provider>();
-  const impermaxSubgraphUrl = useImpermaxSubgraphUrl();
-  const WETH = useWETH();
-  const IMX = useIMX();
-  const uniswapV2FactoryAddress = useUniswapV2FactoryAddress();
+  if (!chainId) {
+    throw new Error('Invalid chain ID!');
+  }
 
-  const subgraph = new Subgraph({
-    impermaxSubgraphUrl,
-    chainId,
-    WETH,
-    IMX,
-    uniswapV2FactoryAddress
-  });
+  const subgraph = new Subgraph({ chainId });
 
   return (
-    <SubgraphContext.Provider
-      value={{
-        subgraph
-      }}>{children}
+    <SubgraphContext.Provider value={{ subgraph }}>
+      {children}
     </SubgraphContext.Provider>
   );
 };
+
+export interface SubgraphContextInterface {
+  subgraph: Subgraph;
+}
+
+export {
+  SubgraphContext
+};
+
+export default SubgraphProvider;

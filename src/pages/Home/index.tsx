@@ -1,16 +1,25 @@
 
-import Layout from 'parts/Layout';
-import LendingPoolsSearch from 'components/LendingPoolsSearch';
-import OverallStats from 'components/OverallStats';
-import CreateNewMarketButton from 'components/CreateNewMarketButton';
+import clsx from 'clsx';
+
+import OverallStats from './OverallStats';
+import CreateNewMarketLinkButton from './CreateNewMarketLinkButton';
+import LendingPools from './LendingPools';
 
 const Home = (): JSX.Element => {
   return (
-    <Layout>
+    <div
+      className={clsx(
+        // TODO: could be styled at `Layout` level
+        'container',
+        'mx-auto',
+        'py-8',
+        'sm:px-8',
+        'space-y-12'
+      )}>
       <OverallStats />
-      <CreateNewMarketButton />
-      <LendingPoolsSearch />
-    </Layout>
+      <CreateNewMarketLinkButton />
+      <LendingPools />
+    </div>
   );
 };
 

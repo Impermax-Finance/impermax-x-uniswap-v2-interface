@@ -6,8 +6,9 @@ import {
 } from 'react-bootstrap';
 import clsx from 'clsx';
 
-import { PoolTokenType } from 'impermax-router/interfaces';
-import { useTokenIcon, useLendingPoolUrl } from 'hooks/useUrlGenerator';
+import { PoolTokenType } from 'types/interfaces';
+import useLendingPoolURL from 'hooks/use-lending-pool-url';
+import { useTokenIcon } from 'hooks/useUrlGenerator';
 import { useSuppliedAmount, useSuppliedValue } from 'hooks/useAccountData';
 import { useSymbol } from 'hooks/useData';
 import { formatUSD, formatAmount } from 'utils/format';
@@ -21,7 +22,7 @@ const SupplyPosition = (): JSX.Element => {
   const suppliedValueB = useSuppliedValue(PoolTokenType.BorrowableB);
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
-  const lendingPoolUrl = useLendingPoolUrl();
+  const lendingPoolUrl = useLendingPoolURL();
 
   return (
     <Link

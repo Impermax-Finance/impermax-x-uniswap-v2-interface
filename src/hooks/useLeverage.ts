@@ -10,7 +10,7 @@ import usePairAddress from './usePairAddress';
 import useImpermaxRouter, { useDoUpdate } from './useImpermaxRouter';
 import { ButtonState } from '../components/InteractionButton';
 import { PermitData } from './useApprove';
-import { PoolTokenType } from '../impermax-router/interfaces';
+import { PoolTokenType } from '../types/interfaces';
 import { useToNumber, useSymbol } from './useData';
 import { formatFloat } from '../utils/format';
 

@@ -7,7 +7,13 @@
 import { formatUnits } from '@ethersproject/units';
 
 import ImpermaxRouter from '.';
-import { Address, PoolTokenType, Changes, NO_CHANGES } from './interfaces';
+import {
+  Address,
+  PoolTokenType,
+  Changes,
+  NO_CHANGES
+} from '../types/interfaces';
+import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
 
 // Exchange rate
 export async function initializeExchangeRate(
@@ -34,7 +40,8 @@ export async function initializeAvailableBalance(
   poolTokenType: PoolTokenType
 ) : Promise<number> {
   const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  if (token.address === this.WETH) {
+  const wethAddress = WETH_ADDRESSES[this.chainId];
+  if (token.address === wethAddress) {
     const bigBalance = await this.library.getBalance(this.account);
     const availableBalance = parseFloat(formatUnits(bigBalance)) / this.dust;
     return availableBalance;
@@ -82,7 +89,11 @@ export async function getDeposited(this: ImpermaxRouter, uniswapV2PairAddress: A
   if (!cache.deposited) cache.deposited = this.initializeDeposited(uniswapV2PairAddress, poolTokenType);
   return cache.deposited;
 }
-export async function getDepositedUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
+export async function getDepositedUSD(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType
+) : Promise<number> {
   const deposited = await this.getDeposited(uniswapV2PairAddress, poolTokenType);
   const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
   return deposited * tokenPrice;

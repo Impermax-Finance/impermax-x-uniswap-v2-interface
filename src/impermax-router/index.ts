@@ -14,25 +14,23 @@ import BorrowableJSON from 'abis/contracts/IBorrowable.json';
 import CollateralSON from 'abis/contracts/ICollateral.json';
 import FactoryJSON from 'abis/contracts/IFactory.json';
 import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
-import MerkleDistributorJSON from 'abis/contracts/IMerkleDistributor.json';
 import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
 import ClaimAggregatorJSON from 'abis/contracts/ClaimAggregator.json';
 import ClaimableJSON from 'abis/contracts/IClaimable.json';
 import {
-  Router,
+  RouterContract,
   Address,
   LendingPool,
   PoolTokenType,
-  ImpermaxRouterCfg,
-  Factory,
-  SimpleUniswapOracle,
+  ImpermaxRouterConfigInterface,
+  FactoryContract,
+  SimpleUniswapOracleContract,
   AirdropData,
-  MerkleDistributor,
-  ClaimAggregator,
+  ClaimAggregatorContract,
   ClaimEvent,
-  Claimable,
-  UniswapV2Factory
-} from './interfaces';
+  ClaimableContract,
+  UniswapV2FactoryContract
+} from '../types/interfaces';
 import * as contracts from './contracts';
 import * as fetchers from './fetchers';
 import * as utils from './utils';
@@ -41,6 +39,11 @@ import * as interactions from './interactions';
 import * as account from './account';
 import * as imx from './imx';
 import Subgraph from 'subgraph';
+import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
+import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
+import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
+import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracle';
+import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
 
 class ImpermaxRouter {
   subgraph: Subgraph;
@@ -48,16 +51,12 @@ class ImpermaxRouter {
   chainId: number;
   uiMargin: number;
   dust: number;
-  router: Router;
-  factory: Factory;
-  uniswapV2Factory: UniswapV2Factory;
-  simpleUniswapOracle: SimpleUniswapOracle;
-  merkleDistributor: MerkleDistributor;
-  claimAggregator: ClaimAggregator;
+  router: RouterContract;
+  factory: FactoryContract;
+  uniswapV2Factory: UniswapV2FactoryContract;
+  simpleUniswapOracle: SimpleUniswapOracleContract;
+  claimAggregator: ClaimAggregatorContract;
   account: Address;
-  IMX: Address;
-  WETH: Address;
-  airdropUrl: string;
   priceInverted: boolean;
   lendingPoolCache: {
     [key in Address]?: {
@@ -86,27 +85,23 @@ class ImpermaxRouter {
   };
   claimableCache: {
     [key in Address]?: {
-      contract?: Claimable,
+      contract?: ClaimableContract,
       availableClaimable?: number,
     }
   };
 
-  constructor(cfg: ImpermaxRouterCfg) {
-    this.subgraph = cfg.subgraph;
-    this.library = cfg.library;
-    this.chainId = cfg.chainId;
+  constructor(config: ImpermaxRouterConfigInterface) {
+    this.subgraph = config.subgraph;
+    this.library = config.library;
+    this.chainId = config.chainId;
     this.uiMargin = 1.1;
     this.dust = 1.000001;
-    this.router = this.newRouter(cfg.routerAddress);
-    this.factory = this.newFactory(cfg.factoryAddress);
-    this.uniswapV2Factory = this.newUniswapV2Factory(cfg.uniswapV2FactoryAddress);
-    this.simpleUniswapOracle = this.newSimpleUniswapOracle(cfg.simpleUniswapOracleAddress);
-    this.merkleDistributor = this.newMerkleDistributor(cfg.merkleDistributorAddress);
-    this.claimAggregator = this.newClaimAggregator(cfg.claimAggregatorAddress);
-    this.IMX = cfg.IMX;
-    this.WETH = cfg.WETH;
-    this.airdropUrl = cfg.airdropUrl;
-    this.priceInverted = cfg.priceInverted;
+    this.router = this.newRouter(ROUTER_ADDRESSES[config.chainId]);
+    this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
+    this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
+    this.simpleUniswapOracle = this.newSimpleUniswapOracle(SIMPLE_UNISWAP_ORACLE_ADDRESSES[config.chainId]);
+    this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
+    this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
     this.imxCache = {};
     this.claimableCache = {};
@@ -142,10 +137,6 @@ class ImpermaxRouter {
 
   newBorrowable(address: Address): Contract {
     return new Contract(address, BorrowableJSON.abi, this.library);
-  }
-
-  newMerkleDistributor(address: Address): Contract {
-    return new Contract(address, MerkleDistributorJSON.abi, this.library.getSigner(this.account));
   }
 
   newFarmingPool(address: Address): Contract {
@@ -245,13 +236,10 @@ class ImpermaxRouter {
   public getMaxDeleverage = account.getMaxDeleverage;
 
   // IMX
-  public initializeAirdropData = imx.initializeAirdropData;
   public initializeFarmingShares = imx.initializeFarmingShares
   public initializeAvailableReward = imx.initializeAvailableReward;
   public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
-  public getAirdropData = imx.getAirdropData;
-  public hasClaimableAirdrop = imx.hasClaimableAirdrop;
   public getFarmingShares = imx.getFarmingShares;
   public getAvailableReward = imx.getAvailableReward;
   public getClaimHistory = imx.getClaimHistory;
@@ -260,7 +248,6 @@ class ImpermaxRouter {
   // Utils
   public normalize = utils.normalize;
   public getDeadline = utils.getDeadline;
-  public toAPY = utils.toAPY;
 
   // Approve
   public getOwnerSpender = approve.getOwnerSpender;
@@ -277,7 +264,6 @@ class ImpermaxRouter {
   public leverage = interactions.leverage;
   public getDeleverageAmounts = interactions.getDeleverageAmounts;
   public deleverage = interactions.deleverage;
-  public claimAirdrop = interactions.claimAirdrop;
   public trackBorrows = interactions.trackBorrows;
   public claims = interactions.claims;
   public claimDistributor = interactions.claimDistributor;

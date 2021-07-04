@@ -1,40 +1,81 @@
-import { useContext, useEffect } from 'react';
-import { ImpermaxRouterContext } from '../contexts/ImpermaxRouterProvider';
-import ImpermaxRouter from '../impermax-router';
 
+import {
+  useContext,
+  useEffect
+} from 'react';
+import { ImpermaxRouterContext } from 'contexts/ImpermaxRouterProvider';
+import ImpermaxRouter from 'impermax-router';
+
+// TODO: should be one hook
 export default function useImpermaxRouter() {
-  const { impermaxRouter } = useContext(ImpermaxRouterContext);
-  return impermaxRouter;
-}
+  const context = useContext(ImpermaxRouterContext);
 
-export function useRouterAccount() {
-  const { routerAccount } = useContext(ImpermaxRouterContext);
-  return routerAccount;
-}
+  if (context === undefined) {
+    throw new Error('useImpermaxRouter must be used within a ImpermaxRouterProvider');
+  }
 
+  return context.impermaxRouter;
+}
 export function useRouterUpdate() {
-  const { routerUpdate } = useContext(ImpermaxRouterContext);
-  return routerUpdate;
-}
+  const context = useContext(ImpermaxRouterContext);
 
+  if (context === undefined) {
+    throw new Error('useRouterUpdate must be used within a ImpermaxRouterProvider');
+  }
+
+  return context.routerUpdate;
+}
 export function useDoUpdate() {
-  const { doUpdate } = useContext(ImpermaxRouterContext);
-  return doUpdate;
-}
+  const context = useContext(ImpermaxRouterContext);
 
+  if (context === undefined) {
+    throw new Error('useDoUpdate must be used within a ImpermaxRouterProvider');
+  }
+
+  return context.doUpdate;
+}
 export function usePriceInverted() {
-  const { priceInverted } = useContext(ImpermaxRouterContext);
-  return priceInverted;
-}
+  const context = useContext(ImpermaxRouterContext);
 
+  if (context === undefined) {
+    throw new Error('usePriceInverted must be used within a ImpermaxRouterProvider');
+  }
+
+  return context.priceInverted;
+}
 export function useTogglePriceInverted() {
-  const { togglePriceInverted } = useContext(ImpermaxRouterContext);
-  return togglePriceInverted;
+  const context = useContext(ImpermaxRouterContext);
+
+  if (context === undefined) {
+    throw new Error('useTogglePriceInverted must be used within a ImpermaxRouterProvider');
+  }
+
+  return context.togglePriceInverted;
 }
 
-export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, a?: Array<any>) {
-  const { impermaxRouter, routerAccount, routerUpdate, priceInverted } = useContext(ImpermaxRouterContext);
+export function useRouterCallback(f: (impermaxRouter: ImpermaxRouter) => void, additionalDeps: Array<any> = []): void {
+  const context = useContext(ImpermaxRouterContext);
+
+  if (context === undefined) {
+    throw new Error('useRouterCallback must be used within a ImpermaxRouterProvider');
+  }
+
+  const {
+    impermaxRouter,
+    routerUpdate,
+    priceInverted
+  } = context;
+
   return useEffect(() => {
-    if (impermaxRouter) f(impermaxRouter);
-  }, [impermaxRouter, routerAccount, routerUpdate, priceInverted].concat(a));
+    if (!impermaxRouter) return;
+    // if (!f) return;
+
+    f(impermaxRouter);
+  }, [
+    impermaxRouter,
+    routerUpdate,
+    priceInverted,
+    // f,
+    ...additionalDeps
+  ]);
 }

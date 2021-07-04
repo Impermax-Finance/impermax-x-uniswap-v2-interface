@@ -1,12 +1,10 @@
 /* eslint-disable no-invalid-this */
-import { Address, PoolTokenType, BorrowableData } from '../impermax-router/interfaces';
+import { Address, PoolTokenType, Borrowable } from '../types/interfaces';
 import Subgraph from '.';
-
-// Pair List
-export async function getPairList(this: Subgraph) : Promise<Address[]> {
-  const lendingPoolData = await this.getLendingPoolsData();
-  return Object.keys(lendingPoolData);
-}
+import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
+import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import toAPY from 'services/to-apy';
+import getPairAddress from 'utils/helpers/web3/get-pair-address';
 
 // Name
 export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
@@ -16,7 +14,8 @@ export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poo
     return nameA + '-' + nameB + ' LP';
   }
   const underlying = await this.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType);
-  if (underlying === this.WETH.toLowerCase()) return 'Ethereum';
+  const wethAddress = WETH_ADDRESSES[this.chainId];
+  if (underlying === wethAddress.toLowerCase()) return 'Ethereum';
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return lendingPoolData[poolTokenType].underlying.name;
 }
@@ -29,7 +28,8 @@ export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, p
     return symbolA + '-' + symbolB;
   }
   const underlying = await this.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType);
-  if (underlying === this.WETH.toLowerCase()) return 'ETH';
+  const wethAddress = WETH_ADDRESSES[this.chainId];
+  if (underlying === wethAddress.toLowerCase()) return 'ETH';
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return lendingPoolData[poolTokenType].underlying.symbol;
 }
@@ -48,9 +48,15 @@ export async function getExchangeRate(this: Subgraph, uniswapV2PairAddress: Addr
 }
 
 // Underlying Address
-export async function getUnderlyingAddress(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<Address> {
+export async function getUnderlyingAddress(
+  this: Subgraph,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType
+) : Promise<Address> {
   if (poolTokenType === PoolTokenType.Collateral) return uniswapV2PairAddress;
+
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
+
   return lendingPoolData[poolTokenType].underlying.id;
 }
 
@@ -60,13 +66,14 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
   if (poolTokenType === PoolTokenType.Collateral) {
     return parseFloat(lendingPoolData.pair.derivedUSD);
   }
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).underlying.derivedUSD);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).underlying.derivedUSD);
 }
 export async function getImxPrice(this: Subgraph) : Promise<number> {
-  const IMXPair = this.getPairAddress(this.WETH, this.IMX);
-  console.log(IMXPair);
+  const imxAddress = IMX_ADDRESSES[this.chainId];
+  const wethAddress = WETH_ADDRESSES[this.chainId];
+  const IMXPair = getPairAddress(wethAddress, imxAddress, this.chainId);
   const AAddress = await this.getUnderlyingAddress(IMXPair, PoolTokenType.BorrowableA);
-  const poolTokenType = AAddress.toLowerCase() === this.IMX.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
+  const poolTokenType = AAddress.toLowerCase() === imxAddress.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
   return this.getTokenPrice(IMXPair, poolTokenType);
 }
 
@@ -95,37 +102,37 @@ export async function getLiquidationIncentive(this: Subgraph, uniswapV2PairAddre
 // Reserve Factor
 export async function getReserveFactor(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).reserveFactor);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).reserveFactor);
 }
 
 // Kink Borrow Rate
 export async function getKinkBorrowRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).kinkBorrowRate);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).kinkBorrowRate);
 }
 
 // Kink Utilization Rate
 export async function getKinkUtilizationRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).kinkUtilizationRate);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).kinkUtilizationRate);
 }
 
 // Borrow Index
 export async function getBorrowIndex(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).borrowIndex);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).borrowIndex);
 }
 
 // Accrue Timestamp
 export async function getAccrualTimestamp(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).accrualTimestamp);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).accrualTimestamp);
 }
 
 // Total borrows
 export async function getTotalBorrows(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).totalBorrows);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).totalBorrows);
 }
 export async function getCurrentTotalBorrows(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const storedAmount = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
@@ -142,11 +149,11 @@ export async function getTotalBorrowsUSD(this: Subgraph, uniswapV2PairAddress: A
 // Borrow rate
 export async function getBorrowRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat((lendingPoolData[poolTokenType] as BorrowableData).borrowRate);
+  return parseFloat((lendingPoolData[poolTokenType] as Borrowable).borrowRate);
 }
 export async function getBorrowAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
-  return this.toAPY(borrowRate);
+  return toAPY(borrowRate);
 }
 export async function getNextBorrowRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
   const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
@@ -159,7 +166,7 @@ export async function getNextBorrowRate(this: Subgraph, uniswapV2PairAddress: Ad
 }
 export async function getNextBorrowAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
   const borrowRate = await this.getNextBorrowRate(uniswapV2PairAddress, poolTokenType, borrowAmount);
-  return this.toAPY(borrowRate);
+  return toAPY(borrowRate);
 }
 
 // Supply
@@ -197,7 +204,7 @@ export async function getSupplyRate(this: Subgraph, uniswapV2PairAddress: Addres
 }
 export async function getSupplyAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const supplyRate = await this.getSupplyRate(uniswapV2PairAddress, poolTokenType);
-  return this.toAPY(supplyRate);
+  return toAPY(supplyRate);
 }
 export async function getNextSupplyRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, supplyAmount: number) : Promise<number> {
   const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
@@ -211,7 +218,7 @@ export async function getNextSupplyRate(this: Subgraph, uniswapV2PairAddress: Ad
 }
 export async function getNextSupplyAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, supplyAmount: number) : Promise<number> {
   const supplyRate = await this.getNextSupplyRate(uniswapV2PairAddress, poolTokenType, supplyAmount);
-  return this.toAPY(supplyRate);
+  return toAPY(supplyRate);
 }
 
 // Utilization Rate
@@ -220,24 +227,10 @@ export async function getUniswapAPY(this: Subgraph, uniswapV2PairAddress: Addres
   return lendingPoolData.pair.uniswapAPY;
 }
 
-// TVL Data
-export async function getTotalValueLocked(this: Subgraph) : Promise<number> {
-  const tvlData = await this.getTvlData();
-  return parseInt(tvlData.totalBalanceUSD);
-}
-export async function getTotalValueSupplied(this: Subgraph) : Promise<number> {
-  const tvlData = await this.getTvlData();
-  return parseInt(tvlData.totalSupplyUSD);
-}
-export async function getTotalValueBorrowed(this: Subgraph) : Promise<number> {
-  const tvlData = await this.getTvlData();
-  return parseInt(tvlData.totalBorrowsUSD);
-}
-
 // Reward Speed
 export async function getRewardSpeed(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  const farmingPoolData = (lendingPoolData[poolTokenType] as BorrowableData).farmingPool;
+  const farmingPoolData = (lendingPoolData[poolTokenType] as Borrowable).farmingPool;
   if (farmingPoolData === null) return 0;
   const segmentLength = parseInt(farmingPoolData.segmentLength);
   const epochBegin = parseInt(farmingPoolData.epochBegin);
@@ -263,5 +256,5 @@ export async function getNextFarmingAPY(this: Subgraph, uniswapV2PairAddress: Ad
   const additionalBorrowsUSD = borrowAmount * tokenPrice;
   const totalBorrowedUSD = currentBorrowedUSD + additionalBorrowsUSD;
   if (totalBorrowedUSD === 0) return 0;
-  return this.toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
+  return toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
 }
