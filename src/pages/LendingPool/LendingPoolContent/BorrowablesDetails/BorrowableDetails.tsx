@@ -3,26 +3,29 @@
 // @ts-nocheck
 // TODO: >
 
-import { useContext } from 'react';
-import { LanguageContext } from 'contexts/LanguageProvider';
-import phrases from './translations';
 import { Table } from 'react-bootstrap';
 import { formatUSD, formatPercentage } from '../../../../utils/format';
 import BorrowableDetailsRow from './BorrowableDetailsRow';
-import { useSymbol, useName, useSupplyUSD, useTotalBorrowsUSD, useUtilizationRate, useSupplyAPY, useBorrowAPY, useFarmingAPY, useHasFarming } from '../../../../hooks/useData';
+import {
+  useSymbol,
+  useName,
+  useSupplyUSD,
+  useTotalBorrowsUSD,
+  useUtilizationRate,
+  useSupplyAPY,
+  useBorrowAPY,
+  useFarmingAPY,
+  useHasFarming
+} from '../../../../hooks/useData';
 import { useTokenIcon } from '../../../../hooks/useUrlGenerator';
 import clsx from 'clsx';
 
 /**
- * Generate the Currency Equity Details card, giving information about the suppy and rates for a particular currency in
+ * Generate the Currency Equity Details card, giving information about the supply and rates for a particular currency in
  * the system.
  */
 
 export default function BorrowableDetails(): JSX.Element {
-  const languages = useContext(LanguageContext);
-  const language = languages.state.selected;
-  const t = (s: string) => (phrases[s][language]);
-
   const name = useName();
   const symbol = useSymbol();
   const supplyUSD = useSupplyUSD();
@@ -42,28 +45,29 @@ export default function BorrowableDetails(): JSX.Element {
             'currency-icon',
             'inline-block'
           )}
-          src={tokenIcon} />
+          src={tokenIcon}
+          alt='' />
         {name} ({symbol})
       </div>
       <Table>
         <tbody>
           <BorrowableDetailsRow
-            name={t('Total Supply')}
+            name='Total Supply'
             value={formatUSD(supplyUSD)} />
           <BorrowableDetailsRow
-            name={t('Total Borrow')}
+            name='Total Borrow'
             value={formatUSD(totalBorrowsUSD)} />
           <BorrowableDetailsRow
-            name={t('Utilization Rate')}
+            name='Utilization Rate'
             value={formatPercentage(utilizationRate)} />
           <BorrowableDetailsRow
-            name={t('Supply APY')}
+            name='Supply APY'
             value={formatPercentage(supplyAPY)} />
           <BorrowableDetailsRow
-            name={t('Borrow APY')}
+            name='Borrow APY'
             value={formatPercentage(borrowAPY)} />
           {hasFarming && (<BorrowableDetailsRow
-            name={t('Farming APY')}
+            name='Farming APY'
             value={formatPercentage(farmingAPY)} />)}
         </tbody>
       </Table>

@@ -3,9 +3,6 @@
 // @ts-nocheck
 // TODO: >
 
-import { useContext } from 'react';
-import { LanguageContext } from 'contexts/LanguageProvider';
-import phrases from './translations';
 import { PoolTokenType } from '../../types/interfaces';
 import { useTogglePriceInverted, usePriceInverted } from '../../hooks/useImpermaxRouter';
 import { formatFloat } from '../../utils/format';
@@ -20,10 +17,6 @@ import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
  */
 
 export default function CurrentPrice(): JSX.Element {
-  const languages = useContext(LanguageContext);
-  const language = languages.state.selected;
-  const t = (s: string) => (phrases[s][language]);
-
   const TWAPPrice = useTWAPPrice();
   const marketPrice = useMarketPrice();
 
@@ -37,7 +30,7 @@ export default function CurrentPrice(): JSX.Element {
   return (
     <DetailsRowCustom>
       <div className='name'>
-        {t('TWAP Price')} ({pair}) <QuestionHelper text='The TWAP (Time Weighted Average Price) and the current market price on Uniswap' />
+        TWAP Price ({pair}) <QuestionHelper text='The TWAP (Time Weighted Average Price) and the current market price on Uniswap' />
       </div>
       <div className='value'>{formatFloat(TWAPPrice, 4)} (current: {formatFloat(marketPrice, 4)}) <FontAwesomeIcon
         icon={faSyncAlt}

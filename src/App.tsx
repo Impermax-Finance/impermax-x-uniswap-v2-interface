@@ -13,7 +13,6 @@ import Risks from 'pages/Risks';
 import Claim from 'pages/Claim';
 import CreateNewPair from 'pages/CreateNewPair';
 import Account from 'pages/Account';
-import LanguageProvider from 'contexts/LanguageProvider';
 import ImpermaxRouterProvider from 'contexts/ImpermaxRouterProvider';
 import SubgraphProvider from 'contexts/SubgraphProvider';
 import Updater from 'store/transactions/updater';
@@ -26,72 +25,70 @@ const App = (): JSX.Element | null => {
 
   return (
     <Layout>
-      <LanguageProvider>
-        <Updater />
-        {/* TODO: should fix properly */}
-        <Switch>
-          <Route path={PAGES.CREATE_NEW_PAIR}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <CreateNewPair />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route path={PAGES.LENDING_POOL}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <LendingPool />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route path={PAGES.ACCOUNT}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <Account />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route path={PAGES.CLAIM}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <Claim />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route path={PAGES.RISKS}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <Risks />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route
-            path={PAGES.USER_GUIDE}
-            component={() => {
-              // TODO: should use <a /> with security attributes
-              window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
-              return null;
-            }} />
-          <Route
-            path={PAGES.HOME}
-            exact>
-            {chainId ? (
-              <Home key={chainId} />
-            // TODO: should improve in a more explicit way
-            ) : null}
-          </Route>
-        </Switch>
-      </LanguageProvider>
+      <Updater />
+      {/* TODO: should fix properly */}
+      <Switch>
+        <Route path={PAGES.CREATE_NEW_PAIR}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <CreateNewPair />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route path={PAGES.LENDING_POOL}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <LendingPool />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route path={PAGES.ACCOUNT}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <Account />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route path={PAGES.CLAIM}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <Claim />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route path={PAGES.RISKS}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <Risks />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route
+          path={PAGES.USER_GUIDE}
+          component={() => {
+            // TODO: should use <a /> with security attributes
+            window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
+            return null;
+          }} />
+        <Route
+          path={PAGES.HOME}
+          exact>
+          {chainId ? (
+            <Home key={chainId} />
+          // TODO: should improve in a more explicit way
+          ) : null}
+        </Route>
+      </Switch>
     </Layout>
   );
 };
