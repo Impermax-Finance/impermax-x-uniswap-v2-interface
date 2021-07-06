@@ -4,6 +4,7 @@ import clsx from 'clsx';
 
 import UpperPart from './UpperPart';
 import LowerPart from './LowerPart';
+import { IS_STAKING_APP } from 'config/general';
 
 type Ref = HTMLDivElement;
 type Props = React.ComponentPropsWithRef<'footer'>;
@@ -30,14 +31,15 @@ const Footer = React.forwardRef<Ref, Props>(({
       className={clsx(
         'container',
         'mx-auto',
-        'py-12',
         'px-4',
         'sm:px-6',
-        'lg:py-16',
         'lg:px-8',
-        'space-y-8'
+        'py-4',
+        'space-y-8',
+        'divide-y',
+        'divide-gray-200'
       )}>
-      <UpperPart />
+      {!IS_STAKING_APP && <UpperPart />}
       <LowerPart />
     </div>
   </footer>

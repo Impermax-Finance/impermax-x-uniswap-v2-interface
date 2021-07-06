@@ -71,7 +71,7 @@ const AppBar = ({
       as='nav'
       className={clsx(
         'bg-impermaxBlackHaze',
-        'shadow',
+        'shadow-sm',
         className
       )}
       {...rest}>

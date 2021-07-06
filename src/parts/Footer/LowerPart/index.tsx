@@ -114,9 +114,7 @@ const SOCIAL_ITEMS = [
 const LowerPart = (): JSX.Element => (
   <div
     className={clsx(
-      'border-t',
-      'border-gray-200',
-      'pt-8',
+      'py-4',
       'md:flex',
       'md:items-center',
       'md:justify-between'
