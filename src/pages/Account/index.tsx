@@ -12,9 +12,11 @@ const Account = (): JSX.Element => {
   const { [PARAMETERS.ACCOUNT]: account } = useParams<Params>();
 
   return (
-    <AccountContext.Provider value={account}>
-      <AccountContent />
-    </AccountContext.Provider>
+    <div className='space-y-12'>
+      <AccountContext.Provider value={account}>
+        <AccountContent />
+      </AccountContext.Provider>
+    </div>
   );
 };
 

@@ -35,6 +35,12 @@ const Layout = ({
           'z-impermaxAppBar'
         )} />
       <main
+        className={clsx(
+          'container',
+          'mx-auto',
+          'py-8',
+          'sm:px-8'
+        )}
         style={{
           paddingBottom: footerHeight
         }}>

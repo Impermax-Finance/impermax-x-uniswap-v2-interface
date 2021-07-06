@@ -1,17 +1,28 @@
-import { useCallback } from 'react';
-import { InteractionModalContainer } from '.';
+
+// ray test touch <
+import * as React from 'react';
 import { Spinner } from 'react-bootstrap';
-import { TransactionDetails } from 'store/transactions/reducer';
-import { useTransactionUrl } from '../../hooks/useUrlGenerator';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { clearAllTransactions } from 'store/transactions/actions';
 import { useDispatch } from 'react-redux';
+
+import { InteractionModalContainer } from '.';
+import { TransactionDetails } from 'store/transactions/reducer';
+import { useTransactionUrl } from 'hooks/useUrlGenerator';
+import { clearAllTransactions } from 'store/transactions/actions';
 import { AppDispatch } from 'store/index';
 
 const MAX_TRANSACTION_HISTORY = 10;
 
-function Transaction({ tx, pending }: TransactionProps) {
+interface TransactionProps {
+  tx: TransactionDetails;
+  pending?: boolean
+}
+
+const Transaction = ({
+  tx,
+  pending
+}: TransactionProps): JSX.Element => {
   const transactionUrl = useTransactionUrl(tx.hash);
   return (
     <div className='transaction-row'>
@@ -28,26 +39,27 @@ function Transaction({ tx, pending }: TransactionProps) {
       </a>
     </div>
   );
-}
+};
 
-export interface TransactionProps {
-  tx: TransactionDetails;
-  pending?: boolean
-}
-
-export interface AccountModalProps {
-  show: boolean;
-  toggleShow(s: boolean): void;
-  pending: Array<TransactionDetails>;
-  confirmed: Array<TransactionDetails>;
-}
-
-export default function AccountModal({ show, toggleShow, pending, confirmed }: AccountModalProps): JSX.Element {
+const AccountModal = ({
+  show,
+  toggleShow,
+  pending,
+  confirmed
+}: Props): JSX.Element => {
   const { chainId } = useWeb3React<Web3Provider>();
+
   const dispatch = useDispatch<AppDispatch>();
-  const clearAllTransactionsCallback = useCallback(() => {
-    if (chainId) dispatch(clearAllTransactions({ chainId }));
-  }, [dispatch, chainId]);
+
+  const clearAllTransactionsCallback = React.useCallback(() => {
+    if (!dispatch) return;
+    if (!chainId) return;
+
+    dispatch(clearAllTransactions({ chainId }));
+  }, [
+    dispatch,
+    chainId
+  ]);
 
   return (
     <InteractionModalContainer
@@ -61,7 +73,8 @@ export default function AccountModal({ show, toggleShow, pending, confirmed }: A
           <>
             <span
               onClick={clearAllTransactionsCallback}
-              className='clear-all-transactions'>Clear all transactions
+              className='clear-all-transactions'>
+              Clear all transactions
             </span>
             {pending.length > 0 && (
               <div>{
@@ -87,4 +100,14 @@ export default function AccountModal({ show, toggleShow, pending, confirmed }: A
       </>
     </InteractionModalContainer>
   );
+};
+
+export interface Props {
+  show: boolean;
+  toggleShow(s: boolean): void;
+  pending: Array<TransactionDetails>;
+  confirmed: Array<TransactionDetails>;
 }
+
+export default AccountModal;
+// ray test touch >
