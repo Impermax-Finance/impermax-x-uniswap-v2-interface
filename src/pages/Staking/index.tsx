@@ -1,16 +1,12 @@
 
-// ray test touch <
-// import Layout from 'parts/Layout';
-// ray test touch >
+import Layout from 'parts/Layout';
 
 const Staking = (): JSX.Element => {
-  // ray test touch <
   return (
-    <>
+    <Layout>
       Staking
-    </>
+    </Layout>
   );
-  // ray test touch >
 };
 
 export default Staking;

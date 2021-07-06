@@ -1,8 +1,9 @@
 
 import {
   NavLink,
-  useRouteMatch
+  useLocation
 } from 'react-router-dom';
+import { matchPath } from 'react-router';
 import { Disclosure } from '@headlessui/react';
 import {
   MenuIcon,
@@ -17,6 +18,7 @@ import WalletConnect from 'containers/WalletConnect';
 import ChainConnect from 'containers/ChainConnect';
 import ConnectedWalletInfo from 'containers/ConnectedWalletInfo';
 import { CHAIN_IDS } from 'config/web3/chains';
+import { IS_STAKING_APP } from 'config/general';
 import { ReactComponent as ImpermaxLogoIcon } from 'assets/images/icons/impermax-logo.svg';
 import {
   PAGES,
@@ -37,52 +39,32 @@ const AppBar = ({
     account
   } = useWeb3React<Web3Provider>();
 
-  const NAVIGATION_ITEMS = [
-    {
-      title: 'Markets',
-      link: PAGES.HOME,
-      enabled: true,
-      matched: (
-        useRouteMatch({
-          path: PAGES.HOME,
-          strict: true
-        })
-      )?.isExact
-    },
-    {
-      title: 'Dashboard',
-      link: account ? PAGES.ACCOUNT.replace(`:${PARAMETERS.ACCOUNT}`, account) : '',
-      enabled: !!account,
-      matched: (
-        useRouteMatch({
-          path: PAGES.ACCOUNT,
-          strict: true
-        })
-      )?.isExact
-    },
-    {
-      title: 'User Guide',
-      link: PAGES.USER_GUIDE,
-      enabled: true,
-      matched: (
-        useRouteMatch({
-          path: PAGES.USER_GUIDE,
-          strict: true
-        })
-      )?.isExact
-    },
-    {
-      title: 'Risks',
-      link: PAGES.RISKS,
-      enabled: chainId === CHAIN_IDS.ETHEREUM_MAIN_NET,
-      matched: (
-        useRouteMatch({
-          path: PAGES.RISKS,
-          strict: true
-        })
-      )?.isExact
-    }
-  ];
+  const NAVIGATION_ITEMS = IS_STAKING_APP ?
+    [] :
+    [
+      {
+        title: 'Markets',
+        link: PAGES.HOME,
+        enabled: true
+      },
+      {
+        title: 'Dashboard',
+        link: account ? PAGES.ACCOUNT.replace(`:${PARAMETERS.ACCOUNT}`, account) : '',
+        enabled: !!account
+      },
+      {
+        title: 'User Guide',
+        link: PAGES.USER_GUIDE,
+        enabled: true
+      },
+      {
+        title: 'Risks',
+        link: PAGES.RISKS,
+        enabled: chainId === CHAIN_IDS.ETHEREUM_MAIN_NET
+      }
+    ];
+
+  const location = useLocation();
 
   return (
     <Disclosure
@@ -97,7 +79,7 @@ const AppBar = ({
         <>
           <div
             className={clsx(
-              'max-w-7xl',
+              'container',
               'mx-auto',
               'px-4',
               'sm:px-6',
@@ -130,27 +112,35 @@ const AppBar = ({
                     'sm:flex',
                     'sm:space-x-8'
                   )}>
-                  {NAVIGATION_ITEMS.map(navigationItem => (
-                    navigationItem.enabled ? (
-                      <NavLink
-                        key={navigationItem.title}
-                        to={navigationItem.link}
-                        className={clsx(
-                          navigationItem.matched ?
-                            'border-impermaxAstral-500 text-textPrimary' :
-                            'border-transparent text-textSecondary hover:border-gray-300 hover:text-gray-700',
-                          'inline-flex',
-                          'items-center',
-                          'px-1',
-                          'pt-1',
-                          'border-b-2',
-                          'text-sm',
-                          'font-medium'
-                        )}>
-                        {navigationItem.title}
-                      </NavLink>
-                    ) : null
-                  ))}
+                  {NAVIGATION_ITEMS.map(navigationItem => {
+                    const match = matchPath(location.pathname, {
+                      path: navigationItem.link,
+                      exact: true,
+                      strict: false
+                    });
+
+                    return (
+                      navigationItem.enabled ? (
+                        <NavLink
+                          key={navigationItem.title}
+                          to={navigationItem.link}
+                          className={clsx(
+                            match?.isExact ?
+                              'border-impermaxAstral-500 text-textPrimary' :
+                              'border-transparent text-textSecondary hover:border-gray-300 hover:text-gray-700',
+                            'inline-flex',
+                            'items-center',
+                            'px-1',
+                            'pt-1',
+                            'border-b-2',
+                            'text-sm',
+                            'font-medium'
+                          )}>
+                          {navigationItem.title}
+                        </NavLink>
+                      ) : null
+                    );
+                  })}
                 </div>
               </div>
               <div
@@ -161,9 +151,13 @@ const AppBar = ({
                   'sm:items-center',
                   'space-x-2'
                 )}>
-                <ClaimAirdropButton />
-                <ChainConnect />
-                <ConnectedWalletInfo />
+                {!IS_STAKING_APP && (
+                  <>
+                    <ClaimAirdropButton />
+                    <ChainConnect />
+                    <ConnectedWalletInfo />
+                  </>
+                )}
                 <WalletConnect />
               </div>
               <div
@@ -219,28 +213,36 @@ const AppBar = ({
                 'space-y-1',
                 'bg-impermaxBlackHaze'
               )}>
-              {NAVIGATION_ITEMS.map(navigationItem => (
-                navigationItem.enabled ? (
-                  <NavLink
-                    key={navigationItem.title}
-                    to={navigationItem.link}
-                    className={clsx(
-                      navigationItem.matched ?
-                        'bg-impermaxAstral-50 border-impermaxAstral-500 text-impermaxAstral-700' :
-                        // eslint-disable-next-line max-len
-                        'border-transparent text-textSecondary hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700',
-                      'block',
-                      'pl-3',
-                      'pr-4',
-                      'py-2',
-                      'border-l-4',
-                      'text-base',
-                      'font-medium'
-                    )}>
-                    {navigationItem.title}
-                  </NavLink>
-                ) : null
-              ))}
+              {NAVIGATION_ITEMS.map(navigationItem => {
+                const match = matchPath(location.pathname, {
+                  path: navigationItem.link,
+                  exact: true,
+                  strict: false
+                });
+
+                return (
+                  navigationItem.enabled ? (
+                    <NavLink
+                      key={navigationItem.title}
+                      to={navigationItem.link}
+                      className={clsx(
+                        match?.isExact ?
+                          'bg-impermaxAstral-50 border-impermaxAstral-500 text-impermaxAstral-700' :
+                          // eslint-disable-next-line max-len
+                          'border-transparent text-textSecondary hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700',
+                        'block',
+                        'pl-3',
+                        'pr-4',
+                        'py-2',
+                        'border-l-4',
+                        'text-base',
+                        'font-medium'
+                      )}>
+                      {navigationItem.title}
+                    </NavLink>
+                  ) : null
+                );
+              })}
             </div>
             <div
               className={clsx(

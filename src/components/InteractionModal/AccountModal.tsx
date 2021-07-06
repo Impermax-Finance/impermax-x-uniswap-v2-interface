@@ -1,5 +1,4 @@
 
-// ray test touch <
 import * as React from 'react';
 import { Spinner } from 'react-bootstrap';
 import { useWeb3React } from '@web3-react/core';
@@ -68,7 +67,7 @@ const AccountModal = ({
       toggleShow={toggleShow}>
       <>
         {pending.length === 0 && confirmed.length === 0 ? (
-          <div>You have no recent transaction</div>
+          <div>You have no recent transaction.</div>
         ) : (
           <>
             <span
@@ -77,22 +76,24 @@ const AccountModal = ({
               Clear all transactions
             </span>
             {pending.length > 0 && (
-              <div>{
-                pending.map((tx: TransactionDetails, key: any) => <Transaction
-                  tx={tx}
-                  key={key}
-                  pending={true} />)
-              }
+              <div>
+                {pending.map((tx: TransactionDetails, key: any) => (
+                  <Transaction
+                    tx={tx}
+                    key={key}
+                    pending={true} />
+                ))}
               </div>
             )}
             {confirmed.length > 0 && (
-              <div>{
-                confirmed
+              <div>
+                {confirmed
                   .slice(0, MAX_TRANSACTION_HISTORY)
-                  .map((tx: TransactionDetails, key: any) => <Transaction
-                    tx={tx}
-                    key={key} />)
-              }
+                  .map((tx: TransactionDetails, index: number) => (
+                    <Transaction
+                      tx={tx}
+                      key={index} />
+                  ))}
               </div>
             )}
           </>
@@ -110,4 +111,3 @@ export interface Props {
 }
 
 export default AccountModal;
-// ray test touch >

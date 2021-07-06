@@ -56,13 +56,11 @@ const ConnectedWalletInfo = (): JSX.Element | null => {
           </Link>
         </ImpermaxJadeButtonGroupItem>
       </ImpermaxJadeButtonGroup>
-      {/* ray test touch < */}
       <AccountModal
         show={accountModalOpen}
         toggleShow={setAccountModalOpen}
         pending={pendingTransactions}
         confirmed={confirmedTransactions} />
-      {/* ray test touch > */}
     </>
   );
 };
