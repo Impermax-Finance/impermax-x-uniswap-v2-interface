@@ -12,6 +12,7 @@ import {
   IMPERMAX_GIT_HUB_LINK,
   IMPERMAX_REDDIT_LINK
 } from 'config/links';
+import { getCurrentYear } from 'utils/helpers/time';
 import { ReactComponent as TwitterLogoIcon } from 'assets/images/icons/twitter-logo.svg';
 import { ReactComponent as GitHubLogoIcon } from 'assets/images/icons/git-hub-logo.svg';
 import { ReactComponent as TelegramLogoIcon } from 'assets/images/icons/telegram-logo.svg';
@@ -149,7 +150,7 @@ const LowerPart = (): JSX.Element => (
         'md:mt-0',
         'md:order-1'
       )}>
-      &copy; 2020 IMPERMAX, Inc. All rights reserved.
+      &copy; {getCurrentYear()} IMPERMAX, Inc. All rights reserved.
     </p>
   </div>
 );
