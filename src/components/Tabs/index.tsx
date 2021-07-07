@@ -29,6 +29,8 @@ const Tab = ({
     <a
       id={id}
       className={clsx(
+        'inline-grid',
+        'place-items-center',
         selected ?
           clsx(
             'bg-gray-100',
@@ -38,13 +40,11 @@ const Tab = ({
             'text-gray-500',
             'hover:text-gray-700'
           ),
-        clsx(
-          'px-3',
-          'py-2',
-          'font-medium',
-          'text-sm',
-          'rounded-md'
-        ),
+        'px-3',
+        'py-2',
+        'font-medium',
+        'text-sm',
+        'rounded-md',
         className
       )}
       href={`#${id}`}
@@ -86,7 +86,6 @@ const Tabs = ({
     <nav
       className={clsx(
         'flex',
-        'space-x-4',
         className
       )}
       role='tablist'

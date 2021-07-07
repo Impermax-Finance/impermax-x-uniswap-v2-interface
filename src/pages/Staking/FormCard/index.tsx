@@ -24,7 +24,17 @@ const FormCard = (): JSX.Element => {
         'rounded-lg',
         'bg-impermaxBlackHaze-600'
       )}>
-      <Tabs>
+      <Tabs
+        className={clsx(
+          'h-14',
+          'grid',
+          'grid-cols-2',
+          'gap-2',
+          'bg-impermaxBlackHaze-700',
+          'px-1.5',
+          'py-1',
+          'rounded-lg'
+        )}>
         <Tab
           id='stake-tab'
           index={0}
