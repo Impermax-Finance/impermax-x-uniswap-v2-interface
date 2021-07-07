@@ -6,11 +6,16 @@ import AppBar from 'parts/AppBar';
 import Footer from 'parts/Footer';
 import { LAYOUT } from 'utils/constants/styles';
 
+interface CustomProps {
+  wrapperClassName?: string;
+}
+
 const Layout = ({
   children,
   className,
+  wrapperClassName,
   ...rest
-}: React.ComponentPropsWithRef<'div'>): JSX.Element => {
+}: CustomProps & React.ComponentPropsWithRef<'div'>): JSX.Element => {
   const [ref, { height: footerHeight }] = useMeasure<HTMLDivElement>();
 
   return (
@@ -38,8 +43,10 @@ const Layout = ({
         className={clsx(
           'container',
           'mx-auto',
+          'px-4',
+          'sm:px-8',
           'py-8',
-          'sm:px-8'
+          wrapperClassName
         )}
         style={{
           paddingBottom: footerHeight
