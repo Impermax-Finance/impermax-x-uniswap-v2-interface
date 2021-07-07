@@ -1,6 +1,8 @@
 
 import clsx from 'clsx';
 
+import ImpermaxInput from 'components/UI/ImpermaxInput';
+
 const FormCard = (): JSX.Element => {
   return (
     <div
@@ -10,7 +12,11 @@ const FormCard = (): JSX.Element => {
         'rounded-lg',
         'bg-impermaxBlackHaze-600'
       )}>
-      FormCard
+      <ImpermaxInput
+        className={clsx(
+          'h-14',
+          'shadow-inner'
+        )} />
     </div>
   );
 };

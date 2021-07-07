@@ -9,40 +9,53 @@ import FormCard from './FormCard';
 
 const Staking = (): JSX.Element => {
   return (
-    <Layout
-      wrapperClassName={clsx(
-        'flex',
-        'flex-col',
-        'items-center'
-      )}>
+    <Layout>
       <div
         className={clsx(
-          'flex',
-          'items-center',
-          'space-x-6'
-        )}>
-        <Information className='max-w-xl' />
-        <Logo
-          className={clsx(
-            'hidden',
-            'lg:grid',
-            'w-72'
-          )} />
-      </div>
-      <div
-        className={clsx(
-          'flex',
-          'space-x-6'
+          'space-y-6',
+          'max-w-6xl',
+          'mx-auto'
         )}>
         <div
           className={clsx(
-            'max-w-xl',
-            'space-y-4'
+            'md:flex',
+            'md:justify-center',
+            'md:items-center',
+            'md:space-x-6',
+            'w-full'
           )}>
-          <APRCard />
-          <FormCard />
+          <Information
+            className={clsx(
+              'max-w-xl',
+              'flex-grow'
+            )} />
+          <Logo
+            className={clsx(
+              'flex-shrink-0',
+              'hidden',
+              'lg:grid',
+              'w-72'
+            )} />
         </div>
-        <div className='w-72'>BalanceCard</div>
+        <div
+          className={clsx(
+            'md:flex',
+            'md:justify-center',
+            'space-y-6',
+            'md:space-x-6',
+            'w-full'
+          )}>
+          <div
+            className={clsx(
+              'space-y-4',
+              'max-w-xl',
+              'flex-grow'
+            )}>
+            <APRCard />
+            <FormCard />
+          </div>
+          <div className='w-72'>BalanceCard</div>
+        </div>
       </div>
     </Layout>
   );
