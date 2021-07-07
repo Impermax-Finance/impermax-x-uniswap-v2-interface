@@ -54,13 +54,21 @@ const FormCard = (): JSX.Element => {
         index={0}
         selectedIndex={selectedTabIndex}
         id='stake-tab-panel'>
-        <StakingForm />
+        <StakingForm
+          className={clsx(
+            'mt-4',
+            'space-y-4'
+          )} />
       </TabPanel>
       <TabPanel
         index={1}
         selectedIndex={selectedTabIndex}
         id='unstake-tab-panel'>
-        <UnstakingForm />
+        <UnstakingForm
+          className={clsx(
+            'mt-4',
+            'space-y-4'
+          )} />
       </TabPanel>
     </div>
   );

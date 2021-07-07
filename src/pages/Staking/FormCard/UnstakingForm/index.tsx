@@ -1,7 +1,9 @@
 
-const UnstakingForm = (): JSX.Element => {
+const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {
   return (
-    <>UnstakingForm</>
+    <form {...props}>
+      UnstakingForm
+    </form>
   );
 };
 
