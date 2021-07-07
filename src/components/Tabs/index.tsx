@@ -27,6 +27,7 @@ const Tab = ({
 
   return (
     <a
+      id={id}
       className={clsx(
         selected ?
           clsx(
