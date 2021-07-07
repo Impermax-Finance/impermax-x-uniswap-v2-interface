@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import Layout from 'parts/Layout';
 import Information from './Information';
 import Logo from './Logo';
+import APRCard from './APRCard';
+import FormCard from './FormCard';
 
 const Staking = (): JSX.Element => {
   return (
@@ -23,12 +25,24 @@ const Staking = (): JSX.Element => {
         <Logo
           className={clsx(
             'hidden',
-            'lg:grid'
-          )}
-          style={{
-            width: 224,
-            height: 224
-          }} />
+            'lg:grid',
+            'w-72'
+          )} />
+      </div>
+      <div
+        className={clsx(
+          'flex',
+          'space-x-6'
+        )}>
+        <div
+          className={clsx(
+            'max-w-xl',
+            'space-y-4'
+          )}>
+          <APRCard />
+          <FormCard />
+        </div>
+        <div className='w-72'>BalanceCard</div>
       </div>
     </Layout>
   );
