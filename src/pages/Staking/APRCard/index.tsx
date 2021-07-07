@@ -43,7 +43,8 @@ const APRCard = ({
         <span
           className={clsx(
             'text-sm',
-            'text-textSecondary'
+            'text-textSecondary',
+            'font-medium'
           )}>
           Yesterday&apos;s APR
         </span>
