@@ -1,8 +1,8 @@
 
 import clsx from 'clsx';
 
-import ImpermaxInput from 'components/UI/ImpermaxInput';
 import ImpermaxCarnationBadge from 'components/badges/ImpermaxCarnationBadge';
+import TokenAmountField from '../TokenAmountField';
 
 const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {
   return (
@@ -22,11 +22,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
         </span>
         <ImpermaxCarnationBadge>1 xIMX = 1.1666 IMX</ImpermaxCarnationBadge>
       </div>
-      <ImpermaxInput
-        className={clsx(
-          'h-14',
-          'shadow-inner'
-        )} />
+      <TokenAmountField />
     </form>
   );
 };
