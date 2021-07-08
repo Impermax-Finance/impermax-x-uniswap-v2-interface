@@ -336,6 +336,7 @@ const LendingPool = ({
       className='block'>
       <Panel
         className={clsx(
+          'bg-white',
           'px-4',
           'py-5',
           'md:p-6',

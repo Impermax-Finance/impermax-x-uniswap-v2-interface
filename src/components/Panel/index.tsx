@@ -7,7 +7,6 @@ const Panel = ({
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => (
   <div
     className={clsx(
-      'bg-white',
       'shadow',
       'overflow-hidden',
       'md:rounded',

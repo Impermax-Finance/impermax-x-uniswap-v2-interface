@@ -27,6 +27,7 @@ export function formatPercentage(n: number, decimals = 2) : string {
   return formatToDecimals(n * 100, decimals) + '%';
 }
 
+// ray test touch <
 // TODO: could use https://formatjs.io/docs/react-intl/
 export function formatAmount(n: number) : string {
   if (!n || n === Infinity) return '0';
@@ -40,6 +41,7 @@ export function formatAmount(n: number) : string {
   }
   return n.toString() + result;
 }
+// ray test touch >
 
 export function formatUSD(n: number) : string {
   return '$' + formatAmount(n);

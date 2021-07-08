@@ -147,8 +147,19 @@ module.exports = {
           600: IMPERMAX_JADE[600],
           700: IMPERMAX_JADE[700],
           800: IMPERMAX_JADE[800],
-          900: IMPERMAX_JADE[900],
-          contrastText: '#333333'
+          900: IMPERMAX_JADE[900]
+        },
+        secondary: {
+          50: IMPERMAX_CARNATION[50],
+          100: IMPERMAX_CARNATION[100],
+          200: IMPERMAX_CARNATION[200],
+          300: IMPERMAX_CARNATION[300],
+          400: IMPERMAX_CARNATION[400],
+          DEFAULT: IMPERMAX_CARNATION[500],
+          600: IMPERMAX_CARNATION[600],
+          700: IMPERMAX_CARNATION[700],
+          800: IMPERMAX_CARNATION[800],
+          900: IMPERMAX_CARNATION[900]
         }
       },
       backgroundColor: {

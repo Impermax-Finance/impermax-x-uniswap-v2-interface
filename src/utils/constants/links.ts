@@ -12,7 +12,8 @@ const PAGES = Object.freeze({
   CREATE_NEW_PAIR: '/create-new-pair',
   RISKS: '/risks',
   CLAIM: '/claim',
-  USER_GUIDE: '/user-guide'
+  USER_GUIDE: '/user-guide',
+  STAKING: '/staking'
 });
 
 export {

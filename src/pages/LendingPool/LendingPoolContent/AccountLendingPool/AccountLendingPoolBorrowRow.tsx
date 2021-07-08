@@ -3,9 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { useContext, useState } from 'react';
-import { LanguageContext } from 'contexts/LanguageProvider';
-import phrases from './translations';
+import { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { PoolTokenType } from '../../../../types/interfaces';
 import InlineAccountTokenInfo from './InlineAccountTokenInfo';
@@ -16,10 +14,6 @@ import DisabledButtonHelper from '../../../../components/DisabledButtonHelper';
 import BorrowInteractionModal from '../../../../components/InteractionModal/BorrowInteractionModal';
 
 export default function AccountLendingPoolBorrowRow(): JSX.Element {
-  const languages = useContext(LanguageContext);
-  const language = languages.state.selected;
-  const t = (s: string) => (phrases[s][language]);
-
   const symbol = useSymbol();
   const symbolLP = useSymbol(PoolTokenType.Collateral);
   const borrowed = useBorrowed();
@@ -28,7 +22,7 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
   const tokenIcon = useTokenIcon();
 
   const [showBorrowModal, toggleBorrowModal] = useState(false);
-  const [showRepayModal, toggleRepaywModal] = useState(false);
+  const [showRepayModal, toggleRepayModal] = useState(false);
 
   const borrowDisabledInfo = `You need to deposit ${symbolLP} as collateral in order to be able to borrow ${symbol}.`;
   const repayDisabledInfo = `You haven't borrowed any ${symbol} yet.`;
@@ -41,7 +35,8 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
             <Col className='token-icon'>
               <img
                 className='inline-block'
-                src={tokenIcon} />
+                src={tokenIcon}
+                alt='' />
             </Col>
             <Col className='token-name'>
               {`${symbol}`}
@@ -52,7 +47,7 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
           md={4}
           className='inline-account-token-info-container'>
           <InlineAccountTokenInfo
-            name={t('Borrowed')}
+            name='Borrowed'
             symbol={symbol}
             value={borrowed}
             valueUSD={borrowedUSD} />
@@ -65,20 +60,26 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
               {depositedUSD > 0 ? (
                 <Button
                   variant='primary'
-                  onClick={() => toggleBorrowModal(true)}>{t('Borrow')}
+                  onClick={() => toggleBorrowModal(true)}>
+                  Borrow
                 </Button>
               ) : (
-                <DisabledButtonHelper text={borrowDisabledInfo}>{t('Borrow')}</DisabledButtonHelper>
+                <DisabledButtonHelper text={borrowDisabledInfo}>
+                  Borrow
+                </DisabledButtonHelper>
               )}
             </Col>
             <Col>
               {borrowed > 0 ? (
                 <Button
                   variant='primary'
-                  onClick={() => toggleRepaywModal(true)}>{t('Repay')}
+                  onClick={() => toggleRepayModal(true)}>
+                  Repay
                 </Button>
               ) : (
-                <DisabledButtonHelper text={repayDisabledInfo}>{t('Repay')}</DisabledButtonHelper>
+                <DisabledButtonHelper text={repayDisabledInfo}>
+                  Repay
+                </DisabledButtonHelper>
               )}
             </Col>
           </Row>
@@ -89,7 +90,7 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
         toggleShow={toggleBorrowModal} />
       <RepayInteractionModal
         show={showRepayModal}
-        toggleShow={toggleRepaywModal} />
+        toggleShow={toggleRepayModal} />
     </>
   );
 }
