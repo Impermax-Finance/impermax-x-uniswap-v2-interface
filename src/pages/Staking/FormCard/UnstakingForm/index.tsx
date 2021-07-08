@@ -1,6 +1,7 @@
 
 import TokenAmountLabel from '../TokenAmountLabel';
 import TokenAmountField from '../TokenAmountField';
+import SubmitButton from '../SubmitButton';
 
 const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {
   return (
@@ -11,6 +12,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
       <TokenAmountField
         id='unstaking-amount'
         name='unstaking-amount' />
+      <SubmitButton>Unstake</SubmitButton>
     </form>
   );
 };

@@ -12,7 +12,7 @@ interface CustomProps {
 }
 
 type Ref = HTMLButtonElement;
-const ImpermaxJadeContainedButton = React.forwardRef<Ref, Props>(({
+const ImpermaxAstralContainedButton = React.forwardRef<Ref, Props>(({
   className,
   children,
   startIcon,
@@ -30,8 +30,8 @@ const ImpermaxJadeContainedButton = React.forwardRef<Ref, Props>(({
       className={clsx(
         'focus:outline-none',
         'focus:ring',
-        'focus:border-impermaxJade-300',
-        'focus:ring-impermaxJade-200',
+        'focus:border-impermaxAstral-300',
+        'focus:ring-impermaxAstral-200',
         'focus:ring-opacity-50',
 
         'border',
@@ -48,8 +48,8 @@ const ImpermaxJadeContainedButton = React.forwardRef<Ref, Props>(({
           'dark:text-opacity-30'
         ) : clsx(
           'text-white',
-          'bg-impermaxJade-600',
-          'hover:bg-impermaxJade-700'
+          'bg-impermaxAstral-600',
+          'hover:bg-impermaxAstral-700'
         ),
 
         'rounded',
@@ -79,8 +79,8 @@ const ImpermaxJadeContainedButton = React.forwardRef<Ref, Props>(({
     </ImpermaxButtonBase>
   );
 });
-ImpermaxJadeContainedButton.displayName = 'ImpermaxJadeContainedButton';
+ImpermaxAstralContainedButton.displayName = 'ImpermaxAstralContainedButton';
 
 export type Props = CustomProps & ImpermaxButtonBaseProps;
 
-export default ImpermaxJadeContainedButton;
+export default ImpermaxAstralContainedButton;
