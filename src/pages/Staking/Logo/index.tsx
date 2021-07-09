@@ -11,6 +11,7 @@ const Logo = ({
     className={clsx(
       'grid',
       'place-items-center',
+      'py-6',
       className
     )}
     {...rest}>

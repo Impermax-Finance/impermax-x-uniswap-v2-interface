@@ -8,6 +8,7 @@ import Tabs, {
   Tab,
   TabPanel
 } from 'components/Tabs';
+import Panel from 'components/Panel';
 
 const FormCard = (): JSX.Element => {
   const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
@@ -17,7 +18,7 @@ const FormCard = (): JSX.Element => {
   };
 
   return (
-    <div
+    <Panel
       className={clsx(
         'px-6',
         'py-4',
@@ -70,7 +71,7 @@ const FormCard = (): JSX.Element => {
             'space-y-4'
           )} />
       </TabPanel>
-    </div>
+    </Panel>
   );
 };
 

@@ -1,12 +1,14 @@
 
 import clsx from 'clsx';
 
+import Panel from 'components/Panel';
+
 const APRCard = ({
   className,
   ...rest
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => {
   return (
-    <div
+    <Panel
       className={clsx(
         'px-6',
         'py-4',
@@ -49,7 +51,7 @@ const APRCard = ({
           Yesterday&apos;s APR
         </span>
       </div>
-    </div>
+    </Panel>
   );
 };
 

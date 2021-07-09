@@ -45,6 +45,7 @@ const Staking = (): JSX.Element => {
             'md:flex',
             'md:justify-center',
             'space-y-6',
+            'md:space-y-0',
             'md:space-x-6',
             'w-full'
           )}>
