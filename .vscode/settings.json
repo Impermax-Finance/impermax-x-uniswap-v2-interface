@@ -22,6 +22,7 @@
     "USDB",
     "Unconnect",
     "Unstake",
+    "Unstaked",
     "Unstaking",
     "XDAI",
     "avif",
@@ -60,6 +61,7 @@
     "tailwindcss",
     "typehash",
     "webfonts",
-    "webp"
+    "webp",
+    "ximx"
   ]
 }
