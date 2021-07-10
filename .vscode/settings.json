@@ -55,9 +55,11 @@
     "popperjs",
     "reduxjs",
     "semibold",
+    "srcs",
     "struct",
     "tailwindcss",
     "typehash",
-    "webfonts"
+    "webfonts",
+    "webp"
   ]
 }

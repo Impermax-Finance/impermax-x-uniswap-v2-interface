@@ -258,7 +258,7 @@ const getLendingPoolTokenIcon = (
   const tokenAddress = lendingPool[poolTokenType].underlying.id;
   const convertedAddress = getAddress(tokenAddress);
 
-  return `/assets/images/token-icons/${convertedAddress}.png`;
+  return `/assets/images/token-logos/${convertedAddress}.png`;
 };
 
 const LendingPool = ({

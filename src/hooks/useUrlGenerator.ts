@@ -16,7 +16,7 @@ export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   if (!tokenAddress) return '';
   const convertedAddress = getAddress(tokenAddress);
   try {
-    return `/assets/images/token-icons/${convertedAddress}.png`;
+    return `/assets/images/token-logos/${convertedAddress}.png`;
   } catch {
     // TODO: <
     // TODO: not working

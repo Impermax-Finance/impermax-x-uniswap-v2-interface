@@ -1,7 +1,7 @@
 
 import clsx from 'clsx';
 
-import ImpermaxImage from 'components/UI/ImpermaxImage';
+import ImpermaxPicture from 'components/UI/ImpermaxPicture';
 
 const Logo = ({
   className,
@@ -15,14 +15,24 @@ const Logo = ({
       className
     )}
     {...rest}>
-    <ImpermaxImage
-      style={{
-        width: 150,
-        height: 157
-      }}
-      // TODO: should optimize
-      src='assets/images/logos/logo-text-square-all-green.avif'
-      alt='Logo' />
+    <ImpermaxPicture
+      width={150}
+      height={157}
+      images={[
+        {
+          type: 'image/avif',
+          path: 'assets/images/impermax-logos/logo-text-square-all-green.avif'
+        },
+        {
+          type: 'image/webp',
+          path: 'assets/images/impermax-logos/logo-text-square-all-green.webp'
+        },
+        {
+          type: 'image/png',
+          path: 'assets/images/impermax-logos/logo-text-square-all-green.png'
+        }
+      ]}
+      alt='Impermax Logo' />
   </div>
 );
 

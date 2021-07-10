@@ -122,12 +122,11 @@ const ChainConnectModal = ({
                   )}
                   aria-current={selected ? 'page' : undefined}
                   onClick={handleChainConnect(chainID)}>
+                  {/* TODO: should use `ImpermaxPicture` */}
                   <ImpermaxImage
-                    className={clsx(
-                      'rounded-md',
-                      'w-8',
-                      'h-8'
-                    )}
+                    width={8}
+                    height={8}
+                    className='rounded-md'
                     src={CHAIN_ICON_PATHS[chainID]} />
                   <span className='truncate'>
                     {CHAIN_LABELS[chainID]}
