@@ -15,7 +15,6 @@ const APRCard = ({
         'flex',
         'justify-between',
         'items-center',
-        'rounded-lg',
         'bg-impermaxJade-200',
         className
       )}

@@ -8,7 +8,7 @@ import APRCard from './APRCard';
 import FormCard from './FormCard';
 import BalanceCard from './BalanceCard';
 
-const WIDTH_72_CLASS = 'w-72';
+const MD_WIDTH_72_CLASS = 'md:w-72';
 
 const Staking = (): JSX.Element => {
   return (
@@ -17,7 +17,8 @@ const Staking = (): JSX.Element => {
         className={clsx(
           'space-y-6',
           'max-w-6xl',
-          'mx-auto'
+          'mx-auto',
+          'my-4'
         )}>
         <div
           className={clsx(
@@ -37,7 +38,7 @@ const Staking = (): JSX.Element => {
               'flex-shrink-0',
               'hidden',
               'lg:grid',
-              WIDTH_72_CLASS
+              MD_WIDTH_72_CLASS
             )} />
         </div>
         <div
@@ -58,7 +59,7 @@ const Staking = (): JSX.Element => {
             <APRCard />
             <FormCard />
           </div>
-          <BalanceCard className={WIDTH_72_CLASS} />
+          <BalanceCard className={MD_WIDTH_72_CLASS} />
         </div>
       </div>
     </Layout>
