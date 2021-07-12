@@ -1,10 +1,10 @@
 
-// ray test touch <<
 import * as React from 'react';
 import {
   Listbox,
   Transition
 } from '@headlessui/react';
+import { Props } from '@headlessui/react/dist/types';
 import {
   CheckIcon,
   SelectorIcon
@@ -84,56 +84,153 @@ const people = [
   }
 ];
 
-const Select = (): JSX.Element => {
-  const [selected, setSelected] = React.useState(people[3]);
+type SelectLabelProps = Props<typeof Listbox.Label>;
 
+const SelectLabel = ({
+  className,
+  ...rest
+}: SelectLabelProps) => (
+  <Listbox.Label
+    className={clsx(
+      'block',
+      'text-sm',
+      'font-medium',
+      'text-gray-700',
+      'mb-1',
+      className
+    )}
+    {...rest} />
+);
+
+type SelectButtonProps = Props<typeof Listbox.Button>;
+
+const SelectButton = ({
+  className,
+  ...rest
+}: SelectButtonProps) => (
+  <Listbox.Button
+    className={clsx(
+      'focus:outline-none',
+      'focus:ring',
+      'focus:border-primary-300',
+      'focus:ring-primary-200',
+      'focus:ring-opacity-50',
+
+      'relative',
+      'w-full',
+      'bg-white',
+      'border',
+      'border-gray-300',
+      'rounded-md',
+      'shadow-sm',
+      'pl-3',
+      'pr-10',
+      'py-2',
+      'text-left',
+      'cursor-default',
+      'sm:text-sm',
+      className
+    )}
+    {...rest} />
+);
+
+interface CustomSelectOptionsProps {
+  open: boolean;
+}
+
+type SelectOptionsProps = CustomSelectOptionsProps & Props<typeof Listbox.Options>;
+
+const SelectOptions = ({
+  open,
+  className,
+  ...rest
+}: SelectOptionsProps) => (
+  <Transition
+    show={open}
+    as={React.Fragment}
+    leave={clsx(
+      'transition',
+      'ease-in',
+      'duration-100'
+    )}
+    leaveFrom='opacity-100'
+    leaveTo='opacity-0'>
+    <Listbox.Options
+      static
+      className={clsx(
+        'absolute',
+        'z-impermaxSpeedDial',
+        'mt-1',
+        'w-full',
+        'bg-white',
+        'shadow-lg',
+        'max-h-56',
+        'rounded-md',
+        'py-1',
+        'text-base',
+        'ring-1',
+        'ring-black',
+        'ring-opacity-5',
+        'overflow-auto',
+        'focus:outline-none',
+        'sm:text-sm',
+        className
+      )}
+      {...rest} />
+  </Transition>
+);
+
+type SelectOptionProps = Props<typeof Listbox.Option>;
+
+const SelectOption = ({
+  value,
+  className,
+  ...rest
+}: SelectOptionProps) => (
+  <Listbox.Option
+    className={({ active }) =>
+      clsx(
+        active ?
+          clsx(
+            'text-white',
+            'bg-indigo-600'
+          ) :
+          'text-gray-900',
+        'cursor-default',
+        'select-none',
+        'relative',
+        'py-2',
+        'pl-3',
+        'pr-9',
+        className
+      )
+    }
+    value={value}
+    {...rest} />
+);
+
+const Select = ({
+  value,
+  onChange
+}: SelectProps): JSX.Element => {
   return (
     <Listbox
-      value={selected}
-      onChange={setSelected}>
+      value={value}
+      onChange={onChange}>
       {({ open }) => (
         <>
-          <Listbox.Label
-            className={clsx(
-              'block',
-              'text-sm',
-              'font-medium',
-              'text-gray-700'
-            )}>
+          <SelectLabel>
             Assigned to
-          </Listbox.Label>
-          <div
-            className={clsx(
-              'mt-1',
-              'relative'
-            )}>
-            <Listbox.Button
-              className={clsx(
-                'relative',
-                'w-full',
-                'bg-white',
-                'border',
-                'border-gray-300',
-                'rounded-md',
-                'shadow-sm',
-                'pl-3',
-                'pr-10',
-                'py-2',
-                'text-left',
-                'cursor-default',
-                'focus:outline-none',
-                'focus:ring-1',
-                'focus:ring-indigo-500',
-                'focus:border-indigo-500',
-                'sm:text-sm'
-              )}>
+          </SelectLabel>
+          <div className='relative'>
+            <SelectButton>
               <span
                 className={clsx(
                   'flex',
                   'items-center'
                 )}>
                 <img
-                  src={selected.avatar}
+                  src={value.avatar}
                   alt=''
                   className={clsx(
                     'flex-shrink-0',
@@ -147,7 +244,7 @@ const Select = (): JSX.Element => {
                     'block',
                     'truncate'
                   )}>
-                  {selected.name}
+                  {value.name}
                 </span>
               </span>
               <span
@@ -169,100 +266,66 @@ const Select = (): JSX.Element => {
                   )}
                   aria-hidden='true' />
               </span>
-            </Listbox.Button>
-            <Transition
-              show={open}
-              as={React.Fragment}
-              leave={clsx(
-                'transition',
-                'ease-in',
-                'duration-100'
-              )}
-              leaveFrom='opacity-100'
-              leaveTo='opacity-0'>
-              <Listbox.Options
-                static
-                className={clsx(
-                  'absolute',
-                  'z-10',
-                  'mt-1',
-                  'w-full',
-                  'bg-white',
-                  'shadow-lg',
-                  'max-h-56',
-                  'rounded-md',
-                  'py-1',
-                  'text-base',
-                  'ring-1',
-                  'ring-black',
-                  'ring-opacity-5',
-                  'overflow-auto',
-                  'focus:outline-none',
-                  'sm:text-sm'
-                )}>
-                {people.map(person => (
-                  <Listbox.Option
-                    key={person.id}
-                    className={({ active }) =>
-                      clsx(
-                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                        'cursor-default',
-                        'select-none',
-                        'relative',
-                        'py-2',
-                        'pl-3',
-                        'pr-9'
-                      )
-                    }
-                    value={person}>
-                    {({ selected, active }) => (
-                      <>
-                        <div
+            </SelectButton>
+            <SelectOptions open={open}>
+              {people.map(person => (
+                <SelectOption
+                  key={person.id}
+                  value={person}>
+                  {({
+                    selected,
+                    active
+                  }) => (
+                    <>
+                      <div
+                        className={clsx(
+                          'flex',
+                          'items-center'
+                        )}>
+                        <img
+                          src={person.avatar}
+                          alt=''
                           className={clsx(
-                            'flex',
-                            'items-center'
+                            'flex-shrink-0',
+                            'h-6',
+                            'w-6',
+                            'rounded-full'
+                          )} />
+                        <span
+                          className={clsx(
+                            selected ?
+                              'font-semibold' :
+                              'font-normal',
+                            'ml-3',
+                            'block',
+                            'truncate'
                           )}>
-                          <img
-                            src={person.avatar}
-                            alt=''
-                            className={clsx(
-                              'flex-shrink-0',
-                              'h-6',
-                              'w-6',
-                              'rounded-full'
-                            )} />
-                          <span
-                            className={clsx(
-                              selected ? 'font-semibold' : 'font-normal',
-                              'ml-3',
-                              'block',
-                              'truncate'
-                            )}>
-                            {person.name}
-                          </span>
-                        </div>
-                        {selected ? (
-                          <span
-                            className={clsx(
-                              active ? 'text-white' : 'text-indigo-600',
-                              'absolute',
-                              'inset-y-0',
-                              'right-0',
-                              'flex',
-                              'items-center',
-                              'pr-4'
-                            )}>
-                            <CheckIcon
-                              className='h-5 w-5'
-                              aria-hidden='true' />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </Transition>
+                          {person.name}
+                        </span>
+                      </div>
+                      {selected ? (
+                        <span
+                          className={clsx(
+                            active ?
+                              'text-white' :
+                              'text-indigo-600',
+                            'absolute',
+                            'inset-y-0',
+                            'right-0',
+                            'flex',
+                            'items-center',
+                            'pr-4'
+                          )}>
+                          <CheckIcon
+                            className='h-5 w-5'
+                            aria-hidden='true' />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </SelectOption>
+              ))}
+            </SelectOptions>
           </div>
         </>
       )}
@@ -270,5 +333,6 @@ const Select = (): JSX.Element => {
   );
 };
 
+export type SelectProps = Props<typeof Listbox>;
+
 export default Select;
-// ray test touch >>
