@@ -4,10 +4,6 @@ import { Contract } from '@ethersproject/contracts';
 
 import Subgraph from 'subgraph';
 
-type BorrowableContract = Contract;
-type UniswapV2PairContract = Contract;
-type ERC20Contract = Contract;
-
 interface Collateral {
   exchangeRate: string;
   id: Address;
@@ -46,6 +42,10 @@ interface FarmingPool {
   vestingBegin: string;
 }
 
+export type PoolTokenContract = Contract;
+export type BorrowableContract = Contract;
+export type UniswapV2PairContract = Contract;
+export type ERC20Contract = Contract;
 export type Address = string;
 export type RouterContract = Contract;
 export type FactoryContract = Contract;
@@ -56,6 +56,8 @@ export type MerkleDistributorContract = Contract;
 export type FarmingPoolContract = Contract;
 export type ClaimAggregatorContract = Contract;
 export type ClaimableContract = Contract;
+export type ReservesDistributorContract = Contract;
+export type StakingRouterContract = Contract;
 
 export type LendingPool = {
   uniswapV2Pair: UniswapV2PairContract;
@@ -77,7 +79,9 @@ export enum PoolTokenType {
 export enum ApprovalType {
   POOL_TOKEN,
   UNDERLYING,
-  BORROW
+  BORROW,
+  STAKE,
+  UNSTAKE,
 }
 
 export interface Changes {
