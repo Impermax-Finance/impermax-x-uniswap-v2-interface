@@ -11,12 +11,11 @@ import Select, {
   SelectLabel,
   SelectButton,
   SelectOptions,
-  SelectOption
+  SelectOption,
+  SelectBody,
+  SelectCheck,
+  SelectText
 } from './';
-import {
-  CheckIcon,
-  SelectorIcon
-} from '@heroicons/react/solid';
 
 const people = [
   {
@@ -108,12 +107,13 @@ const Template: Story<SelectProps> = args => {
           <SelectLabel>
             Assigned to
           </SelectLabel>
-          <div className='relative'>
+          <SelectBody>
             <SelectButton>
               <span
                 className={clsx(
                   'flex',
-                  'items-center'
+                  'items-center',
+                  'space-x-3'
                 )}>
                 <img
                   src={value.avatar}
@@ -124,33 +124,9 @@ const Template: Story<SelectProps> = args => {
                     'w-6',
                     'rounded-full'
                   )} />
-                <span
-                  className={clsx(
-                    'ml-3',
-                    'block',
-                    'truncate'
-                  )}>
+                <SelectText>
                   {value.name}
-                </span>
-              </span>
-              <span
-                className={clsx(
-                  'ml-3',
-                  'absolute',
-                  'inset-y-0',
-                  'right-0',
-                  'flex',
-                  'items-center',
-                  'pr-2',
-                  'pointer-events-none'
-                )}>
-                <SelectorIcon
-                  className={clsx(
-                    'h-5',
-                    'w-5',
-                    'text-gray-400'
-                  )}
-                  aria-hidden='true' />
+                </SelectText>
               </span>
             </SelectButton>
             <SelectOptions open={open}>
@@ -166,7 +142,8 @@ const Template: Story<SelectProps> = args => {
                       <div
                         className={clsx(
                           'flex',
-                          'items-center'
+                          'items-center',
+                          'space-x-3'
                         )}>
                         <img
                           src={person.avatar}
@@ -177,42 +154,19 @@ const Template: Story<SelectProps> = args => {
                             'w-6',
                             'rounded-full'
                           )} />
-                        <span
-                          className={clsx(
-                            selected ?
-                              'font-semibold' :
-                              'font-normal',
-                            'ml-3',
-                            'block',
-                            'truncate'
-                          )}>
+                        <SelectText selected={selected}>
                           {person.name}
-                        </span>
+                        </SelectText>
                       </div>
                       {selected ? (
-                        <span
-                          className={clsx(
-                            active ?
-                              'text-white' :
-                              'text-indigo-600',
-                            'absolute',
-                            'inset-y-0',
-                            'right-0',
-                            'flex',
-                            'items-center',
-                            'pr-4'
-                          )}>
-                          <CheckIcon
-                            className='h-5 w-5'
-                            aria-hidden='true' />
-                        </span>
+                        <SelectCheck active={active} />
                       ) : null}
                     </>
                   )}
                 </SelectOption>
               ))}
             </SelectOptions>
-          </div>
+          </SelectBody>
         </>
       )}
     </Select>

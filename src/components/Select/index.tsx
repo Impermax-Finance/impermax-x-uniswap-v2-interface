@@ -6,6 +6,10 @@ import {
 } from '@headlessui/react';
 import { Props } from '@headlessui/react/dist/types';
 import clsx from 'clsx';
+import {
+  CheckIcon,
+  SelectorIcon
+} from '@heroicons/react/solid';
 
 type SelectLabelProps = Props<typeof Listbox.Label>;
 
@@ -29,6 +33,7 @@ type SelectButtonProps = Props<typeof Listbox.Button>;
 
 const SelectButton = ({
   className,
+  children,
   ...rest
 }: SelectButtonProps): JSX.Element => (
   <Listbox.Button
@@ -54,7 +59,28 @@ const SelectButton = ({
       'sm:text-sm',
       className
     )}
-    {...rest} />
+    {...rest}>
+    {children}
+    <span
+      className={clsx(
+        'ml-3',
+        'absolute',
+        'inset-y-0',
+        'right-0',
+        'flex',
+        'items-center',
+        'pr-2',
+        'pointer-events-none'
+      )}>
+      <SelectorIcon
+        className={clsx(
+          'h-5',
+          'w-5',
+          'text-gray-400'
+        )}
+        aria-hidden='true' />
+    </span>
+  </Listbox.Button>
 );
 
 interface CustomSelectOptionsProps {
@@ -116,7 +142,7 @@ const SelectOption = ({
         active ?
           clsx(
             'text-white',
-            'bg-indigo-600'
+            'bg-impermaxJade-600'
           ) :
           'text-gray-900',
         'cursor-default',
@@ -129,6 +155,71 @@ const SelectOption = ({
       )
     }
     value={value}
+    {...rest} />
+);
+
+const SelectBody = ({
+  className,
+  ...rest
+}: React.ComponentPropsWithRef<'div'>): JSX.Element => (
+  <div
+    className={clsx(
+      'relative',
+      className
+    )}
+    {...rest} />
+);
+
+interface CustomSelectCheckProps {
+  active: boolean;
+}
+
+const SelectCheck = ({
+  active,
+  className,
+  ...rest
+}: CustomSelectCheckProps & React.ComponentPropsWithRef<'span'>): JSX.Element => (
+  <span
+    className={clsx(
+      active ?
+        'text-white' :
+        'text-impermaxJade-600',
+      'absolute',
+      'inset-y-0',
+      'right-0',
+      'flex',
+      'items-center',
+      'pr-4',
+      className
+    )}
+    {...rest}>
+    <CheckIcon
+      className={clsx(
+        'h-5',
+        'w-5'
+      )}
+      aria-hidden='true' />
+  </span>
+);
+
+interface CustomSelectTextProps {
+  selected?: boolean;
+}
+
+const SelectText = ({
+  selected = false,
+  className,
+  ...rest
+}: CustomSelectTextProps & React.ComponentPropsWithRef<'span'>): JSX.Element => (
+  <span
+    className={clsx(
+      selected ?
+        'font-semibold' :
+        'font-normal',
+      'block',
+      'truncate',
+      className
+    )}
     {...rest} />
 );
 
@@ -152,7 +243,10 @@ export {
   SelectLabel,
   SelectButton,
   SelectOptions,
-  SelectOption
+  SelectOption,
+  SelectBody,
+  SelectCheck,
+  SelectText
 };
 
 export default Select;
