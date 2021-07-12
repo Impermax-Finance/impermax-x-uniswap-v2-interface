@@ -89,3 +89,13 @@ export async function getAvailableClaimable(this: ImpermaxRouter, claimableAddre
   if (!cache.availableClaimable) cache.availableClaimable = await this.initializeAvailableClaimable(claimableAddress);
   return cache.availableClaimable;
 }
+
+// xIMX rate
+export async function initializeXIMXRate(this: ImpermaxRouter) : Promise<number> {
+  return await this.xIMX.callStatic.exchangeRate() / 1e18;
+}
+
+export async function getXIMXRate(this: ImpermaxRouter) : Promise<number> {
+  if (!this.imxCache.xIMXExchangeRate) this.imxCache.xIMXExchangeRate = await this.initializeXIMXRate();
+  return this.imxCache.xIMXExchangeRate;
+}
