@@ -4,8 +4,19 @@ import {
   Story,
   Meta
 } from '@storybook/react';
+import clsx from 'clsx';
 
-import Select, { SelectProps } from './';
+import Select, {
+  SelectProps,
+  SelectLabel,
+  SelectButton,
+  SelectOptions,
+  SelectOption
+} from './';
+import {
+  CheckIcon,
+  SelectorIcon
+} from '@heroicons/react/solid';
 
 const people = [
   {
@@ -91,7 +102,120 @@ const Template: Story<SelectProps> = args => {
     <Select
       {...args}
       value={value}
-      onChange={handleChange} />
+      onChange={handleChange}>
+      {({ open }) => (
+        <>
+          <SelectLabel>
+            Assigned to
+          </SelectLabel>
+          <div className='relative'>
+            <SelectButton>
+              <span
+                className={clsx(
+                  'flex',
+                  'items-center'
+                )}>
+                <img
+                  src={value.avatar}
+                  alt=''
+                  className={clsx(
+                    'flex-shrink-0',
+                    'h-6',
+                    'w-6',
+                    'rounded-full'
+                  )} />
+                <span
+                  className={clsx(
+                    'ml-3',
+                    'block',
+                    'truncate'
+                  )}>
+                  {value.name}
+                </span>
+              </span>
+              <span
+                className={clsx(
+                  'ml-3',
+                  'absolute',
+                  'inset-y-0',
+                  'right-0',
+                  'flex',
+                  'items-center',
+                  'pr-2',
+                  'pointer-events-none'
+                )}>
+                <SelectorIcon
+                  className={clsx(
+                    'h-5',
+                    'w-5',
+                    'text-gray-400'
+                  )}
+                  aria-hidden='true' />
+              </span>
+            </SelectButton>
+            <SelectOptions open={open}>
+              {people.map(person => (
+                <SelectOption
+                  key={person.id}
+                  value={person}>
+                  {({
+                    selected,
+                    active
+                  }) => (
+                    <>
+                      <div
+                        className={clsx(
+                          'flex',
+                          'items-center'
+                        )}>
+                        <img
+                          src={person.avatar}
+                          alt=''
+                          className={clsx(
+                            'flex-shrink-0',
+                            'h-6',
+                            'w-6',
+                            'rounded-full'
+                          )} />
+                        <span
+                          className={clsx(
+                            selected ?
+                              'font-semibold' :
+                              'font-normal',
+                            'ml-3',
+                            'block',
+                            'truncate'
+                          )}>
+                          {person.name}
+                        </span>
+                      </div>
+                      {selected ? (
+                        <span
+                          className={clsx(
+                            active ?
+                              'text-white' :
+                              'text-indigo-600',
+                            'absolute',
+                            'inset-y-0',
+                            'right-0',
+                            'flex',
+                            'items-center',
+                            'pr-4'
+                          )}>
+                          <CheckIcon
+                            className='h-5 w-5'
+                            aria-hidden='true' />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </SelectOption>
+              ))}
+            </SelectOptions>
+          </div>
+        </>
+      )}
+    </Select>
   );
 };
 
