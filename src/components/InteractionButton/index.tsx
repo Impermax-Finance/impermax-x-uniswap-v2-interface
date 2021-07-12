@@ -25,6 +25,7 @@ export default function InteractionButton({ name, onCall, state }: InteractionBu
   return (
     <button
       onClick={state === ButtonState.Ready ? onCall : null}
+      type='button'
       className={'interaction-button ' + state}>
       {name}
       {state === ButtonState.Pending ? (<Spinner

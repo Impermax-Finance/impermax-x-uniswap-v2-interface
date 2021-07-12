@@ -79,7 +79,11 @@ export default function InputAmount({ val, setVal, suffix, maxTitle, max, min }:
         </InputGroup>
         <InputGroup className='input-container mb-3'>
           <InputGroup.Prepend className='max-input'>
-            <button onClick={onMax}>MAX</button>
+            <button
+              onClick={onMax}
+              type='button'>
+              MAX
+            </button>
           </InputGroup.Prepend>
           <NumericalInput
             value={stringVal}

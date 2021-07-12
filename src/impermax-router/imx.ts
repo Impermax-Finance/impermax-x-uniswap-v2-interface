@@ -89,3 +89,27 @@ export async function getAvailableClaimable(this: ImpermaxRouter, claimableAddre
   if (!cache.availableClaimable) cache.availableClaimable = await this.initializeAvailableClaimable(claimableAddress);
   return cache.availableClaimable;
 }
+
+// xIMX rate
+export async function initializeXIMXRate(this: ImpermaxRouter) : Promise<number> {
+  return await this.xIMX.callStatic.exchangeRate() / 1e18;
+}
+
+export async function getXIMXRate(this: ImpermaxRouter) : Promise<number> {
+  if (!this.imxCache.xIMXExchangeRate) this.imxCache.xIMXExchangeRate = await this.initializeXIMXRate();
+  return this.imxCache.xIMXExchangeRate;
+}
+
+// xIMX APY
+export async function initializeXIMXAPY(this: ImpermaxRouter) : Promise<number> {
+  const reservesDistributorBalance = await this.IMX.balanceOf(this.reservesDistributor.address) / 1e18;
+  const xImxBalance = await this.IMX.balanceOf(this.xIMX.address) / 1e18;
+  const periodLength = await this.reservesDistributor.periodLength();
+  const dailyAPR = reservesDistributorBalance / periodLength * 3600 * 24 / xImxBalance;
+  return Math.pow(1 + dailyAPR, 365) - 1;
+}
+
+export async function getXIMXAPY(this: ImpermaxRouter) : Promise<number> {
+  if (!this.imxCache.xIMXAPY) this.imxCache.xIMXAPY = await this.initializeXIMXAPY();
+  return this.imxCache.xIMXAPY;
+}

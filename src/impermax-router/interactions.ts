@@ -327,3 +327,33 @@ export async function createNewPair(
     console.error('[createNewPair] error.message => ', error.message);
   }
 }
+
+export async function stake(
+  this: ImpermaxRouter,
+  amount: BigNumber,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
+  try {
+    const tx = await this.stakingRouter.stake(amount);
+    const receipt = await tx.wait();
+    onTransactionHash(receipt.transactionHash);
+  } catch (error) {
+    console.error('[stake] error.message => ', error.message);
+  }
+}
+
+export async function unstake(
+  this: ImpermaxRouter,
+  tokens: BigNumber,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onTransactionHash: Function
+): Promise<void> {
+  try {
+    const tx = await this.stakingRouter.unstake(tokens);
+    const receipt = await tx.wait();
+    onTransactionHash(receipt.transactionHash);
+  } catch (error) {
+    console.error('[unstake] error.message => ', error.message);
+  }
+}
