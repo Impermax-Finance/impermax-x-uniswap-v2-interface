@@ -10,6 +10,7 @@ import usePairAddress from './usePairAddress';
 import usePoolToken from './usePoolToken';
 import { useRouterCallback } from './useImpermaxRouter';
 
+// ray test touch <<
 export default function useAllowance(approvalType: ApprovalType, pendingApproval?: boolean, poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenTypeContext = usePoolToken();
@@ -22,3 +23,4 @@ export default function useAllowance(approvalType: ApprovalType, pendingApproval
 
   return allowance;
 }
+// ray test touch >>

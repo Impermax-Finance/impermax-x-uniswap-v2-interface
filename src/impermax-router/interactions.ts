@@ -328,6 +328,7 @@ export async function createNewPair(
   }
 }
 
+// ray test touch <<
 export async function stake(
   this: ImpermaxRouter,
   amount: BigNumber,
@@ -342,7 +343,9 @@ export async function stake(
     console.error('[stake] error.message => ', error.message);
   }
 }
+// ray test touch >>
 
+// ray test touch <<
 export async function unstake(
   this: ImpermaxRouter,
   tokens: BigNumber,
@@ -357,3 +360,4 @@ export async function unstake(
     console.error('[unstake] error.message => ', error.message);
   }
 }
+// ray test touch >>

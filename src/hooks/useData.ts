@@ -300,12 +300,14 @@ export function useBorrowedUSD(poolTokenTypeArg?: PoolTokenType) : number {
   return borrowedUSD;
 }
 
+// ray test touch <<
 export function useTokenBalance(tokenAddress: Address) : number {
   const [data, setData] = useState<number>(0);
   useRouterCallback(async router => setData(await router.getTokenBalance(tokenAddress)));
   console.log(data);
   return data;
 }
+// ray test touch >>
 
 export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
@@ -458,17 +460,21 @@ export function useDeadline() : BigNumber {
   return deadline;
 }
 
+// ray test touch <<
 export function useToBigNumber(val: number, poolTokenTypeArg?: PoolTokenType, decimalsArg?: number) : BigNumber {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const decimals = decimalsArg ? decimalsArg : useDecimals(poolTokenTypeArg);
   return decimalToBalance(val, decimals);
 }
+// ray test touch >>
 
+// ray test touch <<
 export function useToNumber(amount: BigNumber, poolTokenTypeArg?: PoolTokenType, decimalsArg?: number) : number {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const decimals = decimalsArg ? decimalsArg : useDecimals(poolTokenTypeArg);
   return parseFloat(amount.toString()) / Math.pow(10, decimals);
 }
+// ray test touch >>
 
 export function useToTokens(val: number, poolTokenTypeArg?: PoolTokenType) : BigNumber {
   const decimals = useDecimals(poolTokenTypeArg);
@@ -486,16 +492,19 @@ export function usefromTokens(amount: BigNumber, poolTokenTypeArg?: PoolTokenTyp
   return parseFloat(amount.toString()) * exchangeRate / Math.pow(10, decimals);
 }
 
+// ray test touch <<
 // Staking
-
+// ray test touch <<<
 export function useXIMXRate() : number {
   const [data, setData] = useState<number>(0);
   useRouterCallback(async router => setData(await router.getXIMXRate()));
   return data;
 }
+// ray test touch >>>
 
 export function useXIMXAPY() : number {
   const [data, setData] = useState<number>(0);
   useSubgraphCallback(async subgraph => setData(await subgraph.getXIMXAPY()));
   return data;
 }
+// ray test touch >>

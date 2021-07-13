@@ -8,7 +8,9 @@ import {
   Address,
   TvlData,
   UserData,
-  XimxData
+  // ray test touch <<
+  XImxData
+  // ray test touch >>
 } from 'types/interfaces';
 import * as initializer from './initializer';
 import * as cacheData from './cacheData';
@@ -23,7 +25,9 @@ class Subgraph {
     [key in Address]?: Promise<UserData>
   };
   tvlData: Promise<TvlData>;
-  ximxData: Promise<XimxData>;
+  // ray test touch <<
+  xImxData: Promise<XImxData>;
+  // ray test touch >>
 
   constructor(config: SubgraphConfigInterface) {
     this.chainId = config.chainId;
@@ -34,7 +38,9 @@ class Subgraph {
     this.lendingPoolsData = null;
     this.usersData = null;
     this.tvlData = null;
-    this.ximxData = null;
+    // ray test touch <<
+    this.xImxData = null;
+    // ray test touch >>
   }
 
   // Fetchers
@@ -49,8 +55,10 @@ class Subgraph {
   public fetchUserData = initializer.fetchUserData;
   public initializeUserData = initializer.initializeUserData;
   public getUserData = initializer.getUserData;
-  public initializeXimxData = initializer.initializeXimxData;
-  public getXimxData = initializer.getXimxData;
+  // ray test touch <<
+  public initializeXimxData = initializer.initializeXImxData;
+  public getXimxData = initializer.getXImxData;
+  // ray test touch >>
 
   // Data Getters
   public getName = cacheData.getName;
@@ -88,7 +96,9 @@ class Subgraph {
   public getRewardSpeed = cacheData.getRewardSpeed;
   public getFarmingAPY = cacheData.getFarmingAPY;
   public getNextFarmingAPY = cacheData.getNextFarmingAPY;
+  // ray test touch <<
   public getXIMXAPY = cacheData.getXIMXAPY;
+  // ray test touch >>
 
   // Account
   public getBorrowPositions = account.getBorrowPositions;

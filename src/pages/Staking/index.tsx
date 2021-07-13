@@ -1,4 +1,4 @@
-
+// ray test touch <<
 import clsx from 'clsx';
 
 import Layout from 'parts/Layout';
@@ -13,7 +13,7 @@ import ImpermaxRouterProvider from 'contexts/ImpermaxRouterProvider';
 import SubgraphProvider from 'contexts/SubgraphProvider';
 
 const Staking = (): JSX.Element => {
-  const chainId = 3; // TODO create setting
+  const chainId = 3; // TODO: create setting
   return (
     <Provider store={store}>
       <Layout>
@@ -75,3 +75,4 @@ const Staking = (): JSX.Element => {
 };
 
 export default Staking;
+// ray test touch >>

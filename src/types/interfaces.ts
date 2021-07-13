@@ -4,6 +4,11 @@ import { Contract } from '@ethersproject/contracts';
 
 import Subgraph from 'subgraph';
 
+// ray test touch <<
+type BorrowableContract = Contract;
+type UniswapV2PairContract = Contract;
+// ray test touch >>
+
 interface Collateral {
   exchangeRate: string;
   id: Address;
@@ -42,10 +47,10 @@ interface FarmingPool {
   vestingBegin: string;
 }
 
+// ray test touch <<
 export type PoolTokenContract = Contract;
-export type BorrowableContract = Contract;
-export type UniswapV2PairContract = Contract;
 export type ERC20Contract = Contract;
+// ray test touch >>
 export type Address = string;
 export type RouterContract = Contract;
 export type FactoryContract = Contract;
@@ -56,8 +61,10 @@ export type MerkleDistributorContract = Contract;
 export type FarmingPoolContract = Contract;
 export type ClaimAggregatorContract = Contract;
 export type ClaimableContract = Contract;
+// ray test touch <<
 export type ReservesDistributorContract = Contract;
 export type StakingRouterContract = Contract;
+// ray test touch >>
 
 export type LendingPool = {
   uniswapV2Pair: UniswapV2PairContract;
@@ -79,9 +86,11 @@ export enum PoolTokenType {
 export enum ApprovalType {
   POOL_TOKEN,
   UNDERLYING,
+  // ray test touch <<
   BORROW,
   STAKE,
   UNSTAKE,
+  // ray test touch >>
 }
 
 export interface Changes {
@@ -178,9 +187,11 @@ export interface ClaimEvent {
   transactionHash: string;
 }
 
-export interface XimxData {
+// ray test touch <<
+export interface XImxData {
   totalSupply: string;
   totalBalance: string;
   exchangeRate: string;
   dailyAPR: string;
 }
+// ray test touch >>

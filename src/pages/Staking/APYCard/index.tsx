@@ -1,4 +1,5 @@
 
+// ray test touch <<
 import clsx from 'clsx';
 import { useXIMXAPY } from '../../../hooks/useData';
 import { formatPercentage } from '../../../utils/format';
@@ -57,3 +58,4 @@ const APYCard = ({
 };
 
 export default APYCard;
+// ray test touch >>

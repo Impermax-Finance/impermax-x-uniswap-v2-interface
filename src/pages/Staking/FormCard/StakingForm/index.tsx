@@ -1,4 +1,5 @@
 
+// ray test touch <<
 import clsx from 'clsx';
 
 import { useToBigNumber, useTokenBalance, useXIMXRate } from '../../../../hooks/useData';
@@ -76,3 +77,4 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
 };
 
 export default StakingForm;
+// ray test touch >>

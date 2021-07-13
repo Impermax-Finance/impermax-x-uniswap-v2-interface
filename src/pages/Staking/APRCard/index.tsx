@@ -1,4 +1,5 @@
 
+// ray test touch <<
 import clsx from 'clsx';
 
 import Panel from 'components/Panel';
@@ -55,3 +56,4 @@ const APRCard = ({
 };
 
 export default APRCard;
+// ray test touch >>

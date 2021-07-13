@@ -28,6 +28,7 @@ export interface PermitData {
 }
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
+// ray test touch <<
 export default function useApprove(
   approvalType: ApprovalType,
   amount: BigNumber,
@@ -85,3 +86,4 @@ export default function useApprove(
 
   return [approvalState, approve, permitData];
 }
+// ray test touch >>

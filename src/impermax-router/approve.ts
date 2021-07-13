@@ -10,7 +10,11 @@ import { MaxUint256 } from '@ethersproject/constants';
 
 import { PermitData } from '../hooks/useApprove';
 import ImpermaxRouter from '.';
-import { Address, ApprovalType, PoolTokenType } from '../types/interfaces';
+import {
+  Address,
+  PoolTokenType,
+  ApprovalType
+} from '../types/interfaces';
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eth';
 
 const EIP712DOMAIN = [
@@ -32,6 +36,7 @@ const TYPES = {
   BorrowPermit: PERMIT
 };
 
+// ray test touch <<
 export function getOwnerSpender(this: ImpermaxRouter, approvalType: ApprovalType) : {owner: string, spender: string} {
   return {
     owner: this.account,
@@ -40,7 +45,15 @@ export function getOwnerSpender(this: ImpermaxRouter, approvalType: ApprovalType
       this.router.address
   };
 }
+// export function getOwnerSpender(this: ImpermaxRouter) : {owner: string, spender: string} {
+//   return {
+//     owner: this.account,
+//     spender: this.router.address
+//   };
+// }
+// ray test touch >>
 
+// ray test touch <<
 export async function getAllowance(
   this: ImpermaxRouter,
   approvalType: ApprovalType,
@@ -75,7 +88,9 @@ export async function getAllowance(
 
   return BigNumber.from(allowance);
 }
+// ray test touch >>
 
+// ray test touch <<
 export async function approve(
   this: ImpermaxRouter,
   approvalType: ApprovalType,
@@ -109,7 +124,9 @@ export async function approve(
   const receipt = await tx.wait();
   onTransactionHash(receipt.transactionHash);
 }
+// ray test touch >>
 
+// ray test touch <<
 export async function getPermitData(
   this: ImpermaxRouter,
   approvalType: ApprovalType,
@@ -197,3 +214,4 @@ export async function getPermitData(
     callBack(null);
   }
 }
+// ray test touch >>

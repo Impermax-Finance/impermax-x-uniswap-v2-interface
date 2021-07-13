@@ -90,15 +90,19 @@ export async function getAvailableClaimable(this: ImpermaxRouter, claimableAddre
   return cache.availableClaimable;
 }
 
+// ray test touch <<<
 // xIMX rate
 export async function initializeXIMXRate(this: ImpermaxRouter) : Promise<number> {
   return await this.xIMX.callStatic.exchangeRate() / 1e18;
 }
+// ray test touch >>>
 
+// ray test touch <<<
 export async function getXIMXRate(this: ImpermaxRouter) : Promise<number> {
   if (!this.imxCache.xIMXExchangeRate) this.imxCache.xIMXExchangeRate = await this.initializeXIMXRate();
   return this.imxCache.xIMXExchangeRate;
 }
+// ray test touch >>>
 
 // xIMX APY
 export async function initializeXIMXAPY(this: ImpermaxRouter) : Promise<number> {
