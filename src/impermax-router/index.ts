@@ -52,7 +52,7 @@ import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregat
 import { RESERVE_DISTRIBUTOR_ADDRESSES } from '../config/web3/contracts/reserve-distributors';
 import { IMX_ADDRESSES } from '../config/web3/contracts/imx';
 import { XIMX_ADDRESSES } from '../config/web3/contracts/ximx';
-import { STAKING_ROUTER_ADDRESSES } from '../config/web3/contracts/staking-router';
+import { STAKING_ROUTER_ADDRESSES } from '../config/web3/contracts/staking-routers';
 
 class ImpermaxRouter {
   subgraph: Subgraph;
