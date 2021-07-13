@@ -13,7 +13,7 @@ import {
   Changes,
   NO_CHANGES
 } from '../types/interfaces';
-import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eth';
 
 // Exchange rate
 export async function initializeExchangeRate(
@@ -39,7 +39,7 @@ export async function initializeTokenBalance(
   tokenAddress: Address
 ) : Promise<number> {
   const token = await this.getToken(tokenAddress);
-  const wethAddress = WETH_ADDRESSES[this.chainId];
+  const wethAddress = W_ETH_ADDRESSES[this.chainId];
   if (token.address === wethAddress) {
     const bigBalance = await this.library.getBalance(this.account);
     return parseFloat(formatUnits(bigBalance)) / this.dust;

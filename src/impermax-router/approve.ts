@@ -11,7 +11,7 @@ import { MaxUint256 } from '@ethersproject/constants';
 import { PermitData } from '../hooks/useApprove';
 import ImpermaxRouter from '.';
 import { Address, ApprovalType, PoolTokenType } from '../types/interfaces';
-import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eth';
 
 const EIP712DOMAIN = [
   { name: 'name', type: 'string' },
@@ -59,7 +59,7 @@ export async function getAllowance(
   }
   if (approvalType === ApprovalType.UNDERLYING) {
     const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-    if (token.address === WETH_ADDRESSES[this.chainId]) return MaxUint256;
+    if (token.address === W_ETH_ADDRESSES[this.chainId]) return MaxUint256;
     allowance = await token.allowance(owner, spender);
   }
   if (approvalType === ApprovalType.BORROW) {

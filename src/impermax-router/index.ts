@@ -51,7 +51,7 @@ import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-un
 import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
 import { RESERVE_DISTRIBUTOR_ADDRESSES } from '../config/web3/contracts/reserve-distributors';
 import { IMX_ADDRESSES } from '../config/web3/contracts/imx';
-import { XIMX_ADDRESSES } from '../config/web3/contracts/ximx';
+import { X_IMX_ADDRESSES } from '../config/web3/contracts/x-imx';
 import { STAKING_ROUTER_ADDRESSES } from '../config/web3/contracts/staking-routers';
 
 class ImpermaxRouter {
@@ -123,7 +123,7 @@ class ImpermaxRouter {
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(SIMPLE_UNISWAP_ORACLE_ADDRESSES[config.chainId]);
     this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
     this.IMX = this.newERC20(IMX_ADDRESSES[config.chainId]);
-    this.xIMX = this.newPoolToken(XIMX_ADDRESSES[config.chainId]);
+    this.xIMX = this.newPoolToken(X_IMX_ADDRESSES[config.chainId]);
     this.reservesDistributor = this.newReservesDistributor(RESERVE_DISTRIBUTOR_ADDRESSES[config.chainId]);
     this.stakingRouter = this.newStakingRouter(STAKING_ROUTER_ADDRESSES[config.chainId]);
     this.priceInverted = config.priceInverted;

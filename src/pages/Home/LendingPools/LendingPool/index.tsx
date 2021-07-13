@@ -17,7 +17,7 @@ import {
   PAGES,
   PARAMETERS
 } from 'utils/constants/links';
-import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eth';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
 import {
   Address,
@@ -176,7 +176,7 @@ const getLendingPoolSymbol = (
   chainID: number
 ): string => {
   const underlying = lendingPool[poolTokenType].underlying;
-  const wethAddress = WETH_ADDRESSES[chainID];
+  const wethAddress = W_ETH_ADDRESSES[chainID];
   let symbol;
   if (underlying.id === wethAddress.toLowerCase()) {
     symbol = 'ETH';
@@ -279,7 +279,7 @@ const LendingPool = ({
   const borrowAPYB = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
 
   const imxAddress = IMX_ADDRESSES[chainID];
-  const wethAddress = WETH_ADDRESSES[chainID];
+  const wethAddress = W_ETH_ADDRESSES[chainID];
   const imxPair = getPairAddress(wethAddress, imxAddress, chainID).toLowerCase();
   const aAddress = lendingPoolsData[imxPair][PoolTokenType.BorrowableA].underlying.id;
   const poolTokenType =

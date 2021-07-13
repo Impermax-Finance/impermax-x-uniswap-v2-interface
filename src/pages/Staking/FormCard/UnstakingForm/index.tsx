@@ -9,7 +9,7 @@ import { Col, Row } from 'react-bootstrap';
 import { ApprovalType } from '../../../../types/interfaces';
 import useApprove from '../../../../hooks/useApprove';
 import InputAmount from '../../../../components/InputAmount';
-import { XIMX_ADDRESSES } from '../../../../config/web3/contracts/ximx';
+import { X_IMX_ADDRESSES } from '../../../../config/web3/contracts/x-imx';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useState } from 'react';
@@ -18,7 +18,7 @@ import useUnstake from '../../../../hooks/useUnstake';
 const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {
   const rate = useXIMXRate();
   const { chainId } = useWeb3React<Web3Provider>();
-  const tokenBalance = useTokenBalance(XIMX_ADDRESSES[chainId as number]);
+  const tokenBalance = useTokenBalance(X_IMX_ADDRESSES[chainId as number]);
 
   const [val, setVal] = useState<number>(0);
   const tokens = useToBigNumber(val, undefined, 18);
