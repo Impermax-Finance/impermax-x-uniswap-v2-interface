@@ -49,7 +49,7 @@ import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
 import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracle';
 import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
-import { RESERVES_DISTRIBUTOR_ADDRESSES } from '../config/web3/contracts/reserves-distributor';
+import { RESERVE_DISTRIBUTOR_ADDRESSES } from '../config/web3/contracts/reserve-distributors';
 import { IMX_ADDRESSES } from '../config/web3/contracts/imx';
 import { XIMX_ADDRESSES } from '../config/web3/contracts/ximx';
 import { STAKING_ROUTER_ADDRESSES } from '../config/web3/contracts/staking-router';
@@ -124,7 +124,7 @@ class ImpermaxRouter {
     this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
     this.IMX = this.newERC20(IMX_ADDRESSES[config.chainId]);
     this.xIMX = this.newPoolToken(XIMX_ADDRESSES[config.chainId]);
-    this.reservesDistributor = this.newReservesDistributor(RESERVES_DISTRIBUTOR_ADDRESSES[config.chainId]);
+    this.reservesDistributor = this.newReservesDistributor(RESERVE_DISTRIBUTOR_ADDRESSES[config.chainId]);
     this.stakingRouter = this.newStakingRouter(STAKING_ROUTER_ADDRESSES[config.chainId]);
     this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
