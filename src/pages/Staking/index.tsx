@@ -18,8 +18,8 @@ const Staking = (): JSX.Element => {
     <Provider store={store}>
       <Layout>
         <Updater />
-        <SubgraphProvider chainIdOverwrite={chainId}>
-          <ImpermaxRouterProvider>
+        <SubgraphProvider appChainId={chainId}>
+          <ImpermaxRouterProvider appChainId={chainId}>
             <div
               className={clsx(
                 'space-y-6',

@@ -177,3 +177,10 @@ export interface ClaimEvent {
   amount: number;
   transactionHash: string;
 }
+
+export interface XimxData {
+  totalSupply: string;
+  totalBalance: string;
+  exchangeRate: string;
+  dailyAPR: string;
+}

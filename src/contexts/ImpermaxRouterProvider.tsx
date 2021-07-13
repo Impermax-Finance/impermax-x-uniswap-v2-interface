@@ -9,11 +9,12 @@ import useSubgraph from 'hooks/useSubgraph';
 const ImpermaxRouterContext = React.createContext<ImpermaxRouterContextInterface | undefined>(undefined);
 
 interface ImpermaxRouterProviderProps {
-  chainIdOverwrite?: number;
+  appChainId?: number;
   children: React.ReactNode;
 }
 
 const ImpermaxRouterProvider = ({
+  appChainId,
   children
 }: ImpermaxRouterProviderProps): JSX.Element => {
   const {
@@ -37,10 +38,13 @@ const ImpermaxRouterProvider = ({
     setPriceInverted(!priceInverted);
   };
 
+  const wrongNetwork = appChainId !== chainId;
+
   React.useEffect(() => {
     if (!library) return;
     if (!chainId) return;
     if (!account) return;
+    if (wrongNetwork) return;
     if (!impermaxRouter) {
       const impermaxRouter = new ImpermaxRouter({
         subgraph,

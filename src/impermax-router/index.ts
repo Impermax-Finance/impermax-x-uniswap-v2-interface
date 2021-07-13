@@ -226,7 +226,6 @@ class ImpermaxRouter {
   public getPoolToken = contracts.getPoolToken;
   public getFarmingPool = contracts.getFarmingPool;
   public getClaimable = contracts.getClaimable;
-  public getClaimable = contracts.getClaimable;
   public getToken = contracts.getToken;
   public getPoolTokenAddress = contracts.getPoolTokenAddress;
   public getTokenAddress = contracts.getTokenAddress;

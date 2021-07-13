@@ -496,6 +496,6 @@ export function useXIMXRate() : number {
 
 export function useXIMXAPY() : number {
   const [data, setData] = useState<number>(0);
-  useRouterCallback(async router => setData(await router.getXIMXAPY()));
+  useSubgraphCallback(async subgraph => setData(await subgraph.getXIMXAPY()));
   return data;
 }

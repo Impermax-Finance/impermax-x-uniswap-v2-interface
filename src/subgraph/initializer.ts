@@ -15,13 +15,15 @@ import {
   UserData,
   CollateralPosition,
   SupplyPosition,
-  BorrowPosition
+  BorrowPosition,
+  XimxData
 } from 'types/interfaces';
 import Subgraph from '.';
 import {
   IMPERMAX_SUBGRAPH_URL,
   UNISWAP_SUBGRAPH_URL,
-  BLOCKLYTICS_SUBGRAPH_URL
+  BLOCKLYTICS_SUBGRAPH_URL,
+  IMX_STAKING_SUBGRAPH_URL
 } from 'config/web3/subgraph';
 
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;
@@ -285,6 +287,27 @@ async function getUserData(this: Subgraph, account: Address): Promise<UserData> 
   return this.usersData[account];
 }
 
+// IMX Staking
+async function initializeXimxData(this: Subgraph): Promise<XimxData> {
+  const query = gql`{
+    ximxes(first: 1) {
+      totalSupply
+      totalBalance
+      exchangeRate
+      dailyAPR
+    }
+  }`;
+
+  const impermaxSubgraphUrl = IMX_STAKING_SUBGRAPH_URL[this.chainId];
+  const result = await apolloFetcher(impermaxSubgraphUrl, query);
+
+  return result.data.ximxes[0];
+}
+async function getXimxData(this: Subgraph): Promise<XimxData> {
+  if (!this.ximxData) this.ximxData = this.initializeXimxData();
+  return this.ximxData;
+}
+
 export {
   fetchLendingPools,
   fetchBlockByTimestamp,
@@ -296,5 +319,7 @@ export {
   getLendingPoolData,
   fetchUserData,
   initializeUserData,
-  getUserData
+  getUserData,
+  initializeXimxData,
+  getXimxData
 };

@@ -7,7 +7,8 @@ import {
   LendingPoolData,
   Address,
   TvlData,
-  UserData
+  UserData,
+  XimxData
 } from 'types/interfaces';
 import * as initializer from './initializer';
 import * as cacheData from './cacheData';
@@ -21,7 +22,8 @@ class Subgraph {
   usersData: {
     [key in Address]?: Promise<UserData>
   };
-  tvlData: Promise<TvlData>
+  tvlData: Promise<TvlData>;
+  ximxData: Promise<XimxData>;
 
   constructor(config: SubgraphConfigInterface) {
     this.chainId = config.chainId;
@@ -32,6 +34,7 @@ class Subgraph {
     this.lendingPoolsData = null;
     this.usersData = null;
     this.tvlData = null;
+    this.ximxData = null;
   }
 
   // Fetchers
@@ -46,6 +49,8 @@ class Subgraph {
   public fetchUserData = initializer.fetchUserData;
   public initializeUserData = initializer.initializeUserData;
   public getUserData = initializer.getUserData;
+  public initializeXimxData = initializer.initializeXimxData;
+  public getXimxData = initializer.getXimxData;
 
   // Data Getters
   public getName = cacheData.getName;
@@ -83,6 +88,7 @@ class Subgraph {
   public getRewardSpeed = cacheData.getRewardSpeed;
   public getFarmingAPY = cacheData.getFarmingAPY;
   public getNextFarmingAPY = cacheData.getNextFarmingAPY;
+  public getXIMXAPY = cacheData.getXIMXAPY;
 
   // Account
   public getBorrowPositions = account.getBorrowPositions;

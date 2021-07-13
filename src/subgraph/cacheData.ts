@@ -258,3 +258,9 @@ export async function getNextFarmingAPY(this: Subgraph, uniswapV2PairAddress: Ad
   if (totalBorrowedUSD === 0) return 0;
   return toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
 }
+
+// IMX Staking
+export async function getXIMXAPY(this: Subgraph) : Promise<number> {
+  const ximxData = await this.getXimxData();
+  return Math.pow(1 + parseFloat(ximxData.dailyAPR), 365) - 1;
+}

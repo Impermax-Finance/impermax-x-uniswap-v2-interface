@@ -8,16 +8,16 @@ import Subgraph from 'subgraph';
 const SubgraphContext = React.createContext<SubgraphContextInterface | undefined>(undefined);
 
 interface SubgraphProviderProps {
-  chainIdOverwrite?: number;
+  appChainId?: number;
   children: React.ReactNode;
 }
 
 const SubgraphProvider = ({
-  chainIdOverwrite,
+  appChainId,
   children
 }: SubgraphProviderProps): JSX.Element => {
   let { chainId } = useWeb3React<Web3Provider>();
-  if (chainIdOverwrite) chainId = chainIdOverwrite;
+  if (appChainId) chainId = appChainId;
 
   if (!chainId) {
     throw new Error('Invalid chain ID!');
