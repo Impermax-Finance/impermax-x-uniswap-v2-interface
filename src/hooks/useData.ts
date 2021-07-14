@@ -494,14 +494,6 @@ export function usefromTokens(amount: BigNumber, poolTokenTypeArg?: PoolTokenTyp
 
 // ray test touch <<
 // Staking
-// ray test touch <<<
-export function useXIMXRate() : number {
-  const [data, setData] = useState<number>(0);
-  useRouterCallback(async router => setData(await router.getXIMXRate()));
-  return data;
-}
-// ray test touch >>>
-
 export function useXIMXAPY() : number {
   const [data, setData] = useState<number>(0);
   useSubgraphCallback(async subgraph => setData(await subgraph.getXIMXAPY()));

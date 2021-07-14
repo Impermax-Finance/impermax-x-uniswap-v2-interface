@@ -32,7 +32,6 @@ import {
   ImpermaxRouterConfigInterface,
   FactoryContract,
   SimpleUniswapOracleContract,
-  AirdropData,
   ClaimAggregatorContract,
   ClaimEvent,
   ClaimableContract,
@@ -115,8 +114,6 @@ class ImpermaxRouter {
   // ray test touch >>
   imxCache: {
     // ray test touch <<
-    airdropData?: AirdropData,
-    xIMXExchangeRate?: Promise<number>,
     xIMXAPY?: Promise<number>,
     // ray test touch >>
   };
@@ -333,7 +330,6 @@ class ImpermaxRouter {
   public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
   // ray test touch <<
-  public initializeXIMXRate = imx.initializeXIMXRate;
   public initializeXIMXAPY = imx.initializeXIMXAPY;
   // ray test touch >>
   public getFarmingShares = imx.getFarmingShares;
@@ -341,7 +337,6 @@ class ImpermaxRouter {
   public getClaimHistory = imx.getClaimHistory;
   public getAvailableClaimable = imx.getAvailableClaimable;
   // ray test touch <<
-  public getXIMXRate = imx.getXIMXRate;
   public getXIMXAPY = imx.getXIMXAPY;
   // ray test touch >>
 
