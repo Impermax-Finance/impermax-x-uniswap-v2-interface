@@ -3,19 +3,11 @@
 import clsx from 'clsx';
 
 import ImpermaxInput, { Props as ImpermaxInputProps } from '../../../../components/UI/ImpermaxInput';
-import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
-import { useWeb3React } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
-import { useTokenBalance } from '../../../../hooks/useData';
-import { formatAmount } from '../../../../utils/format';
 
 const TokenAmountField = ({
   className,
   ...rest
 }: ImpermaxInputProps): JSX.Element => {
-  const { chainId } = useWeb3React<Web3Provider>();
-  const tokenBalance = useTokenBalance(IMX_ADDRESSES[chainId as number]);
-  if (!chainId) return (<></>);
   return (
     <div
       className={clsx(
@@ -60,7 +52,7 @@ const TokenAmountField = ({
           'bg-impermaxBlackHaze',
           'whitespace-nowrap'
         )}>
-        Balance: {formatAmount(tokenBalance)}
+        Balance: 10
       </span>
     </div>
   );

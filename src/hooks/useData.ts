@@ -300,15 +300,6 @@ export function useBorrowedUSD(poolTokenTypeArg?: PoolTokenType) : number {
   return borrowedUSD;
 }
 
-// ray test touch <<
-export function useTokenBalance(tokenAddress: Address) : number {
-  const [data, setData] = useState<number>(0);
-  useRouterCallback(async router => setData(await router.getTokenBalance(tokenAddress)));
-  console.log(data);
-  return data;
-}
-// ray test touch >>
-
 export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [availableBalance, setAvailableBalance] = useState<number>(0);
@@ -316,12 +307,14 @@ export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   return availableBalance;
 }
 
+// ray test touch <<<
 export function useAvailableBalanceUSD(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [availableBalanceUSD, setAvailableBalanceUSD] = useState<number>(0);
   useRouterCallback(async router => setAvailableBalanceUSD(await router.getAvailableBalanceUSD(uniswapV2PairAddress, poolTokenType)));
   return availableBalanceUSD;
 }
+// ray test touch >>>
 
 export function useCurrentLeverage(changes?: Changes) : number {
   const uniswapV2PairAddress = usePairAddress();

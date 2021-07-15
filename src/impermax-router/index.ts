@@ -295,9 +295,9 @@ class ImpermaxRouter {
   public initializeBorrowed = account.initializeBorrowed;
   public initializeDeposited = account.initializeDeposited;
   public getExchangeRate = account.getExchangeRate;
-  // ray test touch <<
+  // ray test touch <<<
   public getTokenBalance = account.getTokenBalance;
-  // ray test touch >>
+  // ray test touch >>>
   public getAvailableBalance = account.getAvailableBalance;
   public getAvailableBalanceUSD = account.getAvailableBalanceUSD;
   public getBorrowed = account.getBorrowed;
