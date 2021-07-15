@@ -34,7 +34,6 @@ export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress
 }
 
 // ray test touch <<
-// ray test touch <<<
 // Token Available Balance
 export async function initializeTokenBalance(
   this: ImpermaxRouter,
@@ -49,8 +48,6 @@ export async function initializeTokenBalance(
   const balance = await token.balanceOf(this.account);
   return (await this.normalizeToken(tokenAddress, balance)) / this.dust;
 }
-// ray test touch >>>
-// ray test touch <<<
 export async function getTokenBalance(
   this: ImpermaxRouter,
   tokenAddress: Address
@@ -61,7 +58,6 @@ export async function getTokenBalance(
   }
   return cache.balance;
 }
-// ray test touch >>>
 export async function getAvailableBalance(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
@@ -71,15 +67,6 @@ export async function getAvailableBalance(
   return this.getTokenBalance(tokenAddress);
 }
 // ray test touch >>
-export async function getAvailableBalanceUSD(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  poolTokenType: PoolTokenType
-) : Promise<number> {
-  const availableBalance = await this.getAvailableBalance(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return availableBalance * tokenPrice;
-}
 
 // Deposited
 export async function initializeDeposited(
