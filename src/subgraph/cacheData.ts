@@ -259,10 +259,10 @@ export async function getNextFarmingAPY(this: Subgraph, uniswapV2PairAddress: Ad
   return toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
 }
 
-// ray test touch <<
+// ray test touch <<<
 // IMX Staking
 export async function getXIMXAPY(this: Subgraph) : Promise<number> {
-  const xImxData = await this.getXimxData();
+  const xImxData = await this.getXImxData();
   return Math.pow(1 + parseFloat(xImxData.dailyAPR), 365) - 1;
 }
-// ray test touch >>
+// ray test touch >>>

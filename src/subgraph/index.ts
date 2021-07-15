@@ -56,8 +56,8 @@ class Subgraph {
   public initializeUserData = initializer.initializeUserData;
   public getUserData = initializer.getUserData;
   // ray test touch <<
-  public initializeXimxData = initializer.initializeXImxData;
-  public getXimxData = initializer.getXImxData;
+  public initializeXImxData = initializer.initializeXImxData;
+  public getXImxData = initializer.getXImxData;
   // ray test touch >>
 
   // Data Getters

@@ -291,7 +291,7 @@ async function getUserData(this: Subgraph, account: Address): Promise<UserData> 
   return this.usersData[account];
 }
 
-// ray test touch <<
+// ray test touch <<<
 // IMX Staking
 async function initializeXImxData(this: Subgraph): Promise<XImxData> {
   const query = gql`{
@@ -309,10 +309,10 @@ async function initializeXImxData(this: Subgraph): Promise<XImxData> {
   return result.data.ximxes[0];
 }
 async function getXImxData(this: Subgraph): Promise<XImxData> {
-  if (!this.xImxData) this.xImxData = this.initializeXimxData();
+  if (!this.xImxData) this.xImxData = this.initializeXImxData();
   return this.xImxData;
 }
-// ray test touch >>
+// ray test touch >>>
 
 export {
   fetchLendingPools,

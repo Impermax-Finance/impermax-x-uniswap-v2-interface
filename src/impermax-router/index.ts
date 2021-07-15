@@ -326,16 +326,16 @@ class ImpermaxRouter {
   public initializeAvailableReward = imx.initializeAvailableReward;
   public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
-  // ray test touch <<
+  // ray test touch <<<
   public initializeXIMXAPY = imx.initializeXIMXAPY;
-  // ray test touch >>
+  // ray test touch >>>
   public getFarmingShares = imx.getFarmingShares;
   public getAvailableReward = imx.getAvailableReward;
   public getClaimHistory = imx.getClaimHistory;
   public getAvailableClaimable = imx.getAvailableClaimable;
-  // ray test touch <<
+  // ray test touch <<<
   public getXIMXAPY = imx.getXIMXAPY;
-  // ray test touch >>
+  // ray test touch >>>
 
   // Utils
   // ray test touch <<

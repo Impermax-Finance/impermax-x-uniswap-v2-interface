@@ -1,16 +1,36 @@
 
 // ray test touch <<
+import * as React from 'react';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
 import Panel from 'components/Panel';
-import { useXIMXAPY } from 'hooks/useData';
-import { formatPercentage } from 'utils/format';
+import getXIMXData from 'services/get-x-imx-data';
+import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 
 const APYCard = ({
   className,
   ...rest
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => {
-  const stakingAPY = useXIMXAPY();
+  const { chainId } = useWeb3React<Web3Provider>();
+  const [xIMXAPY, setXIMXAPY] = React.useState(0);
+  React.useEffect(() => {
+    if (!chainId) return;
+
+    (async () => {
+      try {
+        const xIMXData = await getXIMXData(chainId);
+        const theXIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
+        setXIMXAPY(theXIMXAPY);
+      } catch (error) {
+        console.log('[APYCard useEffect] error.message => ', error.message);
+      }
+    })();
+  }, [chainId]);
+
+  const xIMXAPYInPercent = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
+
   return (
     <Panel
       className={clsx(
@@ -43,7 +63,7 @@ const APYCard = ({
             'text-2xl',
             'text-textPrimary'
           )}>
-          {formatPercentage(stakingAPY)}
+          {`${xIMXAPYInPercent} %`}
         </span>
         <span
           className={clsx(
