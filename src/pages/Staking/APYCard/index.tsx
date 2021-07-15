@@ -1,8 +1,10 @@
 
 // ray test touch <<
 import clsx from 'clsx';
-import { useXIMXAPY } from '../../../hooks/useData';
-import { formatPercentage } from '../../../utils/format';
+
+import Panel from 'components/Panel';
+import { useXIMXAPY } from 'hooks/useData';
+import { formatPercentage } from 'utils/format';
 
 const APYCard = ({
   className,
@@ -10,14 +12,13 @@ const APYCard = ({
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => {
   const stakingAPY = useXIMXAPY();
   return (
-    <div
+    <Panel
       className={clsx(
         'px-6',
         'py-4',
         'flex',
         'justify-between',
         'items-center',
-        'rounded-lg',
         'bg-impermaxJade-200',
         className
       )}
@@ -53,7 +54,7 @@ const APYCard = ({
           Staking APY
         </span>
       </div>
-    </div>
+    </Panel>
   );
 };
 
