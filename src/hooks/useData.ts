@@ -475,12 +475,3 @@ export function usefromTokens(amount: BigNumber, poolTokenTypeArg?: PoolTokenTyp
   // TODO: >
   return parseFloat(amount.toString()) * exchangeRate / Math.pow(10, decimals);
 }
-
-// ray test touch <<<
-// Staking
-export function useXIMXAPY() : number {
-  const [data, setData] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setData(await subgraph.getXIMXAPY()));
-  return data;
-}
-// ray test touch >>>

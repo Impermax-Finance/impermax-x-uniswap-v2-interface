@@ -16,8 +16,7 @@ import {
   CollateralPosition,
   SupplyPosition,
   // ray test touch <<
-  BorrowPosition,
-  XImxData
+  BorrowPosition
   // ray test touch >>
 } from 'types/interfaces';
 import Subgraph from '.';
@@ -25,8 +24,7 @@ import {
   IMPERMAX_SUBGRAPH_URL,
   UNISWAP_SUBGRAPH_URL,
   // ray test touch <<
-  BLOCKLYTICS_SUBGRAPH_URL,
-  IMX_STAKING_SUBGRAPH_URL
+  BLOCKLYTICS_SUBGRAPH_URL
   // ray test touch >>
 } from 'config/web3/subgraph';
 
@@ -291,29 +289,6 @@ async function getUserData(this: Subgraph, account: Address): Promise<UserData> 
   return this.usersData[account];
 }
 
-// ray test touch <<<
-// IMX Staking
-async function initializeXImxData(this: Subgraph): Promise<XImxData> {
-  const query = gql`{
-    ximxes(first: 1) {
-      totalSupply
-      totalBalance
-      exchangeRate
-      dailyAPR
-    }
-  }`;
-
-  const impermaxSubgraphUrl = IMX_STAKING_SUBGRAPH_URL[this.chainId];
-  const result = await apolloFetcher(impermaxSubgraphUrl, query);
-
-  return result.data.ximxes[0];
-}
-async function getXImxData(this: Subgraph): Promise<XImxData> {
-  if (!this.xImxData) this.xImxData = this.initializeXImxData();
-  return this.xImxData;
-}
-// ray test touch >>>
-
 export {
   fetchLendingPools,
   fetchBlockByTimestamp,
@@ -325,9 +300,5 @@ export {
   getLendingPoolData,
   fetchUserData,
   initializeUserData,
-  getUserData,
-  // ray test touch <<
-  initializeXImxData,
-  getXImxData
-  // ray test touch >>
+  getUserData
 };

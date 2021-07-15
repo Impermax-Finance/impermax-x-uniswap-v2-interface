@@ -112,11 +112,6 @@ class ImpermaxRouter {
     }
   };
   // ray test touch >>
-  imxCache: {
-    // ray test touch <<
-    xIMXAPY?: Promise<number>,
-    // ray test touch >>
-  };
   claimableCache: {
     [key in Address]?: {
       contract?: ClaimableContract,
@@ -326,16 +321,10 @@ class ImpermaxRouter {
   public initializeAvailableReward = imx.initializeAvailableReward;
   public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
-  // ray test touch <<<
-  public initializeXIMXAPY = imx.initializeXIMXAPY;
-  // ray test touch >>>
   public getFarmingShares = imx.getFarmingShares;
   public getAvailableReward = imx.getAvailableReward;
   public getClaimHistory = imx.getClaimHistory;
   public getAvailableClaimable = imx.getAvailableClaimable;
-  // ray test touch <<<
-  public getXIMXAPY = imx.getXIMXAPY;
-  // ray test touch >>>
 
   // Utils
   // ray test touch <<
