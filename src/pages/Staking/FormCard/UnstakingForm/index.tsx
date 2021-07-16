@@ -3,7 +3,10 @@
 import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { formatUnits } from '@ethersproject/units';
+import {
+  formatUnits,
+  parseUnits
+} from '@ethersproject/units';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Col, Row } from 'react-bootstrap';
 
@@ -11,7 +14,6 @@ import TokenAmountLabel from '../TokenAmountLabel';
 import InteractionButton, { ButtonState } from 'components/InteractionButton';
 import InputAmount from 'components/InputAmount';
 import useERC20Contract from 'utils/hooks/web3/use-erc20-contract';
-import { useToBigNumber } from 'hooks/useData';
 import useApprove from 'hooks/useApprove';
 import useUnstake from 'hooks/useUnstake';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
@@ -45,12 +47,12 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     account
   ]);
 
-  const [val, setVal] = React.useState<number>(0);
-  const tokens = useToBigNumber(val, undefined, 18);
-  const invalidInput = val > xIMXBalance;
+  const [unstakingAmount, setUnstakingAmount] = React.useState<number>(0);
+  const bigUnstakingAmount = parseUnits(unstakingAmount.toString());
+  const invalidInput = unstakingAmount > xIMXBalance;
 
-  const [approvalState, onApprove] = useApprove(ApprovalType.UNSTAKE, tokens, invalidInput);
-  const [unstakeState, onUnstake] = useUnstake(approvalState, tokens, invalidInput);
+  const [approvalState, onApprove] = useApprove(ApprovalType.UNSTAKE, bigUnstakingAmount, invalidInput);
+  const [unstakeState, onUnstake] = useUnstake(approvalState, bigUnstakingAmount, invalidInput);
   return (
     <form {...props}>
       <TokenAmountLabel
@@ -58,8 +60,8 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
         text='Unstake IMX' />
       {/* <TokenAmountField /> */}
       <InputAmount
-        val={val}
-        setVal={setVal}
+        val={unstakingAmount}
+        setVal={setUnstakingAmount}
         suffix='xIMX'
         maxTitle='Available'
         max={xIMXBalance} />

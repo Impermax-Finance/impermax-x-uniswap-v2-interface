@@ -3,7 +3,10 @@
 import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { formatUnits } from '@ethersproject/units';
+import {
+  formatUnits,
+  parseUnits
+} from '@ethersproject/units';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Col, Row } from 'react-bootstrap';
 
@@ -11,7 +14,6 @@ import TokenAmountLabel from '../TokenAmountLabel';
 import InteractionButton, { ButtonState } from 'components/InteractionButton';
 import InputAmount from 'components/InputAmount';
 import useERC20Contract from 'utils/hooks/web3/use-erc20-contract';
-import { useToBigNumber } from 'hooks/useData';
 import useStake from 'hooks/useStake';
 import useApprove from 'hooks/useApprove';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
@@ -45,12 +47,14 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     account
   ]);
 
-  const [val, setVal] = React.useState<number>(0);
-  const amount = useToBigNumber(val, undefined, 18);
-  const invalidInput = val > imxBalance;
+  const [stakingAmount, setStakingAmount] = React.useState<number>(0);
+  const bigStakingAmount = parseUnits(stakingAmount.toString());
+  const invalidInput = stakingAmount > imxBalance;
 
-  const [approvalState, onApprove] = useApprove(ApprovalType.STAKE, amount, invalidInput);
-  const [stakeState, onStake] = useStake(approvalState, amount, invalidInput);
+  // ray test touch <<<
+  const [approvalState, onApprove] = useApprove(ApprovalType.STAKE, bigStakingAmount, invalidInput);
+  // ray test touch >>>
+  const [stakeState, onStake] = useStake(approvalState, bigStakingAmount, invalidInput);
   return (
     <form {...props}>
       <TokenAmountLabel
@@ -58,8 +62,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
         text='Stake IMX' />
       {/* <TokenAmountField /> */}
       <InputAmount
-        val={val}
-        setVal={setVal}
+        val={stakingAmount}
+        setVal={setStakingAmount}
         suffix='IMX'
         maxTitle='Available'
         max={imxBalance} />
