@@ -5,7 +5,8 @@ import clsx from 'clsx';
 import ImpermaxInput, { Props as ImpermaxInputProps } from 'components/UI/ImpermaxInput';
 
 interface CustomProps {
-  balance: number | undefined;
+  balance: number;
+  allowance: number;
   error?: boolean;
   helperText?: React.ReactNode | string;
 }
@@ -14,6 +15,7 @@ type Ref = HTMLInputElement;
 const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>(({
   className,
   balance,
+  allowance,
   error,
   helperText,
   ...rest
@@ -48,26 +50,28 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
           maxLength={79}
           spellCheck='false'
           {...rest} />
-        <span
+        <div
           style={{
             minWidth: 120
           }}
           className={clsx(
             'rounded-r-md',
             'inline-flex',
-            'items-center',
+            'flex-col',
+            'justify-center',
             'px-3',
             'py-2',
             'text-textSecondary',
-            'text-sm',
+            'text-xs',
             'border',
             'border-l-0',
             'border-gray-300',
             'bg-impermaxBlackHaze',
             'whitespace-nowrap'
           )}>
-          Balance: {balance ?? 'Loading...'}
-        </span>
+          <span>Balance: {balance}</span>
+          <span>Allowance: {allowance}</span>
+        </div>
       </div>
       <TokenAmountFieldHelperText
         className={clsx(
