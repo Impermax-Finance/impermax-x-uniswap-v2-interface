@@ -29,12 +29,13 @@ import SubmitButton from '../SubmitButton';
 import ErrorFallback from 'components/ErrorFallback';
 import ErrorModal from 'components/ErrorModal';
 import LineLoadingSpinner from 'components/LineLoadingSpinner';
-import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
-import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
-import StakingRouterJSON from 'abis/contracts/IStakingRouter.json';
+import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
+import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import STATUSES from 'utils/constants/statuses';
+import StakingRouterJSON from 'abis/contracts/IStakingRouter.json';
+import { useTransactionAdder } from 'store/transactions/hooks';
 
 const getStakingRouterContract = (chainID: number, library: Web3Provider, account: string) => {
   const stakingRouterAddress = STAKING_ROUTER_ADDRESSES[chainID];
@@ -67,6 +68,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element | 
 
   const handleError = useErrorHandler();
   const mounted = usePromise();
+  const addTransaction = useTransactionAdder();
 
   const [status, setStatus] = React.useState(STATUSES.IDLE);
   const [submitStatus, setSubmitStatus] = React.useState(STATUSES.IDLE);
@@ -136,7 +138,11 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element | 
         const stakingRouterContract = getStakingRouterContract(chainId, library, account);
         const tx: ContractTransaction = await mounted(stakingRouterContract.stake(bigStakingAmount));
         const receipt = await mounted(tx.wait());
-        console.log('ray : ***** receipt => ', receipt);
+        addTransaction({
+          hash: receipt.transactionHash
+        }, {
+          summary: `Stake IMX (${data[STAKING_AMOUNT]}).`
+        });
         reset({
           [STAKING_AMOUNT]: ''
         });
@@ -171,7 +177,11 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element | 
         const tx: ContractTransaction = await mounted(imxContract.approve(spender, bigStakingAmount));
         const receipt = await mounted(tx.wait());
         setIMXAllowance(bigStakingAmount);
-        console.log('ray : ***** receipt => ', receipt);
+        addTransaction({
+          hash: receipt.transactionHash
+        }, {
+          summary: `Approve of IMX (${data[STAKING_AMOUNT]}) transfer.`
+        });
         setSubmitStatus(STATUSES.RESOLVED);
       } catch (error) {
         setSubmitStatus(STATUSES.REJECTED);
