@@ -39,7 +39,7 @@ export default function useApprove(
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenTypeContext = usePoolToken();
   const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : poolTokenTypeContext;
-  // ray test touch <<<<
+  // ray test touch <<<
   const symbol =
     approvalType === ApprovalType.STAKE ?
       'IMX' :

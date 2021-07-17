@@ -1,6 +1,7 @@
 
 // ray test touch <<
 import * as React from 'react';
+import { useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import {
@@ -33,26 +34,37 @@ import StakingRouterJSON from 'abis/contracts/IStakingRouter.json';
 // import { ApprovalType } from 'types/interfaces';
 // ray test touch >>>
 
-// ray test touch <<<
 const getStakingRouterContract = (chainID: number, library: Web3Provider, account: string) => {
   const stakingRouterAddress = STAKING_ROUTER_ADDRESSES[chainID];
   const signer = library.getSigner(account);
 
   return new Contract(stakingRouterAddress, StakingRouterJSON.abi, signer);
 };
-// ray test touch >>>
+
+const STAKING_AMOUNT = 'staking-amount';
+
+type StakingFormData = {
+  [STAKING_AMOUNT]: string;
+}
 
 const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {
-  // ray test touch <<<
   const {
     chainId,
     account,
     library
   } = useWeb3React<Web3Provider>();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<StakingFormData>({
+    mode: 'onChange'
+  });
+
   const [imxBalance, setIMXBalance] = React.useState<number>();
   const [imxAllowance, setIMXAllowance] = React.useState<BigNumber>();
-  const [stakingAmount, setStakingAmount] = React.useState<number>(0);
 
   React.useEffect(() => {
     if (!chainId) return;
@@ -79,12 +91,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     library,
     account
   ]);
-  // ray test touch >>>
 
-  // ray test touch <<<
-  const handleStake = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-
+  const onSubmit = async (data: StakingFormData) => {
     if (!chainId) {
       throw new Error('Invalid chain ID!');
     }
@@ -95,20 +103,21 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
       throw new Error('Invalid account!');
     }
 
+    const bigStakingAmount = parseUnits(data[STAKING_AMOUNT]);
     const stakingRouterContract = getStakingRouterContract(chainId, library, account);
-    const bigStakingAmount = parseUnits(stakingAmount.toString());
     const tx = await stakingRouterContract.stake(bigStakingAmount);
-    const receipt = await tx.wait();
-    console.log('ray : ***** receipt => ', receipt);
-  };
-
-  const handleStakingAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStakingAmount(Number(event.currentTarget.value));
+    await tx.wait();
+    reset({
+      [STAKING_AMOUNT]: ''
+    });
   };
 
   console.log('ray : ***** imxAllowance?.toString() => ', imxAllowance?.toString());
   console.log('ray : ***** imxBalance => ', imxBalance);
-  // ray test touch >>>
+  const validateForm = (value: string): string | undefined => {
+    console.log('ray : ***** value => ', value);
+    return undefined;
+  };
 
   // ray test touch <<<
   // const bigStakingAmount = parseUnits(stakingAmount.toString());
@@ -117,18 +126,26 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
   // const [stakeState, onStake] = useStake(approvalState, bigStakingAmount, invalidInput);
   // ray test touch >>>
 
+  // ray test touch <<<
   return (
     <form
-      onSubmit={handleStake}
+      onSubmit={handleSubmit(onSubmit)}
       {...props}>
       <TokenAmountLabel
-        htmlFor='staking-amount'
+        htmlFor={STAKING_AMOUNT}
         text='Stake IMX' />
       <TokenAmountField
-        id='staking-amount'
-        name='staking-amount'
+        id={STAKING_AMOUNT}
+        {...register(STAKING_AMOUNT, {
+          required: {
+            value: true,
+            message: 'This field is required!'
+          },
+          validate: value => validateForm(value)
+        })}
         balance={imxBalance}
-        onChange={handleStakingAmountChange} />
+        error={!!errors[STAKING_AMOUNT]}
+        helperText={errors[STAKING_AMOUNT]?.message} />
       <SubmitButton>
         Stake
       </SubmitButton>
@@ -165,6 +182,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     //   </Row>
     // </form>
   );
+  // ray test touch >>>
 };
 
 export default StakingForm;

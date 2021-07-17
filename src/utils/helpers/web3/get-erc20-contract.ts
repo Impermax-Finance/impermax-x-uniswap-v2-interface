@@ -1,5 +1,4 @@
 
-// ray test touch <<<
 import { Web3Provider } from '@ethersproject/providers';
 import { Contract } from '@ethersproject/contracts';
 
@@ -10,4 +9,3 @@ const getERC20Contract = (address: string, library: Web3Provider, account: strin
 };
 
 export default getERC20Contract;
-// ray test touch >>>
