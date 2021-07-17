@@ -40,9 +40,12 @@ const TYPES = {
 export function getOwnerSpender(this: ImpermaxRouter, approvalType: ApprovalType) : {owner: string, spender: string} {
   return {
     owner: this.account,
-    spender: approvalType === ApprovalType.STAKE || approvalType === ApprovalType.UNSTAKE ?
-      this.stakingRouter.address :
-      this.router.address
+    spender:
+      // ray test touch <<<
+      approvalType === ApprovalType.STAKE || approvalType === ApprovalType.UNSTAKE ?
+      // ray test touch >>>
+        this.stakingRouter.address :
+        this.router.address
   };
 }
 // export function getOwnerSpender(this: ImpermaxRouter) : {owner: string, spender: string} {
@@ -79,12 +82,14 @@ export async function getAllowance(
     const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
     allowance = await poolToken.borrowAllowance(owner, spender);
   }
+  // ray test touch <<<
   if (approvalType === ApprovalType.STAKE) {
     allowance = await this.IMX.allowance(owner, spender);
   }
   if (approvalType === ApprovalType.UNSTAKE) {
     allowance = await this.xIMX.allowance(owner, spender);
   }
+  // ray test touch >>>
 
   return BigNumber.from(allowance);
 }
@@ -115,12 +120,14 @@ export async function approve(
     const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
     tx = await poolToken.borrowApprove(spender, amount);
   }
+  // ray test touch <<<
   if (approvalType === ApprovalType.STAKE) {
     tx = await this.IMX.approve(spender, amount);
   }
   if (approvalType === ApprovalType.UNSTAKE) {
     tx = await this.xIMX.approve(spender, amount);
   }
+  // ray test touch >>>
   const receipt = await tx.wait();
   onTransactionHash(receipt.transactionHash);
 }
@@ -138,8 +145,10 @@ export async function getPermitData(
 ): Promise<void> {
   try {
     if (
+      // ray test touch <<<
       approvalType === ApprovalType.STAKE ||
       approvalType === ApprovalType.UNSTAKE ||
+      // ray test touch >>>
       (approvalType === ApprovalType.UNDERLYING && poolTokenType !== PoolTokenType.Collateral)
     ) {
       return callBack(null);

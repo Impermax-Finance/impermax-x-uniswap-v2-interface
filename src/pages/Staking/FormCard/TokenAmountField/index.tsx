@@ -1,13 +1,17 @@
 
-// ray test touch <<
 import clsx from 'clsx';
 
-import ImpermaxInput, { Props as ImpermaxInputProps } from '../../../../components/UI/ImpermaxInput';
+import ImpermaxInput, { Props as ImpermaxInputProps } from 'components/UI/ImpermaxInput';
+
+interface CustomProps {
+  balance: number | undefined;
+}
 
 const TokenAmountField = ({
   className,
+  balance,
   ...rest
-}: ImpermaxInputProps): JSX.Element => {
+}: CustomProps & ImpermaxInputProps): JSX.Element => {
   return (
     <div
       className={clsx(
@@ -52,11 +56,10 @@ const TokenAmountField = ({
           'bg-impermaxBlackHaze',
           'whitespace-nowrap'
         )}>
-        Balance: 10
+        Balance: {balance ?? 'Loading...'}
       </span>
     </div>
   );
 };
 
 export default TokenAmountField;
-// ray test touch >>

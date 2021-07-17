@@ -39,8 +39,15 @@ export default function useApprove(
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenTypeContext = usePoolToken();
   const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : poolTokenTypeContext;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const symbol = approvalType === ApprovalType.STAKE ? 'IMX' : approvalType === ApprovalType.UNSTAKE ? 'xIMX' : useSymbol();
+  // ray test touch <<<<
+  const symbol =
+    approvalType === ApprovalType.STAKE ?
+      'IMX' :
+      approvalType === ApprovalType.UNSTAKE ?
+        'xIMX' :
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useSymbol();
+  // ray test touch >>>
 
   const impermaxRouter = useImpermaxRouter();
   const addTransaction = useTransactionAdder();
@@ -68,6 +75,9 @@ export default function useApprove(
     if (approvalState !== ButtonState.Ready) return;
     setPending(true);
     impermaxRouter.getPermitData(approvalType, amount, deadline, async (permitData: PermitData) => {
+      // ray test touch <<<
+      console.log('ray : ***** permitData => ', permitData);
+      // ray test touch >>>
       if (permitData) setPermitData(permitData);
       else {
         // Fallback to traditional approve if can't sign
@@ -82,7 +92,14 @@ export default function useApprove(
       }
       setPending(false);
     }, uniswapV2PairAddress, poolTokenType);
-  }, [approvalState, uniswapV2PairAddress, poolTokenType, addTransaction, amount, deadline]);
+  }, [
+    approvalState,
+    uniswapV2PairAddress,
+    poolTokenType,
+    addTransaction,
+    amount,
+    deadline
+  ]);
 
   return [approvalState, approve, permitData];
 }

@@ -88,8 +88,10 @@ export enum ApprovalType {
   UNDERLYING,
   // ray test touch <<
   BORROW,
+  // ray test touch <<<
   STAKE,
   UNSTAKE,
+  // ray test touch >>>
   // ray test touch >>
 }
 

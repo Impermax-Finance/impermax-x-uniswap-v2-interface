@@ -13,7 +13,7 @@ import { Col, Row } from 'react-bootstrap';
 import TokenAmountLabel from '../TokenAmountLabel';
 import InteractionButton, { ButtonState } from 'components/InteractionButton';
 import InputAmount from 'components/InputAmount';
-import useERC20Contract from 'utils/hooks/web3/use-erc20-contract';
+import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import useApprove from 'hooks/useApprove';
 import useUnstake from 'hooks/useUnstake';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
@@ -23,17 +23,19 @@ import { ApprovalType } from 'types/interfaces';
 const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {
   const {
     chainId,
+    library,
     account
   } = useWeb3React<Web3Provider>();
 
-  const xIMXContract = useERC20Contract(chainId ? X_IMX_ADDRESSES[chainId] : undefined);
   const [xIMXBalance, setXIMXBalance] = React.useState(0);
   React.useEffect(() => {
-    if (!xIMXContract) return;
+    if (!chainId) return;
+    if (!library) return;
     if (!account) return;
 
     (async () => {
       try {
+        const xIMXContract = getERC20Contract(X_IMX_ADDRESSES[chainId], library, account);
         const bigXIMXBalance: BigNumber = await xIMXContract.balanceOf(account);
         const floatXIMXBalance = parseFloat(formatUnits(bigXIMXBalance));
         const theXIMXBalance = formatNumberWithFixedDecimals(floatXIMXBalance, 2);
@@ -43,7 +45,8 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
       }
     })();
   }, [
-    xIMXContract,
+    chainId,
+    library,
     account
   ]);
 
