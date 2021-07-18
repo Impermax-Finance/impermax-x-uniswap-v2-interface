@@ -51,15 +51,15 @@ import * as interactions from './interactions';
 import * as account from './account';
 import * as imx from './imx';
 import Subgraph from 'subgraph';
-import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
-import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
-import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
-import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracle';
+import { ROUTER_ADDRESSES } from 'config/web3/contracts/routers';
+import { FACTORY_ADDRESSES } from 'config/web3/contracts/factories';
+import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
+import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracles';
 import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
 // ray test touch <<
 import { RESERVES_DISTRIBUTOR_ADDRESSES } from '../config/web3/contracts/reserves-distributors';
-import { IMX_ADDRESSES } from '../config/web3/contracts/imx';
-import { X_IMX_ADDRESSES } from '../config/web3/contracts/x-imx';
+import { IMX_ADDRESSES } from '../config/web3/contracts/imxes';
+import { X_IMX_ADDRESSES } from '../config/web3/contracts/x-imxes';
 import { STAKING_ROUTER_ADDRESSES } from '../config/web3/contracts/staking-routers';
 // ray test touch >>
 

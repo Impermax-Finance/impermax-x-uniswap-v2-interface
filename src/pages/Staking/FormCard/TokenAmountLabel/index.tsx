@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import ImpermaxCarnationBadge from 'components/badges/ImpermaxCarnationBadge';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import PoolTokenJSON from 'abis/contracts/IPoolToken.json';
-import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imx';
+import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
 
 const useXIMXContract = () => {
   const {

@@ -13,7 +13,7 @@ import {
   Changes,
   NO_CHANGES
 } from '../types/interfaces';
-import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-ethes';
 
 // Exchange rate
 export async function initializeExchangeRate(

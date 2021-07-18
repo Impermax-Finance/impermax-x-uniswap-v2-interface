@@ -29,7 +29,7 @@ import SubmitButton from '../SubmitButton';
 import ErrorFallback from 'components/ErrorFallback';
 import ErrorModal from 'components/ErrorModal';
 import LineLoadingSpinner from 'components/LineLoadingSpinner';
-import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';

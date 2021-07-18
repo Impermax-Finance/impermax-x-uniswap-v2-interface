@@ -8,7 +8,7 @@ import { PermitData } from '../hooks/useApprove';
 import { impermanentLoss } from '../utils';
 import { DistributorDetails } from '../utils/constants';
 import { CreatePairStep } from '../hooks/useCreateNewPair';
-import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-ethes';
 
 export async function deposit(
   this: ImpermaxRouter,

@@ -17,8 +17,8 @@ import {
   PAGES,
   PARAMETERS
 } from 'utils/constants/links';
-import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eth';
-import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-ethes';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import {
   Address,
   PoolTokenType,

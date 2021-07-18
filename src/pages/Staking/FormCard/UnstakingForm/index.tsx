@@ -17,7 +17,7 @@ import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import useApprove from 'hooks/useApprove';
 import useUnstake from 'hooks/useUnstake';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
-import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imx';
+import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
 import { ApprovalType } from 'types/interfaces';
 
 const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {

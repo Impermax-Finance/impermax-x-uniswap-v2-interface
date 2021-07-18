@@ -15,7 +15,7 @@ import {
   PoolTokenType,
   ApprovalType
 } from '../types/interfaces';
-import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-ethes';
 
 const EIP712DOMAIN = [
   { name: 'name', type: 'string' },
