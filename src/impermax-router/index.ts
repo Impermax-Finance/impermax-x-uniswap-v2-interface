@@ -10,9 +10,6 @@ import ERC20JSON from 'abis/contracts/IERC20.json';
 import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import UniswapV2FactoryJSON from 'abis/contracts/IUniswapV2Factory.json';
 import Router01JSON from 'abis/contracts/IRouter01.json';
-// ray test touch <<
-import PoolTokenJSON from 'abis/contracts/IPoolToken.json';
-// ray test touch >>
 import BorrowableJSON from 'abis/contracts/IBorrowable.json';
 import CollateralSON from 'abis/contracts/ICollateral.json';
 import FactoryJSON from 'abis/contracts/IFactory.json';
@@ -31,11 +28,7 @@ import {
   ClaimAggregatorContract,
   ClaimEvent,
   ClaimableContract,
-  UniswapV2FactoryContract,
-  // ray test touch <<
-  PoolTokenContract,
-  ERC20Contract
-  // ray test touch >>
+  UniswapV2FactoryContract
 } from '../types/interfaces';
 import * as contracts from './contracts';
 import * as fetchers from './fetchers';
@@ -50,10 +43,6 @@ import { FACTORY_ADDRESSES } from 'config/web3/contracts/factories';
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
 import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracles';
 import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
-// ray test touch <<
-import { IMX_ADDRESSES } from '../config/web3/contracts/imxes';
-import { X_IMX_ADDRESSES } from '../config/web3/contracts/x-imxes';
-// ray test touch >>
 
 class ImpermaxRouter {
   subgraph: Subgraph;
@@ -66,10 +55,6 @@ class ImpermaxRouter {
   uniswapV2Factory: UniswapV2FactoryContract;
   simpleUniswapOracle: SimpleUniswapOracleContract;
   claimAggregator: ClaimAggregatorContract;
-  // ray test touch <<
-  IMX: ERC20Contract;
-  xIMX: PoolTokenContract;
-  // ray test touch >>
   account: Address;
   priceInverted: boolean;
   lendingPoolCache: {
@@ -120,10 +105,6 @@ class ImpermaxRouter {
     this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(SIMPLE_UNISWAP_ORACLE_ADDRESSES[config.chainId]);
     this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
-    // ray test touch <<
-    this.IMX = this.newERC20(IMX_ADDRESSES[config.chainId]);
-    this.xIMX = this.newPoolToken(X_IMX_ADDRESSES[config.chainId]);
-    // ray test touch >>
     this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
     // ray test touch <<
@@ -157,12 +138,6 @@ class ImpermaxRouter {
     return new Contract(address, ERC20JSON.abi, this.library.getSigner(this.account));
   }
 
-  // ray test touch <<
-  newPoolToken(address: Address): Contract {
-    return new Contract(address, PoolTokenJSON.abi, this.library.getSigner(this.account));
-  }
-  // ray test touch >>
-
   newCollateral(address: Address): Contract {
     return new Contract(address, CollateralSON.abi, this.library.getSigner(this.account));
   }
@@ -191,8 +166,6 @@ class ImpermaxRouter {
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle.address);
     // ray test touch <<
     this.claimAggregator = this.newClaimAggregator(this.claimAggregator.address);
-    this.IMX = this.newERC20(this.IMX.address);
-    this.xIMX = this.newPoolToken(this.xIMX.address);
     // ray test touch >>
     this.cleanCache();
   }

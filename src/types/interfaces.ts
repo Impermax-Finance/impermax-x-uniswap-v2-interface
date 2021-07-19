@@ -48,7 +48,6 @@ interface FarmingPool {
 }
 
 // ray test touch <<
-export type PoolTokenContract = Contract;
 export type ERC20Contract = Contract;
 // ray test touch >>
 export type Address = string;
