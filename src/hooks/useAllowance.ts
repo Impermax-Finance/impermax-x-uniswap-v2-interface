@@ -12,14 +12,12 @@ import { useRouterCallback } from './useImpermaxRouter';
 
 export default function useAllowance(approvalType: ApprovalType, pendingApproval?: boolean, poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
-  // TODO: <
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : usePoolToken();
-  // TODO: >
+  const poolTokenTypeContext = usePoolToken();
+  const poolTokenType = poolTokenTypeArg ?? poolTokenTypeContext;
 
   const [allowance, setAllowance] = useState<BigNumber>(null);
   useRouterCallback(async router => {
-    router.getAllowance(uniswapV2PairAddress, poolTokenType, approvalType).then(data => setAllowance(data));
+    router.getAllowance(approvalType, uniswapV2PairAddress, poolTokenType).then(data => setAllowance(data));
   }, [pendingApproval]);
 
   return allowance;

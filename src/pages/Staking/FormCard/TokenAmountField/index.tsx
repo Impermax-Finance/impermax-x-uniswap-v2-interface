@@ -1,58 +1,102 @@
 
+import * as React from 'react';
 import clsx from 'clsx';
 
 import ImpermaxInput, { Props as ImpermaxInputProps } from 'components/UI/ImpermaxInput';
 
-const TokenAmountField = ({
+interface CustomProps {
+  balance: number;
+  allowance: number;
+  error?: boolean;
+  helperText?: React.ReactNode | string;
+}
+
+type Ref = HTMLInputElement;
+const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>(({
+  className,
+  balance,
+  allowance,
+  error,
+  helperText,
+  ...rest
+}, ref): JSX.Element => {
+  return (
+    <div className='space-y-0.5'>
+      <div
+        className={clsx(
+          'flex',
+          'rounded-md'
+        )}>
+        <ImpermaxInput
+          ref={ref}
+          className={clsx(
+            'h-14',
+            'text-2xl',
+            'shadow-none',
+            'rounded-r-none',
+            className
+          )}
+          title='Token Amount'
+          // ray test touch <<<
+          inputMode='decimal'
+          autoComplete='off'
+          autoCorrect='off'
+          type='text'
+          pattern='^[0-9]*[.,]?[0-9]*$'
+          // ray test touch >>>
+          placeholder='0.00'
+          min={0}
+          minLength={1}
+          maxLength={79}
+          spellCheck='false'
+          {...rest} />
+        <div
+          style={{
+            minWidth: 120
+          }}
+          className={clsx(
+            'rounded-r-md',
+            'inline-flex',
+            'flex-col',
+            'justify-center',
+            'px-3',
+            'py-2',
+            'text-textSecondary',
+            'text-xs',
+            'border',
+            'border-l-0',
+            'border-gray-300',
+            'bg-impermaxBlackHaze',
+            'whitespace-nowrap'
+          )}>
+          <span className='truncate'>Balance: {balance}</span>
+          <span className='truncate'>Allowance: {allowance}</span>
+        </div>
+      </div>
+      <TokenAmountFieldHelperText
+        className={clsx(
+          'h-6',
+          'flex',
+          'items-center',
+          { 'text-impermaxCarnation': error }
+        )}>
+        {helperText}
+      </TokenAmountFieldHelperText>
+    </div>
+  );
+});
+TokenAmountField.displayName = 'TokenAmountField';
+
+const TokenAmountFieldHelperText = ({
   className,
   ...rest
-}: ImpermaxInputProps): JSX.Element => (
-  <div
+}: React.ComponentPropsWithRef<'p'>): JSX.Element => (
+  <p
     className={clsx(
-      'flex',
-      'rounded-md'
-    )}>
-    <ImpermaxInput
-      className={clsx(
-        'h-14',
-        'text-2xl',
-        'shadow-none',
-        'rounded-r-none',
-        className
-      )}
-      inputMode='decimal'
-      title='Token Amount'
-      autoComplete='off'
-      autoCorrect='off'
-      type='text'
-      pattern='^[0-9]*[.,]?[0-9]*$'
-      placeholder='0.00'
-      min={0}
-      minLength={1}
-      maxLength={79}
-      spellCheck='false'
-      {...rest} />
-    <span
-      style={{
-        minWidth: 120
-      }}
-      className={clsx(
-        'rounded-r-md',
-        'inline-flex',
-        'items-center',
-        'px-3',
-        'py-2',
-        'text-textSecondary',
-        'text-sm',
-        'border',
-        'border-l-0',
-        'border-gray-300',
-        'bg-impermaxBlackHaze',
-        'whitespace-nowrap'
-      )}>
-      Balance: 0
-    </span>
-  </div>
+      'text-sm',
+      className
+    )}
+    {...rest} />
 );
 
 export default TokenAmountField;

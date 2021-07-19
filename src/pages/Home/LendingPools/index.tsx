@@ -4,7 +4,6 @@ import { usePromise } from 'react-use';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import gql from 'graphql-tag';
-import clsx from 'clsx';
 import { useMedia } from 'react-use';
 import {
   useErrorHandler,
@@ -14,6 +13,7 @@ import {
 import LendingPool from './LendingPool';
 import LendingPoolsHeader from './LendingPoolsHeader';
 import ErrorFallback from 'components/ErrorFallback';
+import LineLoadingSpinner from 'components/LineLoadingSpinner';
 import getUniswapAPYs from 'services/get-uniswap-apys';
 import {
   Address,
@@ -22,7 +22,6 @@ import {
 import apolloFetcher from 'services/apollo-fetcher';
 import { IMPERMAX_SUBGRAPH_URL } from 'config/web3/subgraph';
 import { BREAKPOINTS } from 'utils/constants/styles';
-import { ReactComponent as SpinIcon } from 'assets/images/icons/spin.svg';
 import STATUSES from 'utils/constants/statuses';
 
 const borrowableStr = `{
@@ -138,20 +137,7 @@ const LendingPools = (): JSX.Element | null => {
 
   if (status === STATUSES.IDLE || status === STATUSES.PENDING) {
     return (
-      <div
-        className={clsx(
-          'p-7',
-          'flex',
-          'justify-center'
-        )}>
-        <SpinIcon
-          className={clsx(
-            'animate-spin',
-            'w-8',
-            'h-8',
-            'text-impermaxJade'
-          )} />
-      </div>
+      <LineLoadingSpinner />
     );
   }
 

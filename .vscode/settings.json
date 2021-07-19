@@ -13,6 +13,7 @@
     "GÖRLI",
     "HECO",
     "IERC",
+    "IMXAPY",
     "LOCHMARA",
     "OKEX",
     "RLI",
@@ -25,6 +26,7 @@
     "Unstaked",
     "Unstaking",
     "XDAI",
+    "XIMXAPY",
     "avif",
     "bignumber",
     "blocklytics",
@@ -44,6 +46,7 @@
     "headlessui",
     "heroicons",
     "impermax",
+    "imxes",
     "inmemory",
     "keccak",
     "localstorage",
@@ -62,6 +65,7 @@
     "typehash",
     "webfonts",
     "webp",
-    "ximx"
+    "ximx",
+    "ximxes"
   ]
 }

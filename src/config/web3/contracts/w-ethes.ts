@@ -1,7 +1,7 @@
 
 import { CHAIN_IDS } from 'config/web3/chains';
 
-const WETH_ADDRESSES: {
+const W_ETH_ADDRESSES: {
   [chainId: number]: string;
 } = {
   [CHAIN_IDS.ROPSTEN]: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
@@ -9,5 +9,5 @@ const WETH_ADDRESSES: {
 };
 
 export {
-  WETH_ADDRESSES
+  W_ETH_ADDRESSES
 };

@@ -4,7 +4,7 @@ import { keccak256 } from '@ethersproject/keccak256';
 import { pack } from '@ethersproject/solidity';
 import { getCreate2Address } from '@ethersproject/address';
 
-import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
+import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
 import { Address } from 'types/interfaces';
 
 const getPairAddress = (

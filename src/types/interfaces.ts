@@ -6,7 +6,6 @@ import Subgraph from 'subgraph';
 
 type BorrowableContract = Contract;
 type UniswapV2PairContract = Contract;
-type ERC20Contract = Contract;
 
 interface Collateral {
   exchangeRate: string;
@@ -46,6 +45,7 @@ interface FarmingPool {
   vestingBegin: string;
 }
 
+export type ERC20Contract = Contract;
 export type Address = string;
 export type RouterContract = Contract;
 export type FactoryContract = Contract;

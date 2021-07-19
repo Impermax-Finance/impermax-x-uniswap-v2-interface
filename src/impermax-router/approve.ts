@@ -15,7 +15,7 @@ import {
   PoolTokenType,
   ApprovalType
 } from '../types/interfaces';
-import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-ethes';
 
 const EIP712DOMAIN = [
   { name: 'name', type: 'string' },
@@ -45,69 +45,69 @@ export function getOwnerSpender(this: ImpermaxRouter) : {owner: string, spender:
 
 export async function getAllowance(
   this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  poolTokenType: PoolTokenType,
-  approvalType: ApprovalType
+  approvalType: ApprovalType,
+  uniswapV2PairAddress?: Address,
+  poolTokenType?: PoolTokenType
 ) : Promise<BigNumber> {
-  const [poolToken, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  const wethAddress = WETH_ADDRESSES[this.chainId];
-  if (token.address === wethAddress && approvalType === ApprovalType.UNDERLYING) {
-    return MaxUint256;
-  }
-
   const {
     owner,
     spender
   } = this.getOwnerSpender();
 
-  // TODO: should use `switch`
-  const allowance =
-    (approvalType === ApprovalType.POOL_TOKEN) ? await poolToken.allowance(owner, spender) :
-      (approvalType === ApprovalType.UNDERLYING) ? await token.allowance(owner, spender) :
-        (approvalType === ApprovalType.BORROW) ? await poolToken.borrowAllowance(owner, spender) : 0;
+  let allowance;
+  if (approvalType === ApprovalType.POOL_TOKEN) {
+    const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    allowance = await poolToken.allowance(owner, spender);
+  }
+  if (approvalType === ApprovalType.UNDERLYING) {
+    const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    if (token.address === W_ETH_ADDRESSES[this.chainId]) return MaxUint256;
+    allowance = await token.allowance(owner, spender);
+  }
+  if (approvalType === ApprovalType.BORROW) {
+    const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    allowance = await poolToken.borrowAllowance(owner, spender);
+  }
 
   return BigNumber.from(allowance);
 }
 
 export async function approve(
   this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  poolTokenType: PoolTokenType,
   approvalType: ApprovalType,
   amount: BigNumber,
   // eslint-disable-next-line @typescript-eslint/ban-types
-  onTransactionHash: Function
+  onTransactionHash: Function,
+  uniswapV2PairAddress?: Address,
+  poolTokenType?: PoolTokenType
 ): Promise<void> {
   const { spender } = this.getOwnerSpender();
-  const [
-    poolToken,
-    token
-  ] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
 
-  let receipt;
+  let tx;
   if (approvalType === ApprovalType.POOL_TOKEN) {
-    const tx = await poolToken.approve(spender, amount);
-    receipt = await tx.wait();
+    const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    tx = await poolToken.approve(spender, amount);
   }
   if (approvalType === ApprovalType.UNDERLYING) {
-    const tx = await token.approve(spender, amount);
-    receipt = await tx.wait();
+    const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    tx = await token.approve(spender, amount);
   }
   if (approvalType === ApprovalType.BORROW) {
-    const tx = await poolToken.borrowApprove(spender, amount);
-    receipt = await tx.wait();
+    const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
+    tx = await poolToken.borrowApprove(spender, amount);
   }
+  const receipt = await tx.wait();
   onTransactionHash(receipt.transactionHash);
 }
 
 export async function getPermitData(
   this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  poolTokenType: PoolTokenType,
   approvalType: ApprovalType,
   amount: BigNumber,
   deadlineArg: BigNumber | null,
-  callBack: (permitData: PermitData) => void
+  callBack: (permitData: PermitData) => void,
+  uniswapV2PairAddress?: Address,
+  poolTokenType?: PoolTokenType
 ): Promise<void> {
   try {
     if (approvalType === ApprovalType.UNDERLYING && poolTokenType !== PoolTokenType.Collateral) {
