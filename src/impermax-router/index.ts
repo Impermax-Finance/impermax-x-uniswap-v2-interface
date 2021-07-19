@@ -10,7 +10,6 @@ import ERC20JSON from 'abis/contracts/IERC20.json';
 import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import UniswapV2FactoryJSON from 'abis/contracts/IUniswapV2Factory.json';
 import Router01JSON from 'abis/contracts/IRouter01.json';
-import PoolTokenJSON from 'abis/contracts/IPoolToken.json';
 import BorrowableJSON from 'abis/contracts/IBorrowable.json';
 import CollateralSON from 'abis/contracts/ICollateral.json';
 import FactoryJSON from 'abis/contracts/IFactory.json';
@@ -18,8 +17,6 @@ import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
 import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
 import ClaimAggregatorJSON from 'abis/contracts/ClaimAggregator.json';
 import ClaimableJSON from 'abis/contracts/IClaimable.json';
-import ReservesDistributorJSON from 'abis/contracts/IReservesDistributor.json';
-import StakingRouterJSON from 'abis/contracts/IStakingRouter.json';
 import {
   RouterContract,
   Address,
@@ -28,13 +25,10 @@ import {
   ImpermaxRouterConfigInterface,
   FactoryContract,
   SimpleUniswapOracleContract,
-  AirdropData,
   ClaimAggregatorContract,
   ClaimEvent,
   ClaimableContract,
-  UniswapV2FactoryContract,
-  PoolTokenContract,
-  ReservesDistributorContract, StakingRouterContract, ERC20Contract
+  UniswapV2FactoryContract
 } from '../types/interfaces';
 import * as contracts from './contracts';
 import * as fetchers from './fetchers';
@@ -44,15 +38,11 @@ import * as interactions from './interactions';
 import * as account from './account';
 import * as imx from './imx';
 import Subgraph from 'subgraph';
-import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
-import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
-import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
-import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracle';
+import { ROUTER_ADDRESSES } from 'config/web3/contracts/routers';
+import { FACTORY_ADDRESSES } from 'config/web3/contracts/factories';
+import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
+import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracles';
 import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
-import { RESERVES_DISTRIBUTOR_ADDRESSES } from '../config/web3/contracts/reserves-distributor';
-import { IMX_ADDRESSES } from '../config/web3/contracts/imx';
-import { XIMX_ADDRESSES } from '../config/web3/contracts/ximx';
-import { STAKING_ROUTER_ADDRESSES } from '../config/web3/contracts/staking-router';
 
 class ImpermaxRouter {
   subgraph: Subgraph;
@@ -65,10 +55,6 @@ class ImpermaxRouter {
   uniswapV2Factory: UniswapV2FactoryContract;
   simpleUniswapOracle: SimpleUniswapOracleContract;
   claimAggregator: ClaimAggregatorContract;
-  IMX: ERC20Contract;
-  xIMX: PoolTokenContract;
-  reservesDistributor: ReservesDistributorContract;
-  stakingRouter: StakingRouterContract;
   account: Address;
   priceInverted: boolean;
   lendingPoolCache: {
@@ -92,6 +78,7 @@ class ImpermaxRouter {
       },
     }
   };
+  // ray test touch <<
   tokenCache: {
     [key in Address]?: {
       token?: Promise<ERC20>,
@@ -99,11 +86,7 @@ class ImpermaxRouter {
       balance?: Promise<number>,
     }
   };
-  imxCache: {
-    airdropData?: AirdropData,
-    xIMXExchangeRate?: Promise<number>,
-    xIMXAPY?: Promise<number>,
-  };
+  // ray test touch >>
   claimableCache: {
     [key in Address]?: {
       contract?: ClaimableContract,
@@ -122,13 +105,11 @@ class ImpermaxRouter {
     this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(SIMPLE_UNISWAP_ORACLE_ADDRESSES[config.chainId]);
     this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
-    this.IMX = this.newERC20(IMX_ADDRESSES[config.chainId]);
-    this.xIMX = this.newPoolToken(XIMX_ADDRESSES[config.chainId]);
-    this.reservesDistributor = this.newReservesDistributor(RESERVES_DISTRIBUTOR_ADDRESSES[config.chainId]);
-    this.stakingRouter = this.newStakingRouter(STAKING_ROUTER_ADDRESSES[config.chainId]);
     this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
+    // ray test touch <<
     this.tokenCache = {};
+    // ray test touch >>
     this.imxCache = {};
     this.claimableCache = {};
   }
@@ -157,10 +138,6 @@ class ImpermaxRouter {
     return new Contract(address, ERC20JSON.abi, this.library.getSigner(this.account));
   }
 
-  newPoolToken(address: Address): Contract {
-    return new Contract(address, PoolTokenJSON.abi, this.library.getSigner(this.account));
-  }
-
   newCollateral(address: Address): Contract {
     return new Contract(address, CollateralSON.abi, this.library.getSigner(this.account));
   }
@@ -181,33 +158,26 @@ class ImpermaxRouter {
     return new Contract(address, ClaimableJSON.abi, this.library.getSigner(this.account));
   }
 
-  newReservesDistributor(address: Address): Contract {
-    return new Contract(address, ReservesDistributorJSON.abi, this.library.getSigner(this.account));
-  }
-
-  newStakingRouter(address: Address): Contract {
-    return new Contract(address, StakingRouterJSON.abi, this.library.getSigner(this.account));
-  }
-
   unlockWallet(library: Web3Provider, account: Address): void {
     this.library = library;
     this.account = account;
     this.router = this.newRouter(this.router.address);
     this.factory = this.newFactory(this.factory.address);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle.address);
+    // ray test touch <<
     this.claimAggregator = this.newClaimAggregator(this.claimAggregator.address);
-    this.IMX = this.newERC20(this.IMX.address);
-    this.xIMX = this.newPoolToken(this.xIMX.address);
-    this.stakingRouter = this.newStakingRouter(this.stakingRouter.address);
+    // ray test touch >>
     this.cleanCache();
   }
 
   cleanCache(): void {
     this.lendingPoolCache = {};
+    // ray test touch <<
     this.tokenCache = {};
+    // ray test touch >>
     this.imxCache = {};
     this.claimableCache = {};
-    console.log('cache cleaned');
+    console.log('[ImpermaxRouter cleanCache]');
   }
 
   setPriceInverted(priceInverted: boolean): void {
@@ -217,10 +187,14 @@ class ImpermaxRouter {
   // Contracts
   public initializeLendingPool = contracts.initializeLendingPool;
   public initializeClaimable = contracts.initializeClaimable;
+  // ray test touch <<
   public initializeToken = contracts.initializeToken;
+  // ray test touch >>
   public getLendingPoolCache = contracts.getLendingPoolCache;
   public getClaimableCache = contracts.getClaimableCache;
+  // ray test touch <<
   public getTokenCache = contracts.getTokenCache;
+  // ray test touch >>
   public getLendingPool = contracts.getLendingPool;
   public getContracts = contracts.getContracts;
   public getPoolToken = contracts.getPoolToken;
@@ -232,13 +206,17 @@ class ImpermaxRouter {
 
   // Fetchers
   public getPoolTokenCache = fetchers.getPoolTokenCache;
+  // ray test touch <<
   public initializeTokenDecimals = fetchers.initializeTokenDecimals;
+  // ray test touch >>
   public initializeReserves = fetchers.initializeReserves;
   public initializeLPTotalSupply = fetchers.initializeLPTotalSupply;
   public initializePriceDenomLP = fetchers.initializePriceDenomLP;
   public initializeTWAPPrice = fetchers.initializeTWAPPrice;
+  // ray test touch <<
   public getTokenDecimals = fetchers.getTokenDecimals;
   public getDecimals = fetchers.getDecimals;
+  // ray test touch >>
   public getReserves = fetchers.getReserves;
   public getLPTotalSupply = fetchers.getLPTotalSupply;
   public getPriceDenomLP = fetchers.getPriceDenomLP;
@@ -254,13 +232,14 @@ class ImpermaxRouter {
 
   // Account
   public initializeExchangeRate = account.initializeExchangeRate;
+  // ray test touch <<
   public initializeTokenBalance = account.initializeTokenBalance;
+  // ray test touch >>
   public initializeBorrowed = account.initializeBorrowed;
   public initializeDeposited = account.initializeDeposited;
   public getExchangeRate = account.getExchangeRate;
   public getTokenBalance = account.getTokenBalance;
   public getAvailableBalance = account.getAvailableBalance;
-  public getAvailableBalanceUSD = account.getAvailableBalanceUSD;
   public getBorrowed = account.getBorrowed;
   public getBorrowedUSD = account.getBorrowedUSD;
   public getDeposited = account.getDeposited;
@@ -290,17 +269,15 @@ class ImpermaxRouter {
   public initializeAvailableReward = imx.initializeAvailableReward;
   public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
-  public initializeXIMXRate = imx.initializeXIMXRate;
-  public initializeXIMXAPY = imx.initializeXIMXAPY;
   public getFarmingShares = imx.getFarmingShares;
   public getAvailableReward = imx.getAvailableReward;
   public getClaimHistory = imx.getClaimHistory;
   public getAvailableClaimable = imx.getAvailableClaimable;
-  public getXIMXRate = imx.getXIMXRate;
-  public getXIMXAPY = imx.getXIMXAPY;
 
   // Utils
+  // ray test touch <<
   public normalizeToken = utils.normalizeToken;
+  // ray test touch >>
   public normalize = utils.normalize;
   public getDeadline = utils.getDeadline;
 
@@ -323,8 +300,6 @@ class ImpermaxRouter {
   public claims = interactions.claims;
   public claimDistributor = interactions.claimDistributor;
   public createNewPair = interactions.createNewPair;
-  public stake = interactions.stake;
-  public unstake = interactions.unstake;
 }
 
 export default ImpermaxRouter;

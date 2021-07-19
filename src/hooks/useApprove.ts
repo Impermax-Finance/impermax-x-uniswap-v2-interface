@@ -37,9 +37,7 @@ export default function useApprove(
 ): [ButtonState, () => Promise<void>, PermitData] {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenTypeContext = usePoolToken();
-  const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : poolTokenTypeContext;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const symbol = approvalType === ApprovalType.STAKE ? 'IMX' : approvalType === ApprovalType.UNSTAKE ? 'xIMX' : useSymbol();
+  const poolTokenType = poolTokenTypeArg ?? poolTokenTypeContext;
 
   const impermaxRouter = useImpermaxRouter();
   const addTransaction = useTransactionAdder();
@@ -47,6 +45,7 @@ export default function useApprove(
   const [permitData, setPermitData] = useState<PermitData>(null);
   const currentAllowance = useAllowance(approvalType, pending, poolTokenType);
 
+  const symbol = useSymbol();
   const action =
     approvalType === ApprovalType.BORROW ? 'borrow' :
       approvalType === ApprovalType.POOL_TOKEN ? 'withdrawal' : 'transfer';
@@ -81,7 +80,14 @@ export default function useApprove(
       }
       setPending(false);
     }, uniswapV2PairAddress, poolTokenType);
-  }, [approvalState, uniswapV2PairAddress, poolTokenType, addTransaction, amount, deadline]);
+  }, [
+    approvalState,
+    uniswapV2PairAddress,
+    poolTokenType,
+    addTransaction,
+    amount,
+    deadline
+  ]);
 
   return [approvalState, approve, permitData];
 }

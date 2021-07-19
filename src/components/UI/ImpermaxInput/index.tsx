@@ -18,7 +18,7 @@ const ImpermaxInput = React.forwardRef<Ref, Props>(({
   color = COLORS.primary,
   className,
   ...rest
-}: Props, ref): JSX.Element => (
+}, ref): JSX.Element => (
   <input
     ref={ref}
     type='text'

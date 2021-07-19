@@ -174,7 +174,6 @@ module.exports = {
     ],
     'react/jsx-props-no-multi-spaces': 'error',
     'import/exports-last': 'error',
-    'require-jsdoc': 0, // TODO: `0` for now but later should be on by being removed
-    'linebreak-style': 0
+    'require-jsdoc': 0 // TODO: `0` for now but later should be on by being removed
   }
 };

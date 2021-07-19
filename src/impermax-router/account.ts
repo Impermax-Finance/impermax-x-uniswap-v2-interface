@@ -13,7 +13,7 @@ import {
   Changes,
   NO_CHANGES
 } from '../types/interfaces';
-import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-ethes';
 
 // Exchange rate
 export async function initializeExchangeRate(
@@ -33,13 +33,14 @@ export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress
   return cache.exchangeRate;
 }
 
+// ray test touch <<
 // Token Available Balance
 export async function initializeTokenBalance(
   this: ImpermaxRouter,
   tokenAddress: Address
 ) : Promise<number> {
   const token = await this.getToken(tokenAddress);
-  const wethAddress = WETH_ADDRESSES[this.chainId];
+  const wethAddress = W_ETH_ADDRESSES[this.chainId];
   if (token.address === wethAddress) {
     const bigBalance = await this.library.getBalance(this.account);
     return parseFloat(formatUnits(bigBalance)) / this.dust;
@@ -65,15 +66,7 @@ export async function getAvailableBalance(
   const tokenAddress = await this.getTokenAddress(uniswapV2PairAddress, poolTokenType);
   return this.getTokenBalance(tokenAddress);
 }
-export async function getAvailableBalanceUSD(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  poolTokenType: PoolTokenType
-) : Promise<number> {
-  const availableBalance = await this.getAvailableBalance(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return availableBalance * tokenPrice;
-}
+// ray test touch >>
 
 // Deposited
 export async function initializeDeposited(

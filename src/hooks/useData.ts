@@ -300,25 +300,11 @@ export function useBorrowedUSD(poolTokenTypeArg?: PoolTokenType) : number {
   return borrowedUSD;
 }
 
-export function useTokenBalance(tokenAddress: Address) : number {
-  const [data, setData] = useState<number>(0);
-  useRouterCallback(async router => setData(await router.getTokenBalance(tokenAddress)));
-  console.log(data);
-  return data;
-}
-
 export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [availableBalance, setAvailableBalance] = useState<number>(0);
   useRouterCallback(async router => setAvailableBalance(await router.getAvailableBalance(uniswapV2PairAddress, poolTokenType)));
   return availableBalance;
-}
-
-export function useAvailableBalanceUSD(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [availableBalanceUSD, setAvailableBalanceUSD] = useState<number>(0);
-  useRouterCallback(async router => setAvailableBalanceUSD(await router.getAvailableBalanceUSD(uniswapV2PairAddress, poolTokenType)));
-  return availableBalanceUSD;
 }
 
 export function useCurrentLeverage(changes?: Changes) : number {
@@ -460,13 +446,13 @@ export function useDeadline() : BigNumber {
 
 export function useToBigNumber(val: number, poolTokenTypeArg?: PoolTokenType, decimalsArg?: number) : BigNumber {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const decimals = decimalsArg ? decimalsArg : useDecimals(poolTokenTypeArg);
+  const decimals = decimalsArg ?? useDecimals(poolTokenTypeArg);
   return decimalToBalance(val, decimals);
 }
 
 export function useToNumber(amount: BigNumber, poolTokenTypeArg?: PoolTokenType, decimalsArg?: number) : number {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const decimals = decimalsArg ? decimalsArg : useDecimals(poolTokenTypeArg);
+  const decimals = decimalsArg ?? useDecimals(poolTokenTypeArg);
   return parseFloat(amount.toString()) / Math.pow(10, decimals);
 }
 
@@ -484,18 +470,4 @@ export function usefromTokens(amount: BigNumber, poolTokenTypeArg?: PoolTokenTyp
   const exchangeRate = useExchangeRate(poolTokenTypeArg);
   // TODO: >
   return parseFloat(amount.toString()) * exchangeRate / Math.pow(10, decimals);
-}
-
-// Staking
-
-export function useXIMXRate() : number {
-  const [data, setData] = useState<number>(0);
-  useRouterCallback(async router => setData(await router.getXIMXRate()));
-  return data;
-}
-
-export function useXIMXAPY() : number {
-  const [data, setData] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setData(await subgraph.getXIMXAPY()));
-  return data;
 }

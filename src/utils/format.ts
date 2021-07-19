@@ -3,6 +3,8 @@ function formatSmallNumber(n: number, significant = 6) {
   return '0.' + '0'.repeat(decimals - 1) + (n * Math.pow(10, decimals)).toString().replace('.', '').substring(0, significant);
 }
 
+// ray test touch <
+// TODO: should use `formatNumberWithFixedDecimals`
 /*
  * Return the number floored to a certain amount of significant digits
  */
@@ -17,6 +19,7 @@ export function formatFloat(n: number, significant = 6) : string {
   const floored = rounded - 10 ** (-decimals);
   return parseFloat(floored.toPrecision(significant)).toString();
 }
+// ray test touch >
 
 export function formatToDecimals(n: number, decimals = 2) : string {
   if (n === Infinity) return 'Infinity'; // return "∞";

@@ -1,7 +1,7 @@
 
 import { CHAIN_IDS } from 'config/web3/chains';
 
-const XIMX_ADDRESSES: {
+const X_IMX_ADDRESSES: {
   [chainId: number]: string;
 } = {
   [CHAIN_IDS.ROPSTEN]: '0xD6986435Df54C5CBC3F657636ac9D3Bd35368E58',
@@ -9,5 +9,5 @@ const XIMX_ADDRESSES: {
 };
 
 export {
-  XIMX_ADDRESSES
+  X_IMX_ADDRESSES
 };

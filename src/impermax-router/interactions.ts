@@ -8,7 +8,7 @@ import { PermitData } from '../hooks/useApprove';
 import { impermanentLoss } from '../utils';
 import { DistributorDetails } from '../utils/constants';
 import { CreatePairStep } from '../hooks/useCreateNewPair';
-import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-ethes';
 
 export async function deposit(
   this: ImpermaxRouter,
@@ -23,7 +23,7 @@ export async function deposit(
   const data = permitData ? permitData.permitData : '0x';
   const deadline = permitData ? permitData.deadline : this.getDeadline();
   try {
-    const wethAddress = WETH_ADDRESSES[this.chainId];
+    const wethAddress = W_ETH_ADDRESSES[this.chainId];
     let receipt;
     if (token.address === wethAddress) {
       const overrides = { value: amount };
@@ -57,7 +57,7 @@ export async function withdraw(
 
   let receipt;
   try {
-    const wethAddress = WETH_ADDRESSES[this.chainId];
+    const wethAddress = W_ETH_ADDRESSES[this.chainId];
     if (token.address === wethAddress) {
       const tx = await this.router.redeemETH(poolToken.address, tokens, this.account, deadline, data);
       receipt = await tx.wait();
@@ -85,7 +85,7 @@ export async function borrow(
   const deadline = permitData ? permitData.deadline : this.getDeadline();
 
   try {
-    const wethAddress = WETH_ADDRESSES[this.chainId];
+    const wethAddress = W_ETH_ADDRESSES[this.chainId];
     let receipt;
     if (token.address === wethAddress) {
       const tx = await this.router.borrowETH(borrowable.address, amount, this.account, deadline, data);
@@ -112,7 +112,7 @@ export async function repay(
   const deadline = this.getDeadline();
 
   try {
-    const wethAddress = WETH_ADDRESSES[this.chainId];
+    const wethAddress = W_ETH_ADDRESSES[this.chainId];
     let receipt;
     if (token.address === wethAddress) {
       const overrides = { value: amount };
@@ -325,35 +325,5 @@ export async function createNewPair(
     onTransactionHash(receipt.transactionHash);
   } catch (error) {
     console.error('[createNewPair] error.message => ', error.message);
-  }
-}
-
-export async function stake(
-  this: ImpermaxRouter,
-  amount: BigNumber,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  onTransactionHash: Function
-): Promise<void> {
-  try {
-    const tx = await this.stakingRouter.stake(amount);
-    const receipt = await tx.wait();
-    onTransactionHash(receipt.transactionHash);
-  } catch (error) {
-    console.error('[stake] error.message => ', error.message);
-  }
-}
-
-export async function unstake(
-  this: ImpermaxRouter,
-  tokens: BigNumber,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  onTransactionHash: Function
-): Promise<void> {
-  try {
-    const tx = await this.stakingRouter.unstake(tokens);
-    const receipt = await tx.wait();
-    onTransactionHash(receipt.transactionHash);
-  } catch (error) {
-    console.error('[unstake] error.message => ', error.message);
   }
 }

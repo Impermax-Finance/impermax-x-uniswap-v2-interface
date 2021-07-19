@@ -12,7 +12,9 @@ import {
   Contract,
   FarmingPoolContract,
   ClaimableContract,
+  // ray test touch <<
   ERC20Contract
+  // ray test touch >>
 } from '../types/interfaces';
 
 export function getLendingPoolCache(this: ImpermaxRouter, uniswapV2PairAddress: Address) {
@@ -138,6 +140,7 @@ export async function getClaimable(
   return cache.contract;
 }
 
+// ray test touch <<
 // Token
 export function getTokenCache(this: ImpermaxRouter, tokenAddress: Address) {
   if (!(tokenAddress in this.tokenCache)) {
@@ -159,6 +162,7 @@ export async function getToken(
   if (!cache.contract) cache.contract = this.initializeToken(tokenAddress);
   return cache.contract;
 }
+// ray test touch >>
 
 // Address
 export async function getPoolTokenAddress(

@@ -13,7 +13,7 @@ import { useRouterCallback } from './useImpermaxRouter';
 export default function useAllowance(approvalType: ApprovalType, pendingApproval?: boolean, poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenTypeContext = usePoolToken();
-  const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : poolTokenTypeContext;
+  const poolTokenType = poolTokenTypeArg ?? poolTokenTypeContext;
 
   const [allowance, setAllowance] = useState<BigNumber>(null);
   useRouterCallback(async router => {
