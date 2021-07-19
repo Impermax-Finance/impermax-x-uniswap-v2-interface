@@ -36,25 +36,12 @@ const TYPES = {
   BorrowPermit: PERMIT
 };
 
-// ray test touch <<
-export function getOwnerSpender(this: ImpermaxRouter, approvalType: ApprovalType) : {owner: string, spender: string} {
+export function getOwnerSpender(this: ImpermaxRouter) : {owner: string, spender: string} {
   return {
     owner: this.account,
-    spender:
-      // ray test touch <<<
-      approvalType === ApprovalType.STAKE || approvalType === ApprovalType.UNSTAKE ?
-      // ray test touch >>>
-        this.stakingRouter.address :
-        this.router.address
+    spender: this.router.address
   };
 }
-// export function getOwnerSpender(this: ImpermaxRouter) : {owner: string, spender: string} {
-//   return {
-//     owner: this.account,
-//     spender: this.router.address
-//   };
-// }
-// ray test touch >>
 
 // ray test touch <<
 export async function getAllowance(
@@ -66,7 +53,7 @@ export async function getAllowance(
   const {
     owner,
     spender
-  } = this.getOwnerSpender(approvalType);
+  } = this.getOwnerSpender();
 
   let allowance;
   if (approvalType === ApprovalType.POOL_TOKEN) {
@@ -82,14 +69,6 @@ export async function getAllowance(
     const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
     allowance = await poolToken.borrowAllowance(owner, spender);
   }
-  // ray test touch <<<
-  if (approvalType === ApprovalType.STAKE) {
-    allowance = await this.IMX.allowance(owner, spender);
-  }
-  if (approvalType === ApprovalType.UNSTAKE) {
-    allowance = await this.xIMX.allowance(owner, spender);
-  }
-  // ray test touch >>>
 
   return BigNumber.from(allowance);
 }
@@ -105,7 +84,7 @@ export async function approve(
   uniswapV2PairAddress?: Address,
   poolTokenType?: PoolTokenType
 ): Promise<void> {
-  const { spender } = this.getOwnerSpender(approvalType);
+  const { spender } = this.getOwnerSpender();
 
   let tx;
   if (approvalType === ApprovalType.POOL_TOKEN) {
@@ -120,14 +99,6 @@ export async function approve(
     const [poolToken] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
     tx = await poolToken.borrowApprove(spender, amount);
   }
-  // ray test touch <<<
-  if (approvalType === ApprovalType.STAKE) {
-    tx = await this.IMX.approve(spender, amount);
-  }
-  if (approvalType === ApprovalType.UNSTAKE) {
-    tx = await this.xIMX.approve(spender, amount);
-  }
-  // ray test touch >>>
   const receipt = await tx.wait();
   onTransactionHash(receipt.transactionHash);
 }
@@ -144,20 +115,14 @@ export async function getPermitData(
   poolTokenType?: PoolTokenType
 ): Promise<void> {
   try {
-    if (
-      // ray test touch <<<
-      approvalType === ApprovalType.STAKE ||
-      approvalType === ApprovalType.UNSTAKE ||
-      // ray test touch >>>
-      (approvalType === ApprovalType.UNDERLYING && poolTokenType !== PoolTokenType.Collateral)
-    ) {
+    if (approvalType === ApprovalType.UNDERLYING && poolTokenType !== PoolTokenType.Collateral) {
       return callBack(null);
     }
 
     const {
       owner,
       spender
-    } = this.getOwnerSpender(approvalType);
+    } = this.getOwnerSpender();
     const [
       poolToken,
       token

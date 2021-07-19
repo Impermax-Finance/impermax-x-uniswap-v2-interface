@@ -87,11 +87,7 @@ export enum ApprovalType {
   POOL_TOKEN,
   UNDERLYING,
   // ray test touch <<
-  BORROW,
-  // ray test touch <<<
-  STAKE,
-  UNSTAKE,
-  // ray test touch >>>
+  BORROW
   // ray test touch >>
 }
 
