@@ -15,17 +15,13 @@ import {
   UserData,
   CollateralPosition,
   SupplyPosition,
-  // ray test touch <<
   BorrowPosition
-  // ray test touch >>
 } from 'types/interfaces';
 import Subgraph from '.';
 import {
   IMPERMAX_SUBGRAPH_URL,
   UNISWAP_SUBGRAPH_URL,
-  // ray test touch <<
   BLOCKLYTICS_SUBGRAPH_URL
-  // ray test touch >>
 } from 'config/web3/subgraph';
 
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;

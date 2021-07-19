@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -260,4 +259,3 @@ export default withErrorBoundary(StakingForm, {
     window.location.reload();
   }
 });
-// ray test touch >>

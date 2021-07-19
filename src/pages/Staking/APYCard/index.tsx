@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import * as React from 'react';
 import { usePromise } from 'react-use';
 import {
@@ -135,4 +134,3 @@ export default withErrorBoundary(APYCard, {
     window.location.reload();
   }
 });
-// ray test touch >>

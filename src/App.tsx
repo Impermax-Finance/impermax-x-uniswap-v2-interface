@@ -5,7 +5,6 @@ import {
 } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { Provider } from 'react-redux';
 
 import Layout from 'parts/Layout';
 import Home from 'pages/Home';
@@ -17,7 +16,6 @@ import Account from 'pages/Account';
 import ImpermaxRouterProvider from 'contexts/ImpermaxRouterProvider';
 import SubgraphProvider from 'contexts/SubgraphProvider';
 import Updater from 'store/transactions/updater';
-import store from './store';
 import { PAGES } from 'utils/constants/links';
 import './app.scss';
 
@@ -26,75 +24,73 @@ const App = (): JSX.Element | null => {
   const { chainId } = useWeb3React<Web3Provider>();
 
   return (
-    <Provider store={store}>
-      <Layout>
-        <Updater />
-        {/* TODO: should fix properly */}
-        <Switch>
-          <Route path={PAGES.CREATE_NEW_PAIR}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <CreateNewPair />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route path={PAGES.LENDING_POOL}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <LendingPool />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route path={PAGES.ACCOUNT}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <Account />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route path={PAGES.CLAIM}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <Claim />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route path={PAGES.RISKS}>
-            {chainId ? (
-              <SubgraphProvider key={chainId}>
-                <ImpermaxRouterProvider>
-                  <Risks />
-                </ImpermaxRouterProvider>
-              </SubgraphProvider>
-            ) : null}
-          </Route>
-          <Route
-            path={PAGES.USER_GUIDE}
-            component={() => {
-              // TODO: should use <a /> with security attributes
-              window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
-              return null;
-            }} />
-          <Route
-            path={PAGES.HOME}
-            exact>
-            {chainId ? (
-              <Home key={chainId} />
-            // TODO: should improve in a more explicit way
-            // TODO: should reference https://reactrouter.com/web/example/auth-workflow
-            ) : null}
-          </Route>
-        </Switch>
-      </Layout>
-    </Provider>
+    <Layout>
+      <Updater />
+      {/* TODO: should fix properly */}
+      <Switch>
+        <Route path={PAGES.CREATE_NEW_PAIR}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <CreateNewPair />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route path={PAGES.LENDING_POOL}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <LendingPool />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route path={PAGES.ACCOUNT}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <Account />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route path={PAGES.CLAIM}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <Claim />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route path={PAGES.RISKS}>
+          {chainId ? (
+            <SubgraphProvider key={chainId}>
+              <ImpermaxRouterProvider>
+                <Risks />
+              </ImpermaxRouterProvider>
+            </SubgraphProvider>
+          ) : null}
+        </Route>
+        <Route
+          path={PAGES.USER_GUIDE}
+          component={() => {
+            // TODO: should use <a /> with security attributes
+            window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
+            return null;
+          }} />
+        <Route
+          path={PAGES.HOME}
+          exact>
+          {chainId ? (
+            <Home key={chainId} />
+          // TODO: should improve in a more explicit way
+          // TODO: should reference https://reactrouter.com/web/example/auth-workflow
+          ) : null}
+        </Route>
+      </Switch>
+    </Layout>
   );
 };
 

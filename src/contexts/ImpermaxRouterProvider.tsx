@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
@@ -9,22 +8,13 @@ import useSubgraph from 'hooks/useSubgraph';
 
 const ImpermaxRouterContext = React.createContext<ImpermaxRouterContextInterface | undefined>(undefined);
 
-interface ImpermaxRouterProviderProps {
-  appChainId?: number;
-  children: React.ReactNode;
-}
-
-const ImpermaxRouterProvider = ({
-  appChainId,
-  children
-}: ImpermaxRouterProviderProps): JSX.Element => {
+const ImpermaxRouterProvider: React.FC = ({ children }) => {
   const {
     account,
     chainId,
     library
   } = useWeb3React<Web3Provider>();
   const subgraph = useSubgraph();
-  const [impermaxRouter, setImpermaxRouter] = React.useState<ImpermaxRouter>();
   const [routerUpdate, setRouterUpdate] = React.useState<number>(0);
   const [priceInverted, setPriceInverted] = React.useState<boolean>(false);
   const doUpdate = () => {
@@ -39,30 +29,23 @@ const ImpermaxRouterProvider = ({
     setPriceInverted(!priceInverted);
   };
 
-  const wrongNetwork = appChainId !== chainId;
+  if (!library) {
+    throw new Error('Invalid library!');
+  }
+  if (!chainId) {
+    throw new Error('Invalid chain ID!');
+  }
+  if (!account) {
+    throw new Error('Invalid chain ID!');
+  }
 
-  React.useEffect(() => {
-    if (!library) return;
-    if (!chainId) return;
-    if (!account) return;
-    if (wrongNetwork) return;
-    if (!impermaxRouter) {
-      const impermaxRouter = new ImpermaxRouter({
-        subgraph,
-        library,
-        chainId,
-        priceInverted
-      });
-      if (account) {
-        impermaxRouter.unlockWallet(library, account);
-        doUpdate();
-      }
-      setImpermaxRouter(impermaxRouter);
-    } else if (account) {
-      impermaxRouter.unlockWallet(library, account);
-      doUpdate();
-    }
-  }, [library, chainId, account]);
+  const impermaxRouter = new ImpermaxRouter({
+    subgraph,
+    library,
+    chainId,
+    priceInverted
+  });
+  impermaxRouter.unlockWallet(library, account);
 
   return (
     <ImpermaxRouterContext.Provider
@@ -79,7 +62,7 @@ const ImpermaxRouterProvider = ({
 };
 
 export interface ImpermaxRouterContextInterface {
-  impermaxRouter?: ImpermaxRouter;
+  impermaxRouter: ImpermaxRouter;
   routerUpdate: number;
   // eslint-disable-next-line @typescript-eslint/ban-types
   doUpdate: Function;
@@ -93,4 +76,3 @@ export {
 };
 
 export default ImpermaxRouterProvider;
-// ray test touch >>

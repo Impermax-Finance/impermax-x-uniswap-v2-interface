@@ -4,10 +4,8 @@ import { Contract } from '@ethersproject/contracts';
 
 import Subgraph from 'subgraph';
 
-// ray test touch <<
 type BorrowableContract = Contract;
 type UniswapV2PairContract = Contract;
-// ray test touch >>
 
 interface Collateral {
   exchangeRate: string;
@@ -81,9 +79,7 @@ export enum PoolTokenType {
 export enum ApprovalType {
   POOL_TOKEN,
   UNDERLYING,
-  // ray test touch <<
   BORROW
-  // ray test touch >>
 }
 
 export interface Changes {
