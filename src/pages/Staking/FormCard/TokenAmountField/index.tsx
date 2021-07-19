@@ -69,8 +69,8 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
             'bg-impermaxBlackHaze',
             'whitespace-nowrap'
           )}>
-          <span>Balance: {balance}</span>
-          <span>Allowance: {allowance}</span>
+          <span className='truncate'>Balance: {balance}</span>
+          <span className='truncate'>Allowance: {allowance}</span>
         </div>
       </div>
       <TokenAmountFieldHelperText
