@@ -3,7 +3,13 @@ import gql from 'graphql-tag';
 
 import apolloFetcher from './apollo-fetcher';
 import { IMX_STAKING_SUBGRAPH_URL } from 'config/web3/subgraph';
-import { XImxData } from 'types/interfaces';
+
+interface XImxData {
+  totalSupply: string;
+  totalBalance: string;
+  exchangeRate: string;
+  dailyAPR: string;
+}
 
 const query = gql`{
   ximxes(first: 1) {

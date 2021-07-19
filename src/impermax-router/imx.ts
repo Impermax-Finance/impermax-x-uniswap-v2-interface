@@ -90,13 +90,3 @@ export async function getAvailableClaimable(this: ImpermaxRouter, claimableAddre
   return cache.availableClaimable;
 }
 
-// ray test touch <<<
-// xIMX APY
-export async function initializeXIMXAPY(this: ImpermaxRouter) : Promise<number> {
-  const reservesDistributorBalance = await this.IMX.balanceOf(this.reservesDistributor.address) / 1e18;
-  const xImxBalance = await this.IMX.balanceOf(this.xIMX.address) / 1e18;
-  const periodLength = await this.reservesDistributor.periodLength();
-  const dailyAPR = reservesDistributorBalance / periodLength * 3600 * 24 / xImxBalance;
-  return Math.pow(1 + dailyAPR, 365) - 1;
-}
-// ray test touch >>>

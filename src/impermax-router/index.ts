@@ -20,10 +20,6 @@ import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
 import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
 import ClaimAggregatorJSON from 'abis/contracts/ClaimAggregator.json';
 import ClaimableJSON from 'abis/contracts/IClaimable.json';
-// ray test touch <<
-import ReservesDistributorJSON from 'abis/contracts/IReservesDistributor.json';
-import StakingRouterJSON from 'abis/contracts/IStakingRouter.json';
-// ray test touch >>
 import {
   RouterContract,
   Address,
@@ -38,8 +34,6 @@ import {
   UniswapV2FactoryContract,
   // ray test touch <<
   PoolTokenContract,
-  ReservesDistributorContract,
-  StakingRouterContract,
   ERC20Contract
   // ray test touch >>
 } from '../types/interfaces';
@@ -57,10 +51,8 @@ import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-f
 import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracles';
 import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
 // ray test touch <<
-import { RESERVES_DISTRIBUTOR_ADDRESSES } from '../config/web3/contracts/reserves-distributors';
 import { IMX_ADDRESSES } from '../config/web3/contracts/imxes';
 import { X_IMX_ADDRESSES } from '../config/web3/contracts/x-imxes';
-import { STAKING_ROUTER_ADDRESSES } from '../config/web3/contracts/staking-routers';
 // ray test touch >>
 
 class ImpermaxRouter {
@@ -77,8 +69,6 @@ class ImpermaxRouter {
   // ray test touch <<
   IMX: ERC20Contract;
   xIMX: PoolTokenContract;
-  reservesDistributor: ReservesDistributorContract;
-  stakingRouter: StakingRouterContract;
   // ray test touch >>
   account: Address;
   priceInverted: boolean;
@@ -133,8 +123,6 @@ class ImpermaxRouter {
     // ray test touch <<
     this.IMX = this.newERC20(IMX_ADDRESSES[config.chainId]);
     this.xIMX = this.newPoolToken(X_IMX_ADDRESSES[config.chainId]);
-    this.reservesDistributor = this.newReservesDistributor(RESERVES_DISTRIBUTOR_ADDRESSES[config.chainId]);
-    this.stakingRouter = this.newStakingRouter(STAKING_ROUTER_ADDRESSES[config.chainId]);
     // ray test touch >>
     this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
@@ -195,18 +183,6 @@ class ImpermaxRouter {
     return new Contract(address, ClaimableJSON.abi, this.library.getSigner(this.account));
   }
 
-  // ray test touch <<
-  newReservesDistributor(address: Address): Contract {
-    return new Contract(address, ReservesDistributorJSON.abi, this.library.getSigner(this.account));
-  }
-  // ray test touch >>
-
-  // ray test touch <<
-  newStakingRouter(address: Address): Contract {
-    return new Contract(address, StakingRouterJSON.abi, this.library.getSigner(this.account));
-  }
-  // ray test touch >>
-
   unlockWallet(library: Web3Provider, account: Address): void {
     this.library = library;
     this.account = account;
@@ -217,7 +193,6 @@ class ImpermaxRouter {
     this.claimAggregator = this.newClaimAggregator(this.claimAggregator.address);
     this.IMX = this.newERC20(this.IMX.address);
     this.xIMX = this.newPoolToken(this.xIMX.address);
-    this.stakingRouter = this.newStakingRouter(this.stakingRouter.address);
     // ray test touch >>
     this.cleanCache();
   }
@@ -352,10 +327,6 @@ class ImpermaxRouter {
   public claims = interactions.claims;
   public claimDistributor = interactions.claimDistributor;
   public createNewPair = interactions.createNewPair;
-  // ray test touch <<
-  public stake = interactions.stake;
-  public unstake = interactions.unstake;
-  // ray test touch >>
 }
 
 export default ImpermaxRouter;

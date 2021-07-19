@@ -1,35 +1,86 @@
 
 // ray test touch <<
 import * as React from 'react';
+import { usePromise } from 'react-use';
+import {
+  useErrorHandler,
+  withErrorBoundary
+} from 'react-error-boundary';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
+// TODO: not used for now
+// import { formatUnits } from '@ethersproject/units';
+// import { Contract } from '@ethersproject/contracts';
 
 import Panel from 'components/Panel';
-import getXIMXData from 'services/get-x-imx-data';
+import ErrorFallback from 'components/ErrorFallback';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
+import STATUSES from 'utils/constants/statuses';
+import getXIMXData from 'services/get-x-imx-data';
+// TODO: not used for now
+// import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
+// import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
+// import { RESERVES_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/reserves-distributors';
+// import ReservesDistributorJSON from 'abis/contracts/IReservesDistributor.json';
+// import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
+
+// TODO: not used for now
+// const getXIMXAPY = async (chainID: number, library: Web3Provider) => {
+//   const imxContract = getERC20Contract(IMX_ADDRESSES[chainID], library);
+//   const bigReservesDistributorBalance = await imxContract.balanceOf(RESERVES_DISTRIBUTOR_ADDRESSES[chainID]);
+//   const reservesDistributorBalance = parseFloat(formatUnits(bigReservesDistributorBalance));
+//   const bigXImxBalance = await imxContract.balanceOf(X_IMX_ADDRESSES[chainID]);
+//   const xImxBalance = parseFloat(formatUnits(bigXImxBalance));
+//   const reservesDistributorContract =
+//     new Contract(RESERVES_DISTRIBUTOR_ADDRESSES[chainID], ReservesDistributorJSON.abi, library);
+//   const periodLength = await reservesDistributorContract.periodLength();
+//   const dailyAPR = reservesDistributorBalance / periodLength * 3600 * 24 / xImxBalance;
+//   return Math.pow(1 + dailyAPR, 365) - 1;
+// };
 
 const APYCard = ({
   className,
   ...rest
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => {
-  const { chainId } = useWeb3React<Web3Provider>();
+  const {
+    chainId,
+    library
+  } = useWeb3React<Web3Provider>();
+
+  const handleError = useErrorHandler();
+  const mounted = usePromise();
+
+  const [status, setStatus] = React.useState(STATUSES.IDLE);
   const [xIMXAPY, setXIMXAPY] = React.useState(0);
+
   React.useEffect(() => {
     if (!chainId) return;
+    if (!library) return;
+    if (!mounted) return;
+    if (!handleError) return;
 
     (async () => {
       try {
-        const xIMXData = await getXIMXData(chainId);
+        setStatus(STATUSES.PENDING);
+        const xIMXData = await mounted(getXIMXData(chainId));
         const theXIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
         setXIMXAPY(theXIMXAPY);
+        setStatus(STATUSES.RESOLVED);
       } catch (error) {
-        console.log('[APYCard useEffect] error.message => ', error.message);
+        setStatus(STATUSES.REJECTED);
+        handleError(error);
       }
     })();
-  }, [chainId]);
+  }, [
+    chainId,
+    library,
+    mounted,
+    handleError
+  ]);
 
   const xIMXAPYInPercent = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
+  const loading = status === STATUSES.IDLE || status === STATUSES.PENDING;
 
   return (
     <Panel
@@ -63,7 +114,7 @@ const APYCard = ({
             'text-2xl',
             'text-textPrimary'
           )}>
-          {`${xIMXAPYInPercent} %`}
+          {loading ? 'Loading...' : `${xIMXAPYInPercent} %`}
         </span>
         <span
           className={clsx(
@@ -78,5 +129,10 @@ const APYCard = ({
   );
 };
 
-export default APYCard;
+export default withErrorBoundary(APYCard, {
+  FallbackComponent: ErrorFallback,
+  onReset: () => {
+    window.location.reload();
+  }
+});
 // ray test touch >>

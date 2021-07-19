@@ -61,10 +61,6 @@ export type MerkleDistributorContract = Contract;
 export type FarmingPoolContract = Contract;
 export type ClaimAggregatorContract = Contract;
 export type ClaimableContract = Contract;
-// ray test touch <<
-export type ReservesDistributorContract = Contract;
-export type StakingRouterContract = Contract;
-// ray test touch >>
 
 export type LendingPool = {
   uniswapV2Pair: UniswapV2PairContract;
@@ -184,12 +180,3 @@ export interface ClaimEvent {
   amount: number;
   transactionHash: string;
 }
-
-// ray test touch <<
-export interface XImxData {
-  totalSupply: string;
-  totalBalance: string;
-  exchangeRate: string;
-  dailyAPR: string;
-}
-// ray test touch >>
