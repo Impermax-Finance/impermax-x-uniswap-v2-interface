@@ -45,9 +45,7 @@ interface FarmingPool {
   vestingBegin: string;
 }
 
-// ray test touch <<
 export type ERC20Contract = Contract;
-// ray test touch >>
 export type Address = string;
 export type RouterContract = Contract;
 export type FactoryContract = Contract;

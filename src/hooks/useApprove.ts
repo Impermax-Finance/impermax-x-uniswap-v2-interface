@@ -28,7 +28,6 @@ export interface PermitData {
 }
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
-// ray test touch <<
 export default function useApprove(
   approvalType: ApprovalType,
   amount: BigNumber,
@@ -38,8 +37,7 @@ export default function useApprove(
 ): [ButtonState, () => Promise<void>, PermitData] {
   const uniswapV2PairAddress = usePairAddress();
   const poolTokenTypeContext = usePoolToken();
-  const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : poolTokenTypeContext;
-  const symbol = useSymbol();
+  const poolTokenType = poolTokenTypeArg ?? poolTokenTypeContext;
 
   const impermaxRouter = useImpermaxRouter();
   const addTransaction = useTransactionAdder();
@@ -47,6 +45,7 @@ export default function useApprove(
   const [permitData, setPermitData] = useState<PermitData>(null);
   const currentAllowance = useAllowance(approvalType, pending, poolTokenType);
 
+  const symbol = useSymbol();
   const action =
     approvalType === ApprovalType.BORROW ? 'borrow' :
       approvalType === ApprovalType.POOL_TOKEN ? 'withdrawal' : 'transfer';
@@ -92,4 +91,3 @@ export default function useApprove(
 
   return [approvalState, approve, permitData];
 }
-// ray test touch >>

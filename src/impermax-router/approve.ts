@@ -43,7 +43,6 @@ export function getOwnerSpender(this: ImpermaxRouter) : {owner: string, spender:
   };
 }
 
-// ray test touch <<
 export async function getAllowance(
   this: ImpermaxRouter,
   approvalType: ApprovalType,
@@ -72,9 +71,7 @@ export async function getAllowance(
 
   return BigNumber.from(allowance);
 }
-// ray test touch >>
 
-// ray test touch <<
 export async function approve(
   this: ImpermaxRouter,
   approvalType: ApprovalType,
@@ -102,9 +99,7 @@ export async function approve(
   const receipt = await tx.wait();
   onTransactionHash(receipt.transactionHash);
 }
-// ray test touch >>
 
-// ray test touch <<
 export async function getPermitData(
   this: ImpermaxRouter,
   approvalType: ApprovalType,
@@ -188,4 +183,3 @@ export async function getPermitData(
     callBack(null);
   }
 }
-// ray test touch >>

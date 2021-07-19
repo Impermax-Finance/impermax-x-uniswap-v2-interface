@@ -444,21 +444,17 @@ export function useDeadline() : BigNumber {
   return deadline;
 }
 
-// ray test touch <<
 export function useToBigNumber(val: number, poolTokenTypeArg?: PoolTokenType, decimalsArg?: number) : BigNumber {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const decimals = decimalsArg ? decimalsArg : useDecimals(poolTokenTypeArg);
+  const decimals = decimalsArg ?? useDecimals(poolTokenTypeArg);
   return decimalToBalance(val, decimals);
 }
-// ray test touch >>
 
-// ray test touch <<
 export function useToNumber(amount: BigNumber, poolTokenTypeArg?: PoolTokenType, decimalsArg?: number) : number {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const decimals = decimalsArg ? decimalsArg : useDecimals(poolTokenTypeArg);
+  const decimals = decimalsArg ?? useDecimals(poolTokenTypeArg);
   return parseFloat(amount.toString()) / Math.pow(10, decimals);
 }
-// ray test touch >>
 
 export function useToTokens(val: number, poolTokenTypeArg?: PoolTokenType) : BigNumber {
   const decimals = useDecimals(poolTokenTypeArg);
