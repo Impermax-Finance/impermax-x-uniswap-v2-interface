@@ -1,8 +1,7 @@
 
 import clsx from 'clsx';
 
-// TODO: not used for now
-const ImpermaxCarnationBadge = ({
+const ImpermaxJadeBadge = ({
   className,
   ...rest
 }: React.ComponentPropsWithRef<'span'>): JSX.Element => (
@@ -15,11 +14,11 @@ const ImpermaxCarnationBadge = ({
       'rounded-full',
       'text-sm',
       'font-medium',
-      'bg-impermaxCarnation-100',
-      'text-impermaxCarnation-800',
+      'bg-impermaxJade-100',
+      'text-impermaxJade-800',
       className
     )}
     {...rest} />
 );
 
-export default ImpermaxCarnationBadge;
+export default ImpermaxJadeBadge;

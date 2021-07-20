@@ -12,7 +12,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Contract } from '@ethersproject/contracts';
 import clsx from 'clsx';
 
-import ImpermaxCarnationBadge from 'components/badges/ImpermaxCarnationBadge';
+import ImpermaxJadeBadge from 'components/badges/ImpermaxJadeBadge';
 import ErrorFallback from 'components/ErrorFallback';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
@@ -88,7 +88,7 @@ const TokenAmountLabel = ({
         )}>
         {text}
       </span>
-      <ImpermaxCarnationBadge>1 xIMX = {loading ? 'Loading...' : xIMXRate} IMX</ImpermaxCarnationBadge>
+      <ImpermaxJadeBadge>1 xIMX = {loading ? 'Loading...' : xIMXRate} IMX</ImpermaxJadeBadge>
     </label>
   );
 };
