@@ -1,6 +1,8 @@
 
 import clsx from 'clsx';
 
+import ImpermaxLink from 'components/UI/ImpermaxLink';
+
 const Information = ({
   className,
   ...rest
@@ -26,14 +28,25 @@ const Information = ({
         'text-justify'
       )}>
       {`
-        For every swap on the exchange on every chain,
-        0.05% of the swap fees are distributed as SUSHI proportional to your share of the SushiBar.
-         When your SUSHI is staked into the SushiBar,
-         you receive xSUSHI in return for voting rights and
-         a fully composable token that can interact with other protocols.
-         Your xSUSHI is continuously compounding,
-         when you unstake you will receive all the originally deposited SUSHI and any additional from fees.
+        Up to 20% of all the interests paid on Impermax are kept by the protocol as profit
+         and used to buy back IMX from the market.
+         These tokens are then distributed among IMX stakers
+         proportionally to their share of the pool.
+         By staking IMX you receive an xIMX token that will continuously compound staking profits.
+         You can unstake at any moment
+         in order to receive all the originally deposited IMX and any additional staking profit.
       `}
+      <ImpermaxLink
+        href='https://impermax.medium.com/introducing-imx-staking-281e7b7b54c'
+        className={clsx(
+          'underline',
+          'cursor-pointer',
+          'text-impermaxJade'
+        )}
+        target='_blank'
+        rel='noopener noreferrer'>
+        Learn more
+      </ImpermaxLink>
     </p>
   </div>
 );
