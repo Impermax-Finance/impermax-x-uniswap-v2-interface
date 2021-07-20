@@ -2,6 +2,8 @@
 import * as React from 'react';
 import clsx from 'clsx';
 
+import styles from './impermax-input.module.css';
+
 const COLORS = Object.freeze({
   primary: 'primary',
   secondary: 'secondary'
@@ -23,6 +25,7 @@ const ImpermaxInput = React.forwardRef<Ref, Props>(({
     ref={ref}
     type='text'
     className={clsx(
+      styles.impermaxInput,
       'focus:ring',
       { 'focus:border-primary-300': color === COLORS.primary },
       { 'focus:ring-primary-200': color === COLORS.primary },

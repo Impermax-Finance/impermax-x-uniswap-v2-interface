@@ -39,13 +39,9 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
             className
           )}
           title='Token Amount'
-          // ray test touch <<<
-          inputMode='decimal'
-          autoComplete='off'
-          autoCorrect='off'
-          type='text'
-          pattern='^[0-9]*[.,]?[0-9]*$'
-          // ray test touch >>>
+          type='number'
+          step='any'
+          pattern='[-+]?[0-9]*[.,]?[0-9]+'
           placeholder='0.00'
           min={0}
           minLength={1}
