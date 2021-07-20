@@ -29,7 +29,7 @@ const useMerkleDistributorContract = () => {
   const merkleDistributorContractAddress = MERKLE_DISTRIBUTOR_ADDRESSES[chainId];
 
   if (!merkleDistributorContractAddress) {
-    throw new Error('Undefined merkle distributor contract address!');
+    throw new Error('Invalid merkle distributor contract address!');
   }
 
   const merkleDistributorContract =

@@ -5,8 +5,8 @@ import clsx from 'clsx';
 import ImpermaxInput, { Props as ImpermaxInputProps } from 'components/UI/ImpermaxInput';
 
 interface CustomProps {
-  balance: number;
-  allowance: number;
+  balance: number | undefined;
+  allowance: number | undefined;
   error?: boolean;
   helperText?: React.ReactNode | string;
   tokenUnit: string;
@@ -76,14 +76,14 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
               'truncate',
               'font-medium'
             )}>
-            {`Balance: ${balance} ${tokenUnit}`}
+            {`Balance: ${balance ?? 'Loading...'} ${tokenUnit}`}
           </span>
           <span
             className={clsx(
               'truncate',
               'font-medium'
             )}>
-            Allowance: {allowance}
+            Allowance: {allowance ?? 'Loading...'}
           </span>
         </div>
       </div>

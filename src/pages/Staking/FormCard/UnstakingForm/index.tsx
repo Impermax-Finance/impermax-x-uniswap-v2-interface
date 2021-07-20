@@ -114,10 +114,10 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
 
   if (status === STATUSES.RESOLVED) {
     if (xIMXAllowance === undefined) {
-      throw new Error('Undefined xIMX allowance!');
+      throw new Error('Invalid xIMX allowance!');
     }
     if (xIMXBalance === undefined) {
-      throw new Error('Undefined xIMX balance!');
+      throw new Error('Invalid xIMX balance!');
     }
 
     const onUnstake = async (data: UnstakingFormData) => {
