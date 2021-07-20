@@ -24,7 +24,7 @@ const BalanceCard = ({
             'text-2xl',
             'font-medium'
           )}>
-          Balance
+          Staked Balance
         </h4>
         <div
           className={clsx(
@@ -67,7 +67,7 @@ const BalanceCard = ({
             'text-2xl',
             'font-medium'
           )}>
-          Unstaked
+          Unstaked Balance
         </h4>
         <div
           className={clsx(
