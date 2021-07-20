@@ -13,7 +13,7 @@ const BalanceCard = ({
       className={clsx(
         'px-8',
         'py-7',
-        'space-y-8',
+        'space-y-4',
         'bg-white',
         className
       )}
@@ -57,7 +57,7 @@ const BalanceCard = ({
               'space-y-1'
             )}>
             <span className='font-medium'>_</span>
-            <span>xIMX</span>
+            <span>IMX</span>
           </div>
         </div>
       </div>
@@ -68,6 +68,49 @@ const BalanceCard = ({
             'font-medium'
           )}>
           Unstaked Balance
+        </h4>
+        <div
+          className={clsx(
+            'flex',
+            'items-center',
+            'space-x-4'
+          )}>
+          <ImpermaxPicture
+            images={[
+              {
+                type: 'image/avif',
+                path: 'assets/images/ximx-logos/ximx-logo.avif'
+              },
+              {
+                type: 'image/webp',
+                path: 'assets/images/ximx-logos/ximx-logo.webp'
+              },
+              {
+                type: 'image/png',
+                path: 'assets/images/ximx-logos/ximx-logo.png'
+              }
+            ]}
+            width={64}
+            height={64}
+            alt='xIMX' />
+          <div
+            className={clsx(
+              'inline-flex',
+              'flex-col',
+              'space-y-1'
+            )}>
+            <span className='font-medium'>_</span>
+            <span>IMX</span>
+          </div>
+        </div>
+      </div>
+      <div className='space-y-3'>
+        <h4
+          className={clsx(
+            'text-2xl',
+            'font-medium'
+          )}>
+          Earned
         </h4>
         <div
           className={clsx(
