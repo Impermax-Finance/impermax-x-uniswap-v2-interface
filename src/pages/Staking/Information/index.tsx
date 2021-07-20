@@ -19,7 +19,7 @@ const Information = ({
         'font-medium',
         'text-lg'
       )}>
-      Maximize yield by staking IMX for xIMX
+      How does IMX staking work?
     </h2>
     <p
       className={clsx(
