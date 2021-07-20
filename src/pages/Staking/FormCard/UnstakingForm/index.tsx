@@ -256,7 +256,8 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
           error={!!errors[UNSTAKING_AMOUNT]}
           helperText={errors[UNSTAKING_AMOUNT]?.message}
           tokenUnit='xIMX'
-          walletActive={active} />
+          walletActive={active}
+          disabled={!xIMXAllowance || !xIMXBalance} />
         {active ? (
           <SubmitButton
             disabled={status === STATUSES.IDLE || status === STATUSES.PENDING}

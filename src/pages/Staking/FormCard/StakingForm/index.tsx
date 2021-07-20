@@ -256,7 +256,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
           error={!!errors[STAKING_AMOUNT]}
           helperText={errors[STAKING_AMOUNT]?.message}
           tokenUnit='IMX'
-          walletActive={active} />
+          walletActive={active}
+          disabled={!imxAllowance || !imxBalance} />
         {active ? (
           <SubmitButton
             disabled={status === STATUSES.IDLE || status === STATUSES.PENDING}
