@@ -27,7 +27,6 @@ import TokenAmountField from '../TokenAmountField';
 import SubmitButton from '../SubmitButton';
 import ErrorFallback from 'components/ErrorFallback';
 import ErrorModal from 'components/ErrorModal';
-import LineLoadingSpinner from 'components/LineLoadingSpinner';
 import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
@@ -49,7 +48,7 @@ type UnstakingFormData = {
   [UNSTAKING_AMOUNT]: string;
 }
 
-const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element | null => {
+const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element => {
   const {
     chainId,
     account,
@@ -106,12 +105,107 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     mounted
   ]);
 
-  if (status === STATUSES.IDLE || status === STATUSES.PENDING) {
-    return (
-      <LineLoadingSpinner />
-    );
-  }
+  const onUnstake = async (data: UnstakingFormData) => {
+    if (!chainId) {
+      throw new Error('Invalid chain ID!');
+    }
+    if (!library) {
+      throw new Error('Invalid library!');
+    }
+    if (!account) {
+      throw new Error('Invalid account!');
+    }
+    if (xIMXAllowance === undefined) {
+      throw new Error('Invalid xIMX allowance!');
+    }
+    if (xIMXBalance === undefined) {
+      throw new Error('Invalid xIMX balance!');
+    }
 
+    try {
+      setSubmitStatus(STATUSES.PENDING);
+      const bigUnstakingAmount = parseUnits(data[UNSTAKING_AMOUNT]);
+      const stakingRouterContract = getStakingRouterContract(chainId, library, account);
+      const tx: ContractTransaction = await mounted(stakingRouterContract.unstake(bigUnstakingAmount));
+      const receipt = await mounted(tx.wait());
+      addTransaction({
+        hash: receipt.transactionHash
+      }, {
+        summary: `Unstake IMX (${data[UNSTAKING_AMOUNT]}).`
+      });
+      reset({
+        [UNSTAKING_AMOUNT]: ''
+      });
+      const newXIMXAllowance = xIMXAllowance.sub(bigUnstakingAmount);
+      setXIMXAllowance(newXIMXAllowance);
+      const newXIMXBalance = xIMXBalance.sub(bigUnstakingAmount);
+      setXIMXBalance(newXIMXBalance);
+      setSubmitStatus(STATUSES.RESOLVED);
+    } catch (error) {
+      setSubmitStatus(STATUSES.REJECTED);
+      setSubmitError(error);
+    }
+  };
+
+  const onApprove = async (data: UnstakingFormData) => {
+    if (!chainId) {
+      throw new Error('Invalid chain ID!');
+    }
+    if (!library) {
+      throw new Error('Invalid library!');
+    }
+    if (!account) {
+      throw new Error('Invalid account!');
+    }
+
+    try {
+      setSubmitStatus(STATUSES.PENDING);
+      const bigUnstakingAmount = parseUnits(data[UNSTAKING_AMOUNT]);
+      const xIMXContract = getERC20Contract(X_IMX_ADDRESSES[chainId], library, account);
+      const spender = STAKING_ROUTER_ADDRESSES[chainId];
+      // MEMO: `bigUnstakingAmount` instead of `MaxUint256`
+      const tx: ContractTransaction = await mounted(xIMXContract.approve(spender, bigUnstakingAmount));
+      const receipt = await mounted(tx.wait());
+      setXIMXAllowance(bigUnstakingAmount);
+      addTransaction({
+        hash: receipt.transactionHash
+      }, {
+        summary: `Approve of xIMX (${data[UNSTAKING_AMOUNT]}) transfer.`
+      });
+      setSubmitStatus(STATUSES.RESOLVED);
+    } catch (error) {
+      setSubmitStatus(STATUSES.REJECTED);
+      setSubmitError(error);
+    }
+  };
+
+  const validateForm = (value: string): string | undefined => {
+    if (xIMXAllowance === undefined) {
+      throw new Error('Invalid xIMX allowance!');
+    }
+    if (xIMXBalance === undefined) {
+      throw new Error('Invalid xIMX balance!');
+    }
+
+    const bigUnstakingAmount = parseUnits(value);
+    if (bigUnstakingAmount.gt(xIMXBalance)) {
+      return 'Unstaking amount must be less than your xIMX balance!';
+    }
+
+    if (xIMXAllowance.gt(Zero) && bigUnstakingAmount.gt(xIMXAllowance)) {
+      return 'Unstaking amount must be less than allowance!';
+    }
+
+    if (bigUnstakingAmount.eq(Zero)) {
+      return 'Unstaking amount must be greater than zero!';
+    }
+
+    return undefined;
+  };
+
+  let approved;
+  let floatXIMXBalance;
+  let floatXIMXAllowance;
   if (status === STATUSES.RESOLVED) {
     if (xIMXAllowance === undefined) {
       throw new Error('Invalid xIMX allowance!');
@@ -120,138 +214,56 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
       throw new Error('Invalid xIMX balance!');
     }
 
-    const onUnstake = async (data: UnstakingFormData) => {
-      if (!chainId) {
-        throw new Error('Invalid chain ID!');
-      }
-      if (!library) {
-        throw new Error('Invalid library!');
-      }
-      if (!account) {
-        throw new Error('Invalid account!');
-      }
-
-      try {
-        setSubmitStatus(STATUSES.PENDING);
-        const bigUnstakingAmount = parseUnits(data[UNSTAKING_AMOUNT]);
-        const stakingRouterContract = getStakingRouterContract(chainId, library, account);
-        const tx: ContractTransaction = await mounted(stakingRouterContract.unstake(bigUnstakingAmount));
-        const receipt = await mounted(tx.wait());
-        addTransaction({
-          hash: receipt.transactionHash
-        }, {
-          summary: `Unstake IMX (${data[UNSTAKING_AMOUNT]}).`
-        });
-        reset({
-          [UNSTAKING_AMOUNT]: ''
-        });
-        const newXIMXAllowance = xIMXAllowance.sub(bigUnstakingAmount);
-        setXIMXAllowance(newXIMXAllowance);
-        const newXIMXBalance = xIMXBalance.sub(bigUnstakingAmount);
-        setXIMXBalance(newXIMXBalance);
-        setSubmitStatus(STATUSES.RESOLVED);
-      } catch (error) {
-        setSubmitStatus(STATUSES.REJECTED);
-        setSubmitError(error);
-      }
-    };
-
-    const onApprove = async (data: UnstakingFormData) => {
-      if (!chainId) {
-        throw new Error('Invalid chain ID!');
-      }
-      if (!library) {
-        throw new Error('Invalid library!');
-      }
-      if (!account) {
-        throw new Error('Invalid account!');
-      }
-
-      try {
-        setSubmitStatus(STATUSES.PENDING);
-        const bigUnstakingAmount = parseUnits(data[UNSTAKING_AMOUNT]);
-        const xIMXContract = getERC20Contract(X_IMX_ADDRESSES[chainId], library, account);
-        const spender = STAKING_ROUTER_ADDRESSES[chainId];
-        // MEMO: `bigUnstakingAmount` instead of `MaxUint256`
-        const tx: ContractTransaction = await mounted(xIMXContract.approve(spender, bigUnstakingAmount));
-        const receipt = await mounted(tx.wait());
-        setXIMXAllowance(bigUnstakingAmount);
-        addTransaction({
-          hash: receipt.transactionHash
-        }, {
-          summary: `Approve of xIMX (${data[UNSTAKING_AMOUNT]}) transfer.`
-        });
-        setSubmitStatus(STATUSES.RESOLVED);
-      } catch (error) {
-        setSubmitStatus(STATUSES.REJECTED);
-        setSubmitError(error);
-      }
-    };
-
-    const validateForm = (value: string): string | undefined => {
-      const bigUnstakingAmount = parseUnits(value);
-      if (bigUnstakingAmount.gt(xIMXBalance)) {
-        return 'Unstaking amount must be less than your xIMX balance!';
-      }
-
-      if (xIMXAllowance.gt(Zero) && bigUnstakingAmount.gt(xIMXAllowance)) {
-        return 'Unstaking amount must be less than allowance!';
-      }
-
-      if (bigUnstakingAmount.eq(Zero)) {
-        return 'Unstaking amount must be greater than zero!';
-      }
-
-      return undefined;
-    };
-
-    const approved = xIMXAllowance.gt(Zero);
-    const floatXIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXBalance)), 2);
-    const floatXIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXAllowance)), 2);
-
-    return (
-      <>
-        <form
-          onSubmit={
-            handleSubmit(approved ? onUnstake : onApprove)
-          }
-          {...props}>
-          <TokenAmountLabel
-            htmlFor={UNSTAKING_AMOUNT}
-            text='Unstake IMX' />
-          <TokenAmountField
-            id={UNSTAKING_AMOUNT}
-            {...register(UNSTAKING_AMOUNT, {
-              required: {
-                value: true,
-                message: 'This field is required!'
-              },
-              validate: value => validateForm(value)
-            })}
-            balance={floatXIMXBalance}
-            allowance={floatXIMXAllowance}
-            error={!!errors[UNSTAKING_AMOUNT]}
-            helperText={errors[UNSTAKING_AMOUNT]?.message}
-            tokenUnit='xIMX' />
-          <SubmitButton pending={submitStatus === STATUSES.PENDING}>
-            {approved ? 'Unstake' : 'Approve'}
-          </SubmitButton>
-        </form>
-        {(submitStatus === STATUSES.REJECTED && submitError) && (
-          <ErrorModal
-            open={!!submitError}
-            onClose={() => {
-              setSubmitStatus(STATUSES.IDLE);
-              setSubmitError(null);
-            }}
-            title='Error'
-            description={submitError.message} />
-        )}
-      </>
-    );
+    approved = xIMXAllowance.gt(Zero);
+    floatXIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXBalance)), 2);
+    floatXIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXAllowance)), 2);
   }
 
-  return null;
+  return (
+    <>
+      <form
+        onSubmit={
+          status === STATUSES.RESOLVED ?
+            handleSubmit(approved ? onUnstake : onApprove) :
+            undefined
+        }
+        {...props}>
+        <TokenAmountLabel
+          htmlFor={UNSTAKING_AMOUNT}
+          text='Unstake IMX' />
+        <TokenAmountField
+          id={UNSTAKING_AMOUNT}
+          {...register(UNSTAKING_AMOUNT, {
+            required: {
+              value: true,
+              message: 'This field is required!'
+            },
+            validate: value => validateForm(value)
+          })}
+          balance={floatXIMXBalance}
+          allowance={floatXIMXAllowance}
+          error={!!errors[UNSTAKING_AMOUNT]}
+          helperText={errors[UNSTAKING_AMOUNT]?.message}
+          tokenUnit='xIMX' />
+        <SubmitButton
+          disabled={status === STATUSES.IDLE || status === STATUSES.PENDING}
+          pending={submitStatus === STATUSES.PENDING}>
+          {(status === STATUSES.IDLE || status === STATUSES.PENDING) && 'Loading...'}
+          {status === STATUSES.RESOLVED && (approved ? 'Unstake' : 'Approve')}
+        </SubmitButton>
+      </form>
+      {(submitStatus === STATUSES.REJECTED && submitError) && (
+        <ErrorModal
+          open={!!submitError}
+          onClose={() => {
+            setSubmitStatus(STATUSES.IDLE);
+            setSubmitError(null);
+          }}
+          title='Error'
+          description={submitError.message} />
+      )}
+    </>
+  );
 };
 
 export default withErrorBoundary(UnstakingForm, {
