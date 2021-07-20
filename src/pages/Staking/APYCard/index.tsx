@@ -44,7 +44,6 @@ const APYCard = ({
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => {
   const {
     chainId,
-    library,
     active
   } = useWeb3React<Web3Provider>();
 
@@ -56,7 +55,6 @@ const APYCard = ({
 
   React.useEffect(() => {
     if (!chainId) return;
-    if (!library) return;
     if (!mounted) return;
     if (!handleError) return;
 
@@ -74,7 +72,6 @@ const APYCard = ({
     })();
   }, [
     chainId,
-    library,
     mounted,
     handleError
   ]);
