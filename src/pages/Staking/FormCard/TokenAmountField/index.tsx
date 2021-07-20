@@ -9,6 +9,7 @@ interface CustomProps {
   allowance: number;
   error?: boolean;
   helperText?: React.ReactNode | string;
+  tokenUnit: string;
 }
 
 type Ref = HTMLInputElement;
@@ -18,6 +19,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
   allowance,
   error,
   helperText,
+  tokenUnit,
   ...rest
 }, ref): JSX.Element => {
   return (
@@ -52,7 +54,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
           {...rest} />
         <div
           style={{
-            minWidth: 120
+            minWidth: 160
           }}
           className={clsx(
             'rounded-r-md',
@@ -69,8 +71,20 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
             'bg-impermaxBlackHaze',
             'whitespace-nowrap'
           )}>
-          <span className='truncate'>Balance: {balance}</span>
-          <span className='truncate'>Allowance: {allowance}</span>
+          <span
+            className={clsx(
+              'truncate',
+              'font-medium'
+            )}>
+            {`Balance: ${balance} ${tokenUnit}`}
+          </span>
+          <span
+            className={clsx(
+              'truncate',
+              'font-medium'
+            )}>
+            Allowance: {allowance}
+          </span>
         </div>
       </div>
       <TokenAmountFieldHelperText

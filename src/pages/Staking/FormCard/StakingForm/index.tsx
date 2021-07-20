@@ -231,7 +231,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element | 
             balance={floatIMXBalance}
             allowance={floatIMXAllowance}
             error={!!errors[STAKING_AMOUNT]}
-            helperText={errors[STAKING_AMOUNT]?.message} />
+            helperText={errors[STAKING_AMOUNT]?.message}
+            tokenUnit='IMX' />
           <SubmitButton pending={submitStatus === STATUSES.PENDING}>
             {approved ? 'Stake' : 'Approve'}
           </SubmitButton>

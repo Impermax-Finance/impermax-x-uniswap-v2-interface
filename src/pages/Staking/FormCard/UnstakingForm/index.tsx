@@ -231,7 +231,8 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
             balance={floatXIMXBalance}
             allowance={floatXIMXAllowance}
             error={!!errors[UNSTAKING_AMOUNT]}
-            helperText={errors[UNSTAKING_AMOUNT]?.message} />
+            helperText={errors[UNSTAKING_AMOUNT]?.message}
+            tokenUnit='xIMX' />
           <SubmitButton pending={submitStatus === STATUSES.PENDING}>
             {approved ? 'Unstake' : 'Approve'}
           </SubmitButton>
