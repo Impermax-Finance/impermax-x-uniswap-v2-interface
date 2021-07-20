@@ -33,7 +33,8 @@ const FormCard = (): JSX.Element => {
           'bg-impermaxAstral',
           'px-1.5',
           'py-1',
-          'rounded-lg'
+          'rounded-lg',
+          'select-none'
         )}>
         <Tab
           id='stake-tab'

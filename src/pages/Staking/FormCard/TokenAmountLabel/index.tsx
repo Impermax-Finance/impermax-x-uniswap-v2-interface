@@ -34,7 +34,8 @@ const TokenAmountLabel = ({
 }: CustomProps & Omit<React.ComponentPropsWithRef<'label'>, 'children'>): JSX.Element => {
   const {
     chainId,
-    library
+    library,
+    active
   } = useWeb3React<Web3Provider>();
 
   const handleError = useErrorHandler();
@@ -70,7 +71,15 @@ const TokenAmountLabel = ({
     handleError
   ]);
 
-  const loading = status === STATUSES.IDLE || status === STATUSES.PENDING;
+  let xIMXRateLabel;
+  if (active) {
+    xIMXRateLabel =
+    status === STATUSES.IDLE || status === STATUSES.PENDING ?
+      'Loading...' :
+      xIMXRate;
+  } else {
+    xIMXRateLabel = '-';
+  }
 
   return (
     <label
@@ -88,7 +97,7 @@ const TokenAmountLabel = ({
         )}>
         {text}
       </span>
-      <ImpermaxJadeBadge>1 xIMX = {loading ? 'Loading...' : xIMXRate} IMX</ImpermaxJadeBadge>
+      <ImpermaxJadeBadge>1 xIMX = {xIMXRateLabel} IMX</ImpermaxJadeBadge>
     </label>
   );
 };

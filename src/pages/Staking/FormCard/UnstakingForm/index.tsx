@@ -21,10 +21,12 @@ import {
   Contract,
   ContractTransaction
 } from '@ethersproject/contracts';
+import clsx from 'clsx';
 
 import TokenAmountLabel from '../TokenAmountLabel';
 import TokenAmountField from '../TokenAmountField';
 import SubmitButton from '../SubmitButton';
+import WalletConnectButton from 'containers/WalletConnectButton';
 import ErrorFallback from 'components/ErrorFallback';
 import ErrorModal from 'components/ErrorModal';
 import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
@@ -52,7 +54,8 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
   const {
     chainId,
     account,
-    library
+    library,
+    active
   } = useWeb3React<Web3Provider>();
 
   const {
@@ -219,6 +222,14 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     floatXIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXAllowance)), 2);
   }
 
+  let submitButtonText;
+  if (status === STATUSES.RESOLVED) {
+    submitButtonText = approved ? 'Unstake' : 'Approve';
+  }
+  if (status === STATUSES.IDLE || status === STATUSES.PENDING) {
+    submitButtonText = 'Loading...';
+  }
+
   return (
     <>
       <form
@@ -244,13 +255,24 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
           allowance={floatXIMXAllowance}
           error={!!errors[UNSTAKING_AMOUNT]}
           helperText={errors[UNSTAKING_AMOUNT]?.message}
-          tokenUnit='xIMX' />
-        <SubmitButton
-          disabled={status === STATUSES.IDLE || status === STATUSES.PENDING}
-          pending={submitStatus === STATUSES.PENDING}>
-          {(status === STATUSES.IDLE || status === STATUSES.PENDING) && 'Loading...'}
-          {status === STATUSES.RESOLVED && (approved ? 'Unstake' : 'Approve')}
-        </SubmitButton>
+          tokenUnit='xIMX'
+          walletActive={active} />
+        {active ? (
+          <SubmitButton
+            disabled={status === STATUSES.IDLE || status === STATUSES.PENDING}
+            pending={submitStatus === STATUSES.PENDING}>
+            {submitButtonText}
+          </SubmitButton>
+        ) : (
+          <WalletConnectButton
+            style={{
+              height: 56
+            }}
+            className={clsx(
+              'w-full',
+              'text-lg'
+            )} />
+        )}
       </form>
       {(submitStatus === STATUSES.REJECTED && submitError) && (
         <ErrorModal

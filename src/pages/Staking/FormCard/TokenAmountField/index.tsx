@@ -10,6 +10,7 @@ interface CustomProps {
   error?: boolean;
   helperText?: React.ReactNode | string;
   tokenUnit: string;
+  walletActive: boolean;
 }
 
 type Ref = HTMLInputElement;
@@ -20,8 +21,22 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
   error,
   helperText,
   tokenUnit,
+  walletActive,
   ...rest
 }, ref): JSX.Element => {
+  let balanceLabel;
+  let allowanceLabel;
+  if (walletActive) {
+    balanceLabel =
+      balance === undefined ?
+        'Loading...' :
+        `${balance} ${tokenUnit}`;
+    allowanceLabel = allowance ?? 'Loading...';
+  } else {
+    balanceLabel = '-';
+    allowanceLabel = '-';
+  }
+
   return (
     <div className='space-y-0.5'>
       <div
@@ -65,21 +80,22 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
             'border-l-0',
             'border-gray-300',
             'bg-impermaxBlackHaze',
-            'whitespace-nowrap'
+            'whitespace-nowrap',
+            'select-none'
           )}>
           <span
             className={clsx(
               'truncate',
               'font-medium'
             )}>
-            {`Balance: ${balance ?? 'Loading...'} ${tokenUnit}`}
+            {`Balance: ${balanceLabel}`}
           </span>
           <span
             className={clsx(
               'truncate',
               'font-medium'
             )}>
-            Allowance: {allowance ?? 'Loading...'}
+            Allowance: {allowanceLabel}
           </span>
         </div>
       </div>

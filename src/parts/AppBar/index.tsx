@@ -14,7 +14,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
 import ClaimAirdropButton from 'containers/ClaimAirdropButton';
-import WalletConnect from 'containers/WalletConnect';
+import WalletConnectButton from 'containers/WalletConnectButton';
 import ChainConnect from 'containers/ChainConnect';
 import ConnectedWalletInfo from 'containers/ConnectedWalletInfo';
 import { CHAIN_IDS } from 'config/web3/chains';
@@ -158,7 +158,7 @@ const AppBar = ({
                     <ConnectedWalletInfo />
                   </>
                 )}
-                <WalletConnect />
+                <WalletConnectButton style={{ height: 36 }} />
               </div>
               <div
                 className={clsx(
@@ -253,7 +253,7 @@ const AppBar = ({
               )}>
               <div className='flex items-center px-4'>
                 <ClaimAirdropButton />
-                <WalletConnect />
+                <WalletConnectButton style={{ height: 36 }} />
               </div>
             </div>
           </Disclosure.Panel>

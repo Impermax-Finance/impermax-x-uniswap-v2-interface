@@ -44,7 +44,8 @@ const APYCard = ({
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => {
   const {
     chainId,
-    library
+    library,
+    active
   } = useWeb3React<Web3Provider>();
 
   const handleError = useErrorHandler();
@@ -79,7 +80,15 @@ const APYCard = ({
   ]);
 
   const xIMXAPYInPercent = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
-  const loading = status === STATUSES.IDLE || status === STATUSES.PENDING;
+  let apyLabel;
+  if (active) {
+    apyLabel =
+      (status === STATUSES.IDLE || status === STATUSES.PENDING) ?
+        'Loading...' :
+        `${xIMXAPYInPercent} %`;
+  } else {
+    apyLabel = '-';
+  }
 
   return (
     <Panel
@@ -113,7 +122,7 @@ const APYCard = ({
             'text-2xl',
             'text-textPrimary'
           )}>
-          {loading ? 'Loading...' : `${xIMXAPYInPercent} %`}
+          {apyLabel}
         </span>
         <span
           className={clsx(
