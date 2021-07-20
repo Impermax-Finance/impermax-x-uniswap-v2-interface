@@ -14,7 +14,7 @@ const BalanceCard = ({
         'px-8',
         'py-7',
         'space-y-8',
-        'bg-impermaxBlackHaze-600',
+        'bg-white',
         className
       )}
       {...rest}>

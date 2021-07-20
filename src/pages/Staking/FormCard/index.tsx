@@ -22,7 +22,7 @@ const FormCard = (): JSX.Element => {
       className={clsx(
         'px-6',
         'py-4',
-        'bg-impermaxBlackHaze-600'
+        'bg-white'
       )}>
       <Tabs
         className={clsx(
