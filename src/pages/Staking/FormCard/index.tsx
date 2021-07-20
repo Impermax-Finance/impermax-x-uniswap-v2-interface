@@ -30,7 +30,7 @@ const FormCard = (): JSX.Element => {
           'grid',
           'grid-cols-2',
           'gap-2',
-          'bg-impermaxBlackHaze-700',
+          'bg-impermaxAstral',
           'px-1.5',
           'py-1',
           'rounded-lg'

@@ -37,13 +37,13 @@ const Tab = ({
             'text-gray-700'
           ) :
           clsx(
-            'text-gray-500',
-            'hover:text-gray-700'
+            'text-impermaxBlackHaze-100',
+            'hover:text-impermaxBlackHaze-600'
           ),
         'px-3',
         'py-2',
         'font-medium',
-        'text-sm',
+        'text-md',
         'rounded-md',
         className
       )}
