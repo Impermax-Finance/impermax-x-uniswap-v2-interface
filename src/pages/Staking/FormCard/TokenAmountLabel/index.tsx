@@ -53,11 +53,13 @@ const TokenAmountLabel = ({
     (async () => {
       try {
         setStatus(STATUSES.PENDING);
+        // ray test touch <<<
         const xIMXContract = getXIMXContract(X_IMX_ADDRESSES[chainId], library);
         const bigXIMXRate: BigNumber = await mounted(xIMXContract.callStatic.exchangeRate());
         const floatXIMXRate = parseFloat(formatUnits(bigXIMXRate));
         const theXIMXRate = formatNumberWithFixedDecimals(floatXIMXRate, 5);
         setXIMXRate(theXIMXRate);
+        // ray test touch >>>
         setStatus(STATUSES.RESOLVED);
       } catch (error) {
         setStatus(STATUSES.REJECTED);

@@ -17,14 +17,16 @@ import ErrorFallback from 'components/ErrorFallback';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import STATUSES from 'utils/constants/statuses';
 import getXIMXData from 'services/get-x-imx-data';
+// ray test touch <<<
+import getReservesDistributorData from 'services/get-reserves-distributor-data';
+// ray test touch >>>
+
 // TODO: not used for now
 // import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 // import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
 // import { RESERVES_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/reserves-distributors';
 // import ReservesDistributorJSON from 'abis/contracts/IReservesDistributor.json';
 // import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
-
-// TODO: not used for now
 // const getXIMXAPY = async (chainID: number, library: Web3Provider) => {
 //   const imxContract = getERC20Contract(IMX_ADDRESSES[chainID], library);
 //   const bigReservesDistributorBalance = await imxContract.balanceOf(RESERVES_DISTRIBUTOR_ADDRESSES[chainID]);
@@ -62,6 +64,16 @@ const APYCard = ({
       try {
         setStatus(STATUSES.PENDING);
         const xIMXData = await mounted(getXIMXData(chainId));
+        // ray test touch <<<
+        // Total IMX Staked
+        const totalBalance = xIMXData.totalBalance;
+        console.log('ray : ***** [Total IMX Staked] totalBalance => ', totalBalance);
+
+        // Total IMX Distributed
+        const reservesDistributorData = await mounted(getReservesDistributorData(chainId));
+        const distributed = reservesDistributorData.distributed;
+        console.log('ray : ***** [Total IMX Distributed] distributed => ', distributed);
+        // ray test touch >>>
         const theXIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
         setXIMXAPY(theXIMXAPY);
         setStatus(STATUSES.RESOLVED);

@@ -48,7 +48,7 @@ module.exports = {
       'error',
       'never'
     ],
-    'no-console': 'off', // TODO: `off` for now but later should be `warn`
+    'no-console': 'warn',
     indent: [
       'error',
       2
