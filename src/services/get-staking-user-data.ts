@@ -1,5 +1,4 @@
 
-// ray test touch <<<
 import gql from 'graphql-tag';
 
 import apolloFetcher from './apollo-fetcher';
@@ -11,7 +10,7 @@ interface StakingUserData {
   totalEarned: string;
 }
 
-const getReservesDistributorData = async (chainID: number, account: string): Promise<StakingUserData> => {
+const getStakingUserData = async (chainID: number, account: string): Promise<StakingUserData> => {
   const query = gql`{
     user(id: "${account.toLowerCase()}") {
       ximxBalance
@@ -26,5 +25,4 @@ const getReservesDistributorData = async (chainID: number, account: string): Pro
   return result.data.user;
 };
 
-export default getReservesDistributorData;
-// ray test touch >>>
+export default getStakingUserData;

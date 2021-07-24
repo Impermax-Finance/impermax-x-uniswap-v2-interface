@@ -7,7 +7,7 @@ import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
 import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
-import toAPY from 'services/to-apy';
+import toAPY from 'utils/helpers/web3/to-apy';
 import getPairAddress from 'utils/helpers/web3/get-pair-address';
 import {
   formatUSD,

@@ -4,13 +4,11 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Web3ReactProvider } from '@web3-react/core';
 import { Provider } from 'react-redux';
-// ray test touch <<<
 import {
   QueryClientProvider,
   QueryClient
 } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-// ray test touch >>>
 
 import App from './App';
 import StakingApp from './StakingApp';
@@ -20,9 +18,7 @@ import reportWebVitals from './reportWebVitals';
 import store from './store';
 import './index.css';
 
-// ray test touch <<<
 const queryClient = new QueryClient();
-// ray test touch >>>
 
 ReactDOM.render(
   <React.StrictMode>
@@ -30,12 +26,10 @@ ReactDOM.render(
       <Router>
         <Provider store={store}>
           {IS_STAKING_APP ? (
-            // ray test touch <<<
             <QueryClientProvider client={queryClient}>
               <StakingApp />
               <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
-            // ray test touch >>>
           ) : (
             <App />
           )}

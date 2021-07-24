@@ -1,5 +1,4 @@
 
-// ray test touch <<<
 import gql from 'graphql-tag';
 
 import apolloFetcher from './apollo-fetcher';
@@ -29,4 +28,3 @@ const getReservesDistributorData = async (chainID: number): Promise<ReservesDist
 };
 
 export default getReservesDistributorData;
-// ray test touch >>>
