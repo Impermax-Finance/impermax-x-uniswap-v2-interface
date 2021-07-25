@@ -31,6 +31,9 @@ import ErrorFallback from 'components/ErrorFallback';
 import ErrorModal from 'components/ErrorModal';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
+// ray test touch <<<
+import useTokenBalance from 'utils/hooks/web3/use-token-balance';
+// ray test touch >>>
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import STATUSES from 'utils/constants/statuses';
@@ -66,6 +69,23 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
   } = useForm<StakingFormData>({
     mode: 'onChange'
   });
+
+  // ray test touch <<<
+  const tokenAddress = chainId ? IMX_ADDRESSES[chainId] : undefined;
+  const {
+    isLoading,
+    data,
+    error
+  } = useTokenBalance(
+    chainId,
+    library,
+    tokenAddress,
+    account
+  );
+  console.log('ray : ***** isLoading => ', isLoading);
+  console.log('ray : ***** data?.toString() => ', data?.toString());
+  console.log('ray : ***** error => ', error);
+  // ray test touch >>>
 
   const handleError = useErrorHandler();
   const mounted = usePromise();
