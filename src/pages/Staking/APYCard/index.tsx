@@ -85,7 +85,7 @@ const APYCard = ({
   let apyLabel;
   if (active) {
     if (xIMXDataLoading) {
-      apyLabel = '-';
+      apyLabel = 'Loading...';
     } else {
       if (xIMXData === undefined) {
         throw new Error('Something went wrong!');
