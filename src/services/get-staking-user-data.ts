@@ -2,7 +2,7 @@
 import gql from 'graphql-tag';
 
 import apolloFetcher from './apollo-fetcher';
-import { IMX_STAKING_SUBGRAPH_URL } from 'config/web3/subgraph';
+import { IMX_STAKING_SUBGRAPH_URLS } from 'config/web3/subgraph';
 
 interface StakingUserData {
   ximxBalance: string;
@@ -19,7 +19,7 @@ const getStakingUserData = async (chainID: number, account: string): Promise<Sta
     }
   }`;
 
-  const impermaxSubgraphURL = IMX_STAKING_SUBGRAPH_URL[chainID];
+  const impermaxSubgraphURL = IMX_STAKING_SUBGRAPH_URLS[chainID];
   const result = await apolloFetcher(impermaxSubgraphURL, query);
 
   return result.data.user;

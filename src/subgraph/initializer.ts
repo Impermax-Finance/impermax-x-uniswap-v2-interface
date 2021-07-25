@@ -19,7 +19,7 @@ import {
 } from 'types/interfaces';
 import Subgraph from '.';
 import {
-  IMPERMAX_SUBGRAPH_URL,
+  IMPERMAX_SUBGRAPH_URLS,
   UNISWAP_SUBGRAPH_URL,
   BLOCKLYTICS_SUBGRAPH_URL
 } from 'config/web3/subgraph';
@@ -85,7 +85,7 @@ async function fetchLendingPools(this: Subgraph): Promise<any[]> {
     }
   }`;
 
-  const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
+  const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URLS[this.chainId];
   const result = await apolloFetcher(impermaxSubgraphUrl, query);
 
   return result.data.lendingPools;
@@ -247,7 +247,7 @@ async function fetchUserData(this: Subgraph, account: Address): Promise<{
       }
     }
   }`;
-  const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[this.chainId];
+  const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URLS[this.chainId];
   const result = await apolloFetcher(impermaxSubgraphUrl, query);
   return result.data.user;
 }

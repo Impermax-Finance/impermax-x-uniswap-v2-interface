@@ -1,6 +1,5 @@
 
 import * as React from 'react';
-import { usePromise } from 'react-use';
 import {
   useErrorHandler,
   withErrorBoundary
@@ -8,20 +7,20 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
-// TODO: not used for now
-// import { formatUnits } from '@ethersproject/units';
-// import { Contract } from '@ethersproject/contracts';
+import { useQuery } from 'react-query';
 
 import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
-import STATUSES from 'utils/constants/statuses';
-import getXIMXData from 'services/get-x-imx-data';
 // ray test touch <<<
+import xIMXDataFetcher, { X_IMX_DATA_FETCHER } from 'services/fetchers/x-imx-data-fetcher';
+import { XImxData } from 'services/get-x-imx-data';
 import getReservesDistributorData from 'services/get-reserves-distributor-data';
 // ray test touch >>>
 
 // TODO: not used for now
+// import { formatUnits } from '@ethersproject/units';
+// import { Contract } from '@ethersproject/contracts';
 // import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 // import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
 // import { RESERVES_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/reserves-distributors';
@@ -49,52 +48,58 @@ const APYCard = ({
     active
   } = useWeb3React<Web3Provider>();
 
-  const handleError = useErrorHandler();
-  const mounted = usePromise();
-
-  const [status, setStatus] = React.useState(STATUSES.IDLE);
-  const [xIMXAPY, setXIMXAPY] = React.useState(0);
+  const {
+    isLoading: xIMXDataLoading,
+    data: xIMXData,
+    error: xIMXDataError
+  } = useQuery<XImxData, Error>(
+    [
+      X_IMX_DATA_FETCHER,
+      chainId
+    ],
+    xIMXDataFetcher,
+    {
+      enabled: chainId !== undefined
+    }
+  );
+  useErrorHandler(xIMXDataError);
 
   React.useEffect(() => {
     if (!chainId) return;
-    if (!mounted) return;
-    if (!handleError) return;
 
     (async () => {
       try {
-        setStatus(STATUSES.PENDING);
-        const xIMXData = await mounted(getXIMXData(chainId));
         // ray test touch <<<
-        // Total IMX Staked
-        const totalBalance = xIMXData.totalBalance;
-        console.log('ray : ***** [Total IMX Staked] totalBalance => ', totalBalance);
-
         // Total IMX Distributed
-        const reservesDistributorData = await mounted(getReservesDistributorData(chainId));
+        const reservesDistributorData = await getReservesDistributorData(chainId);
         const distributed = reservesDistributorData.distributed;
         console.log('ray : ***** [Total IMX Distributed] distributed => ', distributed);
         // ray test touch >>>
-        const theXIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
-        setXIMXAPY(theXIMXAPY);
-        setStatus(STATUSES.RESOLVED);
       } catch (error) {
-        setStatus(STATUSES.REJECTED);
-        handleError(error);
+        console.log('[APYCard useEffect] error.message => ', error.message);
       }
     })();
-  }, [
-    chainId,
-    mounted,
-    handleError
-  ]);
+  }, [chainId]);
 
-  const xIMXAPYInPercent = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
   let apyLabel;
   if (active) {
-    apyLabel =
-      (status === STATUSES.IDLE || status === STATUSES.PENDING) ?
-        'Loading...' :
-        `${xIMXAPYInPercent} %`;
+    if (xIMXDataLoading) {
+      apyLabel = '-';
+    } else {
+      if (!xIMXData) {
+        throw new Error('Something went wrong!');
+      }
+
+      const xIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
+      const xIMXAPYInPercent = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
+      apyLabel = `${xIMXAPYInPercent} %`;
+
+      // ray test touch <<<
+      // Total IMX Staked
+      const totalBalance = xIMXData.totalBalance;
+      console.log('ray : ***** [Total IMX Staked] totalBalance => ', totalBalance);
+      // ray test touch >>>
+    }
   } else {
     apyLabel = '-';
   }

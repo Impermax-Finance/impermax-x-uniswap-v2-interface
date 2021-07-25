@@ -20,7 +20,7 @@ import {
   LendingPoolData
 } from 'types/interfaces';
 import apolloFetcher from 'services/apollo-fetcher';
-import { IMPERMAX_SUBGRAPH_URL } from 'config/web3/subgraph';
+import { IMPERMAX_SUBGRAPH_URLS } from 'config/web3/subgraph';
 import { BREAKPOINTS } from 'utils/constants/styles';
 import STATUSES from 'utils/constants/statuses';
 
@@ -106,7 +106,7 @@ const LendingPools = (): JSX.Element | null => {
     (async () => {
       try {
         setStatus(STATUSES.PENDING);
-        const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URL[chainId];
+        const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URLS[chainId];
         const result = await mounted(apolloFetcher(impermaxSubgraphUrl, query));
         const theLendingPools = result.data.lendingPools;
         setLendingPools(theLendingPools);
