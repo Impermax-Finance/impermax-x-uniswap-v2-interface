@@ -4,13 +4,6 @@ import gql from 'graphql-tag';
 import apolloFetcher from './apollo-fetcher';
 import { IMX_STAKING_SUBGRAPH_URLS } from 'config/web3/subgraph';
 
-interface ReservesDistributorData {
-  balance: string;
-  periodLength: string;
-  lastClaim: string;
-  distributed: string;
-}
-
 const query = gql`{
   reservesDistributors(first:1) {
     balance
@@ -26,5 +19,12 @@ const getReservesDistributorData = async (chainID: number): Promise<ReservesDist
 
   return result.data.reservesDistributors[0];
 };
+
+export interface ReservesDistributorData {
+  balance: string;
+  periodLength: string;
+  lastClaim: string;
+  distributed: string;
+}
 
 export default getReservesDistributorData;

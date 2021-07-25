@@ -1,5 +1,4 @@
 
-import * as React from 'react';
 import {
   useErrorHandler,
   withErrorBoundary
@@ -12,11 +11,14 @@ import { useQuery } from 'react-query';
 import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
-// ray test touch <<<
-import xIMXDataFetcher, { X_IMX_DATA_FETCHER } from 'services/fetchers/x-imx-data-fetcher';
-import { XImxData } from 'services/get-x-imx-data';
-import getReservesDistributorData from 'services/get-reserves-distributor-data';
-// ray test touch >>>
+import xIMXDataFetcher, {
+  XImxData,
+  X_IMX_DATA_FETCHER
+} from 'services/fetchers/x-imx-data-fetcher';
+import reservesDistributorDataFetcher, {
+  ReservesDistributorData,
+  RESERVES_DISTRIBUTOR_DATA_FETCHER
+} from 'services/fetchers/reserves-distributor-data-fetcher';
 
 // TODO: not used for now
 // import { formatUnits } from '@ethersproject/units';
@@ -64,29 +66,28 @@ const APYCard = ({
   );
   useErrorHandler(xIMXDataError);
 
-  React.useEffect(() => {
-    if (!chainId) return;
-
-    (async () => {
-      try {
-        // ray test touch <<<
-        // Total IMX Distributed
-        const reservesDistributorData = await getReservesDistributorData(chainId);
-        const distributed = reservesDistributorData.distributed;
-        console.log('ray : ***** [Total IMX Distributed] distributed => ', distributed);
-        // ray test touch >>>
-      } catch (error) {
-        console.log('[APYCard useEffect] error.message => ', error.message);
-      }
-    })();
-  }, [chainId]);
+  const {
+    isLoading: reservesDistributorDataLoading,
+    data: reservesDistributorData,
+    error: reservesDistributorDataError
+  } = useQuery<ReservesDistributorData, Error>(
+    [
+      RESERVES_DISTRIBUTOR_DATA_FETCHER,
+      chainId
+    ],
+    reservesDistributorDataFetcher,
+    {
+      enabled: chainId !== undefined
+    }
+  );
+  useErrorHandler(reservesDistributorDataError);
 
   let apyLabel;
   if (active) {
     if (xIMXDataLoading) {
       apyLabel = '-';
     } else {
-      if (!xIMXData) {
+      if (xIMXData === undefined) {
         throw new Error('Something went wrong!');
       }
 
@@ -100,6 +101,18 @@ const APYCard = ({
       console.log('ray : ***** [Total IMX Staked] totalBalance => ', totalBalance);
       // ray test touch >>>
     }
+
+    // ray test touch <<<
+    if (!reservesDistributorDataLoading) {
+      if (reservesDistributorData === undefined) {
+        throw new Error('Something went wrong!');
+      }
+
+      // Total IMX Distributed
+      const distributed = reservesDistributorData.distributed;
+      console.log('ray : ***** [Total IMX Distributed] distributed => ', distributed);
+    }
+    // ray test touch >>>
   } else {
     apyLabel = '-';
   }

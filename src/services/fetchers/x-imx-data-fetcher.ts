@@ -29,4 +29,8 @@ export {
   X_IMX_DATA_FETCHER
 };
 
+export type {
+  XImxData
+};
+
 export default xIMXDataFetcher;
