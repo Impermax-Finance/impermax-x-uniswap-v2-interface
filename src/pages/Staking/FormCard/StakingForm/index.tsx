@@ -1,7 +1,10 @@
 
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { useQuery } from 'react-query';
+import {
+  useQuery,
+  useMutation
+} from 'react-query';
 import {
   useErrorHandler,
   withErrorBoundary
@@ -20,7 +23,8 @@ import {
 import { BigNumber } from '@ethersproject/bignumber';
 import {
   Contract,
-  ContractTransaction
+  ContractTransaction,
+  ContractReceipt
 } from '@ethersproject/contracts';
 import clsx from 'clsx';
 
@@ -35,7 +39,6 @@ import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers'
 import useTokenBalance from 'utils/hooks/web3/use-token-balance';
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
-import STATUSES from 'utils/constants/statuses';
 import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
 import ERC20JSON from 'abis/contracts/IERC20.json';
 import StakingRouterJSON from 'abis/contracts/IStakingRouter.json';
@@ -74,8 +77,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
   const tokenAddress = chainId ? IMX_ADDRESSES[chainId] : undefined;
   const {
     isIdle: imxBalanceIdle,
-    isLoading: imxBalancePending,
-    isSuccess: imxBalanceResolved,
+    isLoading: imxBalanceLoading,
+    isSuccess: imxBalanceSuccess,
     data: imxBalance,
     error: imxBalanceError,
     refetch: imxBalanceRefetch
@@ -91,8 +94,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
   const spender = chainId ? STAKING_ROUTER_ADDRESSES[chainId] : undefined;
   const {
     isIdle: imxAllowanceIdle,
-    isLoading: imxAllowancePending,
-    isSuccess: imxAllowanceResolved,
+    isLoading: imxAllowanceLoading,
+    isSuccess: imxAllowanceSuccess,
     data: imxAllowance,
     error: imxAllowanceError,
     refetch: imxAllowanceRefetch
@@ -114,11 +117,72 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
   );
   useErrorHandler(imxAllowanceError);
 
+  const approveMutation = useMutation<ContractReceipt, Error, string>(
+    async (variables: string) => {
+      if (!chainId) {
+        throw new Error('Invalid chain ID!');
+      }
+      if (!library) {
+        throw new Error('Invalid library!');
+      }
+      if (!account) {
+        throw new Error('Invalid account!');
+      }
+
+      const bigStakingAmount = parseUnits(variables);
+      const imxContract = getERC20Contract(IMX_ADDRESSES[chainId], library, account);
+      const spender = STAKING_ROUTER_ADDRESSES[chainId];
+      // MEMO: `bigStakingAmount` instead of `MaxUint256`
+      const tx: ContractTransaction = await imxContract.approve(spender, bigStakingAmount);
+      return await tx.wait();
+    },
+    {
+      onSuccess: (data, variables) => {
+        addTransaction({
+          hash: data.transactionHash
+        }, {
+          summary: `Approve of IMX (${variables}) transfer.`
+        });
+        imxAllowanceRefetch();
+      }
+    }
+  );
+
+  const stakeMutation = useMutation<ContractReceipt, Error, string>(
+    async (variables: string) => {
+      if (!chainId) {
+        throw new Error('Invalid chain ID!');
+      }
+      if (!library) {
+        throw new Error('Invalid library!');
+      }
+      if (!account) {
+        throw new Error('Invalid account!');
+      }
+
+      const bigStakingAmount = parseUnits(variables);
+      const stakingRouterContract = getStakingRouterContract(chainId, library, account);
+      const tx: ContractTransaction = await mounted(stakingRouterContract.stake(bigStakingAmount));
+      return await tx.wait();
+    },
+    {
+      onSuccess: (data, variables) => {
+        addTransaction({
+          hash: data.transactionHash
+        }, {
+          summary: `Stake IMX (${variables}).`
+        });
+        reset({
+          [STAKING_AMOUNT]: ''
+        });
+        imxAllowanceRefetch();
+        imxBalanceRefetch();
+      }
+    }
+  );
+
   const mounted = usePromise();
   const addTransaction = useTransactionAdder();
-
-  const [submitStatus, setSubmitStatus] = React.useState(STATUSES.IDLE);
-  const [submitError, setSubmitError] = React.useState<Error | null>(null);
 
   const onStake = async (data: StakingFormData) => {
     if (!chainId) {
@@ -137,27 +201,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
       throw new Error('Invalid IMX allowance!');
     }
 
-    try {
-      setSubmitStatus(STATUSES.PENDING);
-      const bigStakingAmount = parseUnits(data[STAKING_AMOUNT]);
-      const stakingRouterContract = getStakingRouterContract(chainId, library, account);
-      const tx: ContractTransaction = await mounted(stakingRouterContract.stake(bigStakingAmount));
-      const receipt = await mounted(tx.wait());
-      addTransaction({
-        hash: receipt.transactionHash
-      }, {
-        summary: `Stake IMX (${data[STAKING_AMOUNT]}).`
-      });
-      reset({
-        [STAKING_AMOUNT]: ''
-      });
-      imxAllowanceRefetch();
-      imxBalanceRefetch();
-      setSubmitStatus(STATUSES.RESOLVED);
-    } catch (error) {
-      setSubmitStatus(STATUSES.REJECTED);
-      setSubmitError(error);
-    }
+    stakeMutation.mutate(data[STAKING_AMOUNT]);
   };
 
   const onApprove = async (data: StakingFormData) => {
@@ -171,25 +215,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
       throw new Error('Invalid account!');
     }
 
-    try {
-      setSubmitStatus(STATUSES.PENDING);
-      const bigStakingAmount = parseUnits(data[STAKING_AMOUNT]);
-      const imxContract = getERC20Contract(IMX_ADDRESSES[chainId], library, account);
-      const spender = STAKING_ROUTER_ADDRESSES[chainId];
-      // MEMO: `bigStakingAmount` instead of `MaxUint256`
-      const tx: ContractTransaction = await mounted(imxContract.approve(spender, bigStakingAmount));
-      const receipt = await mounted(tx.wait());
-      imxAllowanceRefetch();
-      addTransaction({
-        hash: receipt.transactionHash
-      }, {
-        summary: `Approve of IMX (${data[STAKING_AMOUNT]}) transfer.`
-      });
-      setSubmitStatus(STATUSES.RESOLVED);
-    } catch (error) {
-      setSubmitStatus(STATUSES.REJECTED);
-      setSubmitError(error);
-    }
+    approveMutation.mutate(data[STAKING_AMOUNT]);
   };
 
   const validateForm = (value: string): string | undefined => {
@@ -219,7 +245,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
   let approved;
   let floatIMXBalance;
   let floatIMXAllowance;
-  if (imxBalanceResolved && imxAllowanceResolved) {
+  if (imxBalanceSuccess && imxAllowanceSuccess) {
     if (imxBalance === undefined) {
       throw new Error('Invalid IMX balance!');
     }
@@ -233,10 +259,10 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
   }
 
   let submitButtonText;
-  if (imxBalanceResolved && imxAllowanceResolved) {
+  if (imxBalanceSuccess && imxAllowanceSuccess) {
     submitButtonText = approved ? 'Stake' : 'Approve';
   }
-  if (imxBalanceIdle || imxBalancePending || imxAllowanceIdle || imxAllowancePending) {
+  if (imxBalanceIdle || imxBalanceLoading || imxAllowanceIdle || imxAllowanceLoading) {
     submitButtonText = 'Loading...';
   }
 
@@ -244,7 +270,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     <>
       <form
         onSubmit={
-          (imxBalanceResolved && imxAllowanceResolved) ?
+          (imxBalanceSuccess && imxAllowanceSuccess) ?
             handleSubmit(approved ? onStake : onApprove) :
             undefined
         }
@@ -270,8 +296,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
           disabled={!imxAllowance || !imxBalance} />
         {active ? (
           <SubmitButton
-            disabled={imxBalanceIdle || imxBalancePending || imxAllowanceIdle || imxAllowancePending}
-            pending={submitStatus === STATUSES.PENDING}>
+            disabled={imxBalanceIdle || imxBalanceLoading || imxAllowanceIdle || imxAllowanceLoading}
+            pending={approveMutation.isLoading || stakeMutation.isLoading}>
             {submitButtonText}
           </SubmitButton>
         ) : (
@@ -285,15 +311,21 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
             )} />
         )}
       </form>
-      {(submitStatus === STATUSES.REJECTED && submitError) && (
+      {(approveMutation.isError || stakeMutation.isError) && (
         <ErrorModal
-          open={!!submitError}
+          open={approveMutation.isError || stakeMutation.isError}
           onClose={() => {
-            setSubmitStatus(STATUSES.IDLE);
-            setSubmitError(null);
+            if (approveMutation.isError) {
+              approveMutation.reset();
+            }
+            if (stakeMutation.isError) {
+              stakeMutation.reset();
+            }
           }}
           title='Error'
-          description={submitError.message} />
+          description={
+            approveMutation.error?.message || stakeMutation.error?.message || ''
+          } />
       )}
     </>
   );
