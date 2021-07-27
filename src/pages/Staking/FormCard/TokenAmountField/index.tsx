@@ -17,7 +17,6 @@ type Ref = HTMLInputElement;
 const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>(({
   className,
   balance,
-  allowance,
   error,
   helperText,
   tokenUnit,
@@ -25,16 +24,13 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
   ...rest
 }, ref): JSX.Element => {
   let balanceLabel;
-  let allowanceLabel;
   if (walletActive) {
     balanceLabel =
       balance === undefined ?
         'Loading...' :
         `${balance} ${tokenUnit}`;
-    allowanceLabel = allowance ?? 'Loading...';
   } else {
     balanceLabel = '-';
-    allowanceLabel = '-';
   }
 
   return (
@@ -89,13 +85,6 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
               'font-medium'
             )}>
             {`Balance: ${balanceLabel}`}
-          </span>
-          <span
-            className={clsx(
-              'truncate',
-              'font-medium'
-            )}>
-            Allowance: {allowanceLabel}
           </span>
         </div>
       </div>
