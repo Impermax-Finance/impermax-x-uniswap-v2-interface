@@ -9,7 +9,6 @@ import {
   useErrorHandler,
   withErrorBoundary
 } from 'react-error-boundary';
-import { usePromise } from 'react-use';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import {
@@ -159,10 +158,16 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
       if (!account) {
         throw new Error('Invalid account!');
       }
+      if (imxBalance === undefined) {
+        throw new Error('Invalid IMX balance!');
+      }
+      if (imxAllowance === undefined) {
+        throw new Error('Invalid IMX allowance!');
+      }
 
       const bigStakingAmount = parseUnits(variables);
       const stakingRouterContract = getStakingRouterContract(chainId, library, account);
-      const tx: ContractTransaction = await mounted(stakingRouterContract.stake(bigStakingAmount));
+      const tx: ContractTransaction = await stakingRouterContract.stake(bigStakingAmount);
       return await tx.wait();
     },
     {
@@ -181,41 +186,14 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     }
   );
 
-  const mounted = usePromise();
   const addTransaction = useTransactionAdder();
 
-  const onStake = async (data: StakingFormData) => {
-    if (!chainId) {
-      throw new Error('Invalid chain ID!');
-    }
-    if (!library) {
-      throw new Error('Invalid library!');
-    }
-    if (!account) {
-      throw new Error('Invalid account!');
-    }
-    if (imxBalance === undefined) {
-      throw new Error('Invalid IMX balance!');
-    }
-    if (imxAllowance === undefined) {
-      throw new Error('Invalid IMX allowance!');
-    }
-
-    stakeMutation.mutate(data[STAKING_AMOUNT]);
+  const onApprove = async (data: StakingFormData) => {
+    approveMutation.mutate(data[STAKING_AMOUNT]);
   };
 
-  const onApprove = async (data: StakingFormData) => {
-    if (!chainId) {
-      throw new Error('Invalid chain ID!');
-    }
-    if (!library) {
-      throw new Error('Invalid library!');
-    }
-    if (!account) {
-      throw new Error('Invalid account!');
-    }
-
-    approveMutation.mutate(data[STAKING_AMOUNT]);
+  const onStake = async (data: StakingFormData) => {
+    stakeMutation.mutate(data[STAKING_AMOUNT]);
   };
 
   const validateForm = (value: string): string | undefined => {

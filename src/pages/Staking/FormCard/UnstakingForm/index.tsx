@@ -2,10 +2,13 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import {
+  useQuery,
+  useMutation
+} from 'react-query';
+import {
   useErrorHandler,
   withErrorBoundary
 } from 'react-error-boundary';
-import { usePromise } from 'react-use';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import {
@@ -19,7 +22,8 @@ import {
 import { BigNumber } from '@ethersproject/bignumber';
 import {
   Contract,
-  ContractTransaction
+  ContractTransaction,
+  ContractReceipt
 } from '@ethersproject/contracts';
 import clsx from 'clsx';
 
@@ -31,9 +35,11 @@ import ErrorFallback from 'components/ErrorFallback';
 import ErrorModal from 'components/ErrorModal';
 import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
+import useTokenBalance from 'utils/hooks/web3/use-token-balance';
+import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
+import ERC20JSON from 'abis/contracts/IERC20.json';
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
-import STATUSES from 'utils/constants/statuses';
 import StakingRouterJSON from 'abis/contracts/IStakingRouter.json';
 import { useTransactionAdder } from 'store/transactions/hooks';
 
@@ -67,119 +73,127 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     mode: 'onChange'
   });
 
-  const handleError = useErrorHandler();
-  const mounted = usePromise();
-  const addTransaction = useTransactionAdder();
-
-  const [status, setStatus] = React.useState(STATUSES.IDLE);
-  const [submitStatus, setSubmitStatus] = React.useState(STATUSES.IDLE);
-  const [submitError, setSubmitError] = React.useState<Error | null>(null);
-  const [xIMXBalance, setXIMXBalance] = React.useState<BigNumber>();
-  const [xIMXAllowance, setXIMXAllowance] = React.useState<BigNumber>();
-
-  React.useEffect(() => {
-    if (!chainId) return;
-    if (!library) return;
-    if (!account) return;
-    if (!handleError) return;
-    if (!mounted) return;
-
-    (async () => {
-      try {
-        setStatus(STATUSES.PENDING);
-        const xIMXContract = getERC20Contract(X_IMX_ADDRESSES[chainId], library, account);
-        const theXIMXBalance: BigNumber = await mounted(xIMXContract.balanceOf(account));
-        setXIMXBalance(theXIMXBalance);
-        const owner = account;
-        const spender = STAKING_ROUTER_ADDRESSES[chainId];
-        const theXIMXAllowance: BigNumber = await mounted(xIMXContract.allowance(owner, spender));
-        setXIMXAllowance(theXIMXAllowance);
-        setStatus(STATUSES.RESOLVED);
-      } catch (error) {
-        setStatus(STATUSES.REJECTED);
-        handleError(error);
-      }
-    })();
-  }, [
+  const tokenAddress = chainId ? X_IMX_ADDRESSES[chainId] : undefined;
+  const {
+    isIdle: xIMXBalanceIdle,
+    isLoading: xIMXBalanceLoading,
+    isSuccess: xIMXBalanceSuccess,
+    data: xIMXBalance,
+    error: xIMXBalanceError,
+    refetch: xIMXBalanceRefetch
+  } = useTokenBalance(
     chainId,
     library,
-    account,
-    handleError,
-    mounted
-  ]);
+    tokenAddress,
+    account
+  );
+  useErrorHandler(xIMXBalanceError);
 
-  const onUnstake = async (data: UnstakingFormData) => {
-    if (!chainId) {
-      throw new Error('Invalid chain ID!');
+  const owner = account;
+  const spender = chainId ? STAKING_ROUTER_ADDRESSES[chainId] : undefined;
+  const {
+    isIdle: xIMXAllowanceIdle,
+    isLoading: xIMXAllowanceLoading,
+    isSuccess: xIMXAllowanceSuccess,
+    data: xIMXAllowance,
+    error: xIMXAllowanceError,
+    refetch: xIMXAllowanceRefetch
+  } = useQuery<BigNumber, Error>(
+    [
+      GENERIC_FETCHER,
+      chainId,
+      tokenAddress,
+      'allowance',
+      owner,
+      spender
+    ],
+    (chainId && library && tokenAddress && owner && spender) ?
+      genericFetcher<BigNumber>(library, ERC20JSON.abi) :
+      Promise.resolve,
+    {
+      enabled: !!(chainId && library && tokenAddress && owner && spender)
     }
-    if (!library) {
-      throw new Error('Invalid library!');
-    }
-    if (!account) {
-      throw new Error('Invalid account!');
-    }
-    if (xIMXAllowance === undefined) {
-      throw new Error('Invalid xIMX allowance!');
-    }
-    if (xIMXBalance === undefined) {
-      throw new Error('Invalid xIMX balance!');
-    }
+  );
+  useErrorHandler(xIMXAllowanceError);
 
-    try {
-      setSubmitStatus(STATUSES.PENDING);
-      const bigUnstakingAmount = parseUnits(data[UNSTAKING_AMOUNT]);
-      const stakingRouterContract = getStakingRouterContract(chainId, library, account);
-      const tx: ContractTransaction = await mounted(stakingRouterContract.unstake(bigUnstakingAmount));
-      const receipt = await mounted(tx.wait());
-      addTransaction({
-        hash: receipt.transactionHash
-      }, {
-        summary: `Unstake IMX (${data[UNSTAKING_AMOUNT]}).`
-      });
-      reset({
-        [UNSTAKING_AMOUNT]: ''
-      });
-      const newXIMXAllowance = xIMXAllowance.sub(bigUnstakingAmount);
-      setXIMXAllowance(newXIMXAllowance);
-      const newXIMXBalance = xIMXBalance.sub(bigUnstakingAmount);
-      setXIMXBalance(newXIMXBalance);
-      setSubmitStatus(STATUSES.RESOLVED);
-    } catch (error) {
-      setSubmitStatus(STATUSES.REJECTED);
-      setSubmitError(error);
-    }
-  };
+  const approveMutation = useMutation<ContractReceipt, Error, string>(
+    async (variables: string) => {
+      if (!chainId) {
+        throw new Error('Invalid chain ID!');
+      }
+      if (!library) {
+        throw new Error('Invalid library!');
+      }
+      if (!account) {
+        throw new Error('Invalid account!');
+      }
 
-  const onApprove = async (data: UnstakingFormData) => {
-    if (!chainId) {
-      throw new Error('Invalid chain ID!');
-    }
-    if (!library) {
-      throw new Error('Invalid library!');
-    }
-    if (!account) {
-      throw new Error('Invalid account!');
-    }
-
-    try {
-      setSubmitStatus(STATUSES.PENDING);
-      const bigUnstakingAmount = parseUnits(data[UNSTAKING_AMOUNT]);
+      const bigUnstakingAmount = parseUnits(variables);
       const xIMXContract = getERC20Contract(X_IMX_ADDRESSES[chainId], library, account);
       const spender = STAKING_ROUTER_ADDRESSES[chainId];
       // MEMO: `bigUnstakingAmount` instead of `MaxUint256`
-      const tx: ContractTransaction = await mounted(xIMXContract.approve(spender, bigUnstakingAmount));
-      const receipt = await mounted(tx.wait());
-      setXIMXAllowance(bigUnstakingAmount);
-      addTransaction({
-        hash: receipt.transactionHash
-      }, {
-        summary: `Approve of xIMX (${data[UNSTAKING_AMOUNT]}) transfer.`
-      });
-      setSubmitStatus(STATUSES.RESOLVED);
-    } catch (error) {
-      setSubmitStatus(STATUSES.REJECTED);
-      setSubmitError(error);
+      const tx: ContractTransaction = await xIMXContract.approve(spender, bigUnstakingAmount);
+      return await tx.wait();
+    },
+    {
+      onSuccess: (data, variables) => {
+        addTransaction({
+          hash: data.transactionHash
+        }, {
+          summary: `Approve of xIMX (${variables}) transfer.`
+        });
+        xIMXAllowanceRefetch();
+      }
     }
+  );
+
+  const unstakeMutation = useMutation<ContractReceipt, Error, string>(
+    async (variables: string) => {
+      if (!chainId) {
+        throw new Error('Invalid chain ID!');
+      }
+      if (!library) {
+        throw new Error('Invalid library!');
+      }
+      if (!account) {
+        throw new Error('Invalid account!');
+      }
+      if (xIMXAllowance === undefined) {
+        throw new Error('Invalid xIMX allowance!');
+      }
+      if (xIMXBalance === undefined) {
+        throw new Error('Invalid xIMX balance!');
+      }
+
+      const bigUnstakingAmount = parseUnits(variables);
+      const stakingRouterContract = getStakingRouterContract(chainId, library, account);
+      const tx: ContractTransaction = await stakingRouterContract.unstake(bigUnstakingAmount);
+      return await tx.wait();
+    },
+    {
+      onSuccess: (data, variables) => {
+        addTransaction({
+          hash: data.transactionHash
+        }, {
+          summary: `Unstake IMX (${variables}).`
+        });
+        reset({
+          [UNSTAKING_AMOUNT]: ''
+        });
+        xIMXBalanceRefetch();
+        xIMXAllowanceRefetch();
+      }
+    }
+  );
+
+  const addTransaction = useTransactionAdder();
+
+  const onApprove = async (data: UnstakingFormData) => {
+    approveMutation.mutate(data[UNSTAKING_AMOUNT]);
+  };
+
+  const onUnstake = async (data: UnstakingFormData) => {
+    unstakeMutation.mutate(data[UNSTAKING_AMOUNT]);
   };
 
   const validateForm = (value: string): string | undefined => {
@@ -209,7 +223,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
   let approved;
   let floatXIMXBalance;
   let floatXIMXAllowance;
-  if (status === STATUSES.RESOLVED) {
+  if (xIMXBalanceSuccess && xIMXAllowanceSuccess) {
     if (xIMXAllowance === undefined) {
       throw new Error('Invalid xIMX allowance!');
     }
@@ -223,10 +237,10 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
   }
 
   let submitButtonText;
-  if (status === STATUSES.RESOLVED) {
+  if (xIMXBalanceSuccess && xIMXAllowanceSuccess) {
     submitButtonText = approved ? 'Unstake' : 'Approve';
   }
-  if (status === STATUSES.IDLE || status === STATUSES.PENDING) {
+  if (xIMXBalanceIdle || xIMXBalanceLoading || xIMXAllowanceIdle || xIMXAllowanceLoading) {
     submitButtonText = 'Loading...';
   }
 
@@ -234,7 +248,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     <>
       <form
         onSubmit={
-          status === STATUSES.RESOLVED ?
+          (xIMXBalanceSuccess && xIMXAllowanceSuccess) ?
             handleSubmit(approved ? onUnstake : onApprove) :
             undefined
         }
@@ -260,8 +274,8 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
           disabled={!xIMXAllowance || !xIMXBalance} />
         {active ? (
           <SubmitButton
-            disabled={status === STATUSES.IDLE || status === STATUSES.PENDING}
-            pending={submitStatus === STATUSES.PENDING}>
+            disabled={xIMXBalanceIdle || xIMXBalanceLoading || xIMXAllowanceIdle || xIMXAllowanceLoading}
+            pending={approveMutation.isLoading || unstakeMutation.isLoading}>
             {submitButtonText}
           </SubmitButton>
         ) : (
@@ -275,15 +289,21 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
             )} />
         )}
       </form>
-      {(submitStatus === STATUSES.REJECTED && submitError) && (
+      {(approveMutation.isError || unstakeMutation.isError) && (
         <ErrorModal
-          open={!!submitError}
+          open={approveMutation.isError || unstakeMutation.isError}
           onClose={() => {
-            setSubmitStatus(STATUSES.IDLE);
-            setSubmitError(null);
+            if (approveMutation.isError) {
+              approveMutation.reset();
+            }
+            if (unstakeMutation.isError) {
+              unstakeMutation.reset();
+            }
           }}
           title='Error'
-          description={submitError.message} />
+          description={
+            approveMutation.error?.message || unstakeMutation.error?.message || ''
+          } />
       )}
     </>
   );
