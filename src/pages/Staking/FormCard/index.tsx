@@ -8,9 +8,12 @@ import Tabs, {
   Tab,
   TabPanel
 } from 'components/Tabs';
-import Panel from 'components/Panel';
+import Panel, { Props as PanelProps } from 'components/Panel';
 
-const FormCard = (): JSX.Element => {
+const FormCard = ({
+  className,
+  ...rest
+}: PanelProps): JSX.Element => {
   const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
 
   const handleTabSelect = (newTabIndex: number) => () => {
@@ -22,8 +25,10 @@ const FormCard = (): JSX.Element => {
       className={clsx(
         'px-6',
         'py-4',
-        'bg-white'
-      )}>
+        'bg-white',
+        className
+      )}
+      {...rest}>
       <Tabs
         className={clsx(
           'h-14',

@@ -13,6 +13,8 @@ interface CustomProps {
 
 const ImpermaxPicture = ({
   images,
+  width,
+  height,
   ...rest
 }: CustomProps & Omit<ImpermaxImageProps, 'src'>): JSX.Element => (
   <picture>
@@ -23,8 +25,8 @@ const ImpermaxPicture = ({
         srcSet={image.path} />
     ))}
     <ImpermaxImage
-      width={64}
-      height={64}
+      width={width}
+      height={height}
       src={images[images.length - 1].path}
       {...rest} />
   </picture>

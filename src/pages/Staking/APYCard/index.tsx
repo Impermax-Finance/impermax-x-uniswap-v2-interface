@@ -8,7 +8,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 import { useQuery } from 'react-query';
 
-import Panel from 'components/Panel';
+import Panel, { Props as PanelProps } from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import xIMXDataFetcher, {
@@ -44,7 +44,7 @@ import reservesDistributorDataFetcher, {
 const APYCard = ({
   className,
   ...rest
-}: React.ComponentPropsWithRef<'div'>): JSX.Element => {
+}: PanelProps): JSX.Element => {
   const {
     chainId,
     active

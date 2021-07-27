@@ -8,7 +8,7 @@ import { formatUnits } from '@ethersproject/units';
 import { BigNumber } from '@ethersproject/bignumber';
 // ray test touch >>>
 
-import Panel from 'components/Panel';
+import Panel, { Props as PanelProps } from 'components/Panel';
 import ImpermaxPicture from 'components/UI/ImpermaxPicture';
 // ray test touch <<<
 import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
@@ -21,7 +21,7 @@ import getStakingUserData from 'services/get-staking-user-data';
 const BalanceCard = ({
   className,
   ...rest
-}: React.ComponentPropsWithRef<'div'>): JSX.Element => {
+}: PanelProps): JSX.Element => {
   // ray test touch <<<
   const {
     chainId,
