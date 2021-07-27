@@ -45,10 +45,7 @@ const Staking = (): JSX.Element => (
           )} />
         <APYCard
           className={clsx(
-            // ray test touch <<<
             'flex-shrink-0',
-            // 'lg:grid',
-            // ray test touch >>>
             MD_WIDTH_72_CLASS
           )} />
       </Container>
@@ -58,7 +55,11 @@ const Staking = (): JSX.Element => (
             'max-w-xl',
             'flex-grow'
           )} />
-        <BalanceCard className={MD_WIDTH_72_CLASS} />
+        <BalanceCard
+          className={clsx(
+            'flex-shrink-0',
+            MD_WIDTH_72_CLASS
+          )} />
       </Container>
     </div>
   </Layout>
