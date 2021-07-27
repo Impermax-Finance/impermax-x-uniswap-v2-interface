@@ -8,9 +8,9 @@ import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 import { useQuery } from 'react-query';
 
-import Panel, { Props as PanelProps } from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
+import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
 import xIMXDataFetcher, {
   XImxData,
   X_IMX_DATA_FETCHER
@@ -41,10 +41,37 @@ import reservesDistributorDataFetcher, {
 //   return Math.pow(1 + dailyAPR, 365) - 1;
 // };
 
+const Term = ({
+  className,
+  ...rest
+}: React.ComponentPropsWithRef<'dt'>) => (
+  <dt
+    className={clsx(
+      'text-base',
+      'font-medium',
+      'text-textSecondary',
+      className
+    )}
+    {...rest} />
+);
+const Description = ({
+  className,
+  ...rest
+}: React.ComponentPropsWithRef<'dd'>) => (
+  <dd
+    className={clsx(
+      'text-xl',
+      'font-bold',
+      'text-impermaxAstral',
+      className
+    )}
+    {...rest} />
+);
+
 const APYCard = ({
   className,
   ...rest
-}: PanelProps): JSX.Element => {
+}: React.ComponentPropsWithRef<'dl'>): JSX.Element => {
   const {
     chainId,
     active
@@ -82,10 +109,11 @@ const APYCard = ({
   );
   useErrorHandler(reservesDistributorDataError);
 
-  let apyLabel;
+  let stakingAPYLabel;
+  let totalIMXStakedLabel;
   if (active) {
     if (xIMXDataLoading) {
-      apyLabel = 'Loading...';
+      stakingAPYLabel = 'Loading...';
     } else {
       if (xIMXData === undefined) {
         throw new Error('Something went wrong!');
@@ -93,13 +121,10 @@ const APYCard = ({
 
       const xIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
       const xIMXAPYInPercent = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
-      apyLabel = `${xIMXAPYInPercent} %`;
+      stakingAPYLabel = `${xIMXAPYInPercent} %`;
 
-      // ray test touch <<<
-      // Total IMX Staked
-      const totalBalance = xIMXData.totalBalance;
-      console.log('ray : ***** [Total IMX Staked] totalBalance => ', totalBalance);
-      // ray test touch >>>
+      totalIMXStakedLabel = formatNumberWithFixedDecimals(Number(xIMXData.totalBalance), 2);
+      totalIMXStakedLabel = formatNumberWithComma(totalIMXStakedLabel);
     }
 
     // ray test touch <<<
@@ -114,53 +139,41 @@ const APYCard = ({
     }
     // ray test touch >>>
   } else {
-    apyLabel = '-';
+    stakingAPYLabel = '-';
+    totalIMXStakedLabel = '-';
   }
 
   return (
-    <Panel
+    <dl
       className={clsx(
+        'shadow',
+        'overflow-hidden',
+        'md:rounded',
         'px-6',
         'py-4',
-        'flex',
-        'justify-between',
-        'items-center',
         'bg-impermaxJade-200',
         className
       )}
       {...rest}>
-      <div
-        className={clsx(
-          'text-base',
-          'font-medium'
-        )}>
+      <Term>
         Staking APY
-      </div>
-      <div
-        className={clsx(
-          'flex',
-          'flex-col',
-          'items-end',
-          'space-y-1'
-        )}>
-        <span
-          className={clsx(
-            'font-bold',
-            'text-2xl',
-            'text-textPrimary'
-          )}>
-          {apyLabel}
-        </span>
-        <span
-          className={clsx(
-            'text-sm',
-            'text-textSecondary',
-            'font-medium'
-          )}>
-          Staking APY
-        </span>
-      </div>
-    </Panel>
+      </Term>
+      <Description className='text-3xl'>
+        {stakingAPYLabel}
+      </Description>
+      <Term className='mt-2'>
+        Total IMX Staked
+      </Term>
+      <Description>
+        {totalIMXStakedLabel}
+      </Description>
+      <Term className='mt-2'>
+        Total IMX Distributed
+      </Term>
+      <Description>
+        {stakingAPYLabel}
+      </Description>
+    </dl>
   );
 };
 

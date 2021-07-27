@@ -47,8 +47,8 @@ const Staking = (): JSX.Element => (
           className={clsx(
             // ray test touch <<<
             'flex-shrink-0',
+            // 'lg:grid',
             // ray test touch >>>
-            'lg:grid',
             MD_WIDTH_72_CLASS
           )} />
       </Container>

@@ -35,6 +35,7 @@
     "camelcase",
     "chromaui",
     "clsx",
+    "commify",
     "compat",
     "componentize",
     "craco",
