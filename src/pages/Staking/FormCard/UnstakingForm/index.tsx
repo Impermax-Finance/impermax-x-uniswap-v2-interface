@@ -16,8 +16,8 @@ import {
   parseUnits
 } from '@ethersproject/units';
 import {
-  Zero
-  // MaxUint256
+  Zero,
+  MaxUint256
 } from '@ethersproject/constants';
 import { BigNumber } from '@ethersproject/bignumber';
 import {
@@ -117,7 +117,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
   useErrorHandler(xIMXAllowanceError);
 
   const approveMutation = useMutation<ContractReceipt, Error, string>(
-    async (variables: string) => {
+    async () => {
       if (!chainId) {
         throw new Error('Invalid chain ID!');
       }
@@ -128,11 +128,9 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
         throw new Error('Invalid account!');
       }
 
-      const bigUnstakingAmount = parseUnits(variables);
       const xIMXContract = getERC20Contract(X_IMX_ADDRESSES[chainId], library, account);
       const spender = STAKING_ROUTER_ADDRESSES[chainId];
-      // MEMO: `bigUnstakingAmount` instead of `MaxUint256`
-      const tx: ContractTransaction = await xIMXContract.approve(spender, bigUnstakingAmount);
+      const tx: ContractTransaction = await xIMXContract.approve(spender, MaxUint256);
       return await tx.wait();
     },
     {
