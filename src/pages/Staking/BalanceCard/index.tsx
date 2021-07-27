@@ -18,6 +18,63 @@ import getXIMXData from 'services/get-x-imx-data';
 import getStakingUserData from 'services/get-staking-user-data';
 // ray test touch >>>
 
+interface BalanceItemProps {
+  label: string;
+  value: string;
+  unit: string;
+}
+
+const BalanceItem = ({
+  label,
+  value,
+  unit
+}: BalanceItemProps) => (
+  <div className='space-y-3'>
+    <h4
+      className={clsx(
+        'text-xl',
+        'font-medium',
+        'text-textSecondary'
+      )}>
+      {label}
+    </h4>
+    <div
+      className={clsx(
+        'flex',
+        'items-center',
+        'space-x-4'
+      )}>
+      <ImpermaxPicture
+        images={[
+          {
+            type: 'image/avif',
+            path: 'assets/images/ximx-logos/ximx-logo.avif'
+          },
+          {
+            type: 'image/webp',
+            path: 'assets/images/ximx-logos/ximx-logo.webp'
+          },
+          {
+            type: 'image/png',
+            path: 'assets/images/ximx-logos/ximx-logo.png'
+          }
+        ]}
+        width={36}
+        height={36}
+        alt='IMX' />
+      <div
+        className={clsx(
+          'inline-flex',
+          'flex-col',
+          'space-y-1'
+        )}>
+        <span className='font-bold'>{value}</span>
+        <span className='font-medium'>{unit}</span>
+      </div>
+    </div>
+  </div>
+);
+
 const BalanceCard = ({
   className,
   ...rest
@@ -83,135 +140,18 @@ const BalanceCard = ({
         className
       )}
       {...rest}>
-      <div className='space-y-3'>
-        <h4
-          className={clsx(
-            'text-2xl',
-            'font-medium'
-          )}>
-          Staked Balance
-        </h4>
-        <div
-          className={clsx(
-            'flex',
-            'items-center',
-            'space-x-4'
-          )}>
-          <ImpermaxPicture
-            images={[
-              {
-                type: 'image/avif',
-                path: 'assets/images/imx-logos/imx-logo.avif'
-              },
-              {
-                type: 'image/webp',
-                path: 'assets/images/imx-logos/imx-logo.webp'
-              },
-              {
-                type: 'image/png',
-                path: 'assets/images/imx-logos/imx-logo.png'
-              }
-            ]}
-            width={64}
-            height={64}
-            alt='IMX' />
-          <div
-            className={clsx(
-              'inline-flex',
-              'flex-col',
-              'space-y-1'
-            )}>
-            <span className='font-medium'>_</span>
-            <span>IMX</span>
-          </div>
-        </div>
-      </div>
-      <div className='space-y-3'>
-        <h4
-          className={clsx(
-            'text-2xl',
-            'font-medium'
-          )}>
-          Unstaked Balance
-        </h4>
-        <div
-          className={clsx(
-            'flex',
-            'items-center',
-            'space-x-4'
-          )}>
-          <ImpermaxPicture
-            images={[
-              {
-                type: 'image/avif',
-                path: 'assets/images/ximx-logos/ximx-logo.avif'
-              },
-              {
-                type: 'image/webp',
-                path: 'assets/images/ximx-logos/ximx-logo.webp'
-              },
-              {
-                type: 'image/png',
-                path: 'assets/images/ximx-logos/ximx-logo.png'
-              }
-            ]}
-            width={64}
-            height={64}
-            alt='xIMX' />
-          <div
-            className={clsx(
-              'inline-flex',
-              'flex-col',
-              'space-y-1'
-            )}>
-            <span className='font-medium'>_</span>
-            <span>IMX</span>
-          </div>
-        </div>
-      </div>
-      <div className='space-y-3'>
-        <h4
-          className={clsx(
-            'text-2xl',
-            'font-medium'
-          )}>
-          Earned
-        </h4>
-        <div
-          className={clsx(
-            'flex',
-            'items-center',
-            'space-x-4'
-          )}>
-          <ImpermaxPicture
-            images={[
-              {
-                type: 'image/avif',
-                path: 'assets/images/ximx-logos/ximx-logo.avif'
-              },
-              {
-                type: 'image/webp',
-                path: 'assets/images/ximx-logos/ximx-logo.webp'
-              },
-              {
-                type: 'image/png',
-                path: 'assets/images/ximx-logos/ximx-logo.png'
-              }
-            ]}
-            width={64}
-            height={64}
-            alt='xIMX' />
-          <div
-            className={clsx(
-              'inline-flex',
-              'flex-col',
-              'space-y-1'
-            )}>
-            <span className='font-medium'>_</span>
-            <span>IMX</span>
-          </div>
-        </div>
-      </div>
+      <BalanceItem
+        label='Staked Balance'
+        value='_'
+        unit='IMX' />
+      <BalanceItem
+        label='Unstaked Balance'
+        value='_'
+        unit='IMX' />
+      <BalanceItem
+        label='Earned'
+        value='_'
+        unit='IMX' />
     </Panel>
   );
 };
