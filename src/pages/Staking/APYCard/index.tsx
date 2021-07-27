@@ -111,33 +111,35 @@ const APYCard = ({
 
   let stakingAPYLabel;
   let totalIMXStakedLabel;
+  let totalIMXDistributedLabel;
   if (active) {
     if (xIMXDataLoading) {
       stakingAPYLabel = 'Loading...';
+      totalIMXStakedLabel = 'Loading...';
     } else {
       if (xIMXData === undefined) {
         throw new Error('Something went wrong!');
       }
 
       const xIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
-      const xIMXAPYInPercent = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
-      stakingAPYLabel = `${xIMXAPYInPercent} %`;
+      stakingAPYLabel = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
+      stakingAPYLabel = formatNumberWithComma(stakingAPYLabel);
+      stakingAPYLabel = `${stakingAPYLabel} %`;
 
       totalIMXStakedLabel = formatNumberWithFixedDecimals(Number(xIMXData.totalBalance), 2);
       totalIMXStakedLabel = formatNumberWithComma(totalIMXStakedLabel);
     }
 
-    // ray test touch <<<
-    if (!reservesDistributorDataLoading) {
+    if (reservesDistributorDataLoading) {
+      totalIMXDistributedLabel = 'Loading...';
+    } else {
       if (reservesDistributorData === undefined) {
         throw new Error('Something went wrong!');
       }
 
-      // Total IMX Distributed
-      const distributed = reservesDistributorData.distributed;
-      console.log('ray : ***** [Total IMX Distributed] distributed => ', distributed);
+      totalIMXDistributedLabel = formatNumberWithFixedDecimals(Number(reservesDistributorData.distributed), 2);
+      totalIMXDistributedLabel = formatNumberWithComma(totalIMXDistributedLabel);
     }
-    // ray test touch >>>
   } else {
     stakingAPYLabel = '-';
     totalIMXStakedLabel = '-';
@@ -171,7 +173,7 @@ const APYCard = ({
         Total IMX Distributed
       </Term>
       <Description>
-        {stakingAPYLabel}
+        {totalIMXDistributedLabel}
       </Description>
     </dl>
   );
