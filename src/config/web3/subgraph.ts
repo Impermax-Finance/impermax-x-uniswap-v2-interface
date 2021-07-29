@@ -12,7 +12,8 @@ const IMX_STAKING_SUBGRAPH_URLS: {
   [chainId: number]: string;
 } = {
   [CHAIN_IDS.ROPSTEN]: 'https://api.thegraph.com/subgraphs/name/impermax-finance/imx-staking-ropsten',
-  [CHAIN_IDS.ETHEREUM_MAIN_NET]: 'https://api.thegraph.com/subgraphs/name/impermax-finance/imx-staking'
+  [CHAIN_IDS.ETHEREUM_MAIN_NET]: 'https://api.thegraph.com/subgraphs/name/impermax-finance/imx-staking',
+  [CHAIN_IDS.KOVAN]: 'https://api.thegraph.com/subgraphs/name/impermax-finance/imx-staking-kovan'
 };
 
 const UNISWAP_SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2';
