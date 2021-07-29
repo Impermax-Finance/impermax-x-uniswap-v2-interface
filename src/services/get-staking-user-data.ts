@@ -25,4 +25,8 @@ const getStakingUserData = async (chainID: number, account: string): Promise<Sta
   return result.data.user;
 };
 
+export type {
+  StakingUserData
+};
+
 export default getStakingUserData;

@@ -1,5 +1,4 @@
 
-import * as React from 'react';
 import clsx from 'clsx';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
@@ -24,12 +23,14 @@ import {
 import useTokenBalance from 'utils/hooks/web3/use-token-balance';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
-import getXIMXData from 'services/get-x-imx-data';
-import getStakingUserData from 'services/get-staking-user-data';
 import xIMXDataFetcher, {
   XIMXData,
   X_IMX_DATA_FETCHER
 } from 'services/fetchers/x-imx-data-fetcher';
+import stakingUserDataFetcher, {
+  StakingUserData,
+  STAKING_USER_DATA_FETCHER
+} from 'services/fetchers/staking-user-data-fetcher';
 
 interface BalanceItemProps {
   label: string;
@@ -147,39 +148,26 @@ const BalanceCard = ({
   );
   useErrorHandler(xIMXDataError);
 
-  // ray test touch <<<
-  React.useEffect(() => {
-    if (!chainId) return;
-    if (!library) return;
-    if (!account) return;
-
-    (async () => {
-      try {
-        // Staked Balance
-        const xIMXData = await getXIMXData(chainId);
-        const xIMXRate = parseFloat(xIMXData.exchangeRate);
-
-        // Earned
-        const stakingUserData = await getStakingUserData(chainId, account);
-        const totalEarned = parseFloat(stakingUserData.totalEarned);
-        const anotherXIMXBalance = parseFloat(stakingUserData.ximxBalance);
-        console.log('ray : ***** anotherXIMXBalance => ', anotherXIMXBalance);
-        const lastExchangeRate = parseFloat(stakingUserData.lastExchangeRate);
-        const earnedIMX = totalEarned + anotherXIMXBalance * (xIMXRate - lastExchangeRate);
-        console.log('ray : ***** [Earned] earnedIMX => ', earnedIMX);
-      } catch (error) {
-        console.log('[BalanceCard] error.message => ', error.message);
-      }
-    })();
-  }, [
-    chainId,
-    library,
-    account
-  ]);
-  // ray test touch >>>
+  const {
+    isLoading: stakingUserDataLoading,
+    data: stakingUserData,
+    error: stakingUserDataError
+  } = useQuery<StakingUserData, Error>(
+    [
+      STAKING_USER_DATA_FETCHER,
+      chainId,
+      account
+    ],
+    stakingUserDataFetcher,
+    {
+      enabled: chainId !== undefined && account !== undefined
+    }
+  );
+  useErrorHandler(stakingUserDataError);
 
   let stakedBalanceLabel;
   let unstakedBalanceLabel;
+  let earnedLabel;
   if (active) {
     if (xIMXBalanceLoading || xIMXDataLoading) {
       stakedBalanceLabel = 'Loading...';
@@ -208,9 +196,29 @@ const BalanceCard = ({
       unstakedBalanceLabel = formatNumberWithFixedDecimals(unstakedBalanceLabel, 2);
       unstakedBalanceLabel = formatNumberWithComma(unstakedBalanceLabel);
     }
+
+    if (stakingUserDataLoading || xIMXDataLoading) {
+      earnedLabel = 'Loading...';
+    } else {
+      if (stakingUserData === undefined) {
+        throw new Error('Something went wrong!');
+      }
+      if (xIMXData === undefined) {
+        throw new Error('Something went wrong!');
+      }
+
+      const xIMXRate = parseFloat(xIMXData.exchangeRate);
+      const totalEarned = parseFloat(stakingUserData.totalEarned);
+      const anotherXIMXBalance = parseFloat(stakingUserData.ximxBalance);
+      const lastExchangeRate = parseFloat(stakingUserData.lastExchangeRate);
+      earnedLabel = totalEarned + anotherXIMXBalance * (xIMXRate - lastExchangeRate);
+      earnedLabel = formatNumberWithFixedDecimals(earnedLabel, 2);
+      earnedLabel = formatNumberWithComma(earnedLabel);
+    }
   } else {
     stakedBalanceLabel = '-';
     unstakedBalanceLabel = '-';
+    earnedLabel = '-';
   }
 
   return (
@@ -233,7 +241,7 @@ const BalanceCard = ({
         unitName='IMX' />
       <BalanceItem
         label='Earned'
-        value='_'
+        value={earnedLabel}
         unitName='IMX' />
     </Panel>
   );
