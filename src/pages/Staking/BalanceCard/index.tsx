@@ -81,7 +81,13 @@ const BalanceItem = ({
           'flex-col',
           'space-y-1'
         )}>
-        <span className='font-bold'>{value}</span>
+        <span
+          className={clsx(
+            'font-medium',
+            'text-xl'
+          )}>
+          {value}
+        </span>
         <span className='font-medium'>{unitName}</span>
       </div>
     </div>
