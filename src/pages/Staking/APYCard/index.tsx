@@ -145,6 +145,7 @@ const APYCard = ({
   } else {
     stakingAPYLabel = '-';
     totalIMXStakedLabel = '-';
+    totalIMXDistributedLabel = '-';
   }
 
   return (
