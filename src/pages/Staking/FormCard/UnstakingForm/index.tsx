@@ -33,7 +33,10 @@ import SubmitButton from '../SubmitButton';
 import WalletConnectButton from 'containers/WalletConnectButton';
 import ErrorFallback from 'components/ErrorFallback';
 import ErrorModal from 'components/ErrorModal';
-import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
+import {
+  X_IMX_ADDRESSES,
+  X_IMX_DECIMALS
+} from 'config/web3/contracts/x-imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
 import useTokenBalance from 'utils/hooks/web3/use-token-balance';
 import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
@@ -230,8 +233,8 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     }
 
     approved = xIMXAllowance.gt(Zero);
-    floatXIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXBalance)), 2);
-    floatXIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXAllowance)), 2);
+    floatXIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXBalance, X_IMX_DECIMALS)), 2);
+    floatXIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXAllowance, X_IMX_DECIMALS)), 2);
   }
 
   let submitButtonText;

@@ -21,7 +21,10 @@ import xIMXDataFetcher, {
 // import { formatUnits } from '@ethersproject/units';
 // import { BigNumber } from '@ethersproject/bignumber';
 // import { Contract } from '@ethersproject/contracts';
-// import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
+// import {
+//   X_IMX_ADDRESSES,
+//   X_IMX_DECIMALS
+// } from 'config/web3/contracts/x-imxes';
 // import STATUSES from 'utils/constants/statuses';
 // import PoolTokenJSON from 'abis/contracts/IPoolToken.json';
 // const getXIMXContract = (xIMXAddress: string, library: Web3Provider) => {
@@ -29,7 +32,7 @@ import xIMXDataFetcher, {
 // };
 // const xIMXContract = getXIMXContract(X_IMX_ADDRESSES[chainId], library);
 // const bigXIMXRate: BigNumber = await mounted(xIMXContract.callStatic.exchangeRate());
-// const floatXIMXRate = parseFloat(formatUnits(bigXIMXRate));
+// const floatXIMXRate = parseFloat(formatUnits(bigXIMXRate, X_IMX_DECIMALS));
 // const xIMXRate = formatNumberWithFixedDecimals(floatXIMXRate, 5);
 
 interface CustomProps {

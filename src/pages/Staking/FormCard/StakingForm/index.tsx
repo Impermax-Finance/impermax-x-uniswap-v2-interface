@@ -33,7 +33,10 @@ import SubmitButton from '../SubmitButton';
 import WalletConnectButton from 'containers/WalletConnectButton';
 import ErrorFallback from 'components/ErrorFallback';
 import ErrorModal from 'components/ErrorModal';
-import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
+import {
+  IMX_ADDRESSES,
+  IMX_DECIMALS
+} from 'config/web3/contracts/imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
 import useTokenBalance from 'utils/hooks/web3/use-token-balance';
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
@@ -230,8 +233,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     }
 
     approved = imxAllowance.gt(Zero);
-    floatIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(imxBalance)), 2);
-    floatIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(imxAllowance)), 2);
+    floatIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(imxBalance, IMX_DECIMALS)), 2);
+    floatIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(imxAllowance, IMX_DECIMALS)), 2);
   }
 
   let submitButtonText;
