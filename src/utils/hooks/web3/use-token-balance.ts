@@ -15,7 +15,7 @@ const useTokenBalance = (
   address: string | undefined,
   account: string | null | undefined
 ): UseQueryResult<BigNumber, Error> => {
-  const query = useQuery<BigNumber, Error>(
+  return useQuery<BigNumber, Error>(
     [
       GENERIC_FETCHER,
       chainID,
@@ -30,8 +30,6 @@ const useTokenBalance = (
       enabled: !!(chainID && library && account)
     }
   );
-
-  return query;
 };
 
 export default useTokenBalance;

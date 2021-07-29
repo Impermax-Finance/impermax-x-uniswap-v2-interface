@@ -88,7 +88,8 @@ const APYCard = ({
     ],
     xIMXDataFetcher,
     {
-      enabled: chainId !== undefined
+      enabled: chainId !== undefined,
+      refetchInterval: 10000
     }
   );
   useErrorHandler(xIMXDataError);
@@ -104,7 +105,8 @@ const APYCard = ({
     ],
     reservesDistributorDataFetcher,
     {
-      enabled: chainId !== undefined
+      enabled: chainId !== undefined,
+      refetchInterval: 10000
     }
   );
   useErrorHandler(reservesDistributorDataError);
