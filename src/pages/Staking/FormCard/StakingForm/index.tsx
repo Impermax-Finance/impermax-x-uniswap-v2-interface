@@ -4,9 +4,7 @@ import { useForm } from 'react-hook-form';
 import {
   useQuery,
   useMutation,
-  // ray test touch <<<
   useQueryClient
-  // ray test touch >>>
 } from 'react-query';
 import {
   useErrorHandler,
@@ -155,9 +153,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     }
   );
 
-  // ray test touch <<<
   const queryClient = useQueryClient();
-  // ray test touch >>>
   const stakeMutation = useMutation<ContractReceipt, Error, string>(
     async (variables: string) => {
       if (!chainId) {
@@ -195,7 +191,6 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
         // Invalidations for Staked Balance & Unstaked Balance & Earned
         // Invalidations for Staking APY & Total IMX Staked & Total IMX Distributed
         imxBalanceRefetch();
-        // ray test touch <<<
         // TODO: could be abstracted
         const xIMXTokenAddress = chainId ? X_IMX_ADDRESSES[chainId] : undefined;
         queryClient.invalidateQueries([
@@ -218,7 +213,6 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
           RESERVES_DISTRIBUTOR_DATA_FETCHER,
           chainId
         ]);
-        // ray test touch >>>
       }
     }
   );

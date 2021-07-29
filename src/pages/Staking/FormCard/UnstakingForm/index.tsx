@@ -3,7 +3,8 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import {
   useQuery,
-  useMutation
+  useMutation,
+  useQueryClient
 } from 'react-query';
 import {
   useErrorHandler,
@@ -37,12 +38,16 @@ import {
   X_IMX_ADDRESSES,
   X_IMX_DECIMALS
 } from 'config/web3/contracts/x-imxes';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
 import useTokenBalance from 'utils/hooks/web3/use-token-balance';
-import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
-import ERC20JSON from 'abis/contracts/IERC20.json';
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
+import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
+import { STAKING_USER_DATA_FETCHER } from 'services/fetchers/staking-user-data-fetcher';
+import { X_IMX_DATA_FETCHER } from 'services/fetchers/x-imx-data-fetcher';
+import { RESERVES_DISTRIBUTOR_DATA_FETCHER } from 'services/fetchers/reserves-distributor-data-fetcher';
+import ERC20JSON from 'abis/contracts/IERC20.json';
 import StakingRouterJSON from 'abis/contracts/IStakingRouter.json';
 import { useTransactionAdder } from 'store/transactions/hooks';
 
@@ -148,6 +153,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     }
   );
 
+  const queryClient = useQueryClient();
   const unstakeMutation = useMutation<ContractReceipt, Error, string>(
     async (variables: string) => {
       if (!chainId) {
@@ -181,8 +187,32 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
         reset({
           [UNSTAKING_AMOUNT]: ''
         });
-        xIMXBalanceRefetch();
         xIMXAllowanceRefetch();
+        // Invalidations for Staked Balance & Unstaked Balance & Earned
+        // Invalidations for Staking APY & Total IMX Staked & Total IMX Distributed
+        xIMXBalanceRefetch();
+        // TODO: could be abstracted
+        const imxTokenAddress = chainId ? IMX_ADDRESSES[chainId] : undefined;
+        queryClient.invalidateQueries([
+          GENERIC_FETCHER,
+          chainId,
+          imxTokenAddress,
+          'balanceOf',
+          account
+        ]);
+        queryClient.invalidateQueries([
+          X_IMX_DATA_FETCHER,
+          chainId
+        ]);
+        queryClient.invalidateQueries([
+          STAKING_USER_DATA_FETCHER,
+          chainId,
+          account
+        ]);
+        queryClient.invalidateQueries([
+          RESERVES_DISTRIBUTOR_DATA_FETCHER,
+          chainId
+        ]);
       }
     }
   );
