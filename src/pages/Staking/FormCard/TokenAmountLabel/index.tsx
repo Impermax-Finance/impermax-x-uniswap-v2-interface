@@ -74,8 +74,8 @@ const TokenAmountLabel = ({
         throw new Error('Something went wrong!');
       }
 
-      const xIMXRate = Number(xIMXData.exchangeRate);
-      xIMXRateLabel = formatNumberWithFixedDecimals(xIMXRate, 5);
+      xIMXRateLabel = Number(xIMXData.exchangeRate);
+      xIMXRateLabel = formatNumberWithFixedDecimals(xIMXRateLabel, 5);
     }
   } else {
     xIMXRateLabel = '-';

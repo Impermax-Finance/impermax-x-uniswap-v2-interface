@@ -24,7 +24,7 @@ const FormCard = ({
     <Panel
       className={clsx(
         'px-6',
-        'py-4',
+        'py-6',
         'bg-white',
         className
       )}
@@ -62,8 +62,8 @@ const FormCard = ({
         id='stake-tab-panel'>
         <StakingForm
           className={clsx(
-            'mt-4',
-            'space-y-4'
+            'mt-8',
+            'space-y-8'
           )} />
       </TabPanel>
       <TabPanel
@@ -72,8 +72,8 @@ const FormCard = ({
         id='unstake-tab-panel'>
         <UnstakingForm
           className={clsx(
-            'mt-4',
-            'space-y-4'
+            'mt-8',
+            'space-y-8'
           )} />
       </TabPanel>
     </Panel>

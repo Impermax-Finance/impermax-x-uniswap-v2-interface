@@ -3,7 +3,10 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import {
   useQuery,
-  useMutation
+  useMutation,
+  // ray test touch <<<
+  useQueryClient
+  // ray test touch >>>
 } from 'react-query';
 import {
   useErrorHandler,
@@ -37,11 +40,15 @@ import {
   IMX_ADDRESSES,
   IMX_DECIMALS
 } from 'config/web3/contracts/imxes';
+import { X_IMX_ADDRESSES } from 'config/web3/contracts/x-imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
 import useTokenBalance from 'utils/hooks/web3/use-token-balance';
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
+import { STAKING_USER_DATA_FETCHER } from 'services/fetchers/staking-user-data-fetcher';
+import { X_IMX_DATA_FETCHER } from 'services/fetchers/x-imx-data-fetcher';
+import { RESERVES_DISTRIBUTOR_DATA_FETCHER } from 'services/fetchers/reserves-distributor-data-fetcher';
 import ERC20JSON from 'abis/contracts/IERC20.json';
 import StakingRouterJSON from 'abis/contracts/IStakingRouter.json';
 import { useTransactionAdder } from 'store/transactions/hooks';
@@ -148,6 +155,9 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     }
   );
 
+  // ray test touch <<<
+  const queryClient = useQueryClient();
+  // ray test touch >>>
   const stakeMutation = useMutation<ContractReceipt, Error, string>(
     async (variables: string) => {
       if (!chainId) {
@@ -182,7 +192,33 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
           [STAKING_AMOUNT]: ''
         });
         imxAllowanceRefetch();
+        // Invalidations for Staked Balance & Unstaked Balance & Earned
+        // Invalidations for Staking APY & Total IMX Staked & Total IMX Distributed
         imxBalanceRefetch();
+        // ray test touch <<<
+        // TODO: could be abstracted
+        const xIMXTokenAddress = chainId ? X_IMX_ADDRESSES[chainId] : undefined;
+        queryClient.invalidateQueries([
+          GENERIC_FETCHER,
+          chainId,
+          xIMXTokenAddress,
+          'balanceOf',
+          account
+        ]);
+        queryClient.invalidateQueries([
+          X_IMX_DATA_FETCHER,
+          chainId
+        ]);
+        queryClient.invalidateQueries([
+          STAKING_USER_DATA_FETCHER,
+          chainId,
+          account
+        ]);
+        queryClient.invalidateQueries([
+          RESERVES_DISTRIBUTOR_DATA_FETCHER,
+          chainId
+        ]);
+        // ray test touch >>>
       }
     }
   );
