@@ -8,6 +8,9 @@ const X_IMX_ADDRESSES: {
   [CHAIN_IDS.ETHEREUM_MAIN_NET]: ''
 };
 
+const X_IMX_DECIMALS = 18;
+
 export {
-  X_IMX_ADDRESSES
+  X_IMX_ADDRESSES,
+  X_IMX_DECIMALS
 };

@@ -1,5 +1,5 @@
 
-import getXIMXData, { XImxData } from 'services/get-x-imx-data';
+import getXIMXData, { XIMXData } from 'services/get-x-imx-data';
 
 const X_IMX_DATA_FETCHER = 'x-imx-data-fetcher';
 
@@ -12,7 +12,7 @@ const X_IMX_DATA_FETCHER = 'x-imx-data-fetcher';
 // }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const xIMXDataFetcher = async ({ queryKey }: any): Promise<XImxData> => {
+const xIMXDataFetcher = async ({ queryKey }: any): Promise<XIMXData> => {
   const [
     _key,
     chainID
@@ -30,7 +30,7 @@ export {
 };
 
 export type {
-  XImxData
+  XIMXData
 };
 
 export default xIMXDataFetcher;

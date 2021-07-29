@@ -13,18 +13,22 @@ const query = gql`{
   }
 }`;
 
-const getXIMXData = async (chainID: number): Promise<XImxData> => {
+interface XIMXData {
+  totalSupply: string;
+  totalBalance: string;
+  exchangeRate: string;
+  dailyAPR: string;
+}
+
+const getXIMXData = async (chainID: number): Promise<XIMXData> => {
   const impermaxSubgraphURL = IMX_STAKING_SUBGRAPH_URLS[chainID];
   const result = await apolloFetcher(impermaxSubgraphURL, query);
 
   return result.data.ximxes[0];
 };
 
-export interface XImxData {
-  totalSupply: string;
-  totalBalance: string;
-  exchangeRate: string;
-  dailyAPR: string;
-}
+export type {
+  XIMXData
+};
 
 export default getXIMXData;

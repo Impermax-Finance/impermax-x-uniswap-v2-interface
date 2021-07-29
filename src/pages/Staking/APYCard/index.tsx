@@ -12,7 +12,7 @@ import ErrorFallback from 'components/ErrorFallback';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
 import xIMXDataFetcher, {
-  XImxData,
+  XIMXData,
   X_IMX_DATA_FETCHER
 } from 'services/fetchers/x-imx-data-fetcher';
 import reservesDistributorDataFetcher, {
@@ -81,7 +81,7 @@ const APYCard = ({
     isLoading: xIMXDataLoading,
     data: xIMXData,
     error: xIMXDataError
-  } = useQuery<XImxData, Error>(
+  } = useQuery<XIMXData, Error>(
     [
       X_IMX_DATA_FETCHER,
       chainId
