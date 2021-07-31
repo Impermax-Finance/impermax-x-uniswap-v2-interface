@@ -20,7 +20,6 @@ export function getPoolTokenCache(
   return cache.poolToken[poolTokenType];
 }
 
-// ray test touch <<
 // Decimals
 export async function initializeTokenDecimals(
   this: ImpermaxRouter,
@@ -46,7 +45,6 @@ export async function getDecimals(
   const tokenAddress = await this.getTokenAddress(uniswapV2PairAddress, poolTokenType);
   return this.getTokenDecimals(tokenAddress);
 }
-// ray test touch >>
 
 // Reserves
 export async function initializeReserves(

@@ -7,7 +7,6 @@ import ImpermaxRouter from '.';
 import { Address, PoolTokenType } from '../types/interfaces';
 import { BigNumber } from '@ethersproject/bignumber';
 
-// ray test touch <<
 export async function normalize(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
@@ -18,9 +17,7 @@ export async function normalize(
   const decimals = await this.getDecimals(uniswapV2PairAddress, poolTokenType);
   return amount / Math.pow(10, decimals);
 }
-// ray test touch >>
 
-// ray test touch <<
 export async function normalizeToken(
   this: ImpermaxRouter,
   tokenAddress: Address,
@@ -30,7 +27,6 @@ export async function normalizeToken(
   const decimals = await this.getTokenDecimals(tokenAddress);
   return amount / Math.pow(10, decimals);
 }
-// ray test touch >>
 
 export function getDeadline(this: ImpermaxRouter) {
   return BigNumber.from(Math.floor(Date.now() / 1000) + 3600 * 4); // 4 hour deadline

@@ -78,7 +78,6 @@ class ImpermaxRouter {
       },
     }
   };
-  // ray test touch <<
   tokenCache: {
     [key in Address]?: {
       token?: Promise<ERC20>,
@@ -86,7 +85,6 @@ class ImpermaxRouter {
       balance?: Promise<number>,
     }
   };
-  // ray test touch >>
   claimableCache: {
     [key in Address]?: {
       contract?: ClaimableContract,
@@ -107,9 +105,7 @@ class ImpermaxRouter {
     this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
     this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
-    // ray test touch <<
     this.tokenCache = {};
-    // ray test touch >>
     this.imxCache = {};
     this.claimableCache = {};
   }
@@ -164,17 +160,13 @@ class ImpermaxRouter {
     this.router = this.newRouter(this.router.address);
     this.factory = this.newFactory(this.factory.address);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle.address);
-    // ray test touch <<
     this.claimAggregator = this.newClaimAggregator(this.claimAggregator.address);
-    // ray test touch >>
     this.cleanCache();
   }
 
   cleanCache(): void {
     this.lendingPoolCache = {};
-    // ray test touch <<
     this.tokenCache = {};
-    // ray test touch >>
     this.imxCache = {};
     this.claimableCache = {};
     console.log('[ImpermaxRouter cleanCache]');
@@ -187,14 +179,10 @@ class ImpermaxRouter {
   // Contracts
   public initializeLendingPool = contracts.initializeLendingPool;
   public initializeClaimable = contracts.initializeClaimable;
-  // ray test touch <<
   public initializeToken = contracts.initializeToken;
-  // ray test touch >>
   public getLendingPoolCache = contracts.getLendingPoolCache;
   public getClaimableCache = contracts.getClaimableCache;
-  // ray test touch <<
   public getTokenCache = contracts.getTokenCache;
-  // ray test touch >>
   public getLendingPool = contracts.getLendingPool;
   public getContracts = contracts.getContracts;
   public getPoolToken = contracts.getPoolToken;
@@ -206,17 +194,13 @@ class ImpermaxRouter {
 
   // Fetchers
   public getPoolTokenCache = fetchers.getPoolTokenCache;
-  // ray test touch <<
   public initializeTokenDecimals = fetchers.initializeTokenDecimals;
-  // ray test touch >>
   public initializeReserves = fetchers.initializeReserves;
   public initializeLPTotalSupply = fetchers.initializeLPTotalSupply;
   public initializePriceDenomLP = fetchers.initializePriceDenomLP;
   public initializeTWAPPrice = fetchers.initializeTWAPPrice;
-  // ray test touch <<
   public getTokenDecimals = fetchers.getTokenDecimals;
   public getDecimals = fetchers.getDecimals;
-  // ray test touch >>
   public getReserves = fetchers.getReserves;
   public getLPTotalSupply = fetchers.getLPTotalSupply;
   public getPriceDenomLP = fetchers.getPriceDenomLP;
@@ -232,9 +216,7 @@ class ImpermaxRouter {
 
   // Account
   public initializeExchangeRate = account.initializeExchangeRate;
-  // ray test touch <<
   public initializeTokenBalance = account.initializeTokenBalance;
-  // ray test touch >>
   public initializeBorrowed = account.initializeBorrowed;
   public initializeDeposited = account.initializeDeposited;
   public getExchangeRate = account.getExchangeRate;
@@ -275,9 +257,7 @@ class ImpermaxRouter {
   public getAvailableClaimable = imx.getAvailableClaimable;
 
   // Utils
-  // ray test touch <<
   public normalizeToken = utils.normalizeToken;
-  // ray test touch >>
   public normalize = utils.normalize;
   public getDeadline = utils.getDeadline;
 

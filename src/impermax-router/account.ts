@@ -33,7 +33,6 @@ export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress
   return cache.exchangeRate;
 }
 
-// ray test touch <<
 // Token Available Balance
 export async function initializeTokenBalance(
   this: ImpermaxRouter,
@@ -66,7 +65,6 @@ export async function getAvailableBalance(
   const tokenAddress = await this.getTokenAddress(uniswapV2PairAddress, poolTokenType);
   return this.getTokenBalance(tokenAddress);
 }
-// ray test touch >>
 
 // Deposited
 export async function initializeDeposited(
