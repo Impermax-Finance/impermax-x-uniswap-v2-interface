@@ -300,7 +300,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
           allowance={floatXIMXAllowance}
           error={!!errors[UNSTAKING_AMOUNT]}
           helperText={errors[UNSTAKING_AMOUNT]?.message}
-          tokenUnit='xIMX'
+          unitName='xIMX'
           walletActive={active}
           disabled={!xIMXAllowance || !xIMXBalance} />
         {active ? (

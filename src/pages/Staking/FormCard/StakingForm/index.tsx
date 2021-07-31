@@ -300,7 +300,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
           allowance={floatIMXAllowance}
           error={!!errors[STAKING_AMOUNT]}
           helperText={errors[STAKING_AMOUNT]?.message}
-          tokenUnit='IMX'
+          unitName='IMX'
           walletActive={active}
           disabled={!imxAllowance || !imxBalance} />
         {active ? (

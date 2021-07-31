@@ -9,7 +9,7 @@ interface CustomProps {
   allowance: number | undefined;
   error?: boolean;
   helperText?: React.ReactNode | string;
-  tokenUnit: string;
+  unitName: string;
   walletActive: boolean;
 }
 
@@ -19,7 +19,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
   balance,
   error,
   helperText,
-  tokenUnit,
+  unitName,
   walletActive,
   ...rest
 }, ref): JSX.Element => {
@@ -28,13 +28,28 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
     balanceLabel =
       balance === undefined ?
         'Loading...' :
-        `${balance} ${tokenUnit}`;
+        `${balance} ${unitName}`;
   } else {
     balanceLabel = '-';
   }
 
   return (
-    <div className='space-y-0.5'>
+    <div
+      className={clsx(
+        'space-y-0.5',
+        'flex',
+        'flex-col'
+      )}>
+      <TokenAmountFieldHelperText
+        style={{
+          minWidth: 120
+        }}
+        className={clsx(
+          'self-end',
+          'inline-block'
+        )}>
+        Available: {balanceLabel}
+      </TokenAmountFieldHelperText>
       <div
         className={clsx(
           'flex',
@@ -47,6 +62,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
             'text-2xl',
             'shadow-none',
             'rounded-r-none',
+            'text-right',
             className
           )}
           title='Token Amount'
@@ -61,17 +77,18 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
           {...rest} />
         <div
           style={{
-            minWidth: 160
+            minWidth: 60
           }}
           className={clsx(
             'rounded-r-md',
             'inline-flex',
-            'flex-col',
+            'flex',
             'justify-center',
+            'items-center',
             'px-3',
             'py-2',
             'text-textSecondary',
-            'text-xs',
+            'text-sm',
             'border',
             'border-l-0',
             'border-gray-300',
@@ -84,7 +101,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
               'truncate',
               'font-medium'
             )}>
-            {`Balance: ${balanceLabel}`}
+            {unitName}
           </span>
         </div>
       </div>
