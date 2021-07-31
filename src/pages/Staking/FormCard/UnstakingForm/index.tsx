@@ -251,9 +251,10 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     return undefined;
   };
 
-  let approved;
-  let floatXIMXBalance;
-  let floatXIMXAllowance;
+  let approved: boolean | undefined;
+  let floatXIMXBalance: number | undefined;
+  let floatXIMXAllowance: number | undefined;
+  let submitButtonText: string | undefined;
   if (xIMXBalanceSuccess && xIMXAllowanceSuccess) {
     if (xIMXAllowance === undefined) {
       throw new Error('Invalid xIMX allowance!');
@@ -263,17 +264,21 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
     }
 
     approved = xIMXAllowance.gt(Zero);
+    submitButtonText = approved ? 'Unstake' : 'Approve';
     floatXIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXBalance, X_IMX_DECIMALS)), 2);
     floatXIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXAllowance, X_IMX_DECIMALS)), 2);
-  }
-
-  let submitButtonText;
-  if (xIMXBalanceSuccess && xIMXAllowanceSuccess) {
-    submitButtonText = approved ? 'Unstake' : 'Approve';
   }
   if (xIMXBalanceIdle || xIMXBalanceLoading || xIMXAllowanceIdle || xIMXAllowanceLoading) {
     submitButtonText = 'Loading...';
   }
+
+  const inputMaxValue = () => {
+    if (!floatXIMXBalance) return;
+
+    reset({
+      [UNSTAKING_AMOUNT]: floatXIMXBalance.toString()
+    });
+  };
 
   return (
     <>
@@ -296,6 +301,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
             },
             validate: value => validateForm(value)
           })}
+          inputMaxValue={inputMaxValue}
           balance={floatXIMXBalance}
           allowance={floatXIMXAllowance}
           error={!!errors[UNSTAKING_AMOUNT]}

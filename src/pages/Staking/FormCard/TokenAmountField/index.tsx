@@ -3,8 +3,10 @@ import * as React from 'react';
 import clsx from 'clsx';
 
 import ImpermaxInput, { Props as ImpermaxInputProps } from 'components/UI/ImpermaxInput';
+import ImpermaxMirageContainedButton from 'components/buttons/ImpermaxMirageContainedButton';
 
 interface CustomProps {
+  inputMaxValue: () => void;
   balance: number | undefined;
   allowance: number | undefined;
   error?: boolean;
@@ -16,6 +18,7 @@ interface CustomProps {
 type Ref = HTMLInputElement;
 const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>(({
   className,
+  inputMaxValue,
   balance,
   error,
   helperText,
@@ -53,8 +56,23 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
       <div
         className={clsx(
           'flex',
-          'rounded-md'
+          'rounded-md',
+          'relative'
         )}>
+        <ImpermaxMirageContainedButton
+          onClick={inputMaxValue}
+          className={clsx(
+            'absolute',
+            'top-1/2',
+            'transform',
+            '-translate-y-1/2',
+            'left-0',
+            'ml-3',
+            'h-8',
+            '!px-2'
+          )}>
+          MAX
+        </ImpermaxMirageContainedButton>
         <ImpermaxInput
           ref={ref}
           className={clsx(

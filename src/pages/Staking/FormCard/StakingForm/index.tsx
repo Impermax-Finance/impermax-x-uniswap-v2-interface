@@ -251,9 +251,10 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     return undefined;
   };
 
-  let approved;
-  let floatIMXBalance;
-  let floatIMXAllowance;
+  let approved: boolean | undefined;
+  let floatIMXBalance: number | undefined;
+  let floatIMXAllowance: number | undefined;
+  let submitButtonText: string | undefined;
   if (imxBalanceSuccess && imxAllowanceSuccess) {
     if (imxBalance === undefined) {
       throw new Error('Invalid IMX balance!');
@@ -263,17 +264,21 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
     }
 
     approved = imxAllowance.gt(Zero);
+    submitButtonText = approved ? 'Stake' : 'Approve';
     floatIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(imxBalance, IMX_DECIMALS)), 2);
     floatIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(imxAllowance, IMX_DECIMALS)), 2);
-  }
-
-  let submitButtonText;
-  if (imxBalanceSuccess && imxAllowanceSuccess) {
-    submitButtonText = approved ? 'Stake' : 'Approve';
   }
   if (imxBalanceIdle || imxBalanceLoading || imxAllowanceIdle || imxAllowanceLoading) {
     submitButtonText = 'Loading...';
   }
+
+  const inputMaxValue = () => {
+    if (!floatIMXBalance) return;
+
+    reset({
+      [STAKING_AMOUNT]: floatIMXBalance.toString()
+    });
+  };
 
   return (
     <>
@@ -296,6 +301,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
             },
             validate: value => validateForm(value)
           })}
+          inputMaxValue={inputMaxValue}
           balance={floatIMXBalance}
           allowance={floatIMXAllowance}
           error={!!errors[STAKING_AMOUNT]}
