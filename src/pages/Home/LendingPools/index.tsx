@@ -20,7 +20,7 @@ import {
   LendingPoolData
 } from 'types/interfaces';
 import apolloFetcher from 'services/apollo-fetcher';
-import { IMPERMAX_SUBGRAPH_URLS } from 'config/web3/subgraph';
+import { IMPERMAX_SUBGRAPH_URLS } from 'config/web3/subgraphs';
 import { BREAKPOINTS } from 'utils/constants/styles';
 import STATUSES from 'utils/constants/statuses';
 

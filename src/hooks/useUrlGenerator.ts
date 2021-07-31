@@ -7,7 +7,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { getAddress } from '@ethersproject/address';
 
-import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-ethes';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 import { PoolTokenType } from '../types/interfaces';
 import { useUnderlyingAddress } from './useData';
 

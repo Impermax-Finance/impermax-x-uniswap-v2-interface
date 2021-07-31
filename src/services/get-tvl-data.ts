@@ -2,7 +2,7 @@
 import gql from 'graphql-tag';
 
 import apolloFetcher from './apollo-fetcher';
-import { IMPERMAX_SUBGRAPH_URLS } from 'config/web3/subgraph';
+import { IMPERMAX_SUBGRAPH_URLS } from 'config/web3/subgraphs';
 import { TvlData } from 'types/interfaces';
 
 const query = gql`{

@@ -2,7 +2,7 @@
 import { Address, PoolTokenType, Borrowable } from '../types/interfaces';
 import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
-import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-ethes';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 import toAPY from 'utils/helpers/web3/to-apy';
 import getPairAddress from 'utils/helpers/web3/get-pair-address';
 

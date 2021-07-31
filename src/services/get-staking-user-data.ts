@@ -2,7 +2,7 @@
 import gql from 'graphql-tag';
 
 import apolloFetcher from './apollo-fetcher';
-import { IMX_STAKING_SUBGRAPH_URLS } from 'config/web3/subgraph';
+import { IMX_STAKING_SUBGRAPH_URLS } from 'config/web3/subgraphs';
 
 interface StakingUserData {
   ximxBalance: string;

@@ -22,7 +22,7 @@ import {
   IMPERMAX_SUBGRAPH_URLS,
   UNISWAP_SUBGRAPH_URL,
   BLOCKLYTICS_SUBGRAPH_URL
-} from 'config/web3/subgraph';
+} from 'config/web3/subgraphs';
 
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;
 const UNISWAP_FEE = 0.003;
