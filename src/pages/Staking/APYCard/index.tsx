@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { useQuery } from 'react-query';
 
 import ErrorFallback from 'components/ErrorFallback';
+import { CHAIN_IDS } from 'config/web3/chains';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
 import xIMXDataFetcher, {
@@ -72,8 +73,7 @@ const APYCard = ({
   ...rest
 }: React.ComponentPropsWithRef<'dl'>): JSX.Element => {
   const {
-    chainId,
-    active
+    chainId = CHAIN_IDS.ETHEREUM_MAIN_NET
   } = useWeb3React<Web3Provider>();
 
   const {
@@ -110,41 +110,35 @@ const APYCard = ({
   );
   useErrorHandler(reservesDistributorDataError);
 
-  let stakingAPYLabel;
-  let totalIMXStakedLabel;
-  let totalIMXDistributedLabel;
-  if (active) {
-    if (xIMXDataLoading) {
-      stakingAPYLabel = 'Loading...';
-      totalIMXStakedLabel = 'Loading...';
-    } else {
-      if (xIMXData === undefined) {
-        throw new Error('Something went wrong!');
-      }
-
-      const xIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
-      stakingAPYLabel = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
-      stakingAPYLabel = formatNumberWithComma(stakingAPYLabel);
-      stakingAPYLabel = `${stakingAPYLabel} %`;
-
-      totalIMXStakedLabel = formatNumberWithFixedDecimals(Number(xIMXData.totalBalance), 2);
-      totalIMXStakedLabel = formatNumberWithComma(totalIMXStakedLabel);
-    }
-
-    if (reservesDistributorDataLoading) {
-      totalIMXDistributedLabel = 'Loading...';
-    } else {
-      if (reservesDistributorData === undefined) {
-        throw new Error('Something went wrong!');
-      }
-
-      totalIMXDistributedLabel = formatNumberWithFixedDecimals(Number(reservesDistributorData.distributed), 2);
-      totalIMXDistributedLabel = formatNumberWithComma(totalIMXDistributedLabel);
-    }
+  let stakingAPYLabel: string | number = '-';
+  let totalIMXStakedLabel: string | number = '-';
+  let totalIMXDistributedLabel: string | number = '-';
+  if (xIMXDataLoading) {
+    stakingAPYLabel = 'Loading...';
+    totalIMXStakedLabel = 'Loading...';
   } else {
-    stakingAPYLabel = '-';
-    totalIMXStakedLabel = '-';
-    totalIMXDistributedLabel = '-';
+    if (xIMXData === undefined) {
+      throw new Error('Something went wrong!');
+    }
+
+    const xIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
+    stakingAPYLabel = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
+    stakingAPYLabel = formatNumberWithComma(stakingAPYLabel);
+    stakingAPYLabel = `${stakingAPYLabel} %`;
+
+    totalIMXStakedLabel = formatNumberWithFixedDecimals(Number(xIMXData.totalBalance), 2);
+    totalIMXStakedLabel = formatNumberWithComma(totalIMXStakedLabel);
+  }
+
+  if (reservesDistributorDataLoading) {
+    totalIMXDistributedLabel = 'Loading...';
+  } else {
+    if (reservesDistributorData === undefined) {
+      throw new Error('Something went wrong!');
+    }
+
+    totalIMXDistributedLabel = formatNumberWithFixedDecimals(Number(reservesDistributorData.distributed), 2);
+    totalIMXDistributedLabel = formatNumberWithComma(totalIMXDistributedLabel);
   }
 
   return (

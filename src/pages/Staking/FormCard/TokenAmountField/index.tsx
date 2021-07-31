@@ -32,7 +32,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
     balanceLabel =
       balance === undefined ?
         'Loading...' :
-        `${formatNumberWithComma(balance)} ${unitName}`;
+        formatNumberWithComma(balance);
   } else {
     balanceLabel = '-';
   }
@@ -52,7 +52,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
           'self-end',
           'inline-block'
         )}>
-        Available: {balanceLabel}
+        Available: {balanceLabel} {unitName}
       </TokenAmountFieldHelperText>
       <div
         className={clsx(

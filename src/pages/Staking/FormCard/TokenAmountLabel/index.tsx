@@ -11,6 +11,7 @@ import { useQuery } from 'react-query';
 
 import ImpermaxJadeBadge from 'components/badges/ImpermaxJadeBadge';
 import ErrorFallback from 'components/ErrorFallback';
+import { CHAIN_IDS } from 'config/web3/chains';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import xIMXDataFetcher, {
   XIMXData,
@@ -45,8 +46,7 @@ const TokenAmountLabel = ({
   ...rest
 }: CustomProps & Omit<React.ComponentPropsWithRef<'label'>, 'children'>): JSX.Element => {
   const {
-    chainId,
-    active
+    chainId = CHAIN_IDS.ETHEREUM_MAIN_NET
   } = useWeb3React<Web3Provider>();
 
   const {
@@ -65,20 +65,16 @@ const TokenAmountLabel = ({
   );
   useErrorHandler(xIMXDataError);
 
-  let xIMXRateLabel;
-  if (active) {
-    if (xIMXDataLoading) {
-      xIMXRateLabel = 'Loading...';
-    } else {
-      if (xIMXData === undefined) {
-        throw new Error('Something went wrong!');
-      }
-
-      xIMXRateLabel = Number(xIMXData.exchangeRate);
-      xIMXRateLabel = formatNumberWithFixedDecimals(xIMXRateLabel, 5);
-    }
+  let xIMXRateLabel: string | number = '-';
+  if (xIMXDataLoading) {
+    xIMXRateLabel = 'Loading...';
   } else {
-    xIMXRateLabel = '-';
+    if (xIMXData === undefined) {
+      throw new Error('Something went wrong!');
+    }
+
+    xIMXRateLabel = Number(xIMXData.exchangeRate);
+    xIMXRateLabel = formatNumberWithFixedDecimals(xIMXRateLabel, 5);
   }
 
   return (
