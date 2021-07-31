@@ -40,12 +40,11 @@ const ChainConnect = (): JSX.Element | null => {
         }}
         onClick={handleChainModalOpen}
         startIcon={
+          // TODO: should use `ImpermaxPicture`
           <ImpermaxImage
             className='rounded'
-            style={{
-              width: 18,
-              height: 18
-            }}
+            width={18}
+            height={18}
             src={CHAIN_ICON_PATHS[chainId]}
             alt='Switch Chain' />
         }>

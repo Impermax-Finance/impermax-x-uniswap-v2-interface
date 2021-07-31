@@ -13,7 +13,7 @@ import {
   Changes,
   NO_CHANGES
 } from '../types/interfaces';
-import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 
 // Exchange rate
 export async function initializeExchangeRate(
@@ -33,42 +33,37 @@ export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress
   return cache.exchangeRate;
 }
 
-// Available Balance
-export async function initializeAvailableBalance(
+// Token Available Balance
+export async function initializeTokenBalance(
   this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  poolTokenType: PoolTokenType
+  tokenAddress: Address
 ) : Promise<number> {
-  const [, token] = await this.getContracts(uniswapV2PairAddress, poolTokenType);
-  const wethAddress = WETH_ADDRESSES[this.chainId];
+  const token = await this.getToken(tokenAddress);
+  const wethAddress = W_ETH_ADDRESSES[this.chainId];
   if (token.address === wethAddress) {
     const bigBalance = await this.library.getBalance(this.account);
-    const availableBalance = parseFloat(formatUnits(bigBalance)) / this.dust;
-    return availableBalance;
+    return parseFloat(formatUnits(bigBalance)) / this.dust;
   }
-
   const balance = await token.balanceOf(this.account);
-
-  return (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) / this.dust;
+  return (await this.normalizeToken(tokenAddress, balance)) / this.dust;
 }
-
+export async function getTokenBalance(
+  this: ImpermaxRouter,
+  tokenAddress: Address
+) : Promise<number> {
+  const cache = this.getTokenCache(tokenAddress);
+  if (!cache.balance) {
+    cache.balance = this.initializeTokenBalance(tokenAddress);
+  }
+  return cache.balance;
+}
 export async function getAvailableBalance(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
   poolTokenType: PoolTokenType
 ) : Promise<number> {
-  // TODO: should handle cache via an independent mechanism
-  const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
-  if (!cache.availableBalance) {
-    cache.availableBalance = this.initializeAvailableBalance(uniswapV2PairAddress, poolTokenType);
-  }
-  return cache.availableBalance;
-}
-
-export async function getAvailableBalanceUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const availableBalance = await this.getAvailableBalance(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return availableBalance * tokenPrice;
+  const tokenAddress = await this.getTokenAddress(uniswapV2PairAddress, poolTokenType);
+  return this.getTokenBalance(tokenAddress);
 }
 
 // Deposited

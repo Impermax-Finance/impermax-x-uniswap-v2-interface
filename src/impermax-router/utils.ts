@@ -7,9 +7,24 @@ import ImpermaxRouter from '.';
 import { Address, PoolTokenType } from '../types/interfaces';
 import { BigNumber } from '@ethersproject/bignumber';
 
-export async function normalize(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, amount: number) : Promise<number> {
+export async function normalize(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType,
+  amount: number
+) : Promise<number> {
   // eslint-disable-next-line no-invalid-this
-  const decimals = await this.subgraph.getDecimals(uniswapV2PairAddress, poolTokenType);
+  const decimals = await this.getDecimals(uniswapV2PairAddress, poolTokenType);
+  return amount / Math.pow(10, decimals);
+}
+
+export async function normalizeToken(
+  this: ImpermaxRouter,
+  tokenAddress: Address,
+  amount: number
+) : Promise<number> {
+  // eslint-disable-next-line no-invalid-this
+  const decimals = await this.getTokenDecimals(tokenAddress);
   return amount / Math.pow(10, decimals);
 }
 

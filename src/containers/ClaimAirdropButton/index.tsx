@@ -10,6 +10,7 @@ import getAirdropData from 'services/get-airdrop-data';
 import { formatAmount } from 'utils/format';
 import MerkleDistributorJSON from 'abis/contracts/IMerkleDistributor.json';
 import { MERKLE_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/merkle-distributors';
+import { IMX_DECIMALS } from 'config/web3/contracts/imxes';
 import { useTransactionAdder } from 'store/transactions/hooks';
 import { AirdropData } from 'types/airdrop';
 import STATUSES from 'utils/constants/statuses';
@@ -29,7 +30,7 @@ const useMerkleDistributorContract = () => {
   const merkleDistributorContractAddress = MERKLE_DISTRIBUTOR_ADDRESSES[chainId];
 
   if (!merkleDistributorContractAddress) {
-    throw new Error('Undefined merkle distributor contract address!');
+    throw new Error('Invalid merkle distributor contract address!');
   }
 
   const merkleDistributorContract =
@@ -107,7 +108,7 @@ const ClaimAirdropButton = (): JSX.Element | null => {
       const receipt = await tx.wait();
 
       // const amount = parseFloat(airdropData.amount.toString()) / 1e18; // TODO: update other cases
-      const amount = parseFloat(formatUnits(airdropData.amount));
+      const amount = parseFloat(formatUnits(airdropData.amount, IMX_DECIMALS));
       const summary = `Claim ${formatAmount(amount)} IMX`;
       addTransaction({ hash: receipt.transactionHash }, { summary });
       setClaimStatus(STATUSES.RESOLVED);
@@ -129,7 +130,7 @@ const ClaimAirdropButton = (): JSX.Element | null => {
       }}
       pending={claimStatus === STATUSES.PENDING}
       onClick={handleClaim}>
-      Claim {formatAmount(parseFloat(formatUnits(airdropData.amount)))} IMX
+      Claim {formatAmount(parseFloat(formatUnits(airdropData.amount, IMX_DECIMALS)))} IMX
     </ImpermaxJadeContainedButton>
   );
 };

@@ -25,7 +25,6 @@ import {
   ImpermaxRouterConfigInterface,
   FactoryContract,
   SimpleUniswapOracleContract,
-  AirdropData,
   ClaimAggregatorContract,
   ClaimEvent,
   ClaimableContract,
@@ -39,10 +38,10 @@ import * as interactions from './interactions';
 import * as account from './account';
 import * as imx from './imx';
 import Subgraph from 'subgraph';
-import { ROUTER_ADDRESSES } from 'config/web3/contracts/router';
-import { FACTORY_ADDRESSES } from 'config/web3/contracts/factory';
-import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factory';
-import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracle';
+import { ROUTER_ADDRESSES } from 'config/web3/contracts/routers';
+import { FACTORY_ADDRESSES } from 'config/web3/contracts/factories';
+import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
+import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracles';
 import { CLAIM_AGGREGATOR_ADDRESSES } from 'config/web3/contracts/claim-aggregators';
 
 class ImpermaxRouter {
@@ -71,7 +70,6 @@ class ImpermaxRouter {
       poolToken?: {
         [key in PoolTokenType]?: {
           exchangeRate?: Promise<number>,
-          availableBalance?: Promise<number>,
           deposited?: Promise<number>,
           borrowed?: Promise<number>,
           rewardSpeed?: Promise<number>,
@@ -80,8 +78,12 @@ class ImpermaxRouter {
       },
     }
   };
-  imxCache: {
-    airdropData?: AirdropData,
+  tokenCache: {
+    [key in Address]?: {
+      token?: Promise<ERC20>,
+      decimals?: Promise<number>,
+      balance?: Promise<number>,
+    }
   };
   claimableCache: {
     [key in Address]?: {
@@ -103,6 +105,7 @@ class ImpermaxRouter {
     this.claimAggregator = this.newClaimAggregator(CLAIM_AGGREGATOR_ADDRESSES[config.chainId]);
     this.priceInverted = config.priceInverted;
     this.lendingPoolCache = {};
+    this.tokenCache = {};
     this.imxCache = {};
     this.claimableCache = {};
   }
@@ -116,31 +119,31 @@ class ImpermaxRouter {
   }
 
   newSimpleUniswapOracle(address: Address): Contract {
-    return new Contract(address, SimpleUniswapOracleJSON.abi, this.library);
+    return new Contract(address, SimpleUniswapOracleJSON.abi, this.library.getSigner(this.account));
   }
 
   newUniswapV2Pair(address: Address): Contract {
-    return new Contract(address, UniswapV2PairJSON.abi, this.library);
+    return new Contract(address, UniswapV2PairJSON.abi, this.library.getSigner(this.account));
   }
 
   newUniswapV2Factory(address: Address): Contract {
-    return new Contract(address, UniswapV2FactoryJSON.abi, this.library);
+    return new Contract(address, UniswapV2FactoryJSON.abi, this.library.getSigner(this.account));
   }
 
   newERC20(address: Address): Contract {
-    return new Contract(address, ERC20JSON.abi, this.library);
+    return new Contract(address, ERC20JSON.abi, this.library.getSigner(this.account));
   }
 
   newCollateral(address: Address): Contract {
-    return new Contract(address, CollateralSON.abi, this.library);
+    return new Contract(address, CollateralSON.abi, this.library.getSigner(this.account));
   }
 
   newBorrowable(address: Address): Contract {
-    return new Contract(address, BorrowableJSON.abi, this.library);
+    return new Contract(address, BorrowableJSON.abi, this.library.getSigner(this.account));
   }
 
   newFarmingPool(address: Address): Contract {
-    return new Contract(address, FarmingPoolJSON.abi, this.library);
+    return new Contract(address, FarmingPoolJSON.abi, this.library.getSigner(this.account));
   }
 
   newClaimAggregator(address: Address): Contract {
@@ -157,13 +160,16 @@ class ImpermaxRouter {
     this.router = this.newRouter(this.router.address);
     this.factory = this.newFactory(this.factory.address);
     this.simpleUniswapOracle = this.newSimpleUniswapOracle(this.simpleUniswapOracle.address);
+    this.claimAggregator = this.newClaimAggregator(this.claimAggregator.address);
     this.cleanCache();
   }
 
   cleanCache(): void {
     this.lendingPoolCache = {};
+    this.tokenCache = {};
     this.imxCache = {};
     this.claimableCache = {};
+    console.log('[ImpermaxRouter cleanCache]');
   }
 
   setPriceInverted(priceInverted: boolean): void {
@@ -173,23 +179,28 @@ class ImpermaxRouter {
   // Contracts
   public initializeLendingPool = contracts.initializeLendingPool;
   public initializeClaimable = contracts.initializeClaimable;
+  public initializeToken = contracts.initializeToken;
   public getLendingPoolCache = contracts.getLendingPoolCache;
   public getClaimableCache = contracts.getClaimableCache;
+  public getTokenCache = contracts.getTokenCache;
   public getLendingPool = contracts.getLendingPool;
   public getContracts = contracts.getContracts;
   public getPoolToken = contracts.getPoolToken;
-  public getToken = contracts.getToken;
   public getFarmingPool = contracts.getFarmingPool;
   public getClaimable = contracts.getClaimable;
+  public getToken = contracts.getToken;
   public getPoolTokenAddress = contracts.getPoolTokenAddress;
   public getTokenAddress = contracts.getTokenAddress;
 
   // Fetchers
   public getPoolTokenCache = fetchers.getPoolTokenCache;
+  public initializeTokenDecimals = fetchers.initializeTokenDecimals;
   public initializeReserves = fetchers.initializeReserves;
   public initializeLPTotalSupply = fetchers.initializeLPTotalSupply;
   public initializePriceDenomLP = fetchers.initializePriceDenomLP;
   public initializeTWAPPrice = fetchers.initializeTWAPPrice;
+  public getTokenDecimals = fetchers.getTokenDecimals;
+  public getDecimals = fetchers.getDecimals;
   public getReserves = fetchers.getReserves;
   public getLPTotalSupply = fetchers.getLPTotalSupply;
   public getPriceDenomLP = fetchers.getPriceDenomLP;
@@ -205,12 +216,12 @@ class ImpermaxRouter {
 
   // Account
   public initializeExchangeRate = account.initializeExchangeRate;
-  public initializeAvailableBalance = account.initializeAvailableBalance;
+  public initializeTokenBalance = account.initializeTokenBalance;
   public initializeBorrowed = account.initializeBorrowed;
   public initializeDeposited = account.initializeDeposited;
   public getExchangeRate = account.getExchangeRate;
+  public getTokenBalance = account.getTokenBalance;
   public getAvailableBalance = account.getAvailableBalance;
-  public getAvailableBalanceUSD = account.getAvailableBalanceUSD;
   public getBorrowed = account.getBorrowed;
   public getBorrowedUSD = account.getBorrowedUSD;
   public getDeposited = account.getDeposited;
@@ -236,7 +247,7 @@ class ImpermaxRouter {
   public getMaxDeleverage = account.getMaxDeleverage;
 
   // IMX
-  public initializeFarmingShares = imx.initializeFarmingShares
+  public initializeFarmingShares = imx.initializeFarmingShares;
   public initializeAvailableReward = imx.initializeAvailableReward;
   public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
@@ -246,6 +257,7 @@ class ImpermaxRouter {
   public getAvailableClaimable = imx.getAvailableClaimable;
 
   // Utils
+  public normalizeToken = utils.normalizeToken;
   public normalize = utils.normalize;
   public getDeadline = utils.getDeadline;
 

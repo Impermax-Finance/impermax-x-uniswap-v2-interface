@@ -6,7 +6,6 @@
 import {
   LendingPoolData,
   Address,
-  TvlData,
   UserData
 } from 'types/interfaces';
 import * as initializer from './initializer';
@@ -21,7 +20,6 @@ class Subgraph {
   usersData: {
     [key in Address]?: Promise<UserData>
   };
-  tvlData: Promise<TvlData>
 
   constructor(config: SubgraphConfigInterface) {
     this.chainId = config.chainId;
@@ -31,7 +29,6 @@ class Subgraph {
   cleanCache(): void {
     this.lendingPoolsData = null;
     this.usersData = null;
-    this.tvlData = null;
   }
 
   // Fetchers

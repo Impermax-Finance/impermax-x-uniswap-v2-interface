@@ -4,10 +4,9 @@ import clsx from 'clsx';
 const Panel = ({
   className,
   ...rest
-}: React.ComponentPropsWithRef<'div'>): JSX.Element => (
+}: Props): JSX.Element => (
   <div
     className={clsx(
-      'bg-white',
       'shadow',
       'overflow-hidden',
       'md:rounded',
@@ -15,5 +14,7 @@ const Panel = ({
     )}
     {...rest} />
 );
+
+export type Props = React.ComponentPropsWithRef<'div'>;
 
 export default Panel;

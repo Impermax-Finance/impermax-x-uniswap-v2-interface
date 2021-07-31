@@ -7,7 +7,7 @@ import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
 import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
-import toAPY from 'services/to-apy';
+import toAPY from 'utils/helpers/web3/to-apy';
 import getPairAddress from 'utils/helpers/web3/get-pair-address';
 import {
   formatUSD,
@@ -17,8 +17,8 @@ import {
   PAGES,
   PARAMETERS
 } from 'utils/constants/links';
-import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
-import { IMX_ADDRESSES } from 'config/web3/contracts/imx';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import {
   Address,
   PoolTokenType,
@@ -176,7 +176,7 @@ const getLendingPoolSymbol = (
   chainID: number
 ): string => {
   const underlying = lendingPool[poolTokenType].underlying;
-  const wethAddress = WETH_ADDRESSES[chainID];
+  const wethAddress = W_ETH_ADDRESSES[chainID];
   let symbol;
   if (underlying.id === wethAddress.toLowerCase()) {
     symbol = 'ETH';
@@ -258,7 +258,7 @@ const getLendingPoolTokenIcon = (
   const tokenAddress = lendingPool[poolTokenType].underlying.id;
   const convertedAddress = getAddress(tokenAddress);
 
-  return `/assets/images/token-icons/${convertedAddress}.png`;
+  return `/assets/images/token-logos/${convertedAddress}.png`;
 };
 
 const LendingPool = ({
@@ -279,7 +279,7 @@ const LendingPool = ({
   const borrowAPYB = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
 
   const imxAddress = IMX_ADDRESSES[chainID];
-  const wethAddress = WETH_ADDRESSES[chainID];
+  const wethAddress = W_ETH_ADDRESSES[chainID];
   const imxPair = getPairAddress(wethAddress, imxAddress, chainID).toLowerCase();
   const aAddress = lendingPoolsData[imxPair][PoolTokenType.BorrowableA].underlying.id;
   const poolTokenType =
@@ -336,6 +336,7 @@ const LendingPool = ({
       className='block'>
       <Panel
         className={clsx(
+          'bg-white',
           'px-4',
           'py-5',
           'md:p-6',

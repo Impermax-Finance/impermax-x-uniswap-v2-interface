@@ -64,6 +64,18 @@ const IMPERMAX_MERCURY = Object.freeze({
   800: '#8b8b8b',
   900: '#717171'
 });
+const IMPERMAX_MIRAGE = Object.freeze({
+  50: '#f3f3f4',
+  100: '#e7e8e9',
+  200: '#c4c5c9',
+  300: '#a0a3a9',
+  400: '#585d68',
+  500: '#111827',
+  600: '#0f1623',
+  700: '#0d121d',
+  800: '#0a0e17',
+  900: '#080c13'
+});
 
 module.exports = {
   purge: [
@@ -137,6 +149,19 @@ module.exports = {
           800: IMPERMAX_MERCURY[800],
           900: IMPERMAX_MERCURY[900]
         },
+        impermaxMirage: {
+          50: IMPERMAX_MIRAGE[50],
+          100: IMPERMAX_MIRAGE[100],
+          200: IMPERMAX_MIRAGE[200],
+          300: IMPERMAX_MIRAGE[300],
+          400: IMPERMAX_MIRAGE[400],
+          500: IMPERMAX_MIRAGE[500],
+          DEFAULT: IMPERMAX_MIRAGE[500],
+          600: IMPERMAX_MIRAGE[600],
+          700: IMPERMAX_MIRAGE[700],
+          800: IMPERMAX_MIRAGE[800],
+          900: IMPERMAX_MIRAGE[900]
+        },
         primary: {
           50: IMPERMAX_JADE[50],
           100: IMPERMAX_JADE[100],
@@ -147,8 +172,19 @@ module.exports = {
           600: IMPERMAX_JADE[600],
           700: IMPERMAX_JADE[700],
           800: IMPERMAX_JADE[800],
-          900: IMPERMAX_JADE[900],
-          contrastText: '#333333'
+          900: IMPERMAX_JADE[900]
+        },
+        secondary: {
+          50: IMPERMAX_CARNATION[50],
+          100: IMPERMAX_CARNATION[100],
+          200: IMPERMAX_CARNATION[200],
+          300: IMPERMAX_CARNATION[300],
+          400: IMPERMAX_CARNATION[400],
+          DEFAULT: IMPERMAX_CARNATION[500],
+          600: IMPERMAX_CARNATION[600],
+          700: IMPERMAX_CARNATION[700],
+          800: IMPERMAX_CARNATION[800],
+          900: IMPERMAX_CARNATION[900]
         }
       },
       backgroundColor: {
@@ -176,7 +212,8 @@ module.exports = {
         'first',
         'last'
       ],
-      margin: ['important']
+      margin: ['important'],
+      padding: ['important']
     }
   },
   plugins: [

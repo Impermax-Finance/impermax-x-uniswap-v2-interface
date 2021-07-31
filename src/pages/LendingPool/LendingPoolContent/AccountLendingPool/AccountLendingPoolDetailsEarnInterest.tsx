@@ -3,9 +3,6 @@
 // @ts-nocheck
 // TODO: >
 
-import { useContext } from 'react';
-import { LanguageContext } from 'contexts/LanguageProvider';
-import phrases from './translations';
 import { Row, Col } from 'react-bootstrap';
 import { formatUSD, formatPercentage } from '../../../../utils/format';
 import DetailsRow from '../../../../components/DetailsRow';
@@ -16,10 +13,6 @@ import { useSuppliedUSD, useAccountAPY } from '../../../../hooks/useData';
  */
 
 export default function AccountLendingPoolDetailsEarnInterest(): JSX.Element {
-  const languages = useContext(LanguageContext);
-  const language = languages.state.selected;
-  const t = (s: string) => (phrases[s][language]);
-
   const suppliedUSD = useSuppliedUSD();
   const accountAPY = useAccountAPY();
 
@@ -30,14 +23,14 @@ export default function AccountLendingPoolDetailsEarnInterest(): JSX.Element {
           sm={12}
           md={6}>
           <DetailsRow
-            name={t('Supply Balance')}
+            name='Supply Balance'
             value={formatUSD(suppliedUSD)} />
         </Col>
         <Col
           sm={12}
           md={6}>
           <DetailsRow
-            name={t('Net APY')}
+            name='Net APY'
             value={formatPercentage(accountAPY)} />
         </Col>
       </Row>

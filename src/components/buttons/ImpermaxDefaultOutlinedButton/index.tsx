@@ -79,7 +79,7 @@ const ImpermaxDefaultOutlinedButton = React.forwardRef<Ref, Props>(({
     </ImpermaxButtonBase>
   );
 });
-ImpermaxDefaultOutlinedButton.displayName = 'InterlayDefaultContainedButton';
+ImpermaxDefaultOutlinedButton.displayName = 'ImpermaxDefaultOutlinedButton';
 
 export type Props = CustomProps & ImpermaxButtonBaseProps;
 

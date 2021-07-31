@@ -3,9 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { useContext, useState } from 'react';
-import { LanguageContext } from 'contexts/LanguageProvider';
-import phrases from './translations';
+import { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import InlineAccountTokenInfo from './InlineAccountTokenInfo';
 import DepositInteractionModal from '../../../../components/InteractionModal/DepositInteractionModal';
@@ -15,10 +13,6 @@ import DisabledButtonHelper from '../../../../components/DisabledButtonHelper';
 import WithdrawInteractionModal from '../../../../components/InteractionModal/WithdrawInteractionModal';
 
 export default function AccountLendingPoolSupplyRow(): JSX.Element {
-  const languages = useContext(LanguageContext);
-  const language = languages.state.selected;
-  const t = (s: string) => (phrases[s][language]);
-
   const symbol = useSymbol();
   const deposited = useDeposited();
   const depositedUSD = useDepositedUSD();
@@ -38,7 +32,8 @@ export default function AccountLendingPoolSupplyRow(): JSX.Element {
             <Col className='token-icon'>
               <img
                 className='inline-block'
-                src={tokenIcon} />
+                src={tokenIcon}
+                alt='' />
             </Col>
             <Col className='token-name'>
               {`${symbol}`}
@@ -49,7 +44,7 @@ export default function AccountLendingPoolSupplyRow(): JSX.Element {
           md={4}
           className='inline-account-token-info-container'>
           <InlineAccountTokenInfo
-            name={t('Supplied')}
+            name='Supplied'
             symbol={symbol}
             value={deposited}
             valueUSD={depositedUSD} />
@@ -61,17 +56,21 @@ export default function AccountLendingPoolSupplyRow(): JSX.Element {
             <Col>
               <Button
                 variant='primary'
-                onClick={() => toggleDepositModal(true)}>{t('Supply')}
+                onClick={() => toggleDepositModal(true)}>
+                Supply
               </Button>
             </Col>
             <Col>
               {maxWithdrawable > 0 ? (
                 <Button
                   variant='primary'
-                  onClick={() => toggleWithdrawModal(true)}>{t('Withdraw')}
+                  onClick={() => toggleWithdrawModal(true)}>
+                  Withdraw
                 </Button>
               ) : (
-                <DisabledButtonHelper text={withdrawDisabledInfo}>{t('Withdraw')}</DisabledButtonHelper>
+                <DisabledButtonHelper text={withdrawDisabledInfo}>
+                  Withdraw
+                </DisabledButtonHelper>
               )}
             </Col>
           </Row>

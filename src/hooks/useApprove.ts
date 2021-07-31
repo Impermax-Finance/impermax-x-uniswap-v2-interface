@@ -28,12 +28,17 @@ export interface PermitData {
 }
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
-export default function useApprove(approvalType: ApprovalType, amount: BigNumber, invalidInput: boolean, poolTokenTypeArg?: PoolTokenType, deadline?: BigNumber): [ButtonState, () => Promise<void>, PermitData] {
+export default function useApprove(
+  approvalType: ApprovalType,
+  amount: BigNumber,
+  invalidInput: boolean,
+  poolTokenTypeArg?: PoolTokenType,
+  deadline?: BigNumber
+): [ButtonState, () => Promise<void>, PermitData] {
   const uniswapV2PairAddress = usePairAddress();
-  // TODO: <
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : usePoolToken();
-  // TODO: >
+  const poolTokenTypeContext = usePoolToken();
+  const poolTokenType = poolTokenTypeArg ?? poolTokenTypeContext;
+
   const impermaxRouter = useImpermaxRouter();
   const addTransaction = useTransactionAdder();
   const [pending, setPending] = useState<boolean>(false);
@@ -41,7 +46,9 @@ export default function useApprove(approvalType: ApprovalType, amount: BigNumber
   const currentAllowance = useAllowance(approvalType, pending, poolTokenType);
 
   const symbol = useSymbol();
-  const action = approvalType === ApprovalType.BORROW ? 'borrow' : approvalType === ApprovalType.POOL_TOKEN ? 'withdrawal' : 'transfer';
+  const action =
+    approvalType === ApprovalType.BORROW ? 'borrow' :
+      approvalType === ApprovalType.POOL_TOKEN ? 'withdrawal' : 'transfer';
   const summary = `Approve ${symbol} ${action}`;
 
   const approvalState: ButtonState = useMemo(() => {
@@ -58,22 +65,29 @@ export default function useApprove(approvalType: ApprovalType, amount: BigNumber
   const approve = useCallback(async (): Promise<void> => {
     if (approvalState !== ButtonState.Ready) return;
     setPending(true);
-    impermaxRouter.getPermitData(uniswapV2PairAddress, poolTokenType, approvalType, amount, deadline, async (permitData: PermitData) => {
+    impermaxRouter.getPermitData(approvalType, amount, deadline, async (permitData: PermitData) => {
       if (permitData) setPermitData(permitData);
       else {
         // Fallback to traditional approve if can't sign
         setPermitData(null);
         try {
-          await impermaxRouter.approve(uniswapV2PairAddress, poolTokenType, approvalType, APPROVE_AMOUNT, (hash: string) => {
+          await impermaxRouter.approve(approvalType, APPROVE_AMOUNT, (hash: string) => {
             addTransaction({ hash }, { summary });
-          });
+          }, uniswapV2PairAddress, poolTokenType);
         } catch (err) {
           console.error(err);
         }
       }
       setPending(false);
-    });
-  }, [approvalState, uniswapV2PairAddress, poolTokenType, addTransaction, amount, deadline]);
+    }, uniswapV2PairAddress, poolTokenType);
+  }, [
+    approvalState,
+    uniswapV2PairAddress,
+    poolTokenType,
+    addTransaction,
+    amount,
+    deadline
+  ]);
 
   return [approvalState, approve, permitData];
 }

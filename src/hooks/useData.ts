@@ -307,13 +307,6 @@ export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   return availableBalance;
 }
 
-export function useAvailableBalanceUSD(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [availableBalanceUSD, setAvailableBalanceUSD] = useState<number>(0);
-  useRouterCallback(async router => setAvailableBalanceUSD(await router.getAvailableBalanceUSD(uniswapV2PairAddress, poolTokenType)));
-  return availableBalanceUSD;
-}
-
 export function useCurrentLeverage(changes?: Changes) : number {
   const uniswapV2PairAddress = usePairAddress();
   const [leverage, setLeverage] = useState<number>(0);
@@ -451,13 +444,15 @@ export function useDeadline() : BigNumber {
   return deadline;
 }
 
-export function useToBigNumber(val: number, poolTokenTypeArg?: PoolTokenType) : BigNumber {
-  const decimals = useDecimals(poolTokenTypeArg);
+export function useToBigNumber(val: number, poolTokenTypeArg?: PoolTokenType, decimalsArg?: number) : BigNumber {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const decimals = decimalsArg ?? useDecimals(poolTokenTypeArg);
   return decimalToBalance(val, decimals);
 }
 
-export function useToNumber(amount: BigNumber, poolTokenTypeArg?: PoolTokenType) : number {
-  const decimals = useDecimals(poolTokenTypeArg);
+export function useToNumber(amount: BigNumber, poolTokenTypeArg?: PoolTokenType, decimalsArg?: number) : number {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const decimals = decimalsArg ?? useDecimals(poolTokenTypeArg);
   return parseFloat(amount.toString()) / Math.pow(10, decimals);
 }
 

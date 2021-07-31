@@ -20,6 +20,32 @@ export function getPoolTokenCache(
   return cache.poolToken[poolTokenType];
 }
 
+// Decimals
+export async function initializeTokenDecimals(
+  this: ImpermaxRouter,
+  tokenAddress: Address
+) : Promise<[number, number]> {
+  const token = await this.getToken(tokenAddress);
+  return parseInt(await token.decimals());
+}
+export async function getTokenDecimals(
+  this: ImpermaxRouter,
+  tokenAddress: Address
+) : Promise<number> {
+  const cache = this.getTokenCache(tokenAddress);
+  if (!cache.decimals) cache.decimals = this.initializeTokenDecimals(tokenAddress);
+  return cache.decimals;
+}
+export async function getDecimals(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address,
+  poolTokenType: PoolTokenType
+) : Promise<number> {
+  if (poolTokenType === PoolTokenType.Collateral) return 18;
+  const tokenAddress = await this.getTokenAddress(uniswapV2PairAddress, poolTokenType);
+  return this.getTokenDecimals(tokenAddress);
+}
+
 // Reserves
 export async function initializeReserves(
   this: ImpermaxRouter,

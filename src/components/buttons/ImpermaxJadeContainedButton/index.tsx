@@ -79,7 +79,7 @@ const ImpermaxJadeContainedButton = React.forwardRef<Ref, Props>(({
     </ImpermaxButtonBase>
   );
 });
-ImpermaxJadeContainedButton.displayName = 'InterlayDefaultContainedButton';
+ImpermaxJadeContainedButton.displayName = 'ImpermaxJadeContainedButton';
 
 export type Props = CustomProps & ImpermaxButtonBaseProps;
 

@@ -1,7 +1,7 @@
 
 import { BigNumber } from '@ethersproject/bignumber';
 
-import { AIRDROP_URLS } from 'config/web3/endpoints/airdrop';
+import { AIRDROP_URLS } from 'config/web3/endpoints/airdrops';
 import { AirdropData } from 'types/airdrop';
 
 /**

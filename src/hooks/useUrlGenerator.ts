@@ -7,7 +7,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { getAddress } from '@ethersproject/address';
 
-import { WETH_ADDRESSES } from 'config/web3/contracts/weth';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 import { PoolTokenType } from '../types/interfaces';
 import { useUnderlyingAddress } from './useData';
 
@@ -16,7 +16,7 @@ export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
   if (!tokenAddress) return '';
   const convertedAddress = getAddress(tokenAddress);
   try {
-    return `/assets/images/token-icons/${convertedAddress}.png`;
+    return `/assets/images/token-logos/${convertedAddress}.png`;
   } catch {
     // TODO: <
     // TODO: not working
@@ -27,7 +27,7 @@ export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
 
 export function useAddLiquidityUrl() : string {
   const { chainId } = useWeb3React<Web3Provider>();
-  const wethAddress = WETH_ADDRESSES[chainId];
+  const wethAddress = W_ETH_ADDRESSES[chainId];
   const tokenAAddress = useUnderlyingAddress(PoolTokenType.BorrowableA);
   const tokenBAddress = useUnderlyingAddress(PoolTokenType.BorrowableB);
   const addressA = tokenAAddress === wethAddress ? 'ETH' : tokenAAddress;

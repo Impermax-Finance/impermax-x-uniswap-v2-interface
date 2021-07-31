@@ -6,7 +6,7 @@ import apolloFetcher from './apollo-fetcher';
 import {
   BLOCKLYTICS_SUBGRAPH_URL,
   UNISWAP_SUBGRAPH_URL
-} from 'config/web3/subgraph';
+} from 'config/web3/subgraphs';
 import { Address } from 'types/interfaces';
 
 const SECONDS_IN_YEAR = 60 * 60 * 24 * 365;

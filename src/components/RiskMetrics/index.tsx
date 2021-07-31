@@ -3,9 +3,6 @@
 // @ts-nocheck
 // TODO: >
 
-import { useContext } from 'react';
-import { LanguageContext } from 'contexts/LanguageProvider';
-import phrases from './translations';
 import { formatLeverage } from '../../utils/format';
 import DetailsRow from '../DetailsRow';
 import { useCurrentLeverage } from '../../hooks/useData';
@@ -25,10 +22,6 @@ interface RiskMetricsProps {
  */
 
 export default function RiskMetrics({ changeBorrowedA, changeBorrowedB, changeCollateral, hideIfNull } : RiskMetricsProps): JSX.Element {
-  const languages = useContext(LanguageContext);
-  const language = languages.state.selected;
-  const t = (s: string) => (phrases[s][language]);
-
   const changes = changeBorrowedA || changeBorrowedB || changeCollateral ? {
     changeBorrowedA: changeBorrowedA ? changeBorrowedA : 0,
     changeBorrowedB: changeBorrowedB ? changeBorrowedB : 0,
@@ -47,7 +40,7 @@ export default function RiskMetrics({ changeBorrowedA, changeBorrowedB, changeCo
     <div>
       {changes ? (
         <DetailsRow
-          name={t('New Leverage')}
+          name='New Leverage'
           explanation={leverageExplanation}>
           {formatLeverage(currentLeverage)}
           <i className='change-arrow' />
@@ -55,14 +48,14 @@ export default function RiskMetrics({ changeBorrowedA, changeBorrowedB, changeCo
         </DetailsRow>
       ) : (
         <DetailsRow
-          name={t('Current Leverage')}
+          name='Current Leverage'
           explanation={leverageExplanation}>
           {formatLeverage(currentLeverage)}
         </DetailsRow>
       )}
       {changes ? (
         <DetailsRow
-          name={t('New Liquidation Prices')}
+          name='New Liquidation Prices'
           explanation={liquidationExplanation}>
           <LiquidationPrices />
           <i className='change-arrow' />
@@ -70,7 +63,7 @@ export default function RiskMetrics({ changeBorrowedA, changeBorrowedB, changeCo
         </DetailsRow>
       ) : (
         <DetailsRow
-          name={t('Liquidation Prices')}
+          name='Liquidation Prices'
           explanation={liquidationExplanation}>
           <LiquidationPrices />
         </DetailsRow>

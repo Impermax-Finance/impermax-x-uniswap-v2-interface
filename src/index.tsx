@@ -2,23 +2,39 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import { Web3ReactProvider } from '@web3-react/core';
+import { Provider } from 'react-redux';
+import {
+  QueryClientProvider,
+  QueryClient
+} from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import App from './App';
+import StakingApp from './StakingApp';
+import { IS_STAKING_APP } from 'config/general';
 import getLibrary from 'utils/helpers/web3/get-library';
-import store from './store';
 import reportWebVitals from './reportWebVitals';
+import store from './store';
 import './index.css';
+
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
     <Web3ReactProvider getLibrary={getLibrary}>
-      <Provider store={store}>
-        <Router>
-          <App />
-        </Router>
-      </Provider>
+      <Router>
+        <Provider store={store}>
+          {IS_STAKING_APP ? (
+            <QueryClientProvider client={queryClient}>
+              <StakingApp />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+          ) : (
+            <App />
+          )}
+        </Provider>
+      </Router>
     </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById('root')
