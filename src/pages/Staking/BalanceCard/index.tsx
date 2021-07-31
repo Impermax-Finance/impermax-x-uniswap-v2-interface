@@ -11,7 +11,6 @@ import { useQuery } from 'react-query';
 
 import Panel, { Props as PanelProps } from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
-import ImpermaxPicture from 'components/UI/ImpermaxPicture';
 import {
   X_IMX_ADDRESSES,
   X_IMX_DECIMALS
@@ -56,41 +55,16 @@ const BalanceItem = ({
       className={clsx(
         'flex',
         'items-center',
-        'space-x-4'
+        'space-x-1',
+        'text-xl',
+        'font-bold'
       )}>
-      <ImpermaxPicture
-        images={[
-          {
-            type: 'image/avif',
-            path: 'assets/images/ximx-logos/ximx-logo.avif'
-          },
-          {
-            type: 'image/webp',
-            path: 'assets/images/ximx-logos/ximx-logo.webp'
-          },
-          {
-            type: 'image/png',
-            path: 'assets/images/ximx-logos/ximx-logo.png'
-          }
-        ]}
-        width={36}
-        height={36}
-        alt='IMX' />
-      <div
-        className={clsx(
-          'inline-flex',
-          'flex-col',
-          'space-y-1'
-        )}>
-        <span
-          className={clsx(
-            'font-medium',
-            'text-xl'
-          )}>
-          {value}
-        </span>
-        <span className='font-medium'>{unitName}</span>
-      </div>
+      <span>
+        {value}
+      </span>
+      <span>
+        {unitName}
+      </span>
     </div>
   </div>
 );
@@ -226,7 +200,7 @@ const BalanceCard = ({
       className={clsx(
         'px-8',
         'py-7',
-        'space-y-4',
+        'space-y-8',
         'bg-white',
         className
       )}
