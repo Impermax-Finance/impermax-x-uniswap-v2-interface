@@ -62,7 +62,6 @@ const Description = ({
     className={clsx(
       'text-xl',
       'font-bold',
-      'text-impermaxAstral',
       className
     )}
     {...rest} />
