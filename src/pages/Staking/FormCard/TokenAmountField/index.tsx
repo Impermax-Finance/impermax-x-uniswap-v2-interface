@@ -4,6 +4,7 @@ import clsx from 'clsx';
 
 import ImpermaxInput, { Props as ImpermaxInputProps } from 'components/UI/ImpermaxInput';
 import ImpermaxMirageContainedButton from 'components/buttons/ImpermaxMirageContainedButton';
+import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
 
 interface CustomProps {
   inputMaxValue: () => void;
@@ -31,7 +32,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
     balanceLabel =
       balance === undefined ?
         'Loading...' :
-        `${balance} ${unitName}`;
+        `${formatNumberWithComma(balance)} ${unitName}`;
   } else {
     balanceLabel = '-';
   }
