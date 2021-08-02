@@ -46,8 +46,7 @@ const BalanceItem = ({
     <h4
       className={clsx(
         'text-xl',
-        'font-medium',
-        'text-textSecondary'
+        'font-medium'
       )}>
       {label}
     </h4>

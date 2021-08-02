@@ -50,7 +50,6 @@ const Term = ({
     className={clsx(
       'text-base',
       'font-medium',
-      'text-textSecondary',
       className
     )}
     {...rest} />
