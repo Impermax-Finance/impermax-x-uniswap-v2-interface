@@ -5,8 +5,7 @@ import { CHAIN_IDS } from 'config/web3/chains';
 
 const injected = new InjectedConnector({
   supportedChainIds: [
-    CHAIN_IDS.ETHEREUM_MAIN_NET,
-    CHAIN_IDS.ROPSTEN
+    CHAIN_IDS.ETHEREUM_MAIN_NET
   ]
 });
 
