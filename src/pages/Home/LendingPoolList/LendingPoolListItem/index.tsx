@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { getAddress } from '@ethersproject/address';
 
-import LendingPoolDesktopGridWrapper from './LendingPoolDesktopGridWrapper';
-import LendingPoolMobileGridWrapper from './LendingPoolMobileGridWrapper';
+import LendingPoolListItemDesktopGridWrapper from './LendingPoolListItemDesktopGridWrapper';
+import LendingPoolListItemMobileGridWrapper from './LendingPoolListItemMobileGridWrapper';
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import toAPY from 'utils/helpers/web3/to-apy';
@@ -27,7 +27,7 @@ import {
 
 const LEVERAGE = 5;
 
-interface PairCellCustomProps {
+interface TokenPairLabelCustomProps {
   tokenIconA: string;
   tokenIconB: string;
   symbolA: string;
@@ -40,7 +40,7 @@ const TokenPairLabel = ({
   symbolA,
   symbolB,
   className
-}: PairCellCustomProps & React.ComponentPropsWithRef<'div'>): JSX.Element => (
+}: TokenPairLabelCustomProps & React.ComponentPropsWithRef<'div'>): JSX.Element => (
   <div
     className={clsx(
       'flex',
@@ -162,13 +162,6 @@ const SetWrapper = ({
   </div>
 );
 
-interface Props {
-  chainID: number;
-  lendingPoolsData: { [key in Address]: LendingPoolData };
-  lendingPool: LendingPoolData;
-  greaterThanMd: boolean;
-}
-
 const getLendingPoolSymbol = (
   // TODO: should type properly
   lendingPool: any,
@@ -261,7 +254,14 @@ const getLendingPoolTokenIcon = (
   return `/assets/images/token-logos/${convertedAddress}.png`;
 };
 
-const LendingPool = ({
+interface Props {
+  chainID: number;
+  lendingPoolsData: { [key in Address]: LendingPoolData };
+  lendingPool: LendingPoolData;
+  greaterThanMd: boolean;
+}
+
+const LendingPoolListItem = ({
   chainID,
   lendingPoolsData,
   lendingPool,
@@ -343,7 +343,7 @@ const LendingPool = ({
           'hover:bg-gray-50'
         )}>
         {greaterThanMd ? (
-          <LendingPoolDesktopGridWrapper>
+          <LendingPoolListItemDesktopGridWrapper>
             <TokenPairLabel
               className='col-span-2'
               tokenIconA={tokenIconA}
@@ -384,10 +384,10 @@ const LendingPool = ({
               )}>
               {formatPercentage(leveragedAPY)}
             </Value>
-          </LendingPoolDesktopGridWrapper>
+          </LendingPoolListItemDesktopGridWrapper>
         ) : (
           <>
-            <LendingPoolMobileGridWrapper>
+            <LendingPoolListItemMobileGridWrapper>
               <TokenPairLabel
                 tokenIconA={tokenIconA}
                 tokenIconB={tokenIconB}
@@ -399,8 +399,8 @@ const LendingPool = ({
               <TokenLabel
                 tokenIcon={tokenIconB}
                 symbol={symbolB} />
-            </LendingPoolMobileGridWrapper>
-            <LendingPoolMobileGridWrapper
+            </LendingPoolListItemMobileGridWrapper>
+            <LendingPoolListItemMobileGridWrapper
               className={clsx(
                 'gap-y-1.5',
                 'mt-2.5'
@@ -448,7 +448,7 @@ const LendingPool = ({
                   {formatPercentage(leveragedAPY)}
                 </Value>
               </>
-            </LendingPoolMobileGridWrapper>
+            </LendingPoolListItemMobileGridWrapper>
           </>
         )}
       </Panel>
@@ -456,4 +456,4 @@ const LendingPool = ({
   );
 };
 
-export default LendingPool;
+export default LendingPoolListItem;

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import OverallStats from './OverallStats';
 import CreateNewMarketLinkButton from './CreateNewMarketLinkButton';
-import LendingPools from './LendingPools';
+import LendingPoolList from './LendingPoolList';
 
 const Home = (): JSX.Element => {
   return (
@@ -14,7 +14,7 @@ const Home = (): JSX.Element => {
       )}>
       <OverallStats />
       <CreateNewMarketLinkButton />
-      <LendingPools />
+      <LendingPoolList />
     </div>
   );
 };

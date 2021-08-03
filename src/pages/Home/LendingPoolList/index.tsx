@@ -10,8 +10,8 @@ import {
   withErrorBoundary
 } from 'react-error-boundary';
 
-import LendingPool from './LendingPool';
-import LendingPoolsHeader from './LendingPoolsHeader';
+import LendingPoolListItem from './LendingPoolListItem';
+import LendingPoolListHeader from './LendingPoolListHeader';
 import ErrorFallback from 'components/ErrorFallback';
 import LineLoadingSpinner from 'components/LineLoadingSpinner';
 import getUniswapAPYs from 'services/get-uniswap-apys';
@@ -81,7 +81,7 @@ const query = gql`{
   }
 }`;
 
-const LendingPools = (): JSX.Element | null => {
+const LendingPoolList = (): JSX.Element | null => {
   const { chainId } = useWeb3React<Web3Provider>();
 
   const greaterThanMd = useMedia(`(min-width: ${BREAKPOINTS.md})`);
@@ -155,11 +155,11 @@ const LendingPools = (): JSX.Element | null => {
     return (
       <div className='space-y-3'>
         {greaterThanMd && (
-          <LendingPoolsHeader className='px-4' />
+          <LendingPoolListHeader className='px-4' />
         )}
         {lendingPools.map(lendingPool => {
           return (
-            <LendingPool
+            <LendingPoolListItem
               key={lendingPool.id}
               chainID={chainId}
               // TODO: could combine `lendingPoolsData` and `lendingPool`
@@ -175,7 +175,7 @@ const LendingPools = (): JSX.Element | null => {
   return null;
 };
 
-export default withErrorBoundary(LendingPools, {
+export default withErrorBoundary(LendingPoolList, {
   FallbackComponent: ErrorFallback,
   onReset: () => {
     window.location.reload();

@@ -1,7 +1,7 @@
 
 import clsx from 'clsx';
 
-const LendingPoolDesktopGridWrapper = ({
+const LendingPoolListItemDesktopGridWrapper = ({
   className,
   ...rest
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => (
@@ -15,4 +15,4 @@ const LendingPoolDesktopGridWrapper = ({
     {...rest} />
 );
 
-export default LendingPoolDesktopGridWrapper;
+export default LendingPoolListItemDesktopGridWrapper;
