@@ -14,15 +14,21 @@ import LendingPoolListItem from './LendingPoolListItem';
 import LendingPoolListHeader from './LendingPoolListHeader';
 import ErrorFallback from 'components/ErrorFallback';
 import LineLoadingSpinner from 'components/LineLoadingSpinner';
+import { IMPERMAX_SUBGRAPH_URLS } from 'config/web3/subgraphs';
+// ray test touch <<
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
+import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
+import getPairAddress from 'utils/helpers/web3/get-pair-address';
+// ray test touch >>
+import { BREAKPOINTS } from 'utils/constants/styles';
+import STATUSES from 'utils/constants/statuses';
 import getUniswapAPYs from 'services/get-uniswap-apys';
+import apolloFetcher from 'services/apollo-fetcher';
 import {
   Address,
   LendingPoolData
 } from 'types/interfaces';
-import apolloFetcher from 'services/apollo-fetcher';
-import { IMPERMAX_SUBGRAPH_URLS } from 'config/web3/subgraphs';
-import { BREAKPOINTS } from 'utils/constants/styles';
-import STATUSES from 'utils/constants/statuses';
 
 const borrowableStr = `{
   id
@@ -94,6 +100,7 @@ const LendingPoolList = (): JSX.Element | null => {
 
   const mounted = usePromise();
 
+  // ray test touch <<
   React.useEffect(() => {
     if (!chainId) return;
     if (!handleError) return;
@@ -106,27 +113,38 @@ const LendingPoolList = (): JSX.Element | null => {
     (async () => {
       try {
         setStatus(STATUSES.PENDING);
-        const impermaxSubgraphUrl = IMPERMAX_SUBGRAPH_URLS[chainId];
-        const result = await mounted(apolloFetcher(impermaxSubgraphUrl, query));
-        const theLendingPools = result.data.lendingPools;
-        setLendingPools(theLendingPools);
+        const impermaxSubgraphURL = IMPERMAX_SUBGRAPH_URLS[chainId];
+        const result = await mounted(apolloFetcher(impermaxSubgraphURL, query));
+        // ray test touch <<
+        const initialLendingPools: Array<LendingPoolData> = result.data.lendingPools;
+        // ray test touch >>
 
-        // TODO: should type properly
-        const uniswapV2PairAddresses = theLendingPools.map((theLendingPool: { id: any; }) => theLendingPool.id);
+        const uniswapV2PairAddresses = initialLendingPools.map(
+          (initialLendingPool: { id: string; }) => initialLendingPool.id
+        );
         const uniswapAPYs = await mounted(getUniswapAPYs(uniswapV2PairAddresses));
 
         const theLendingPoolsData: { [key in Address]: LendingPoolData } = {};
-        for (const theLendingPool of theLendingPools) {
-          theLendingPoolsData[theLendingPool.id] = theLendingPool;
-          theLendingPoolsData[theLendingPool.id].pair.uniswapAPY = uniswapAPYs[theLendingPool.id];
+        for (const initialLendingPool of initialLendingPools) {
+          theLendingPoolsData[initialLendingPool.id] = initialLendingPool;
+          theLendingPoolsData[initialLendingPool.id].pair.uniswapAPY = uniswapAPYs[initialLendingPool.id];
         }
+        // ray test touch <<
+        const theLendingPools = initialLendingPools.map(initialLendingPool => ({
+          ...initialLendingPool,
+          pair: {
+            ...initialLendingPool.pair,
+            uniswapAPY: uniswapAPYs[initialLendingPool.id]
+          }
+        }));
+        setLendingPools(theLendingPools);
+        // ray test touch >>
 
         setLendingPoolsData(theLendingPoolsData);
         setStatus(STATUSES.RESOLVED);
       } catch (error) {
         setStatus(STATUSES.REJECTED);
         handleError(error);
-        console.log('[useLendingPools useEffect] error.message => ', error.message);
       }
     })();
   }, [
@@ -134,6 +152,7 @@ const LendingPoolList = (): JSX.Element | null => {
     handleError,
     mounted
   ]);
+  // ray test touch >>
 
   if (status === STATUSES.IDLE || status === STATUSES.PENDING) {
     return (
@@ -152,6 +171,18 @@ const LendingPoolList = (): JSX.Element | null => {
       throw new Error('Invalid chain ID!');
     }
 
+    // ray test touch <<
+    const imxAddress = IMX_ADDRESSES[chainId];
+    const wethAddress = W_ETH_ADDRESSES[chainId];
+    const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[chainId];
+    const imxPair = getPairAddress(wethAddress, imxAddress, uniswapV2FactoryAddress).toLowerCase();
+    const imxLendingPool = lendingPools.find(lendingPool => lendingPool.id === imxPair);
+
+    if (!imxLendingPool) {
+      throw new Error('Something went wrong!');
+    }
+    // ray test touch >>
+
     return (
       <div className='space-y-3'>
         {greaterThanMd && (
@@ -162,8 +193,11 @@ const LendingPoolList = (): JSX.Element | null => {
             <LendingPoolListItem
               key={lendingPool.id}
               chainID={chainId}
+              // ray test touch <<
+              imxLendingPool={imxLendingPool}
               // TODO: could combine `lendingPoolsData` and `lendingPool`
-              lendingPoolsData={lendingPoolsData}
+              // lendingPoolsData={lendingPoolsData}
+              // ray test touch >>
               lendingPool={lendingPool}
               greaterThanMd={greaterThanMd} />
           );

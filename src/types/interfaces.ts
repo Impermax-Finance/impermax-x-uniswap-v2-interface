@@ -115,6 +115,7 @@ export interface Borrowable {
   underlying: Underlying;
 }
 
+// ray test touch <<
 export interface LendingPoolData {
   [PoolTokenType.BorrowableA]: Borrowable;
   [PoolTokenType.BorrowableB]: Borrowable;
@@ -122,6 +123,7 @@ export interface LendingPoolData {
   id: string;
   pair: Pair;
 }
+// ray test touch >>
 
 export interface CollateralPosition {
   balance: string;

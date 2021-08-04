@@ -3,6 +3,9 @@ import { Address, PoolTokenType, Borrowable } from '../types/interfaces';
 import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
+// ray test touch <<
+import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
+// ray test touch >>
 import toAPY from 'utils/helpers/web3/to-apy';
 import getPairAddress from 'utils/helpers/web3/get-pair-address';
 
@@ -71,10 +74,13 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
 export async function getImxPrice(this: Subgraph) : Promise<number> {
   const imxAddress = IMX_ADDRESSES[this.chainId];
   const wethAddress = W_ETH_ADDRESSES[this.chainId];
-  const IMXPair = getPairAddress(wethAddress, imxAddress, this.chainId);
-  const AAddress = await this.getUnderlyingAddress(IMXPair, PoolTokenType.BorrowableA);
+  // ray test touch <<
+  const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[this.chainId];
+  const imxPair = getPairAddress(wethAddress, imxAddress, uniswapV2FactoryAddress);
+  // ray test touch >>
+  const AAddress = await this.getUnderlyingAddress(imxPair, PoolTokenType.BorrowableA);
   const poolTokenType = AAddress.toLowerCase() === imxAddress.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
-  return this.getTokenPrice(IMXPair, poolTokenType);
+  return this.getTokenPrice(imxPair, poolTokenType);
 }
 
 // Total balance

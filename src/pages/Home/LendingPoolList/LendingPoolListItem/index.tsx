@@ -8,7 +8,9 @@ import LendingPoolListItemMobileGridWrapper from './LendingPoolListItemMobileGri
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import toAPY from 'utils/helpers/web3/to-apy';
-import getPairAddress from 'utils/helpers/web3/get-pair-address';
+// ray test touch <<
+// import getPairAddress from 'utils/helpers/web3/get-pair-address';
+// ray test touch >>
 import {
   formatUSD,
   formatPercentage
@@ -19,8 +21,13 @@ import {
 } from 'utils/constants/links';
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
+// ray test touch <<
+// import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
+// ray test touch >>
 import {
-  Address,
+  // ray test touch <<
+  // Address,
+  // ray test touch >>
   PoolTokenType,
   LendingPoolData
 } from 'types/interfaces';
@@ -256,14 +263,20 @@ const getLendingPoolTokenIcon = (
 
 interface Props {
   chainID: number;
-  lendingPoolsData: { [key in Address]: LendingPoolData };
+  // ray test touch <<
+  imxLendingPool: LendingPoolData;
+  // lendingPoolsData: { [key in Address]: LendingPoolData };
+  // ray test touch >>
   lendingPool: LendingPoolData;
   greaterThanMd: boolean;
 }
 
 const LendingPoolListItem = ({
   chainID,
-  lendingPoolsData,
+  // ray test touch <<
+  imxLendingPool,
+  // lendingPoolsData,
+  // ray test touch >>
   lendingPool,
   greaterThanMd
 }: Props): JSX.Element => {
@@ -279,17 +292,27 @@ const LendingPoolListItem = ({
   const borrowAPYB = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
 
   const imxAddress = IMX_ADDRESSES[chainID];
-  const wethAddress = W_ETH_ADDRESSES[chainID];
-  const imxPair = getPairAddress(wethAddress, imxAddress, chainID).toLowerCase();
-  const aAddress = lendingPoolsData[imxPair][PoolTokenType.BorrowableA].underlying.id;
+  // ray test touch <<
+  // const wethAddress = W_ETH_ADDRESSES[chainID];
+  // const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[chainID];
+  // const imxPair = getPairAddress(wethAddress, imxAddress, uniswapV2FactoryAddress).toLowerCase();
+  const aAddress = imxLendingPool[PoolTokenType.BorrowableA].underlying.id;
+  // const aAddress = lendingPoolsData[imxPair][PoolTokenType.BorrowableA].underlying.id;
+  // ray test touch >>
   const poolTokenType =
     aAddress.toLowerCase() === imxAddress.toLowerCase() ?
       PoolTokenType.BorrowableA :
       PoolTokenType.BorrowableB;
-  const imxLendingPoolData = lendingPoolsData[imxPair];
+  // ray test touch <<
+  const imxLendingPoolData = imxLendingPool;
+  // const imxLendingPoolData = lendingPoolsData[imxPair];
+  // ray test touch >>
   const imxPrice = Number(imxLendingPoolData[poolTokenType].underlying.derivedUSD);
   let rewardSpeed;
-  const lendingPoolData = lendingPoolsData[lendingPool.id];
+  // ray test touch <<
+  const lendingPoolData = lendingPool;
+  // const lendingPoolData = lendingPoolsData[lendingPool.id];
+  // ray test touch >>
   const farmingPoolData = lendingPoolData[poolTokenType].farmingPool;
   if (farmingPoolData === null) {
     rewardSpeed = 0;
@@ -324,7 +347,10 @@ const LendingPoolListItem = ({
       .replace(`:${PARAMETERS.CHAIN_ID}`, chainID.toString())
       .replace(`:${PARAMETERS.UNISWAP_V2_PAIR_ADDRESS}`, lendingPool.id);
 
-  const uniswapAPY = lendingPoolsData[lendingPool.id].pair.uniswapAPY;
+  // ray test touch <<
+  const uniswapAPY = lendingPool.pair.uniswapAPY;
+  // const uniswapAPY = lendingPoolsData[lendingPool.id].pair.uniswapAPY;
+  // ray test touch >>
   const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniswapAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
   const tokenIconA = getLendingPoolTokenIcon(lendingPool, PoolTokenType.BorrowableA);
