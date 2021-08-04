@@ -161,8 +161,7 @@ const SetWrapper = ({
 );
 
 const getLendingPoolSymbol = (
-  // TODO: should type properly
-  lendingPool: any,
+  lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
   chainID: number
 ): string => {
