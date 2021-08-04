@@ -3,7 +3,6 @@ import * as React from 'react';
 import { usePromise } from 'react-use';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import gql from 'graphql-tag';
 import { useMedia } from 'react-use';
 import {
   useErrorHandler,
@@ -14,7 +13,6 @@ import LendingPoolListItem from './LendingPoolListItem';
 import LendingPoolListHeader from './LendingPoolListHeader';
 import ErrorFallback from 'components/ErrorFallback';
 import LineLoadingSpinner from 'components/LineLoadingSpinner';
-import { IMPERMAX_SUBGRAPH_URLS } from 'config/web3/subgraphs';
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
@@ -22,65 +20,7 @@ import getPairAddress from 'utils/helpers/web3/get-pair-address';
 import { BREAKPOINTS } from 'utils/constants/styles';
 import STATUSES from 'utils/constants/statuses';
 import getUniswapAPYs from 'services/get-uniswap-apys';
-import apolloFetcher from 'services/apollo-fetcher';
-import { LendingPoolData } from 'types/interfaces';
-
-const borrowableStr = `{
-  id
-  underlying {
-    id
-    symbol
-    name
-    decimals
-    derivedUSD
-  }
-  totalBalance
-  totalBorrows
-  borrowRate
-  reserveFactor
-  kinkBorrowRate
-  kinkUtilizationRate
-  borrowIndex
-  accrualTimestamp 
-  exchangeRate 
-  totalBalanceUSD
-  totalSupplyUSD
-  totalBorrowsUSD
-  farmingPool {
-    epochAmount
-    epochBegin
-    segmentLength
-    vestingBegin
-    sharePercentage
-    distributor {
-      id
-    }
-  }
-}`;
-
-const query = gql`{
-  lendingPools(first: 1000, orderBy: totalBorrowsUSD, orderDirection: desc) {
-    id
-    borrowable0 ${borrowableStr}
-    borrowable1 ${borrowableStr}
-    collateral {
-      id
-      totalBalance
-      totalBalanceUSD
-      safetyMargin
-      liquidationIncentive
-      exchangeRate 
-    }
-    pair {
-      reserve0
-      reserve1
-      reserveUSD
-      token0Price
-      token1Price
-      derivedUSD
-    }
-  }
-}`;
+import getLendingPools, { LendingPoolData } from 'services/get-lending-pools';
 
 const LendingPoolList = (): JSX.Element | null => {
   const { chainId } = useWeb3React<Web3Provider>();
@@ -107,9 +47,7 @@ const LendingPoolList = (): JSX.Element | null => {
     (async () => {
       try {
         setStatus(STATUSES.PENDING);
-        const impermaxSubgraphURL = IMPERMAX_SUBGRAPH_URLS[chainId];
-        const result = await mounted(apolloFetcher(impermaxSubgraphURL, query));
-        const initialLendingPools: Array<LendingPoolData> = result.data.lendingPools;
+        const initialLendingPools = await mounted(getLendingPools(chainId));
 
         const uniswapV2PairAddresses = initialLendingPools.map(
           (initialLendingPool: { id: string; }) => initialLendingPool.id
