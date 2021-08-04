@@ -163,12 +163,6 @@ export interface UserData {
   borrowPositions: { [key in Address]: { [key in PoolTokenType]?: BorrowPosition } };
 }
 
-export interface TvlData {
-  totalBalanceUSD: string;
-  totalBorrowsUSD: string;
-  totalSupplyUSD: string;
-}
-
 export interface ClaimEvent {
   amount: number;
   transactionHash: string;

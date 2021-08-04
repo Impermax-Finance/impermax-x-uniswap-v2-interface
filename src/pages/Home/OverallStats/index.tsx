@@ -1,44 +1,49 @@
 
-import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import {
   useErrorHandler,
   withErrorBoundary
 } from 'react-error-boundary';
+import { useQuery } from 'react-query';
 
 import OverallStatsInternal from 'components/OverallStatsInternal';
 import ErrorFallback from 'components/ErrorFallback';
-import getTVLData from 'services/get-tvl-data';
-import { TvlData } from 'types/interfaces';
+import tvlDataFetcher, {
+  TvlData,
+  TVL_DATA_FETCHER
+} from 'services/fetchers/tvl-data-fetcher';
 
 const OverallStats = (): JSX.Element => {
   const { chainId } = useWeb3React<Web3Provider>();
 
-  const [tvlData, setTVLData] = React.useState<TvlData>();
-  const handleError = useErrorHandler();
+  const {
+    isLoading: tvlDataLoading,
+    data: tvlData,
+    error: tvlDataError
+  } = useQuery<TvlData, Error>(
+    [
+      TVL_DATA_FETCHER,
+      chainId
+    ],
+    tvlDataFetcher,
+    {
+      enabled: chainId !== undefined
+    }
+  );
+  useErrorHandler(tvlDataError);
 
-  React.useEffect(() => {
-    if (!chainId) return;
-    if (!handleError) return;
+  // TODO: should use skeleton loaders
+  if (tvlDataLoading) {
+    return <>Loading...</>;
+  }
+  if (tvlData === undefined) {
+    throw new Error('Something went wrong!');
+  }
 
-    // TODO: should add loading UX
-    (async () => {
-      try {
-        const theTVLData = await getTVLData(chainId);
-        setTVLData(theTVLData);
-      } catch (error) {
-        handleError(error);
-      }
-    })();
-  }, [
-    chainId,
-    handleError
-  ]);
-
-  const totalValueLocked = parseFloat(tvlData?.totalBalanceUSD ?? '0');
-  const totalValueSupplied = parseFloat(tvlData?.totalSupplyUSD ?? '0');
-  const totalValueBorrowed = parseFloat(tvlData?.totalBorrowsUSD ?? '0');
+  const totalValueLocked = parseFloat(tvlData.totalBalanceUSD);
+  const totalValueSupplied = parseFloat(tvlData.totalSupplyUSD);
+  const totalValueBorrowed = parseFloat(tvlData.totalBorrowsUSD);
 
   return (
     <OverallStatsInternal

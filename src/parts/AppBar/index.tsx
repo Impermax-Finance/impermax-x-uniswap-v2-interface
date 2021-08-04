@@ -126,8 +126,16 @@ const AppBar = ({
                           to={navigationItem.link}
                           className={clsx(
                             match?.isExact ?
-                              'border-impermaxAstral-500 text-textPrimary' :
-                              'border-transparent text-textSecondary hover:border-gray-300 hover:text-gray-700',
+                              clsx(
+                                'border-impermaxAstral-500',
+                                'text-textPrimary'
+                              ) :
+                              clsx(
+                                'border-transparent',
+                                'text-textSecondary',
+                                'hover:border-gray-300',
+                                'hover:text-gray-700'
+                              ),
                             'inline-flex',
                             'items-center',
                             'px-1',
@@ -227,9 +235,18 @@ const AppBar = ({
                       to={navigationItem.link}
                       className={clsx(
                         match?.isExact ?
-                          'bg-impermaxAstral-50 border-impermaxAstral-500 text-impermaxAstral-700' :
-                          // eslint-disable-next-line max-len
-                          'border-transparent text-textSecondary hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700',
+                          clsx(
+                            'bg-impermaxAstral-50',
+                            'border-impermaxAstral-500',
+                            'text-impermaxAstral-700'
+                          ) :
+                          clsx(
+                            'border-transparent',
+                            'text-textSecondary',
+                            'hover:bg-gray-50',
+                            'hover:border-gray-300',
+                            'hover:text-gray-700'
+                          ),
                         'block',
                         'pl-3',
                         'pr-4',

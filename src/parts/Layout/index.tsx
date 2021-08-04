@@ -40,7 +40,7 @@ const Layout = ({
           'mx-auto',
           'px-4',
           'sm:px-8',
-          'py-8'
+          'pt-8'
         )}
         style={{
           paddingBottom: footerHeight

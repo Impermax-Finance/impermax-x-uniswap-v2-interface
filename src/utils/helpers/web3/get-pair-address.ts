@@ -4,18 +4,16 @@ import { keccak256 } from '@ethersproject/keccak256';
 import { pack } from '@ethersproject/solidity';
 import { getCreate2Address } from '@ethersproject/address';
 
-import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
 import { Address } from 'types/interfaces';
 
 const getPairAddress = (
   tokenA: Address,
   tokenB: Address,
-  chainID: number
+  uniswapV2FactoryAddress: Address
 ): string => {
   const [token0, token1] = tokenA < tokenB ? [tokenA, tokenB] : [tokenB, tokenA];
   const salt = keccak256(pack(['address', 'address'], [token0, token1]));
 
-  const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[chainID];
   return getCreate2Address(
     uniswapV2FactoryAddress,
     salt,

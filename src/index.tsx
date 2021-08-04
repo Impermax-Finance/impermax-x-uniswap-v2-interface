@@ -25,14 +25,14 @@ ReactDOM.render(
     <Web3ReactProvider getLibrary={getLibrary}>
       <Router>
         <Provider store={store}>
-          {IS_STAKING_APP ? (
-            <QueryClientProvider client={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            {IS_STAKING_APP ? (
               <StakingApp />
-              <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
-          ) : (
-            <App />
-          )}
+            ) : (
+              <App />
+            )}
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
         </Provider>
       </Router>
     </Web3ReactProvider>

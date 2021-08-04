@@ -1,7 +1,7 @@
 
 import clsx from 'clsx';
 
-const LendingPoolMobileGridWrapper = ({
+const LendingPoolListItemMobileGridWrapper = ({
   className,
   ...rest
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => (
@@ -15,4 +15,4 @@ const LendingPoolMobileGridWrapper = ({
     {...rest} />
 );
 
-export default LendingPoolMobileGridWrapper;
+export default LendingPoolListItemMobileGridWrapper;

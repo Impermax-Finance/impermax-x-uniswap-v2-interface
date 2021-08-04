@@ -23,7 +23,7 @@ const getBlockByTimestamp = async (timestamp: number) : Promise<number> => {
   return result.data.blocks[0].number;
 };
 
-const getPastVolume = async (
+const getPastVolumes = async (
   uniswapV2PairAddresses: Array<string>,
   seconds: number
 ): Promise<{
@@ -89,7 +89,7 @@ const getUniswapAPYs = async (
   uniswapV2PairAddresses: Array<string>,
   seconds: number = 60 * 60 * 24 * 7
 ): Promise<{ [key in Address]: number }> => {
-  const pastVolume = await getPastVolume(uniswapV2PairAddresses, seconds);
+  const pastVolumes = await getPastVolumes(uniswapV2PairAddresses, seconds);
   const {
     currentVolumes,
     currentReserves
@@ -100,7 +100,7 @@ const getUniswapAPYs = async (
       uniswapAPY[uniswapV2PairAddress] = 0;
       continue;
     }
-    const cumVolumePast = pastVolume[uniswapV2PairAddress] ?? 0;
+    const cumVolumePast = pastVolumes[uniswapV2PairAddress] ?? 0;
     const cumVolumeNow = currentVolumes[uniswapV2PairAddress];
     const reserveUSD = currentReserves[uniswapV2PairAddress];
     const volumeUSD = cumVolumeNow - cumVolumePast;

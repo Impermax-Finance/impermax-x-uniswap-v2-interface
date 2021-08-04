@@ -2,7 +2,9 @@
 import * as React from 'react';
 import clsx from 'clsx';
 
-import LendingPoolDesktopGridWrapper from 'pages/Home/LendingPools/LendingPool/LendingPoolDesktopGridWrapper';
+import
+LendingPoolListItemDesktopGridWrapper
+  from 'pages/Home/LendingPoolList/LendingPoolListItem/LendingPoolListItemDesktopGridWrapper';
 import QuestionHelper from 'components/QuestionHelper';
 
 const Heading = ({
@@ -20,12 +22,12 @@ const Heading = ({
   </h6>
 );
 
-const LendingPoolsHeader = ({
+const LendingPoolListHeader = ({
   className,
   ...rest
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => {
   return (
-    <LendingPoolDesktopGridWrapper
+    <LendingPoolListItemDesktopGridWrapper
       className={clsx(
         'text-textSecondary',
         'text-sm',
@@ -50,8 +52,8 @@ const LendingPoolsHeader = ({
           placement='left'
           text='Based on last 7 days trading fees assuming a 5x leverage' />
       </Heading>
-    </LendingPoolDesktopGridWrapper>
+    </LendingPoolListItemDesktopGridWrapper>
   );
 };
 
-export default LendingPoolsHeader;
+export default LendingPoolListHeader;
