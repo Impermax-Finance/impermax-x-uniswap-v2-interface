@@ -1,5 +1,5 @@
-/* eslint-disable max-len */
 
+/* eslint-disable max-len */
 import gql from 'graphql-tag';
 
 import apolloFetcher from './apollo-fetcher';
@@ -88,7 +88,9 @@ const getCurrentVolumesAndCurrentReserves = async (
 const getUniswapAPYs = async (
   uniswapV2PairAddresses: Array<string>,
   seconds: number = 60 * 60 * 24 * 7
-): Promise<{ [key in Address]: number }> => {
+): Promise<{
+  [key in Address]: number;
+}> => {
   const pastVolumes = await getPastVolumes(uniswapV2PairAddresses, seconds);
   const {
     currentVolumes,
