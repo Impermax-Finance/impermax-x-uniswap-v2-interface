@@ -43,8 +43,8 @@ const ChainConnect = (): JSX.Element | null => {
           // TODO: should use `ImpermaxPicture`
           <ImpermaxImage
             className='rounded'
-            width={18}
-            height={18}
+            width={20}
+            height={20}
             src={CHAIN_ICON_PATHS[chainId]}
             alt='Switch Chain' />
         }>

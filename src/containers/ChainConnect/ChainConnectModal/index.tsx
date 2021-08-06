@@ -124,8 +124,8 @@ const ChainConnectModal = ({
                   onClick={handleChainConnect(chainID)}>
                   {/* TODO: should use `ImpermaxPicture` */}
                   <ImpermaxImage
-                    width={8}
-                    height={8}
+                    width={36}
+                    height={36}
                     className='rounded-md'
                     src={CHAIN_ICON_PATHS[chainID]} />
                   <span className='truncate'>

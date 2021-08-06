@@ -1,4 +1,8 @@
 
+// ray test touch <<
+import { SupportedChain } from 'types/web3/general.d';
+// ray test touch >>
+
 const POLLING_INTERVAL = 12000;
 
 const CHAIN_IDS = Object.freeze({
@@ -50,21 +54,19 @@ const CHAIN_ICON_PATHS = {
   [CHAIN_IDS.OKEX_TESTNET]: 'assets/images/chains/okex-chain.jpg'
 };
 
-interface ChainDetails {
-  chainId: string
-  chainName: string
-  nativeCurrency: {
-    name: string
-    symbol: string
-    decimals: number
-  }
-  rpcUrls: string[]
-  blockExplorerUrls: string[]
-}
-
 const CHAIN_DETAILS: {
   // TODO: should type correctly
-  [chainId: number]: ChainDetails
+  [chainId: number]: {
+    chainId: string
+    chainName: string
+    nativeCurrency: {
+      name: string
+      symbol: string
+      decimals: number
+    }
+    rpcUrls: string[]
+    blockExplorerUrls: string[]
+  }
 } = {
   [CHAIN_IDS.ETHEREUM_MAIN_NET]: {
     chainId: '0x1',
@@ -192,10 +194,25 @@ const CHAIN_LABELS: { [chainId: number]: string } = {
   [CHAIN_IDS.OKEX_TESTNET]: 'OKExChain'
 };
 
+// ray test touch <<
+const SUPPORTED_CHAIN_IDS = [
+  CHAIN_IDS.ETHEREUM_MAIN_NET,
+  CHAIN_IDS.ROPSTEN
+];
+
+const SUPPORTED_CHAINS: Array<SupportedChain> = SUPPORTED_CHAIN_IDS.map(supportedChainId => ({
+  id: supportedChainId,
+  label: CHAIN_LABELS[supportedChainId],
+  iconPath: CHAIN_ICON_PATHS[supportedChainId]
+}));
+// ray test touch >>
+
 export {
   CHAIN_IDS,
   POLLING_INTERVAL,
   CHAIN_ICON_PATHS,
   CHAIN_DETAILS,
-  CHAIN_LABELS
+  CHAIN_LABELS,
+  SUPPORTED_CHAIN_IDS,
+  SUPPORTED_CHAINS
 };
