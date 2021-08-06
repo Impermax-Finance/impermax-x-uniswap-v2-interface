@@ -84,7 +84,7 @@ const App = (): JSX.Element | null => {
           path={PAGES.HOME}
           exact>
           {chainId ? (
-            <Home key={chainId} />
+            <Home />
           // TODO: should improve in a more explicit way
           // TODO: should reference https://reactrouter.com/web/example/auth-workflow
           ) : null}
