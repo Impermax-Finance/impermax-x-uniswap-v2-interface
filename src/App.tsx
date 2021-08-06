@@ -1,7 +1,8 @@
 
 import {
   Switch,
-  Route
+  Route,
+  Redirect
 } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
@@ -81,7 +82,7 @@ const App = (): JSX.Element | null => {
             return null;
           }} />
         <Route
-          path={PAGES.HOME}
+          path={PAGES.MARKETS}
           exact>
           {chainId ? (
             <Home />
@@ -89,6 +90,9 @@ const App = (): JSX.Element | null => {
           // TODO: should reference https://reactrouter.com/web/example/auth-workflow
           ) : null}
         </Route>
+        <Redirect
+          from={PAGES.HOME}
+          to={PAGES.MARKETS} />
       </Switch>
     </Layout>
   );

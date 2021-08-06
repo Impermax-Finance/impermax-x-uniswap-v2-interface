@@ -44,7 +44,7 @@ const AppBar = ({
     [
       {
         title: 'Markets',
-        link: PAGES.HOME,
+        link: PAGES.MARKETS,
         enabled: true
       },
       {
@@ -141,7 +141,7 @@ const AppBar = ({
                             'px-1',
                             'pt-1',
                             'border-b-2',
-                            'text-sm',
+                            'text-base',
                             'font-medium'
                           )}>
                           {navigationItem.title}
