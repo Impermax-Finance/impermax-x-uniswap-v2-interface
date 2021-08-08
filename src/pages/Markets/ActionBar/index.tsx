@@ -15,7 +15,7 @@ const ActionBar = (): JSX.Element => {
     <div
       className={clsx(
         'flex',
-        'justify-between',
+        'justify-end',
         'items-center'
       )}>
       {/* TODO: not used for now */}
