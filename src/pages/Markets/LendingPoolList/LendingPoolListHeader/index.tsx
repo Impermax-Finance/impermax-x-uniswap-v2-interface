@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import
 LendingPoolListItemDesktopGridWrapper
-  from 'pages/Home/LendingPoolList/LendingPoolListItem/LendingPoolListItemDesktopGridWrapper';
+  from 'pages/Markets/LendingPoolList/LendingPoolListItem/LendingPoolListItemDesktopGridWrapper';
 import QuestionHelper from 'components/QuestionHelper';
 
 const Heading = ({

@@ -1,5 +1,4 @@
 
-// ray test touch <<
 interface SupportedChain {
   id: number;
   label: string;
@@ -9,4 +8,3 @@ interface SupportedChain {
 export type {
   SupportedChain
 };
-// ray test touch >>

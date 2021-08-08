@@ -1,7 +1,5 @@
 
-// ray test touch <<
 import { SupportedChain } from 'types/web3/general.d';
-// ray test touch >>
 
 const POLLING_INTERVAL = 12000;
 
@@ -32,26 +30,26 @@ const CHAIN_IDS = Object.freeze({
 });
 
 const CHAIN_ICON_PATHS = {
-  [CHAIN_IDS.ETHEREUM_MAIN_NET]: 'assets/images/chains/ethereum-main-chain.jpg',
-  [CHAIN_IDS.ROPSTEN]: 'assets/images/chains/ropsten-chain.jpg',
-  [CHAIN_IDS.RINKEBY]: 'assets/images/chains/rinkeby-chain.jpg',
-  [CHAIN_IDS.GÖRLI]: 'assets/images/chains/goerli-chain.jpg',
-  [CHAIN_IDS.KOVAN]: 'assets/images/chains/kovan-chain.jpg',
-  [CHAIN_IDS.FANTOM]: 'assets/images/chains/fantom-chain.jpg',
-  [CHAIN_IDS.FANTOM_TESTNET]: 'assets/images/chains/fantom-chain.jpg',
-  [CHAIN_IDS.BSC]: 'assets/images/chains/binance-smart-chain.jpg',
-  [CHAIN_IDS.BSC_TESTNET]: 'assets/images/chains/binance-smart-chain.jpg',
-  [CHAIN_IDS.MATIC]: 'assets/images/chains/polygon-chain.jpg',
-  [CHAIN_IDS.MATIC_TESTNET]: 'assets/images/chains/matic-chain.jpg',
-  [CHAIN_IDS.XDAI]: 'assets/images/chains/xdai-chain.jpg',
-  [CHAIN_IDS.ARBITRUM]: 'assets/images/chains/arbitrum-chain.jpg',
-  [CHAIN_IDS.AVALANCHE]: 'assets/images/chains/avalanche-chain.jpg',
-  [CHAIN_IDS.HECO]: 'assets/images/chains/heco-chain.jpg',
-  [CHAIN_IDS.HECO_TESTNET]: 'assets/images/chains/heco-chain.jpg',
-  [CHAIN_IDS.HARMONY]: 'assets/images/chains/harmony-chain.jpg',
-  [CHAIN_IDS.HARMONY_TESTNET]: 'assets/images/chains/harmony-chain.jpg',
-  [CHAIN_IDS.OKEX]: 'assets/images/chains/okex-chain.jpg',
-  [CHAIN_IDS.OKEX_TESTNET]: 'assets/images/chains/okex-chain.jpg'
+  [CHAIN_IDS.ETHEREUM_MAIN_NET]: '/assets/images/chains/ethereum-main-chain.jpg',
+  [CHAIN_IDS.ROPSTEN]: '/assets/images/chains/ropsten-chain.jpg',
+  [CHAIN_IDS.RINKEBY]: '/assets/images/chains/rinkeby-chain.jpg',
+  [CHAIN_IDS.GÖRLI]: '/assets/images/chains/goerli-chain.jpg',
+  [CHAIN_IDS.KOVAN]: '/assets/images/chains/kovan-chain.jpg',
+  [CHAIN_IDS.FANTOM]: '/assets/images/chains/fantom-chain.jpg',
+  [CHAIN_IDS.FANTOM_TESTNET]: '/assets/images/chains/fantom-chain.jpg',
+  [CHAIN_IDS.BSC]: '/assets/images/chains/binance-smart-chain.jpg',
+  [CHAIN_IDS.BSC_TESTNET]: '/assets/images/chains/binance-smart-chain.jpg',
+  [CHAIN_IDS.MATIC]: '/assets/images/chains/polygon-chain.jpg',
+  [CHAIN_IDS.MATIC_TESTNET]: '/assets/images/chains/matic-chain.jpg',
+  [CHAIN_IDS.XDAI]: '/assets/images/chains/xdai-chain.jpg',
+  [CHAIN_IDS.ARBITRUM]: '/assets/images/chains/arbitrum-chain.jpg',
+  [CHAIN_IDS.AVALANCHE]: '/assets/images/chains/avalanche-chain.jpg',
+  [CHAIN_IDS.HECO]: '/assets/images/chains/heco-chain.jpg',
+  [CHAIN_IDS.HECO_TESTNET]: '/assets/images/chains/heco-chain.jpg',
+  [CHAIN_IDS.HARMONY]: '/assets/images/chains/harmony-chain.jpg',
+  [CHAIN_IDS.HARMONY_TESTNET]: '/assets/images/chains/harmony-chain.jpg',
+  [CHAIN_IDS.OKEX]: '/assets/images/chains/okex-chain.jpg',
+  [CHAIN_IDS.OKEX_TESTNET]: '/assets/images/chains/okex-chain.jpg'
 };
 
 const CHAIN_DETAILS: {
@@ -194,7 +192,6 @@ const CHAIN_LABELS: { [chainId: number]: string } = {
   [CHAIN_IDS.OKEX_TESTNET]: 'OKExChain'
 };
 
-// ray test touch <<
 const SUPPORTED_CHAIN_IDS = [
   CHAIN_IDS.ETHEREUM_MAIN_NET,
   CHAIN_IDS.ROPSTEN
@@ -205,7 +202,6 @@ const SUPPORTED_CHAINS: Array<SupportedChain> = SUPPORTED_CHAIN_IDS.map(supporte
   label: CHAIN_LABELS[supportedChainId],
   iconPath: CHAIN_ICON_PATHS[supportedChainId]
 }));
-// ray test touch >>
 
 export {
   CHAIN_IDS,
