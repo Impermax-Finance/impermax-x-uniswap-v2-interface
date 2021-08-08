@@ -1,5 +1,4 @@
 
-import * as React from 'react';
 import {
   Switch,
   Route,
@@ -91,11 +90,7 @@ const App = (): JSX.Element | null => {
             return null;
           }} />
         <Route path={PAGES.MARKETS}>
-          {chainId ? (
-            <Markets />
-          // TODO: should improve in a more explicit way
-          // TODO: should reference https://reactrouter.com/web/example/auth-workflow
-          ) : null}
+          <Markets />
         </Route>
         <Redirect
           exact
