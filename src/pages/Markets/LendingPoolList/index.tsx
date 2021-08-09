@@ -1,6 +1,4 @@
 
-import { useWeb3React } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
 import { useMedia } from 'react-use';
 import {
   useErrorHandler,
@@ -23,9 +21,13 @@ import lendingPoolsFetcher, {
 } from 'services/fetchers/lending-pools-fetcher';
 import uniswapAPYsFetcher, { UNISWAP_APYS_FETCHER } from 'services/fetchers/uniswap-apys-fetcher';
 
-const LendingPoolList = (): JSX.Element => {
-  const { chainId } = useWeb3React<Web3Provider>();
+interface Props {
+  chainID: number;
+}
 
+const LendingPoolList = ({
+  chainID
+}: Props): JSX.Element => {
   const greaterThanMd = useMedia(`(min-width: ${BREAKPOINTS.md})`);
 
   const {
@@ -35,12 +37,9 @@ const LendingPoolList = (): JSX.Element => {
   } = useQuery<Array<LendingPoolData>, Error>(
     [
       LENDING_POOLS_FETCHER,
-      chainId
+      chainID
     ],
-    lendingPoolsFetcher,
-    {
-      enabled: chainId !== undefined
-    }
+    lendingPoolsFetcher
   );
   useErrorHandler(initialLendingPoolsError);
 
@@ -88,13 +87,9 @@ const LendingPoolList = (): JSX.Element => {
     }
   }));
 
-  if (!chainId) {
-    throw new Error('Invalid chain ID!');
-  }
-
-  const imxAddress = IMX_ADDRESSES[chainId];
-  const wethAddress = W_ETH_ADDRESSES[chainId];
-  const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[chainId];
+  const imxAddress = IMX_ADDRESSES[chainID];
+  const wethAddress = W_ETH_ADDRESSES[chainID];
+  const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[chainID];
   const imxPair = getPairAddress(wethAddress, imxAddress, uniswapV2FactoryAddress).toLowerCase();
   const imxLendingPool = lendingPools.find(lendingPool => lendingPool.id === imxPair);
 
@@ -111,7 +106,7 @@ const LendingPoolList = (): JSX.Element => {
         return (
           <LendingPoolListItem
             key={lendingPool.id}
-            chainID={chainId}
+            chainID={chainID}
             imxLendingPool={imxLendingPool}
             lendingPool={lendingPool}
             greaterThanMd={greaterThanMd} />

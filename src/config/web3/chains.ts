@@ -1,4 +1,6 @@
 
+import { SupportedChain } from 'types/web3/general.d';
+
 const POLLING_INTERVAL = 12000;
 
 const CHAIN_IDS = Object.freeze({
@@ -28,43 +30,41 @@ const CHAIN_IDS = Object.freeze({
 });
 
 const CHAIN_ICON_PATHS = {
-  [CHAIN_IDS.ETHEREUM_MAIN_NET]: 'assets/images/chains/ethereum-main-chain.jpg',
-  [CHAIN_IDS.ROPSTEN]: 'assets/images/chains/ropsten-chain.jpg',
-  [CHAIN_IDS.RINKEBY]: 'assets/images/chains/rinkeby-chain.jpg',
-  [CHAIN_IDS.GÖRLI]: 'assets/images/chains/goerli-chain.jpg',
-  [CHAIN_IDS.KOVAN]: 'assets/images/chains/kovan-chain.jpg',
-  [CHAIN_IDS.FANTOM]: 'assets/images/chains/fantom-chain.jpg',
-  [CHAIN_IDS.FANTOM_TESTNET]: 'assets/images/chains/fantom-chain.jpg',
-  [CHAIN_IDS.BSC]: 'assets/images/chains/binance-smart-chain.jpg',
-  [CHAIN_IDS.BSC_TESTNET]: 'assets/images/chains/binance-smart-chain.jpg',
-  [CHAIN_IDS.MATIC]: 'assets/images/chains/polygon-chain.jpg',
-  [CHAIN_IDS.MATIC_TESTNET]: 'assets/images/chains/matic-chain.jpg',
-  [CHAIN_IDS.XDAI]: 'assets/images/chains/xdai-chain.jpg',
-  [CHAIN_IDS.ARBITRUM]: 'assets/images/chains/arbitrum-chain.jpg',
-  [CHAIN_IDS.AVALANCHE]: 'assets/images/chains/avalanche-chain.jpg',
-  [CHAIN_IDS.HECO]: 'assets/images/chains/heco-chain.jpg',
-  [CHAIN_IDS.HECO_TESTNET]: 'assets/images/chains/heco-chain.jpg',
-  [CHAIN_IDS.HARMONY]: 'assets/images/chains/harmony-chain.jpg',
-  [CHAIN_IDS.HARMONY_TESTNET]: 'assets/images/chains/harmony-chain.jpg',
-  [CHAIN_IDS.OKEX]: 'assets/images/chains/okex-chain.jpg',
-  [CHAIN_IDS.OKEX_TESTNET]: 'assets/images/chains/okex-chain.jpg'
+  [CHAIN_IDS.ETHEREUM_MAIN_NET]: '/assets/images/chains/ethereum-main-chain.jpg',
+  [CHAIN_IDS.ROPSTEN]: '/assets/images/chains/ropsten-chain.jpg',
+  [CHAIN_IDS.RINKEBY]: '/assets/images/chains/rinkeby-chain.jpg',
+  [CHAIN_IDS.GÖRLI]: '/assets/images/chains/goerli-chain.jpg',
+  [CHAIN_IDS.KOVAN]: '/assets/images/chains/kovan-chain.jpg',
+  [CHAIN_IDS.FANTOM]: '/assets/images/chains/fantom-chain.jpg',
+  [CHAIN_IDS.FANTOM_TESTNET]: '/assets/images/chains/fantom-chain.jpg',
+  [CHAIN_IDS.BSC]: '/assets/images/chains/binance-smart-chain.jpg',
+  [CHAIN_IDS.BSC_TESTNET]: '/assets/images/chains/binance-smart-chain.jpg',
+  [CHAIN_IDS.MATIC]: '/assets/images/chains/polygon-chain.jpg',
+  [CHAIN_IDS.MATIC_TESTNET]: '/assets/images/chains/matic-chain.jpg',
+  [CHAIN_IDS.XDAI]: '/assets/images/chains/xdai-chain.jpg',
+  [CHAIN_IDS.ARBITRUM]: '/assets/images/chains/arbitrum-chain.jpg',
+  [CHAIN_IDS.AVALANCHE]: '/assets/images/chains/avalanche-chain.jpg',
+  [CHAIN_IDS.HECO]: '/assets/images/chains/heco-chain.jpg',
+  [CHAIN_IDS.HECO_TESTNET]: '/assets/images/chains/heco-chain.jpg',
+  [CHAIN_IDS.HARMONY]: '/assets/images/chains/harmony-chain.jpg',
+  [CHAIN_IDS.HARMONY_TESTNET]: '/assets/images/chains/harmony-chain.jpg',
+  [CHAIN_IDS.OKEX]: '/assets/images/chains/okex-chain.jpg',
+  [CHAIN_IDS.OKEX_TESTNET]: '/assets/images/chains/okex-chain.jpg'
 };
-
-interface ChainDetails {
-  chainId: string
-  chainName: string
-  nativeCurrency: {
-    name: string
-    symbol: string
-    decimals: number
-  }
-  rpcUrls: string[]
-  blockExplorerUrls: string[]
-}
 
 const CHAIN_DETAILS: {
   // TODO: should type correctly
-  [chainId: number]: ChainDetails
+  [chainId: number]: {
+    chainId: string
+    chainName: string
+    nativeCurrency: {
+      name: string
+      symbol: string
+      decimals: number
+    }
+    rpcUrls: string[]
+    blockExplorerUrls: string[]
+  }
 } = {
   [CHAIN_IDS.ETHEREUM_MAIN_NET]: {
     chainId: '0x1',
@@ -192,10 +192,23 @@ const CHAIN_LABELS: { [chainId: number]: string } = {
   [CHAIN_IDS.OKEX_TESTNET]: 'OKExChain'
 };
 
+const SUPPORTED_CHAIN_IDS = [
+  CHAIN_IDS.ETHEREUM_MAIN_NET,
+  CHAIN_IDS.ROPSTEN
+];
+
+const SUPPORTED_CHAINS: Array<SupportedChain> = SUPPORTED_CHAIN_IDS.map(supportedChainId => ({
+  id: supportedChainId,
+  label: CHAIN_LABELS[supportedChainId],
+  iconPath: CHAIN_ICON_PATHS[supportedChainId]
+}));
+
 export {
   CHAIN_IDS,
   POLLING_INTERVAL,
   CHAIN_ICON_PATHS,
   CHAIN_DETAILS,
-  CHAIN_LABELS
+  CHAIN_LABELS,
+  SUPPORTED_CHAIN_IDS,
+  SUPPORTED_CHAINS
 };

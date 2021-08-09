@@ -7,6 +7,7 @@ const PARAMETERS = Object.freeze({
 
 const PAGES = Object.freeze({
   HOME: '/',
+  MARKETS: `/markets/:${PARAMETERS.CHAIN_ID}`,
   LENDING_POOL: `/lending-pool/:${PARAMETERS.CHAIN_ID}/:${PARAMETERS.UNISWAP_V2_PAIR_ADDRESS}`,
   ACCOUNT: `/account/:${PARAMETERS.ACCOUNT}`,
   CREATE_NEW_PAIR: '/create-new-pair',

@@ -1,22 +1,31 @@
 
 import {
   Switch,
-  Route
+  Route,
+  Redirect
 } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import Layout from 'parts/Layout';
-import Home from 'pages/Home';
+// ray test touch <
+// TODO: should do code-splitting
+import Markets from 'pages/Markets';
 import LendingPool from 'pages/LendingPool';
 import Risks from 'pages/Risks';
 import Claim from 'pages/Claim';
 import CreateNewPair from 'pages/CreateNewPair';
 import Account from 'pages/Account';
+import NoMatch from 'pages/NoMatch';
+// ray test touch >
 import ImpermaxRouterProvider from 'contexts/ImpermaxRouterProvider';
 import SubgraphProvider from 'contexts/SubgraphProvider';
 import Updater from 'store/transactions/updater';
-import { PAGES } from 'utils/constants/links';
+import { SUPPORTED_CHAIN_IDS } from 'config/web3/chains';
+import {
+  PAGES,
+  PARAMETERS
+} from 'utils/constants/links';
 import './app.scss';
 
 const App = (): JSX.Element | null => {
@@ -80,14 +89,15 @@ const App = (): JSX.Element | null => {
             window.location.href = 'https://impermax.finance/User-Guide-Impermax.pdf';
             return null;
           }} />
-        <Route
-          path={PAGES.HOME}
-          exact>
-          {chainId ? (
-            <Home key={chainId} />
-          // TODO: should improve in a more explicit way
-          // TODO: should reference https://reactrouter.com/web/example/auth-workflow
-          ) : null}
+        <Route path={PAGES.MARKETS}>
+          <Markets />
+        </Route>
+        <Redirect
+          exact
+          from={PAGES.HOME}
+          to={PAGES.MARKETS.replace(`:${PARAMETERS.CHAIN_ID}`, SUPPORTED_CHAIN_IDS[0].toString())} />
+        <Route path='*'>
+          <NoMatch />
         </Route>
       </Switch>
     </Layout>

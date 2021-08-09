@@ -1,6 +1,4 @@
 
-import { useWeb3React } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
 import {
   useErrorHandler,
   withErrorBoundary
@@ -14,9 +12,13 @@ import tvlDataFetcher, {
   TVL_DATA_FETCHER
 } from 'services/fetchers/tvl-data-fetcher';
 
-const OverallStats = (): JSX.Element => {
-  const { chainId } = useWeb3React<Web3Provider>();
+interface Props {
+  chainID: number;
+}
 
+const OverallStats = ({
+  chainID
+}: Props): JSX.Element => {
   const {
     isLoading: tvlDataLoading,
     data: tvlData,
@@ -24,12 +26,9 @@ const OverallStats = (): JSX.Element => {
   } = useQuery<TvlData, Error>(
     [
       TVL_DATA_FETCHER,
-      chainId
+      chainID
     ],
-    tvlDataFetcher,
-    {
-      enabled: chainId !== undefined
-    }
+    tvlDataFetcher
   );
   useErrorHandler(tvlDataError);
 

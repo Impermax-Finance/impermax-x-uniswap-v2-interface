@@ -17,7 +17,10 @@ import ClaimAirdropButton from 'containers/ClaimAirdropButton';
 import WalletConnectButton from 'containers/WalletConnectButton';
 import ChainConnect from 'containers/ChainConnect';
 import ConnectedWalletInfo from 'containers/ConnectedWalletInfo';
-import { CHAIN_IDS } from 'config/web3/chains';
+import {
+  CHAIN_IDS,
+  SUPPORTED_CHAIN_IDS
+} from 'config/web3/chains';
 import { IS_STAKING_APP } from 'config/general';
 import { ReactComponent as ImpermaxLogoIcon } from 'assets/images/icons/impermax-logo.svg';
 import {
@@ -44,7 +47,7 @@ const AppBar = ({
     [
       {
         title: 'Markets',
-        link: PAGES.HOME,
+        link: PAGES.MARKETS.replace(`:${PARAMETERS.CHAIN_ID}`, SUPPORTED_CHAIN_IDS[0].toString()),
         enabled: true
       },
       {
@@ -141,7 +144,7 @@ const AppBar = ({
                             'px-1',
                             'pt-1',
                             'border-b-2',
-                            'text-sm',
+                            'text-base',
                             'font-medium'
                           )}>
                           {navigationItem.title}
