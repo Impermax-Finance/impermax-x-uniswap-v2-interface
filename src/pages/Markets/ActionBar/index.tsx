@@ -5,6 +5,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import { LinkIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 
+import ChainSelect from './ChainSelect';
 import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 import { PAGES } from 'utils/constants/links';
 
@@ -15,11 +16,10 @@ const ActionBar = (): JSX.Element => {
     <div
       className={clsx(
         'flex',
-        'justify-end',
+        'justify-between',
         'items-center'
       )}>
-      {/* TODO: not used for now */}
-      {/* <ChainSelect routeLink={PAGES.MARKETS} /> */}
+      <ChainSelect routeLink={PAGES.MARKETS} />
       <Link
         className={clsx(
           { 'pointer-events-none': !active }

@@ -1,15 +1,15 @@
 
-import { useWeb3React } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
+import { useParams } from 'react-router-dom';
 import clsx from 'clsx';
 
 import OverallStats from './OverallStats';
 import ActionBar from './ActionBar';
 import LendingPoolList from './LendingPoolList';
-import { SUPPORTED_CHAIN_IDS } from 'config/web3/chains';
+import { PARAMETERS } from 'utils/constants/links';
 
 const Markets = (): JSX.Element => {
-  const { chainId = SUPPORTED_CHAIN_IDS[0] } = useWeb3React<Web3Provider>();
+  const { [PARAMETERS.CHAIN_ID]: chainIDParam } = useParams<Record<string, string>>();
+  const selectedChainID = Number(chainIDParam);
 
   return (
     <div
@@ -17,9 +17,9 @@ const Markets = (): JSX.Element => {
         'space-y-12',
         'py-6'
       )}>
-      <OverallStats chainID={chainId} />
+      <OverallStats chainID={selectedChainID} />
       <ActionBar />
-      <LendingPoolList chainID={chainId} />
+      <LendingPoolList chainID={selectedChainID} />
     </div>
   );
 };
