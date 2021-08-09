@@ -1,6 +1,6 @@
 
 const LAYOUT = Object.freeze({
-  appBarHeight: 80
+  appBarHeight: 72
 });
 
 const BREAKPOINTS = Object.freeze({
