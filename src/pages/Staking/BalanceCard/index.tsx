@@ -34,13 +34,13 @@ import stakingUserDataFetcher, {
 interface BalanceItemProps {
   label: string;
   value: string;
-  unitName: string;
+  tokenSymbol: string;
 }
 
 const BalanceItem = ({
   label,
   value,
-  unitName
+  tokenSymbol
 }: BalanceItemProps) => (
   <div className='space-y-3'>
     <h4
@@ -62,7 +62,7 @@ const BalanceItem = ({
         {value}
       </span>
       <span>
-        {unitName}
+        {tokenSymbol}
       </span>
     </div>
   </div>
@@ -207,15 +207,15 @@ const BalanceCard = ({
       <BalanceItem
         label='Staked Balance'
         value={stakedBalanceLabel}
-        unitName='IMX' />
+        tokenSymbol='IMX' />
       <BalanceItem
         label='Unstaked Balance'
         value={unstakedBalanceLabel}
-        unitName='IMX' />
+        tokenSymbol='IMX' />
       <BalanceItem
         label='Earned'
         value={earnedLabel}
-        unitName='IMX' />
+        tokenSymbol='IMX' />
     </Panel>
   );
 };

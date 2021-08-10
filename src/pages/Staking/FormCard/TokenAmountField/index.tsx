@@ -12,7 +12,7 @@ interface CustomProps {
   allowance: number | undefined;
   error?: boolean;
   helperText?: React.ReactNode | string;
-  unitName: string;
+  tokenSymbol: string;
   walletActive: boolean;
 }
 
@@ -23,7 +23,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
   balance,
   error,
   helperText,
-  unitName,
+  tokenSymbol,
   walletActive,
   ...rest
 }, ref): JSX.Element => {
@@ -52,7 +52,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
           'self-end',
           'inline-block'
         )}>
-        Available: {balanceLabel} {unitName}
+        Available: {balanceLabel} {tokenSymbol}
       </TokenAmountFieldHelperText>
       <div
         className={clsx(
@@ -120,7 +120,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
               'truncate',
               'font-medium'
             )}>
-            {unitName}
+            {tokenSymbol}
           </span>
         </div>
       </div>
