@@ -39,8 +39,7 @@ const Layout = ({
           'container',
           'mx-auto',
           'px-4',
-          'sm:px-8',
-          'pt-8'
+          'sm:px-8'
         )}
         style={{
           paddingBottom: footerHeight

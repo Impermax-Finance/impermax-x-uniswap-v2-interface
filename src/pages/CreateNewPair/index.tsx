@@ -10,7 +10,6 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import {
-  Container,
   Card,
   Row,
   Col
@@ -18,6 +17,7 @@ import {
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import MainContainer from 'parts/MainContainer';
 import InteractionButton, { ButtonState } from 'components/InteractionButton';
 import {
   useIsValidPair,
@@ -66,7 +66,7 @@ const CreateNewPair = (): JSX.Element | null => {
   if (!account) return null;
 
   return (
-    <Container className='create-new-pair'>
+    <MainContainer>
       <Card className='mt-4 p-4'>
         <Row className='steps'>
           <Col className={stepClassName(1)}>
@@ -162,7 +162,7 @@ const CreateNewPair = (): JSX.Element | null => {
           </div>
         )}
       </Card>
-    </Container>
+    </MainContainer>
   );
 };
 

@@ -1,12 +1,10 @@
 
-import {
-  Container,
-  Card
-} from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 
 import ClaimDistributor from 'pages/Claim/ClaimDistributor';
+import MainContainer from 'parts/MainContainer';
 import { DistributorDetails } from 'utils/constants';
 import { DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/distributors';
 
@@ -19,7 +17,7 @@ const Claim = (): JSX.Element => {
   const distributors = DISTRIBUTOR_ADDRESSES[chainId];
 
   return (
-    <Container>
+    <MainContainer>
       <Card className='mt-5'>
         {distributors.map(
           (distributor: DistributorDetails, key: any) => (
@@ -29,7 +27,7 @@ const Claim = (): JSX.Element => {
           )
         )}
       </Card>
-    </Container>
+    </MainContainer>
   );
 };
 
