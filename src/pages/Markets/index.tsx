@@ -1,10 +1,10 @@
 
 import { useParams } from 'react-router-dom';
-import clsx from 'clsx';
 
 import OverallStats from './OverallStats';
 import ActionBar from './ActionBar';
 import LendingPoolList from './LendingPoolList';
+import MainContainer from 'parts/MainContainer';
 import { PARAMETERS } from 'utils/constants/links';
 
 const Markets = (): JSX.Element => {
@@ -12,15 +12,11 @@ const Markets = (): JSX.Element => {
   const selectedChainID = Number(chainIDParam);
 
   return (
-    <div
-      className={clsx(
-        'space-y-12',
-        'py-6'
-      )}>
+    <MainContainer>
       <OverallStats chainID={selectedChainID} />
       <ActionBar />
       <LendingPoolList chainID={selectedChainID} />
-    </div>
+    </MainContainer>
   );
 };
 

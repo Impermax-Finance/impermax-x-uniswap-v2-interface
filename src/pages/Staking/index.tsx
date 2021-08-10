@@ -12,7 +12,7 @@ interface ContainerProps {
   children: React.ReactNode;
 }
 
-const Container = ({
+const InternalContainer = ({
   children
 }: ContainerProps) => (
   <div
@@ -37,7 +37,7 @@ const Staking = (): JSX.Element => (
         'mx-auto',
         'my-4'
       )}>
-      <Container>
+      <InternalContainer>
         <Information
           className={clsx(
             'max-w-xl',
@@ -48,8 +48,8 @@ const Staking = (): JSX.Element => (
             'flex-shrink-0',
             MD_WIDTH_72_CLASS
           )} />
-      </Container>
-      <Container>
+      </InternalContainer>
+      <InternalContainer>
         <FormCard
           className={clsx(
             'max-w-xl',
@@ -60,7 +60,7 @@ const Staking = (): JSX.Element => (
             'flex-shrink-0',
             MD_WIDTH_72_CLASS
           )} />
-      </Container>
+      </InternalContainer>
     </div>
   </Layout>
 );

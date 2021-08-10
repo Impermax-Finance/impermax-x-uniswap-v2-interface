@@ -2,21 +2,19 @@
 import { useParams } from 'react-router-dom';
 
 import AccountContent from './AccountContent';
+import MainContainer from 'parts/MainContainer';
 import { AccountContext } from 'contexts/AccountProvider';
 import { PARAMETERS } from 'utils/constants/links';
-interface Params {
-  [key: string]: string;
-}
 
 const Account = (): JSX.Element => {
-  const { [PARAMETERS.ACCOUNT]: account } = useParams<Params>();
+  const { [PARAMETERS.ACCOUNT]: account } = useParams<Record<string, string>>();
 
   return (
-    <div className='space-y-12'>
+    <MainContainer>
       <AccountContext.Provider value={account}>
         <AccountContent />
       </AccountContext.Provider>
-    </div>
+    </MainContainer>
   );
 };
 
