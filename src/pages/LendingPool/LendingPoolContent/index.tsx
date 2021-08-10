@@ -1,9 +1,10 @@
-import { useOracleIsInitialized } from '../../../hooks/useData';
+
 import BorrowablesDetails from './BorrowablesDetails';
 import AccountLendingPool from './AccountLendingPool';
+import { useOracleIsInitialized } from 'hooks/useData';
 import './index.scss';
 
-export default function LendingPoolContent(): JSX.Element {
+const LendingPoolContent = (): JSX.Element => {
   const oracleIsInitialized = useOracleIsInitialized();
 
   if (!oracleIsInitialized) {
@@ -20,4 +21,6 @@ export default function LendingPoolContent(): JSX.Element {
       <AccountLendingPool />
     </>
   );
-}
+};
+
+export default LendingPoolContent;
