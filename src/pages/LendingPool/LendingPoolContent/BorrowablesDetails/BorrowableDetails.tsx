@@ -1,8 +1,9 @@
 
-import { Table } from 'react-bootstrap';
 import clsx from 'clsx';
 
-import BorrowableDetailsRow from './BorrowableDetailsRow';
+import List, { ListItem } from 'components/List';
+import Panel from 'components/Panel';
+import ImpermaxImage from 'components/UI/ImpermaxImage';
 import {
   useSymbol,
   useName,
@@ -15,7 +16,10 @@ import {
   useHasFarming
 } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
-import { formatUSD, formatPercentage } from 'utils/format';
+import {
+  formatUSD,
+  formatPercentage
+} from 'utils/format';
 
 /**
  * Generate the Currency Equity Details card,
@@ -34,44 +38,74 @@ const BorrowableDetails = (): JSX.Element => {
   const farmingAPY = useFarmingAPY();
   const tokenIcon = useTokenIcon();
 
-  // ray test touch <<
+  const details = [
+    {
+      name: 'Total Supply',
+      value: formatUSD(supplyUSD)
+    },
+    {
+      name: 'Total Borrow',
+      value: formatUSD(totalBorrowsUSD)
+    },
+    {
+      name: 'Utilization Rate',
+      value: formatPercentage(utilizationRate)
+    },
+    {
+      name: 'Supply APY',
+      value: formatPercentage(supplyAPY)
+    },
+    {
+      name: 'Borrow APY',
+      value: formatPercentage(borrowAPY)
+    }
+  ];
+  if (hasFarming) {
+    details.push({
+      name: 'Farming APY',
+      value: formatPercentage(farmingAPY)
+    });
+  }
+
   return (
-    <div>
-      <div className='header'>
-        <img
-          className={clsx(
-            'currency-icon',
-            'inline-block'
-          )}
-          src={tokenIcon}
-          alt='' />
-        {name} ({symbol})
+    <Panel
+      className={clsx(
+        'px-6',
+        'py-6',
+        'bg-white'
+      )}>
+      <div
+        className={clsx(
+          'py-3',
+          'flex',
+          'items-center',
+          'space-x-3'
+        )}>
+        <ImpermaxImage
+          width={32}
+          height={32}
+          src={tokenIcon} />
+        <h4
+          className='text-lg'>
+          {name} ({symbol})
+        </h4>
       </div>
-      <Table>
-        <tbody>
-          <BorrowableDetailsRow
-            name='Total Supply'
-            value={formatUSD(supplyUSD)} />
-          <BorrowableDetailsRow
-            name='Total Borrow'
-            value={formatUSD(totalBorrowsUSD)} />
-          <BorrowableDetailsRow
-            name='Utilization Rate'
-            value={formatPercentage(utilizationRate)} />
-          <BorrowableDetailsRow
-            name='Supply APY'
-            value={formatPercentage(supplyAPY)} />
-          <BorrowableDetailsRow
-            name='Borrow APY'
-            value={formatPercentage(borrowAPY)} />
-          {hasFarming && (<BorrowableDetailsRow
-            name='Farming APY'
-            value={formatPercentage(farmingAPY)} />)}
-        </tbody>
-      </Table>
-    </div>
+      <List>
+        {details.map(detail => (
+          <ListItem
+            key={detail.name}
+            className={clsx(
+              'flex',
+              'items-center',
+              'justify-between'
+            )}>
+            <span>{detail.name}</span>
+            <span>{detail.value}</span>
+          </ListItem>
+        ))}
+      </List>
+    </Panel>
   );
-  // ray test touch >>
 };
 
 export default BorrowableDetails;
