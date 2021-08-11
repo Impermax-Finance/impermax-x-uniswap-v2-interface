@@ -10,6 +10,7 @@ import { PoolTokenType } from 'types/interfaces';
 import PoolTokenContext from 'contexts/PoolToken';
 import './index.scss';
 
+// ray test touch <<
 const BorrowablesDetails = (): JSX.Element => {
   return (
     <div className='borrowables-details'>
@@ -36,5 +37,6 @@ const BorrowablesDetails = (): JSX.Element => {
     </div>
   );
 };
+// ray test touch >>
 
 export default BorrowablesDetails;

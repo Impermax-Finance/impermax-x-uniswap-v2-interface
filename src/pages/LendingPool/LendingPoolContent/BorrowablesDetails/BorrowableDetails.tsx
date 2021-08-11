@@ -1,10 +1,7 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import { Table } from 'react-bootstrap';
-import { formatUSD, formatPercentage } from '../../../../utils/format';
+import clsx from 'clsx';
+
 import BorrowableDetailsRow from './BorrowableDetailsRow';
 import {
   useSymbol,
@@ -16,16 +13,16 @@ import {
   useBorrowAPY,
   useFarmingAPY,
   useHasFarming
-} from '../../../../hooks/useData';
-import { useTokenIcon } from '../../../../hooks/useUrlGenerator';
-import clsx from 'clsx';
+} from 'hooks/useData';
+import { useTokenIcon } from 'hooks/useUrlGenerator';
+import { formatUSD, formatPercentage } from 'utils/format';
 
 /**
- * Generate the Currency Equity Details card, giving information about the supply and rates for a particular currency in
- * the system.
+ * Generate the Currency Equity Details card,
+ * giving information about the supply and rates for a particular currency in the system.
  */
 
-export default function BorrowableDetails(): JSX.Element {
+const BorrowableDetails = (): JSX.Element => {
   const name = useName();
   const symbol = useSymbol();
   const supplyUSD = useSupplyUSD();
@@ -37,8 +34,9 @@ export default function BorrowableDetails(): JSX.Element {
   const farmingAPY = useFarmingAPY();
   const tokenIcon = useTokenIcon();
 
+  // ray test touch <<
   return (
-    <div className='borrowable-details'>
+    <div>
       <div className='header'>
         <img
           className={clsx(
@@ -73,4 +71,7 @@ export default function BorrowableDetails(): JSX.Element {
       </Table>
     </div>
   );
-}
+  // ray test touch >>
+};
+
+export default BorrowableDetails;
