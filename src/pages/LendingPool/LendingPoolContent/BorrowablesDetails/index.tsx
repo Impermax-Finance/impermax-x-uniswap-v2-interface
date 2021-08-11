@@ -1,15 +1,16 @@
-import './index.scss';
-import { Row, Col, Card } from 'react-bootstrap';
-import BorrowableDetails from './BorrowableDetails';
-import { PoolTokenType } from '../../../../types/interfaces';
-import PoolTokenContext from '../../../../contexts/PoolToken';
-import { useTotalBalanceUSD } from '../../../../hooks/useData';
 
-export default function BorrowablesDetails(): JSX.Element {
-  const lpTokenLocked = useTotalBalanceUSD(PoolTokenType.Collateral);
-  if (lpTokenLocked > 0) {
-    console.log('[BorrowablesDetails] lpTokenLocked => ', lpTokenLocked);
-  }
+import {
+  Row,
+  Col,
+  Card
+} from 'react-bootstrap';
+
+import BorrowableDetails from './BorrowableDetails';
+import { PoolTokenType } from 'types/interfaces';
+import PoolTokenContext from 'contexts/PoolToken';
+import './index.scss';
+
+const BorrowablesDetails = (): JSX.Element => {
   return (
     <div className='borrowables-details'>
       <Row>
@@ -34,4 +35,6 @@ export default function BorrowablesDetails(): JSX.Element {
       </Row>
     </div>
   );
-}
+};
+
+export default BorrowablesDetails;
