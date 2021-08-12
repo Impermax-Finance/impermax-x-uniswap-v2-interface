@@ -2,9 +2,10 @@
 import clsx from 'clsx';
 
 import BorrowableDetails from './BorrowableDetails';
-import { PoolTokenType } from 'types/interfaces';
 import PoolTokenContext from 'contexts/PoolToken';
+import { PoolTokenType } from 'types/interfaces';
 
+// ray test touch <<
 const BorrowablesDetails = (): JSX.Element => {
   return (
     <div
@@ -24,5 +25,6 @@ const BorrowablesDetails = (): JSX.Element => {
     </div>
   );
 };
+// ray test touch >>
 
 export default BorrowablesDetails;

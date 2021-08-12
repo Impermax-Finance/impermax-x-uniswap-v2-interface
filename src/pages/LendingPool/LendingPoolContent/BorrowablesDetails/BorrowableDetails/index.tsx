@@ -38,7 +38,7 @@ const BorrowableDetails = (): JSX.Element => {
   const farmingAPY = useFarmingAPY();
   const tokenIcon = useTokenIcon();
 
-  const details = [
+  const borrowableDetails = [
     {
       name: 'Total Supply',
       value: formatUSD(supplyUSD)
@@ -61,7 +61,7 @@ const BorrowableDetails = (): JSX.Element => {
     }
   ];
   if (hasFarming) {
-    details.push({
+    borrowableDetails.push({
       name: 'Farming APY',
       value: formatPercentage(farmingAPY)
     });
@@ -91,7 +91,7 @@ const BorrowableDetails = (): JSX.Element => {
         </h4>
       </div>
       <List>
-        {details.map(detail => (
+        {borrowableDetails.map(detail => (
           <ListItem
             key={detail.name}
             className={clsx(
