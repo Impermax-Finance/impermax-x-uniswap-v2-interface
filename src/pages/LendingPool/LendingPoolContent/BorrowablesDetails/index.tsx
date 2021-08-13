@@ -20,7 +20,7 @@ const BorrowablesDetails = (): JSX.Element => {
         <BorrowableDetails poolTokenType={PoolTokenType.BorrowableA} />
       </PoolTokenContext.Provider>
       <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
-        <BorrowableDetails poolTokenType={PoolTokenType.BorrowableA} />
+        <BorrowableDetails poolTokenType={PoolTokenType.BorrowableB} />
       </PoolTokenContext.Provider>
     </div>
   );

@@ -11,7 +11,6 @@ import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import {
-  useSymbol,
   useSupplyUSD,
   useTotalBorrowsUSD,
   useUtilizationRate,
@@ -51,6 +50,23 @@ const getTokenName = (
   }
 };
 
+// TODO: double-check with `useSymbol`
+const getTokenSymbol = (
+  lendingPool: LendingPoolData,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
+  chainID: number
+) => {
+  const wETHAddress = W_ETH_ADDRESSES[chainID];
+  const lowerCasedWETHAddress = wETHAddress.toLowerCase();
+  const underlyingAddress = lendingPool[poolTokenType].underlying.id;
+
+  if (underlyingAddress === lowerCasedWETHAddress) {
+    return 'ETH';
+  } else {
+    return lendingPool[poolTokenType].underlying.symbol;
+  }
+};
+
 interface Props {
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB;
 }
@@ -58,7 +74,6 @@ interface Props {
 const BorrowableDetails = ({
   poolTokenType
 }: Props): JSX.Element => {
-  const symbol = useSymbol();
   const supplyUSD = useSupplyUSD();
   const totalBorrowsUSD = useTotalBorrowsUSD();
   const utilizationRate = useUtilizationRate();
@@ -95,7 +110,9 @@ const BorrowableDetails = ({
   if (selectedLendingPool === undefined) {
     throw new Error('Something went wrong!');
   }
+
   const tokenName = getTokenName(selectedLendingPool, poolTokenType, selectedChainID);
+  const tokenSymbol = getTokenSymbol(selectedLendingPool, poolTokenType, selectedChainID);
 
   const borrowableDetails = [
     {
@@ -146,7 +163,7 @@ const BorrowableDetails = ({
           src={tokenIcon} />
         <h4
           className='text-lg'>
-          {tokenName} ({symbol})
+          {tokenName} ({tokenSymbol})
         </h4>
       </div>
       <List>

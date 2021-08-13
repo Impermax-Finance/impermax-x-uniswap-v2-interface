@@ -15,8 +15,8 @@ export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, p
     return symbolA + '-' + symbolB;
   }
   const underlying = await this.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType);
-  const wethAddress = W_ETH_ADDRESSES[this.chainId];
-  if (underlying === wethAddress.toLowerCase()) return 'ETH';
+  const wETHAddress = W_ETH_ADDRESSES[this.chainId];
+  if (underlying === wETHAddress.toLowerCase()) return 'ETH';
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return lendingPoolData[poolTokenType].underlying.symbol;
 }
@@ -57,9 +57,9 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
 }
 export async function getImxPrice(this: Subgraph) : Promise<number> {
   const imxAddress = IMX_ADDRESSES[this.chainId];
-  const wethAddress = W_ETH_ADDRESSES[this.chainId];
+  const wETHAddress = W_ETH_ADDRESSES[this.chainId];
   const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[this.chainId];
-  const imxPair = getPairAddress(wethAddress, imxAddress, uniswapV2FactoryAddress);
+  const imxPair = getPairAddress(wETHAddress, imxAddress, uniswapV2FactoryAddress);
   const AAddress = await this.getUnderlyingAddress(imxPair, PoolTokenType.BorrowableA);
   const poolTokenType = AAddress.toLowerCase() === imxAddress.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
   return this.getTokenPrice(imxPair, poolTokenType);

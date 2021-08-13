@@ -39,8 +39,8 @@ export async function initializeTokenBalance(
   tokenAddress: Address
 ) : Promise<number> {
   const token = await this.getToken(tokenAddress);
-  const wethAddress = W_ETH_ADDRESSES[this.chainId];
-  if (token.address === wethAddress) {
+  const wETHAddress = W_ETH_ADDRESSES[this.chainId];
+  if (token.address === wETHAddress) {
     const bigBalance = await this.library.getBalance(this.account);
     return parseFloat(formatUnits(bigBalance)) / this.dust;
   }
