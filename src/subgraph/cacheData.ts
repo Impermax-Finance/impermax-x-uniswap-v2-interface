@@ -7,22 +7,6 @@ import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-f
 import toAPY from 'utils/helpers/web3/to-apy';
 import getPairAddress from 'utils/helpers/web3/get-pair-address';
 
-// ray test touch <<
-// Name
-export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
-  if (poolTokenType === PoolTokenType.Collateral) {
-    const nameA = await this.getName(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-    const nameB = await this.getName(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-    return nameA + '-' + nameB + ' LP';
-  }
-  const underlying = await this.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType);
-  const wethAddress = W_ETH_ADDRESSES[this.chainId];
-  if (underlying === wethAddress.toLowerCase()) return 'Ethereum';
-  const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return lendingPoolData[poolTokenType].underlying.name;
-}
-// ray test touch >>
-
 // Symbol
 export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
   if (poolTokenType === PoolTokenType.Collateral) {

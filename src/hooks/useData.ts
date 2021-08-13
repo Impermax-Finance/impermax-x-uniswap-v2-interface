@@ -36,15 +36,6 @@ export function useSymbol(poolTokenTypeArg?: PoolTokenType) : string {
   return symbol;
 }
 
-// ray test touch <<
-export function useName(poolTokenTypeArg?: PoolTokenType) : string {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [name, setName] = useState<string>('');
-  useSubgraphCallback(async subgraph => setName(await subgraph.getName(uniswapV2PairAddress, poolTokenType)));
-  return name;
-}
-// ray test touch >>
-
 export function useExchangeRate(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [exchangeRate, setExchangeRate] = useState<number>(1);
