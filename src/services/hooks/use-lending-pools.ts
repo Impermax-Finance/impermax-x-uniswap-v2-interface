@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { useQuery } from 'react-query';
 
 import initialLendingPoolsFetcher, {
@@ -72,4 +71,3 @@ const useLendingPools = (
 };
 
 export default useLendingPools;
-// ray test touch >>
