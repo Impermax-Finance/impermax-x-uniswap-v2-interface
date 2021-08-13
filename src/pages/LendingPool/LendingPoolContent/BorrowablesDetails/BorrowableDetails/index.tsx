@@ -17,9 +17,9 @@ import {
 } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 import {
-  formatUSD,
-  formatPercentage
-} from 'utils/format';
+  formatNumberWithUSDCommaDecimals,
+  formatNumberWithPercentageCommaDecimals
+} from 'utils/helpers/format-number';
 
 /**
  * Generate the Currency Equity Details card,
@@ -43,29 +43,29 @@ const BorrowableDetails = (): JSX.Element => {
   const borrowableDetails = [
     {
       name: 'Total Supply',
-      value: formatUSD(supplyUSD)
+      value: formatNumberWithUSDCommaDecimals(supplyUSD)
     },
     {
       name: 'Total Borrow',
-      value: formatUSD(totalBorrowsUSD)
+      value: formatNumberWithUSDCommaDecimals(totalBorrowsUSD)
     },
     {
       name: 'Utilization Rate',
-      value: formatPercentage(utilizationRate)
+      value: formatNumberWithPercentageCommaDecimals(utilizationRate)
     },
     {
       name: 'Supply APY',
-      value: formatPercentage(supplyAPY)
+      value: formatNumberWithPercentageCommaDecimals(supplyAPY)
     },
     {
       name: 'Borrow APY',
-      value: formatPercentage(borrowAPY)
+      value: formatNumberWithPercentageCommaDecimals(borrowAPY)
     }
   ];
   if (hasFarming) {
     borrowableDetails.push({
       name: 'Farming APY',
-      value: formatPercentage(farmingAPY)
+      value: formatNumberWithPercentageCommaDecimals(farmingAPY)
     });
   }
 

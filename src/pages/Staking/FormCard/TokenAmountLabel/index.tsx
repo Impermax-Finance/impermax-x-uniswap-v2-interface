@@ -34,7 +34,7 @@ import xIMXDataFetcher, {
 // const xIMXContract = getXIMXContract(X_IMX_ADDRESSES[chainId], library);
 // const bigXIMXRate: BigNumber = await mounted(xIMXContract.callStatic.exchangeRate());
 // const floatXIMXRate = parseFloat(formatUnits(bigXIMXRate, X_IMX_DECIMALS));
-// const xIMXRate = formatNumberWithFixedDecimals(floatXIMXRate, 5);
+// const xIMXRate = formatNumberWithFixedDecimals(6)(floatXIMXRate);
 
 interface CustomProps {
   text: string;
@@ -74,7 +74,7 @@ const TokenAmountLabel = ({
     }
 
     xIMXRateLabel = Number(xIMXData.exchangeRate);
-    xIMXRateLabel = formatNumberWithFixedDecimals(xIMXRateLabel, 5);
+    xIMXRateLabel = formatNumberWithFixedDecimals(6)(xIMXRateLabel);
   }
 
   return (

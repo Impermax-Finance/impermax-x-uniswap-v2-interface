@@ -265,8 +265,8 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
 
     approved = xIMXAllowance.gt(Zero);
     submitButtonText = approved ? 'Unstake' : 'Approve';
-    floatXIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXBalance, X_IMX_DECIMALS)), 2);
-    floatXIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXAllowance, X_IMX_DECIMALS)), 2);
+    floatXIMXBalance = formatNumberWithFixedDecimals(2)(parseFloat(formatUnits(xIMXBalance, X_IMX_DECIMALS)));
+    floatXIMXAllowance = formatNumberWithFixedDecimals(2)(parseFloat(formatUnits(xIMXAllowance, X_IMX_DECIMALS)));
   }
   if (xIMXBalanceIdle || xIMXBalanceLoading || xIMXAllowanceIdle || xIMXAllowanceLoading) {
     submitButtonText = 'Loading...';

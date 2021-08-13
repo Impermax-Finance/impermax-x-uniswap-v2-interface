@@ -9,9 +9,9 @@ import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import toAPY from 'utils/helpers/web3/to-apy';
 import {
-  formatUSD,
-  formatPercentage
-} from 'utils/format';
+  formatNumberWithUSDCommaDecimals,
+  formatNumberWithPercentageCommaDecimals
+} from 'utils/helpers/format-number';
 import {
   PAGES,
   PARAMETERS
@@ -352,20 +352,20 @@ const LendingPoolListItem = ({
                 symbol={symbolB} />
             </SetWrapper>
             <SetWrapper>
-              <Value>{formatUSD(supplyUSDA)}</Value>
-              <Value>{formatUSD(supplyUSDB)}</Value>
+              <Value>{formatNumberWithUSDCommaDecimals(supplyUSDA)}</Value>
+              <Value>{formatNumberWithUSDCommaDecimals(supplyUSDB)}</Value>
             </SetWrapper>
             <SetWrapper>
-              <Value>{formatUSD(totalBorrowsUSDA)}</Value>
-              <Value>{formatUSD(totalBorrowsUSDB)}</Value>
+              <Value>{formatNumberWithUSDCommaDecimals(totalBorrowsUSDA)}</Value>
+              <Value>{formatNumberWithUSDCommaDecimals(totalBorrowsUSDB)}</Value>
             </SetWrapper>
             <SetWrapper>
-              <Value>{formatPercentage(supplyAPYA)}</Value>
-              <Value>{formatPercentage(supplyAPYB)}</Value>
+              <Value>{formatNumberWithPercentageCommaDecimals(supplyAPYA)}</Value>
+              <Value>{formatNumberWithPercentageCommaDecimals(supplyAPYB)}</Value>
             </SetWrapper>
             <SetWrapper>
-              <Value>{formatPercentage(borrowAPYA)}</Value>
-              <Value>{formatPercentage(borrowAPYB)}</Value>
+              <Value>{formatNumberWithPercentageCommaDecimals(borrowAPYA)}</Value>
+              <Value>{formatNumberWithPercentageCommaDecimals(borrowAPYB)}</Value>
             </SetWrapper>
             <Value
               className={clsx(
@@ -375,7 +375,7 @@ const LendingPoolListItem = ({
                 'font-medium',
                 'text-impermaxAstral'
               )}>
-              {formatPercentage(leveragedAPY)}
+              {formatNumberWithPercentageCommaDecimals(leveragedAPY)}
             </Value>
           </LendingPoolListItemDesktopGridWrapper>
         ) : (
@@ -402,29 +402,29 @@ const LendingPoolListItem = ({
                 <PropertyLabel className='self-center'>
                   Total supply
                 </PropertyLabel>
-                <Value>{formatUSD(supplyUSDA)}</Value>
-                <Value>{formatUSD(supplyUSDB)}</Value>
+                <Value>{formatNumberWithUSDCommaDecimals(supplyUSDA)}</Value>
+                <Value>{formatNumberWithUSDCommaDecimals(supplyUSDB)}</Value>
               </>
               <>
                 <PropertyLabel className='self-center'>
                   Total borrowed
                 </PropertyLabel>
-                <Value>{formatUSD(totalBorrowsUSDA)}</Value>
-                <Value>{formatUSD(totalBorrowsUSDB)}</Value>
+                <Value>{formatNumberWithUSDCommaDecimals(totalBorrowsUSDA)}</Value>
+                <Value>{formatNumberWithUSDCommaDecimals(totalBorrowsUSDB)}</Value>
               </>
               <>
                 <PropertyLabel className='self-center'>
                   Supply APY
                 </PropertyLabel>
-                <Value>{formatPercentage(supplyAPYA)}</Value>
-                <Value>{formatPercentage(supplyAPYB)}</Value>
+                <Value>{formatNumberWithPercentageCommaDecimals(supplyAPYA)}</Value>
+                <Value>{formatNumberWithPercentageCommaDecimals(supplyAPYB)}</Value>
               </>
               <>
                 <PropertyLabel className='self-center'>
                   Borrow APY
                 </PropertyLabel>
-                <Value>{formatPercentage(borrowAPYA)}</Value>
-                <Value>{formatPercentage(borrowAPYB)}</Value>
+                <Value>{formatNumberWithPercentageCommaDecimals(borrowAPYA)}</Value>
+                <Value>{formatNumberWithPercentageCommaDecimals(borrowAPYB)}</Value>
               </>
               <>
                 <PropertyLabel className='self-center'>
@@ -438,7 +438,7 @@ const LendingPoolListItem = ({
                     'font-medium',
                     'text-impermaxAstral'
                   )}>
-                  {formatPercentage(leveragedAPY)}
+                  {formatNumberWithPercentageCommaDecimals(leveragedAPY)}
                 </Value>
               </>
             </LendingPoolListItemMobileGridWrapper>

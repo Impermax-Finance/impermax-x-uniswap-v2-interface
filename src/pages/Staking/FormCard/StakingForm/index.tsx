@@ -265,8 +265,8 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
 
     approved = imxAllowance.gt(Zero);
     submitButtonText = approved ? 'Stake' : 'Approve';
-    floatIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(imxBalance, IMX_DECIMALS)), 2);
-    floatIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(imxAllowance, IMX_DECIMALS)), 2);
+    floatIMXBalance = formatNumberWithFixedDecimals(2)(parseFloat(formatUnits(imxBalance, IMX_DECIMALS)));
+    floatIMXAllowance = formatNumberWithFixedDecimals(2)(parseFloat(formatUnits(imxAllowance, IMX_DECIMALS)));
   }
   if (imxBalanceIdle || imxBalanceLoading || imxAllowanceIdle || imxAllowanceLoading) {
     submitButtonText = 'Loading...';
