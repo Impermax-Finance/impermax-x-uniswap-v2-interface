@@ -11,7 +11,6 @@ import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import {
-  useSupplyUSD,
   useTotalBorrowsUSD,
   useUtilizationRate,
   useSupplyAPY,
@@ -24,48 +23,21 @@ import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
 } from 'utils/helpers/format-number';
+// ray test touch <<
+import {
+  getLendingPoolTokenName,
+  getLendingPoolTokenSymbol,
+  getLendingPoolTokenSupplyInUSD
+} from 'utils/helpers/lending-pools';
+// ray test touch >>
 import { PARAMETERS } from 'utils/constants/links';
-import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
-import useLendingPools, { LendingPoolData } from 'services/hooks/use-lending-pools';
+import useLendingPools from 'services/hooks/use-lending-pools';
 import { PoolTokenType } from 'types/interfaces';
 
 /**
  * Generate the Currency Equity Details card,
  * giving information about the supply and rates for a particular currency in the system.
  */
-
-const getTokenName = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
-  chainID: number
-) => {
-  const wETHAddress = W_ETH_ADDRESSES[chainID];
-  const lowerCasedWETHAddress = wETHAddress.toLowerCase();
-  const underlyingAddress = lendingPool[poolTokenType].underlying.id;
-
-  if (underlyingAddress === lowerCasedWETHAddress) {
-    return 'Ethereum';
-  } else {
-    return lendingPool[poolTokenType].underlying.name;
-  }
-};
-
-// TODO: double-check with `useSymbol`
-const getTokenSymbol = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
-  chainID: number
-) => {
-  const wETHAddress = W_ETH_ADDRESSES[chainID];
-  const lowerCasedWETHAddress = wETHAddress.toLowerCase();
-  const underlyingAddress = lendingPool[poolTokenType].underlying.id;
-
-  if (underlyingAddress === lowerCasedWETHAddress) {
-    return 'ETH';
-  } else {
-    return lendingPool[poolTokenType].underlying.symbol;
-  }
-};
 
 interface Props {
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB;
@@ -74,7 +46,6 @@ interface Props {
 const BorrowableDetails = ({
   poolTokenType
 }: Props): JSX.Element => {
-  const supplyUSD = useSupplyUSD();
   const totalBorrowsUSD = useTotalBorrowsUSD();
   const utilizationRate = useUtilizationRate();
   const supplyAPY = useSupplyAPY();
@@ -111,13 +82,14 @@ const BorrowableDetails = ({
     throw new Error('Something went wrong!');
   }
 
-  const tokenName = getTokenName(selectedLendingPool, poolTokenType, selectedChainID);
-  const tokenSymbol = getTokenSymbol(selectedLendingPool, poolTokenType, selectedChainID);
+  const tokenName = getLendingPoolTokenName(selectedLendingPool, poolTokenType, selectedChainID);
+  const tokenSymbol = getLendingPoolTokenSymbol(selectedLendingPool, poolTokenType, selectedChainID);
+  const tokenSupplyInUSD = getLendingPoolTokenSupplyInUSD(selectedLendingPool, poolTokenType);
 
   const borrowableDetails = [
     {
       name: 'Total Supply',
-      value: formatNumberWithUSDCommaDecimals(supplyUSD)
+      value: formatNumberWithUSDCommaDecimals(tokenSupplyInUSD)
     },
     {
       name: 'Total Borrow',

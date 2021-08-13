@@ -163,17 +163,6 @@ export async function getSupply(this: Subgraph, uniswapV2PairAddress: Address, p
   const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
   return totalBalance + totalBorrows;
 }
-export async function getCurrentSupply(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const storedAmount = await this.getSupply(uniswapV2PairAddress, poolTokenType);
-  const accrualTimestamp = await this.getAccrualTimestamp(uniswapV2PairAddress, poolTokenType);
-  const supplyRate = await this.getSupplyRate(uniswapV2PairAddress, poolTokenType);
-  return storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
-}
-export async function getSupplyUSD(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const supply = await this.getCurrentSupply(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return supply * tokenPrice;
-}
 
 // Utilization Rate
 export async function getUtilizationRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {

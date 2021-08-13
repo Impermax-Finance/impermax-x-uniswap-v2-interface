@@ -68,8 +68,6 @@ class Subgraph {
   public getNextBorrowRate = cacheData.getNextBorrowRate;
   public getNextBorrowAPY = cacheData.getNextBorrowAPY;
   public getSupply = cacheData.getSupply;
-  public getCurrentSupply = cacheData.getCurrentSupply;
-  public getSupplyUSD = cacheData.getSupplyUSD;
   public getUtilizationRate = cacheData.getUtilizationRate;
   public getSupplyRate = cacheData.getSupplyRate;
   public getSupplyAPY = cacheData.getSupplyAPY;

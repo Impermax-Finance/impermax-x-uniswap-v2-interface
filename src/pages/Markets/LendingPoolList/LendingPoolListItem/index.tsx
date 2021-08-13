@@ -7,17 +7,22 @@ import LendingPoolListItemDesktopGridWrapper from './LendingPoolListItemDesktopG
 import LendingPoolListItemMobileGridWrapper from './LendingPoolListItemMobileGridWrapper';
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import toAPY from 'utils/helpers/web3/to-apy';
 import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
 } from 'utils/helpers/format-number';
+// ray test touch <<
+import {
+  getLendingPoolTokenSymbol,
+  getLendingPoolTokenSupplyInUSD
+} from 'utils/helpers/lending-pools';
+// ray test touch >>
 import {
   PAGES,
   PARAMETERS
 } from 'utils/constants/links';
-import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
-import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import {
   PoolTokenType,
   LendingPoolData
@@ -160,44 +165,7 @@ const SetWrapper = ({
   </div>
 );
 
-const getLendingPoolSymbol = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
-  chainID: number
-): string => {
-  const underlying = lendingPool[poolTokenType].underlying;
-  const wETHAddress = W_ETH_ADDRESSES[chainID];
-  let symbol;
-  if (underlying.id === wETHAddress.toLowerCase()) {
-    symbol = 'ETH';
-  } else {
-    symbol = underlying.symbol;
-  }
-
-  return symbol;
-};
-
-const getLendingPoolSupplyUSD = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): number => {
-  const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
-  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const supply = totalBalance + totalBorrows;
-  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply; // TODO: could be a function
-
-  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
-  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
-
-  const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
-  const currentSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
-  const tokenPrice = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
-  const supplyUSD = currentSupply * tokenPrice;
-
-  return supplyUSD;
-};
-
+// ray test touch <<
 const getLendingPoolTotalBorrowsUSD = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
@@ -250,6 +218,7 @@ const getLendingPoolTokenIcon = (
 
   return `/assets/images/token-logos/${convertedAddress}.png`;
 };
+// ray test touch >>
 
 interface Props {
   chainID: number;
@@ -264,10 +233,10 @@ const LendingPoolListItem = ({
   lendingPool,
   greaterThanMd
 }: Props): JSX.Element => {
-  const symbolA = getLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
-  const symbolB = getLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
-  const supplyUSDA = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableA);
-  const supplyUSDB = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableB);
+  const symbolA = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
+  const symbolB = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
+  const supplyUSDA = getLendingPoolTokenSupplyInUSD(lendingPool, PoolTokenType.BorrowableA);
+  const supplyUSDB = getLendingPoolTokenSupplyInUSD(lendingPool, PoolTokenType.BorrowableB);
   const totalBorrowsUSDA = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableA);
   const totalBorrowsUSDB = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableB);
   const supplyAPYA = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableA);
