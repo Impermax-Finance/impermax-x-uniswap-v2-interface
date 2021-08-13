@@ -70,4 +70,8 @@ const useLendingPools = (
   };
 };
 
+export type {
+  LendingPoolData
+};
+
 export default useLendingPools;

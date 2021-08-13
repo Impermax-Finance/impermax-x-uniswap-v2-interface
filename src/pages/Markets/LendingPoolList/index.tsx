@@ -41,9 +41,9 @@ const LendingPoolList = ({
   }
 
   const imxAddress = IMX_ADDRESSES[chainID];
-  const wethAddress = W_ETH_ADDRESSES[chainID];
+  const wETHAddress = W_ETH_ADDRESSES[chainID];
   const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[chainID];
-  const imxPair = getPairAddress(wethAddress, imxAddress, uniswapV2FactoryAddress).toLowerCase();
+  const imxPair = getPairAddress(wETHAddress, imxAddress, uniswapV2FactoryAddress).toLowerCase();
   const imxLendingPool = lendingPools.find(lendingPool => lendingPool.id === imxPair);
 
   if (!imxLendingPool) {

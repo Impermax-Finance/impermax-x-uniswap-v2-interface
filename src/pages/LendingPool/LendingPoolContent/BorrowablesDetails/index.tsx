@@ -17,10 +17,10 @@ const BorrowablesDetails = (): JSX.Element => {
         'md:gap-3'
       )}>
       <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
-        <BorrowableDetails />
+        <BorrowableDetails poolTokenType={PoolTokenType.BorrowableA} />
       </PoolTokenContext.Provider>
       <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
-        <BorrowableDetails />
+        <BorrowableDetails poolTokenType={PoolTokenType.BorrowableA} />
       </PoolTokenContext.Provider>
     </div>
   );

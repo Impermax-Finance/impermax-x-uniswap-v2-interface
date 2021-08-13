@@ -7,13 +7,15 @@ import PairAddressContext from 'contexts/PairAddress';
 import { PARAMETERS } from 'utils/constants/links';
 
 const LendingPool = (): JSX.Element => {
-  const { [PARAMETERS.UNISWAP_V2_PAIR_ADDRESS]: uniswapV2PairAddress } = useParams<Record<string, string>>();
+  const { [PARAMETERS.UNISWAP_V2_PAIR_ADDRESS]: selectedUniswapV2PairAddress } = useParams<Record<string, string>>();
 
   return (
     <MainContainer>
-      <PairAddressContext.Provider value={uniswapV2PairAddress}>
+      {/* ray test touch << */}
+      <PairAddressContext.Provider value={selectedUniswapV2PairAddress}>
         <LendingPoolContent />
       </PairAddressContext.Provider>
+      {/* ray test touch >> */}
     </MainContainer>
   );
 };

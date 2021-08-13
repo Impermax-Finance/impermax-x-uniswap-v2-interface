@@ -1,12 +1,17 @@
 
+import { useParams } from 'react-router-dom';
+import {
+  useErrorHandler,
+  withErrorBoundary
+} from 'react-error-boundary';
 import clsx from 'clsx';
 
 import List, { ListItem } from 'components/List';
 import Panel from 'components/Panel';
+import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import {
   useSymbol,
-  useName,
   useSupplyUSD,
   useTotalBorrowsUSD,
   useUtilizationRate,
@@ -20,15 +25,41 @@ import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
 } from 'utils/helpers/format-number';
+import { PARAMETERS } from 'utils/constants/links';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
+import useLendingPools, { LendingPoolData } from 'services/hooks/use-lending-pools';
+import { PoolTokenType } from 'types/interfaces';
 
 /**
  * Generate the Currency Equity Details card,
  * giving information about the supply and rates for a particular currency in the system.
  */
 
-const BorrowableDetails = (): JSX.Element => {
+const getTokenName = (
+  lendingPool: LendingPoolData,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
+  chainID: number
+) => {
+  const wETHAddress = W_ETH_ADDRESSES[chainID];
+  const lowerCasedWETHAddress = wETHAddress.toLowerCase();
+  const underlyingAddress = lendingPool[poolTokenType].underlying.id;
+
+  if (underlyingAddress === lowerCasedWETHAddress) {
+    return 'Ethereum';
+  } else {
+    return lendingPool[poolTokenType].underlying.name;
+  }
+};
+
+interface Props {
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB;
+}
+
+const BorrowableDetails = ({
+  poolTokenType
+}: Props): JSX.Element => {
   // ray test touch <<
-  const name = useName();
+  // const name = useName();
   // ray test touch >>
   const symbol = useSymbol();
   const supplyUSD = useSupplyUSD();
@@ -39,6 +70,35 @@ const BorrowableDetails = (): JSX.Element => {
   const hasFarming = useHasFarming();
   const farmingAPY = useFarmingAPY();
   const tokenIcon = useTokenIcon();
+
+  const {
+    [PARAMETERS.CHAIN_ID]: selectedChainIDParam,
+    [PARAMETERS.UNISWAP_V2_PAIR_ADDRESS]: selectedUniswapV2PairAddress
+  } = useParams<Record<string, string>>();
+  const selectedChainID = Number(selectedChainIDParam);
+
+  const {
+    isLoading: lendingPoolsLoading,
+    data: lendingPools,
+    error: lendingPoolsError
+  } = useLendingPools(selectedChainID);
+  useErrorHandler(lendingPoolsError);
+
+  // TODO: should use skeleton loaders
+  if (lendingPoolsLoading) {
+    return <>Loading...</>;
+  }
+  if (lendingPools === undefined) {
+    throw new Error('Something went wrong!');
+  }
+
+  const lowerCasedSelectedUniswapV2PairAddress = selectedUniswapV2PairAddress.toLowerCase();
+  const selectedLendingPool =
+    lendingPools.find(lendingPool => lendingPool.id === lowerCasedSelectedUniswapV2PairAddress);
+  if (selectedLendingPool === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  const tokenName = getTokenName(selectedLendingPool, poolTokenType, selectedChainID);
 
   const borrowableDetails = [
     {
@@ -89,7 +149,7 @@ const BorrowableDetails = (): JSX.Element => {
           src={tokenIcon} />
         <h4
           className='text-lg'>
-          {name} ({symbol})
+          {tokenName} ({symbol})
         </h4>
       </div>
       <List>
@@ -110,4 +170,9 @@ const BorrowableDetails = (): JSX.Element => {
   );
 };
 
-export default BorrowableDetails;
+export default withErrorBoundary(BorrowableDetails, {
+  FallbackComponent: ErrorFallback,
+  onReset: () => {
+    window.location.reload();
+  }
+});

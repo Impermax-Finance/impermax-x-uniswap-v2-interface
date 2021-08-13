@@ -166,9 +166,9 @@ const getLendingPoolSymbol = (
   chainID: number
 ): string => {
   const underlying = lendingPool[poolTokenType].underlying;
-  const wethAddress = W_ETH_ADDRESSES[chainID];
+  const wETHAddress = W_ETH_ADDRESSES[chainID];
   let symbol;
-  if (underlying.id === wethAddress.toLowerCase()) {
+  if (underlying.id === wETHAddress.toLowerCase()) {
     symbol = 'ETH';
   } else {
     symbol = underlying.symbol;
