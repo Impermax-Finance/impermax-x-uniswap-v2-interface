@@ -27,7 +27,9 @@ import {
  */
 
 const BorrowableDetails = (): JSX.Element => {
+  // ray test touch <<
   const name = useName();
+  // ray test touch >>
   const symbol = useSymbol();
   const supplyUSD = useSupplyUSD();
   const totalBorrowsUSD = useTotalBorrowsUSD();

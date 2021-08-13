@@ -40,7 +40,7 @@ import {
 } from 'config/web3/contracts/x-imxes';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
-import useTokenBalance from 'utils/hooks/web3/use-token-balance';
+import useTokenBalance from 'services/hooks/use-token-balance';
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';

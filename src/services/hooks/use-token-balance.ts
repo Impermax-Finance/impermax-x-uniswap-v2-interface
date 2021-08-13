@@ -27,7 +27,7 @@ const useTokenBalance = (
       genericFetcher<BigNumber>(library, ERC20JSON.abi) :
       Promise.resolve,
     {
-      enabled: !!(chainID && library && account)
+      enabled: !!(chainID && library && address && account)
     }
   );
 };

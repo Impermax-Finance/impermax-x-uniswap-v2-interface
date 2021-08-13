@@ -45,7 +45,9 @@ class Subgraph {
   public getUserData = initializer.getUserData;
 
   // Data Getters
+  // ray test touch <<
   public getName = cacheData.getName;
+  // ray test touch >>
   public getSymbol = cacheData.getSymbol;
   public getDecimals = cacheData.getDecimals;
   public getExchangeRate = cacheData.getExchangeRate;
