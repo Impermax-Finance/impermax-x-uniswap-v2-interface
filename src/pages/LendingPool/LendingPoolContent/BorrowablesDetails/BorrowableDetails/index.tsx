@@ -16,7 +16,6 @@ import {
   useHasFarming
 } from 'hooks/useData';
 // ray test touch >>
-import { useTokenIcon } from 'hooks/useUrlGenerator';
 import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
@@ -28,7 +27,8 @@ import {
   getLendingPoolTokenTotalBorrowInUSD,
   getLendingPoolTokenUtilizationRate,
   getLendingPoolTokenSupplyAPY,
-  getLendingPoolTokenBorrowAPY
+  getLendingPoolTokenBorrowAPY,
+  getLendingPoolTokenIcon
 } from 'utils/helpers/lending-pools';
 import { PARAMETERS } from 'utils/constants/links';
 import useLendingPools from 'services/hooks/use-lending-pools';
@@ -46,9 +46,10 @@ interface Props {
 const BorrowableDetails = ({
   poolTokenType
 }: Props): JSX.Element => {
+  // ray test touch <<
   const hasFarming = useHasFarming();
   const farmingAPY = useFarmingAPY();
-  const tokenIcon = useTokenIcon();
+  // ray test touch >>
 
   const {
     [PARAMETERS.CHAIN_ID]: selectedChainIDParam,
@@ -86,6 +87,7 @@ const BorrowableDetails = ({
   const tokenUtilizationRate = getLendingPoolTokenUtilizationRate(selectedLendingPool, poolTokenType);
   const tokenSupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, poolTokenType);
   const tokenBorrowAPY = getLendingPoolTokenBorrowAPY(selectedLendingPool, poolTokenType);
+  const tokenIcon = getLendingPoolTokenIcon(selectedLendingPool, poolTokenType);
   // ray test touch >>
 
   const borrowableDetails = [

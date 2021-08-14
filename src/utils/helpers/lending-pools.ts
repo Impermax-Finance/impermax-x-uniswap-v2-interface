@@ -1,4 +1,6 @@
 
+import { getAddress } from '@ethersproject/address';
+
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 import toAPY from 'utils/helpers/to-apy';
 import {
@@ -105,7 +107,6 @@ const getLendingPoolTokenSupplyAPY = (
   return supplyAPY;
 };
 
-// ray test touch <<
 const getLendingPoolTokenBorrowAPY = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
@@ -114,6 +115,17 @@ const getLendingPoolTokenBorrowAPY = (
   const borrowAPY = toAPY(borrowRate);
 
   return borrowAPY;
+};
+
+// ray test touch <<
+const getLendingPoolTokenIcon = (
+  lendingPool: LendingPoolData,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): string => {
+  const underlyingAddress = lendingPool[poolTokenType].underlying.id;
+  const convertedUnderlyingAddress = getAddress(underlyingAddress);
+
+  return `/assets/images/token-logos/${convertedUnderlyingAddress}.png`;
 };
 // ray test touch >>
 
@@ -124,5 +136,6 @@ export {
   getLendingPoolTokenTotalBorrowInUSD,
   getLendingPoolTokenUtilizationRate,
   getLendingPoolTokenSupplyAPY,
-  getLendingPoolTokenBorrowAPY
+  getLendingPoolTokenBorrowAPY,
+  getLendingPoolTokenIcon
 };

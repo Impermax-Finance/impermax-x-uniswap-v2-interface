@@ -17,7 +17,7 @@ export function useToken(poolTokenTypeArg?: PoolTokenType) {
   const uniswapV2PairAddress = usePairAddress();
   // TODO: <
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const poolTokenType = poolTokenTypeArg ? poolTokenTypeArg : usePoolToken();
+  const poolTokenType = poolTokenTypeArg ?? usePoolToken();
   // TODO: >
   return { uniswapV2PairAddress, poolTokenType };
 }

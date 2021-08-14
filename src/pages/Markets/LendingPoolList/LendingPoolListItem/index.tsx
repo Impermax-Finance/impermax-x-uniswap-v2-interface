@@ -1,7 +1,6 @@
 
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { getAddress } from '@ethersproject/address';
 
 import LendingPoolListItemDesktopGridWrapper from './LendingPoolListItemDesktopGridWrapper';
 import LendingPoolListItemMobileGridWrapper from './LendingPoolListItemMobileGridWrapper';
@@ -19,7 +18,8 @@ import {
   getLendingPoolTokenTotalSupplyInUSD,
   getLendingPoolTokenTotalBorrowInUSD,
   getLendingPoolTokenSupplyAPY,
-  getLendingPoolTokenBorrowAPY
+  getLendingPoolTokenBorrowAPY,
+  getLendingPoolTokenIcon
 } from 'utils/helpers/lending-pools';
 // ray test touch >>
 import {
@@ -167,18 +167,6 @@ const SetWrapper = ({
     {children}
   </div>
 );
-
-// ray test touch <<
-const getLendingPoolTokenIcon = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): string => {
-  const tokenAddress = lendingPool[poolTokenType].underlying.id;
-  const convertedAddress = getAddress(tokenAddress);
-
-  return `/assets/images/token-logos/${convertedAddress}.png`;
-};
-// ray test touch >>
 
 interface Props {
   chainID: number;
