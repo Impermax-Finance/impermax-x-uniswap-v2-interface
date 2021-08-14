@@ -139,10 +139,6 @@ export async function getBorrowRate(this: Subgraph, uniswapV2PairAddress: Addres
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return parseFloat((lendingPoolData[poolTokenType] as Borrowable).borrowRate);
 }
-export async function getBorrowAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
-  return toAPY(borrowRate);
-}
 export async function getNextBorrowRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
   const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
   const supply = await this.getSupply(uniswapV2PairAddress, poolTokenType);

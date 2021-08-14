@@ -18,7 +18,8 @@ import {
   getLendingPoolTokenSymbol,
   getLendingPoolTokenTotalSupplyInUSD,
   getLendingPoolTokenTotalBorrowInUSD,
-  getLendingPoolTokenSupplyAPY
+  getLendingPoolTokenSupplyAPY,
+  getLendingPoolTokenBorrowAPY
 } from 'utils/helpers/lending-pools';
 // ray test touch >>
 import {
@@ -168,16 +169,6 @@ const SetWrapper = ({
 );
 
 // ray test touch <<
-const getLendingPoolBorrowAPY = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): number => {
-  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const borrowAPY = toAPY(borrowRate);
-
-  return borrowAPY;
-};
-
 const getLendingPoolTokenIcon = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
@@ -211,8 +202,8 @@ const LendingPoolListItem = ({
   const totalBorrowsUSDB = getLendingPoolTokenTotalBorrowInUSD(lendingPool, PoolTokenType.BorrowableB);
   const supplyAPYA = getLendingPoolTokenSupplyAPY(lendingPool, PoolTokenType.BorrowableA);
   const supplyAPYB = getLendingPoolTokenSupplyAPY(lendingPool, PoolTokenType.BorrowableB);
-  const borrowAPYA = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableA);
-  const borrowAPYB = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
+  const borrowAPYA = getLendingPoolTokenBorrowAPY(lendingPool, PoolTokenType.BorrowableA);
+  const borrowAPYB = getLendingPoolTokenBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
   // ray test touch >>
 
   const imxAddress = IMX_ADDRESSES[chainID];

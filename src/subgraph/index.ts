@@ -64,7 +64,6 @@ class Subgraph {
   public getCurrentTotalBorrows = cacheData.getCurrentTotalBorrows;
   public getTotalBorrowsUSD = cacheData.getTotalBorrowsUSD;
   public getBorrowRate = cacheData.getBorrowRate;
-  public getBorrowAPY = cacheData.getBorrowAPY;
   public getNextBorrowRate = cacheData.getNextBorrowRate;
   public getNextBorrowAPY = cacheData.getNextBorrowAPY;
   public getSupply = cacheData.getSupply;

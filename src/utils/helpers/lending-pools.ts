@@ -105,11 +105,24 @@ const getLendingPoolTokenSupplyAPY = (
   return supplyAPY;
 };
 
+// ray test touch <<
+const getLendingPoolTokenBorrowAPY = (
+  lendingPool: LendingPoolData,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): number => {
+  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
+  const borrowAPY = toAPY(borrowRate);
+
+  return borrowAPY;
+};
+// ray test touch >>
+
 export {
   getLendingPoolTokenName,
   getLendingPoolTokenSymbol,
   getLendingPoolTokenTotalSupplyInUSD,
   getLendingPoolTokenTotalBorrowInUSD,
   getLendingPoolTokenUtilizationRate,
-  getLendingPoolTokenSupplyAPY
+  getLendingPoolTokenSupplyAPY,
+  getLendingPoolTokenBorrowAPY
 };

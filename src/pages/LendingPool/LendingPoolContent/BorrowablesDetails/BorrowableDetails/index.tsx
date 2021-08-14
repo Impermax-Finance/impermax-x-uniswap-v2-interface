@@ -10,26 +10,26 @@ import List, { ListItem } from 'components/List';
 import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
+// ray test touch <<
 import {
-  useBorrowAPY,
   useFarmingAPY,
   useHasFarming
 } from 'hooks/useData';
+// ray test touch >>
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
 } from 'utils/helpers/format-number';
-// ray test touch <<
 import {
   getLendingPoolTokenName,
   getLendingPoolTokenSymbol,
   getLendingPoolTokenTotalSupplyInUSD,
   getLendingPoolTokenTotalBorrowInUSD,
   getLendingPoolTokenUtilizationRate,
-  getLendingPoolTokenSupplyAPY
+  getLendingPoolTokenSupplyAPY,
+  getLendingPoolTokenBorrowAPY
 } from 'utils/helpers/lending-pools';
-// ray test touch >>
 import { PARAMETERS } from 'utils/constants/links';
 import useLendingPools from 'services/hooks/use-lending-pools';
 import { PoolTokenType } from 'types/interfaces';
@@ -46,7 +46,6 @@ interface Props {
 const BorrowableDetails = ({
   poolTokenType
 }: Props): JSX.Element => {
-  const borrowAPY = useBorrowAPY();
   const hasFarming = useHasFarming();
   const farmingAPY = useFarmingAPY();
   const tokenIcon = useTokenIcon();
@@ -86,6 +85,7 @@ const BorrowableDetails = ({
   const tokenTotalBorrowInUSD = getLendingPoolTokenTotalBorrowInUSD(selectedLendingPool, poolTokenType);
   const tokenUtilizationRate = getLendingPoolTokenUtilizationRate(selectedLendingPool, poolTokenType);
   const tokenSupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, poolTokenType);
+  const tokenBorrowAPY = getLendingPoolTokenBorrowAPY(selectedLendingPool, poolTokenType);
   // ray test touch >>
 
   const borrowableDetails = [
@@ -107,7 +107,7 @@ const BorrowableDetails = ({
     },
     {
       name: 'Borrow APY',
-      value: formatNumberWithPercentageCommaDecimals(borrowAPY)
+      value: formatNumberWithPercentageCommaDecimals(tokenBorrowAPY)
     }
   ];
   if (hasFarming) {
