@@ -4,7 +4,7 @@ import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
-import toAPY from 'utils/helpers/web3/to-apy';
+import toAPY from 'utils/helpers/to-apy';
 import getPairAddress from 'utils/helpers/web3/get-pair-address';
 
 // Symbol

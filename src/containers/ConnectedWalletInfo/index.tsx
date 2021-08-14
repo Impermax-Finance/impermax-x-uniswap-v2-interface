@@ -6,7 +6,7 @@ import { Web3Provider } from '@ethersproject/providers';
 
 import ImpermaxJadeButtonGroup, { ImpermaxJadeButtonGroupItem } from 'components/button-groups/ImpermaxJadeButtonGroup';
 import AccountModal from 'components/InteractionModal/AccountModal';
-import shortenAddress from 'utils/helpers/web3/shorten-address';
+import shortenAddress from 'utils/helpers/shorten-address';
 import {
   useAllTransactions,
   isTransactionRecent

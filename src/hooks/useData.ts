@@ -106,13 +106,6 @@ export function useUnderlyingAddress(poolTokenTypeArg?: PoolTokenType) : string 
   return tokenAddress;
 }
 
-export function useSupplyAPY(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [supplyAPY, setSupplyAPY] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setSupplyAPY(await subgraph.getSupplyAPY(uniswapV2PairAddress, poolTokenType)));
-  return supplyAPY;
-}
-
 export function useBorrowAPY(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [borrowAPY, setBorrowAPY] = useState<number>(0);

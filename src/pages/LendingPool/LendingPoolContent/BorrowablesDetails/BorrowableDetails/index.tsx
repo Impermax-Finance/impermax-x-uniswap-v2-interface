@@ -11,7 +11,6 @@ import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import {
-  useSupplyAPY,
   useBorrowAPY,
   useFarmingAPY,
   useHasFarming
@@ -27,7 +26,8 @@ import {
   getLendingPoolTokenSymbol,
   getLendingPoolTokenTotalSupplyInUSD,
   getLendingPoolTokenTotalBorrowInUSD,
-  getLendingPoolTokenUtilizationRate
+  getLendingPoolTokenUtilizationRate,
+  getLendingPoolTokenSupplyAPY
 } from 'utils/helpers/lending-pools';
 // ray test touch >>
 import { PARAMETERS } from 'utils/constants/links';
@@ -46,7 +46,6 @@ interface Props {
 const BorrowableDetails = ({
   poolTokenType
 }: Props): JSX.Element => {
-  const supplyAPY = useSupplyAPY();
   const borrowAPY = useBorrowAPY();
   const hasFarming = useHasFarming();
   const farmingAPY = useFarmingAPY();
@@ -85,7 +84,8 @@ const BorrowableDetails = ({
   const tokenSymbol = getLendingPoolTokenSymbol(selectedLendingPool, poolTokenType, selectedChainID);
   const tokenTotalSupplyInUSD = getLendingPoolTokenTotalSupplyInUSD(selectedLendingPool, poolTokenType);
   const tokenTotalBorrowInUSD = getLendingPoolTokenTotalBorrowInUSD(selectedLendingPool, poolTokenType);
-  const utilizationRate = getLendingPoolTokenUtilizationRate(selectedLendingPool, poolTokenType);
+  const tokenUtilizationRate = getLendingPoolTokenUtilizationRate(selectedLendingPool, poolTokenType);
+  const tokenSupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, poolTokenType);
   // ray test touch >>
 
   const borrowableDetails = [
@@ -99,11 +99,11 @@ const BorrowableDetails = ({
     },
     {
       name: 'Utilization Rate',
-      value: formatNumberWithPercentageCommaDecimals(utilizationRate)
+      value: formatNumberWithPercentageCommaDecimals(tokenUtilizationRate)
     },
     {
       name: 'Supply APY',
-      value: formatNumberWithPercentageCommaDecimals(supplyAPY)
+      value: formatNumberWithPercentageCommaDecimals(tokenSupplyAPY)
     },
     {
       name: 'Borrow APY',

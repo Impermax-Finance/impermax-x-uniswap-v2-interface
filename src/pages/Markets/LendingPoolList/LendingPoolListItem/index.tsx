@@ -8,7 +8,7 @@ import LendingPoolListItemMobileGridWrapper from './LendingPoolListItemMobileGri
 import Panel from 'components/Panel';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
-import toAPY from 'utils/helpers/web3/to-apy';
+import toAPY from 'utils/helpers/to-apy';
 import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
@@ -17,7 +17,8 @@ import {
 import {
   getLendingPoolTokenSymbol,
   getLendingPoolTokenTotalSupplyInUSD,
-  getLendingPoolTokenTotalBorrowInUSD
+  getLendingPoolTokenTotalBorrowInUSD,
+  getLendingPoolTokenSupplyAPY
 } from 'utils/helpers/lending-pools';
 // ray test touch >>
 import {
@@ -167,24 +168,6 @@ const SetWrapper = ({
 );
 
 // ray test touch <<
-const getLendingPoolSupplyAPY = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): number => {
-  const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
-  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const supply = totalBalance + totalBorrows;
-  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply; // TODO: could be a function
-
-  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
-  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
-
-  const supplyAPY = toAPY(supplyRate);
-
-  return supplyAPY;
-};
-
 const getLendingPoolBorrowAPY = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
@@ -226,8 +209,8 @@ const LendingPoolListItem = ({
   const supplyUSDB = getLendingPoolTokenTotalSupplyInUSD(lendingPool, PoolTokenType.BorrowableB);
   const totalBorrowsUSDA = getLendingPoolTokenTotalBorrowInUSD(lendingPool, PoolTokenType.BorrowableA);
   const totalBorrowsUSDB = getLendingPoolTokenTotalBorrowInUSD(lendingPool, PoolTokenType.BorrowableB);
-  const supplyAPYA = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableA);
-  const supplyAPYB = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableB);
+  const supplyAPYA = getLendingPoolTokenSupplyAPY(lendingPool, PoolTokenType.BorrowableA);
+  const supplyAPYB = getLendingPoolTokenSupplyAPY(lendingPool, PoolTokenType.BorrowableB);
   const borrowAPYA = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableA);
   const borrowAPYB = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
   // ray test touch >>

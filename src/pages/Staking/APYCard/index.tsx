@@ -11,7 +11,7 @@ import { useQuery } from 'react-query';
 import ErrorFallback from 'components/ErrorFallback';
 import { CHAIN_IDS } from 'config/web3/chains';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
-import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
+import formatNumberWithComma from 'utils/helpers/format-number-with-comma';
 import xIMXDataFetcher, {
   XIMXData,
   X_IMX_DATA_FETCHER

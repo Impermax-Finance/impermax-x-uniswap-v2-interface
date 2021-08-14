@@ -21,7 +21,7 @@ import {
 } from 'config/web3/contracts/imxes';
 import useTokenBalance from 'services/hooks/use-token-balance';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
-import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
+import formatNumberWithComma from 'utils/helpers/format-number-with-comma';
 import xIMXDataFetcher, {
   XIMXData,
   X_IMX_DATA_FETCHER

@@ -1,5 +1,6 @@
 
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
+import toAPY from 'utils/helpers/to-apy';
 import {
   PoolTokenType,
   LendingPoolData
@@ -86,10 +87,29 @@ const getLendingPoolTokenUtilizationRate = (
   return utilizationRate;
 };
 
+const getLendingPoolTokenSupplyAPY = (
+  lendingPool: LendingPoolData,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): number => {
+  const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
+  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
+  const supply = totalBalance + totalBorrows;
+  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply; // TODO: could be a function
+
+  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
+  const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
+  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
+
+  const supplyAPY = toAPY(supplyRate);
+
+  return supplyAPY;
+};
+
 export {
   getLendingPoolTokenName,
   getLendingPoolTokenSymbol,
   getLendingPoolTokenTotalSupplyInUSD,
   getLendingPoolTokenTotalBorrowInUSD,
-  getLendingPoolTokenUtilizationRate
+  getLendingPoolTokenUtilizationRate,
+  getLendingPoolTokenSupplyAPY
 };
