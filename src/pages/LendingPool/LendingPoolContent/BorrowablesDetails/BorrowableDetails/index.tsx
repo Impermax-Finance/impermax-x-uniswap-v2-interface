@@ -11,7 +11,6 @@ import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import {
-  useUtilizationRate,
   useSupplyAPY,
   useBorrowAPY,
   useFarmingAPY,
@@ -27,7 +26,8 @@ import {
   getLendingPoolTokenName,
   getLendingPoolTokenSymbol,
   getLendingPoolTokenTotalSupplyInUSD,
-  getLendingPoolTokenTotalBorrowInUSD
+  getLendingPoolTokenTotalBorrowInUSD,
+  getLendingPoolTokenUtilizationRate
 } from 'utils/helpers/lending-pools';
 // ray test touch >>
 import { PARAMETERS } from 'utils/constants/links';
@@ -46,7 +46,6 @@ interface Props {
 const BorrowableDetails = ({
   poolTokenType
 }: Props): JSX.Element => {
-  const utilizationRate = useUtilizationRate();
   const supplyAPY = useSupplyAPY();
   const borrowAPY = useBorrowAPY();
   const hasFarming = useHasFarming();
@@ -86,6 +85,7 @@ const BorrowableDetails = ({
   const tokenSymbol = getLendingPoolTokenSymbol(selectedLendingPool, poolTokenType, selectedChainID);
   const tokenTotalSupplyInUSD = getLendingPoolTokenTotalSupplyInUSD(selectedLendingPool, poolTokenType);
   const tokenTotalBorrowInUSD = getLendingPoolTokenTotalBorrowInUSD(selectedLendingPool, poolTokenType);
+  const utilizationRate = getLendingPoolTokenUtilizationRate(selectedLendingPool, poolTokenType);
   // ray test touch >>
 
   const borrowableDetails = [

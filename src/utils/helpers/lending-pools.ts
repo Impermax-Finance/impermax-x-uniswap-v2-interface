@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 import {
   PoolTokenType,
@@ -45,15 +44,15 @@ const getLendingPoolTokenTotalSupplyInUSD = (
 ): number => {
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
   const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const totalSupply = totalBalance + totalBorrows;
-  const utilizationRate = totalSupply === 0 ? 0 : totalBorrows / totalSupply; // TODO: could be a function
+  const supply = totalBalance + totalBorrows;
+  const utilizationRate = getLendingPoolTokenUtilizationRate(lendingPool, poolTokenType);
 
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
   const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
 
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
-  const currentTotalSupply = totalSupply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
+  const currentTotalSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
   const tokenPriceInUSD = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
   const totalSupplyInUSD = currentTotalSupply * tokenPriceInUSD;
 
@@ -75,10 +74,22 @@ const getLendingPoolTokenTotalBorrowInUSD = (
   return totalBorrowInUSD;
 };
 
+const getLendingPoolTokenUtilizationRate = (
+  lendingPool: LendingPoolData,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): number => {
+  const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
+  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
+  const supply = totalBalance + totalBorrows;
+  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply;
+
+  return utilizationRate;
+};
+
 export {
   getLendingPoolTokenName,
   getLendingPoolTokenSymbol,
   getLendingPoolTokenTotalSupplyInUSD,
-  getLendingPoolTokenTotalBorrowInUSD
+  getLendingPoolTokenTotalBorrowInUSD,
+  getLendingPoolTokenUtilizationRate
 };
-// ray test touch >>
