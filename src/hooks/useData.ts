@@ -106,13 +106,6 @@ export function useUnderlyingAddress(poolTokenTypeArg?: PoolTokenType) : string 
   return tokenAddress;
 }
 
-export function useTotalBorrowsUSD(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [totalBorrowsUSD, setTotalBorrowsUSD] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setTotalBorrowsUSD(await subgraph.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType)));
-  return totalBorrowsUSD;
-}
-
 export function useUtilizationRate(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [utilizationRate, setUtilizationRate] = useState<number>(0);

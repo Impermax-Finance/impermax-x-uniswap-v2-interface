@@ -39,30 +39,46 @@ const getLendingPoolTokenSymbol = (
   }
 };
 
-const getLendingPoolTokenSupplyInUSD = (
+const getLendingPoolTokenTotalSupplyInUSD = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
   const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const supply = totalBalance + totalBorrows;
-  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply; // TODO: could be a function
+  const totalSupply = totalBalance + totalBorrows;
+  const utilizationRate = totalSupply === 0 ? 0 : totalBorrows / totalSupply; // TODO: could be a function
 
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
   const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
 
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
-  const currentSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
+  const currentTotalSupply = totalSupply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
   const tokenPriceInUSD = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
-  const supplyInUSD = currentSupply * tokenPriceInUSD;
+  const totalSupplyInUSD = currentTotalSupply * tokenPriceInUSD;
 
-  return supplyInUSD;
+  return totalSupplyInUSD;
+};
+
+const getLendingPoolTokenTotalBorrowInUSD = (
+  lendingPool: LendingPoolData,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+): number => {
+  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
+  const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
+  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
+  const currentTotalBorrow = totalBorrows * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
+  const tokenPriceInUSD = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
+  // TODO: it's also from lendingPool[poolTokenType].totalBorrowsUSD. What is different?
+  const totalBorrowInUSD = currentTotalBorrow * tokenPriceInUSD;
+
+  return totalBorrowInUSD;
 };
 
 export {
   getLendingPoolTokenName,
   getLendingPoolTokenSymbol,
-  getLendingPoolTokenSupplyInUSD
+  getLendingPoolTokenTotalSupplyInUSD,
+  getLendingPoolTokenTotalBorrowInUSD
 };
 // ray test touch >>

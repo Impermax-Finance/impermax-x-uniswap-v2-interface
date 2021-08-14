@@ -16,7 +16,8 @@ import {
 // ray test touch <<
 import {
   getLendingPoolTokenSymbol,
-  getLendingPoolTokenSupplyInUSD
+  getLendingPoolTokenTotalSupplyInUSD,
+  getLendingPoolTokenTotalBorrowInUSD
 } from 'utils/helpers/lending-pools';
 // ray test touch >>
 import {
@@ -166,21 +167,6 @@ const SetWrapper = ({
 );
 
 // ray test touch <<
-const getLendingPoolTotalBorrowsUSD = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): number => {
-  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
-  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const currentTotalBorrows = totalBorrows * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
-  const tokenPrice = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
-  // TODO: it's also from lendingPool[poolTokenType].totalBorrowsUSD. What is different?
-  const totalBorrowsUSD = currentTotalBorrows * tokenPrice;
-
-  return totalBorrowsUSD;
-};
-
 const getLendingPoolSupplyAPY = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
@@ -233,16 +219,18 @@ const LendingPoolListItem = ({
   lendingPool,
   greaterThanMd
 }: Props): JSX.Element => {
+  // ray test touch <<
   const symbolA = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
   const symbolB = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
-  const supplyUSDA = getLendingPoolTokenSupplyInUSD(lendingPool, PoolTokenType.BorrowableA);
-  const supplyUSDB = getLendingPoolTokenSupplyInUSD(lendingPool, PoolTokenType.BorrowableB);
-  const totalBorrowsUSDA = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableA);
-  const totalBorrowsUSDB = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableB);
+  const supplyUSDA = getLendingPoolTokenTotalSupplyInUSD(lendingPool, PoolTokenType.BorrowableA);
+  const supplyUSDB = getLendingPoolTokenTotalSupplyInUSD(lendingPool, PoolTokenType.BorrowableB);
+  const totalBorrowsUSDA = getLendingPoolTokenTotalBorrowInUSD(lendingPool, PoolTokenType.BorrowableA);
+  const totalBorrowsUSDB = getLendingPoolTokenTotalBorrowInUSD(lendingPool, PoolTokenType.BorrowableB);
   const supplyAPYA = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableA);
   const supplyAPYB = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableB);
   const borrowAPYA = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableA);
   const borrowAPYB = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
+  // ray test touch >>
 
   const imxAddress = IMX_ADDRESSES[chainID];
   const aAddress = imxLendingPool[PoolTokenType.BorrowableA].underlying.id;

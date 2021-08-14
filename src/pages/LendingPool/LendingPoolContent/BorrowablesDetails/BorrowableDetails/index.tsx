@@ -11,7 +11,6 @@ import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
 import {
-  useTotalBorrowsUSD,
   useUtilizationRate,
   useSupplyAPY,
   useBorrowAPY,
@@ -27,7 +26,8 @@ import {
 import {
   getLendingPoolTokenName,
   getLendingPoolTokenSymbol,
-  getLendingPoolTokenSupplyInUSD
+  getLendingPoolTokenTotalSupplyInUSD,
+  getLendingPoolTokenTotalBorrowInUSD
 } from 'utils/helpers/lending-pools';
 // ray test touch >>
 import { PARAMETERS } from 'utils/constants/links';
@@ -46,7 +46,6 @@ interface Props {
 const BorrowableDetails = ({
   poolTokenType
 }: Props): JSX.Element => {
-  const totalBorrowsUSD = useTotalBorrowsUSD();
   const utilizationRate = useUtilizationRate();
   const supplyAPY = useSupplyAPY();
   const borrowAPY = useBorrowAPY();
@@ -82,18 +81,21 @@ const BorrowableDetails = ({
     throw new Error('Something went wrong!');
   }
 
+  // ray test touch <<
   const tokenName = getLendingPoolTokenName(selectedLendingPool, poolTokenType, selectedChainID);
   const tokenSymbol = getLendingPoolTokenSymbol(selectedLendingPool, poolTokenType, selectedChainID);
-  const tokenSupplyInUSD = getLendingPoolTokenSupplyInUSD(selectedLendingPool, poolTokenType);
+  const tokenTotalSupplyInUSD = getLendingPoolTokenTotalSupplyInUSD(selectedLendingPool, poolTokenType);
+  const tokenTotalBorrowInUSD = getLendingPoolTokenTotalBorrowInUSD(selectedLendingPool, poolTokenType);
+  // ray test touch >>
 
   const borrowableDetails = [
     {
       name: 'Total Supply',
-      value: formatNumberWithUSDCommaDecimals(tokenSupplyInUSD)
+      value: formatNumberWithUSDCommaDecimals(tokenTotalSupplyInUSD)
     },
     {
       name: 'Total Borrow',
-      value: formatNumberWithUSDCommaDecimals(totalBorrowsUSD)
+      value: formatNumberWithUSDCommaDecimals(tokenTotalBorrowInUSD)
     },
     {
       name: 'Utilization Rate',
