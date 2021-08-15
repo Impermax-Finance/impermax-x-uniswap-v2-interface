@@ -5,7 +5,7 @@ import BorrowableDetails from './BorrowableDetails';
 import PoolTokenContext from 'contexts/PoolToken';
 import { PoolTokenType } from 'types/interfaces';
 
-// ray test touch <<
+// ray test touch <
 const BorrowablesDetails = (): JSX.Element => {
   return (
     <div
@@ -25,6 +25,6 @@ const BorrowablesDetails = (): JSX.Element => {
     </div>
   );
 };
-// ray test touch >>
+// ray test touch >
 
 export default BorrowablesDetails;

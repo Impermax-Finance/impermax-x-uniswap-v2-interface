@@ -8,7 +8,7 @@ import initialLendingPoolsFetcher, {
 import uniswapAPYsFetcher, { UNISWAP_APYS_FETCHER } from 'services/fetchers/uniswap-apys-fetcher';
 
 const useLendingPools = (
-  chainID: number | undefined
+  chainID: number
 ): {
   isLoading: boolean;
   data: Array<LendingPoolData> | undefined;

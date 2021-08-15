@@ -22,6 +22,7 @@ export function getLendingPoolCache(this: ImpermaxRouter, uniswapV2PairAddress: 
   return this.lendingPoolCache[uniswapV2PairAddress];
 }
 
+// ray test touch <<
 export async function initializeLendingPool(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address
@@ -52,7 +53,9 @@ export async function initializeLendingPool(
         this.newFarmingPool(farmingPoolBAddress)
   };
 }
+// ray test touch >>
 
+// ray test touch <<
 export async function getLendingPool(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<LendingPool> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.lendingPool) {
@@ -60,6 +63,7 @@ export async function getLendingPool(this: ImpermaxRouter, uniswapV2PairAddress:
   }
   return cache.lendingPool;
 }
+// ray test touch >>
 
 export async function getContracts(
   this: ImpermaxRouter,
@@ -98,6 +102,7 @@ export async function getPoolToken(
   return poolToken;
 }
 
+// ray test touch <<
 export async function getFarmingPool(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
@@ -115,6 +120,7 @@ export async function getFarmingPool(
 
   return null;
 }
+// ray test touch >>
 
 // Claimable
 export function getClaimableCache(this: ImpermaxRouter, claimableAddress: Address) {

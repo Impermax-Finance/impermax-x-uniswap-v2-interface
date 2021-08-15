@@ -12,7 +12,6 @@ import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
 } from 'utils/helpers/format-number';
-// ray test touch <<
 import {
   getLendingPoolTokenSymbol,
   getLendingPoolTokenTotalSupplyInUSD,
@@ -21,7 +20,6 @@ import {
   getLendingPoolTokenBorrowAPY,
   getLendingPoolTokenIcon
 } from 'utils/helpers/lending-pools';
-// ray test touch >>
 import {
   PAGES,
   PARAMETERS

@@ -113,6 +113,7 @@ export function useUniswapAPY() : number {
   return uniswapAPY;
 }
 
+// ray test touch <<
 export function useFarmingAPY(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [farmingAPY, setFarmingAPY] = useState<number>(0);
@@ -126,6 +127,7 @@ export function useHasFarming(poolTokenTypeArg?: PoolTokenType) : boolean {
   useRouterCallback(async router => setFarmingPool(await router.getFarmingPool(uniswapV2PairAddress, poolTokenType)));
   return farmingPool ? true : false;
 }
+// ray test touch >>
 
 export function useNextSupplyAPY(supplyAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);

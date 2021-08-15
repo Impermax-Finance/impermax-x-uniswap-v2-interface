@@ -217,6 +217,7 @@ export async function getRewardSpeed(this: Subgraph, uniswapV2PairAddress: Addre
   return epochAmount / segmentLength;
 }
 
+// ray test touch <<
 // Farming
 export async function getFarmingAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   return this.getNextFarmingAPY(uniswapV2PairAddress, poolTokenType, 0);
@@ -231,3 +232,4 @@ export async function getNextFarmingAPY(this: Subgraph, uniswapV2PairAddress: Ad
   if (totalBorrowedUSD === 0) return 0;
   return toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
 }
+// ray test touch >>

@@ -11,11 +11,11 @@ const LendingPool = (): JSX.Element => {
 
   return (
     <MainContainer>
-      {/* ray test touch << */}
+      {/* ray test touch < */}
       <PairAddressContext.Provider value={selectedUniswapV2PairAddress}>
         <LendingPoolContent />
       </PairAddressContext.Provider>
-      {/* ray test touch >> */}
+      {/* ray test touch > */}
     </MainContainer>
   );
 };

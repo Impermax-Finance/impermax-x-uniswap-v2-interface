@@ -117,7 +117,6 @@ const getLendingPoolTokenBorrowAPY = (
   return borrowAPY;
 };
 
-// ray test touch <<
 const getLendingPoolTokenIcon = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
@@ -127,7 +126,6 @@ const getLendingPoolTokenIcon = (
 
   return `/assets/images/token-logos/${convertedUnderlyingAddress}.png`;
 };
-// ray test touch >>
 
 export {
   getLendingPoolTokenName,
