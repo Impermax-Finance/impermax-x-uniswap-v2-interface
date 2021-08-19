@@ -120,6 +120,7 @@ export function useFarmingAPY(poolTokenTypeArg?: PoolTokenType) : number {
   useSubgraphCallback(async subgraph => setFarmingAPY(await subgraph.getFarmingAPY(uniswapV2PairAddress, poolTokenType)));
   return farmingAPY;
 }
+// ray test touch >>
 
 export function useHasFarming(poolTokenTypeArg?: PoolTokenType) : boolean {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
@@ -127,7 +128,6 @@ export function useHasFarming(poolTokenTypeArg?: PoolTokenType) : boolean {
   useRouterCallback(async router => setFarmingPool(await router.getFarmingPool(uniswapV2PairAddress, poolTokenType)));
   return farmingPool ? true : false;
 }
-// ray test touch >>
 
 export function useNextSupplyAPY(supplyAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
