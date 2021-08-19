@@ -1,5 +1,4 @@
 
-// ray test touch <<
 import { useQuery } from 'react-query';
 import { Web3Provider } from '@ethersproject/providers';
 
@@ -11,7 +10,7 @@ import BorrowableJSON from 'abis/contracts/IBorrowable.json';
 const useFarmingPoolAddresses = (
   chainID: number,
   uniswapV2PairAddress: string,
-  library: Web3Provider
+  library: Web3Provider | undefined
 ): {
   isLoading: boolean;
   data: {
@@ -33,7 +32,13 @@ const useFarmingPoolAddresses = (
       'getLendingPool',
       uniswapV2PairAddress
     ],
-    genericFetcher<any>(library, Router01JSON.abi)
+    library ?
+      // TODO: should type properly
+      genericFetcher<any>(library, Router01JSON.abi) :
+      Promise.resolve,
+    {
+      enabled: !!library
+    }
   );
 
   const borrowableAAddress = lendingPool?.borrowableA;
@@ -48,12 +53,14 @@ const useFarmingPoolAddresses = (
       borrowableAAddress,
       'borrowTracker'
     ],
-    genericFetcher<string>(library, BorrowableJSON.abi),
+    library ?
+      genericFetcher<string>(library, BorrowableJSON.abi) :
+      Promise.resolve,
     {
-      enabled: !!borrowableAAddress
+      enabled: !!(borrowableAAddress && library)
     }
   );
-  const borrowableBAddress = lendingPool?.borrowableA;
+  const borrowableBAddress = lendingPool?.borrowableB;
   const {
     isLoading: farmingPoolBAddressLoading,
     data: farmingPoolBAddress,
@@ -65,9 +72,11 @@ const useFarmingPoolAddresses = (
       borrowableBAddress,
       'borrowTracker'
     ],
-    genericFetcher<string>(library, BorrowableJSON.abi),
+    library ?
+      genericFetcher<string>(library, BorrowableJSON.abi) :
+      Promise.resolve,
     {
-      enabled: !!borrowableBAddress
+      enabled: !!(borrowableBAddress && library)
     }
   );
 
@@ -82,4 +91,3 @@ const useFarmingPoolAddresses = (
 };
 
 export default useFarmingPoolAddresses;
-// ray test touch >>

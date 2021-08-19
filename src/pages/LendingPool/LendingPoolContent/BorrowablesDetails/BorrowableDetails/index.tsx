@@ -4,18 +4,15 @@ import {
   useErrorHandler,
   withErrorBoundary
 } from 'react-error-boundary';
+import { useWeb3React } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
 import clsx from 'clsx';
 
 import List, { ListItem } from 'components/List';
 import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
-// ray test touch <<
-import {
-  useFarmingAPY,
-  useHasFarming
-} from 'hooks/useData';
-// ray test touch >>
+import { useFarmingAPY } from 'hooks/useData';
 import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
@@ -32,6 +29,7 @@ import {
 } from 'utils/helpers/lending-pools';
 import { PARAMETERS } from 'utils/constants/links';
 import useLendingPools from 'services/hooks/use-lending-pools';
+import useFarmingPoolAddresses from 'services/hooks/use-farming-pool-addresses';
 import { PoolTokenType } from 'types/interfaces';
 
 /**
@@ -47,7 +45,6 @@ const BorrowableDetails = ({
   poolTokenType
 }: Props): JSX.Element => {
   // ray test touch <<
-  const hasFarming = useHasFarming();
   const farmingAPY = useFarmingAPY();
   // ray test touch >>
 
@@ -56,6 +53,17 @@ const BorrowableDetails = ({
     [PARAMETERS.UNISWAP_V2_PAIR_ADDRESS]: selectedUniswapV2PairAddress
   } = useParams<Record<string, string>>();
   const selectedChainID = Number(selectedChainIDParam);
+
+  const { library } = useWeb3React<Web3Provider>();
+  const {
+    isLoading: farmingPoolAddressesLoading,
+    data: {
+      farmingPoolAAddress,
+      farmingPoolBAddress
+    },
+    error: farmingPoolAddressesError
+  } = useFarmingPoolAddresses(selectedChainID, selectedUniswapV2PairAddress, library);
+  useErrorHandler(farmingPoolAddressesError);
 
   const {
     isLoading: lendingPoolsLoading,
@@ -66,6 +74,9 @@ const BorrowableDetails = ({
 
   // TODO: should use skeleton loaders
   if (lendingPoolsLoading) {
+    return <>Loading...</>;
+  }
+  if (farmingPoolAddressesLoading) {
     return <>Loading...</>;
   }
   if (lendingPools === undefined) {
@@ -112,7 +123,10 @@ const BorrowableDetails = ({
       value: formatNumberWithPercentageCommaDecimals(tokenBorrowAPY)
     }
   ];
-  if (hasFarming) {
+  if (
+    (poolTokenType === PoolTokenType.BorrowableA && farmingPoolAAddress) ||
+    (poolTokenType === PoolTokenType.BorrowableB && farmingPoolBAddress)
+  ) {
     borrowableDetails.push({
       name: 'Farming APY',
       value: formatNumberWithPercentageCommaDecimals(farmingAPY)
