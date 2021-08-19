@@ -12,7 +12,11 @@ import List, { ListItem } from 'components/List';
 import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
-import { useFarmingAPY } from 'hooks/useData';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
+import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
+import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
+import toAPY from 'utils/helpers/to-apy';
+import getPairAddress from 'utils/helpers/web3/get-pair-address';
 import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
@@ -25,12 +29,57 @@ import {
   getLendingPoolTokenUtilizationRate,
   getLendingPoolTokenSupplyAPY,
   getLendingPoolTokenBorrowAPY,
-  getLendingPoolTokenIcon
+  getLendingPoolTokenIcon,
+  getLendingPoolTokenPrice
 } from 'utils/helpers/lending-pools';
 import { PARAMETERS } from 'utils/constants/links';
 import useLendingPools from 'services/hooks/use-lending-pools';
 import useFarmingPoolAddresses from 'services/hooks/use-farming-pool-addresses';
-import { PoolTokenType } from 'types/interfaces';
+import {
+  PoolTokenType,
+  LendingPoolData
+} from 'types/interfaces';
+
+const getIMXPrice = (
+  chainID: number,
+  lendingPools: Array<LendingPoolData>
+) => {
+  const imxAddress = IMX_ADDRESSES[chainID];
+  const wETHAddress = W_ETH_ADDRESSES[chainID];
+  const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[chainID];
+  const imxPair = getPairAddress(wETHAddress, imxAddress, uniswapV2FactoryAddress).toLowerCase();
+  const imxLendingPool = lendingPools.find(lendingPool => lendingPool.id === imxPair);
+  if (!imxLendingPool) {
+    throw new Error('Something went wrong!');
+  }
+  const aAddress = imxLendingPool[PoolTokenType.BorrowableA].underlying.id;
+  const poolTokenType =
+    aAddress.toLowerCase() === imxAddress.toLowerCase() ?
+      PoolTokenType.BorrowableA :
+      PoolTokenType.BorrowableB;
+
+  return getLendingPoolTokenPrice(imxLendingPool, poolTokenType);
+};
+
+const getRewardSpeed = (
+  lendingPool: LendingPoolData,
+  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
+) => {
+  const farmingPool = lendingPool[poolTokenType].farmingPool;
+  if (farmingPool === null) {
+    return 0;
+  }
+  const segmentLength = parseInt(farmingPool.segmentLength);
+  const epochBegin = parseInt(farmingPool.epochBegin);
+  const epochAmount = parseFloat(farmingPool.epochAmount);
+  const epochEnd = epochBegin + segmentLength;
+  const timestamp = new Date().getTime() / 1000;
+  if (timestamp > epochEnd) {
+    // How to manage better this case? Maybe check shares on distributor
+    return 0;
+  }
+  return epochAmount / segmentLength;
+};
 
 /**
  * Generate the Currency Equity Details card,
@@ -44,10 +93,6 @@ interface Props {
 const BorrowableDetails = ({
   poolTokenType
 }: Props): JSX.Element => {
-  // ray test touch <<
-  const farmingAPY = useFarmingAPY();
-  // ray test touch >>
-
   const {
     [PARAMETERS.CHAIN_ID]: selectedChainIDParam,
     [PARAMETERS.UNISWAP_V2_PAIR_ADDRESS]: selectedUniswapV2PairAddress
@@ -90,7 +135,6 @@ const BorrowableDetails = ({
     throw new Error('Something went wrong!');
   }
 
-  // ray test touch <<
   const tokenName = getLendingPoolTokenName(selectedLendingPool, poolTokenType, selectedChainID);
   const tokenSymbol = getLendingPoolTokenSymbol(selectedLendingPool, poolTokenType, selectedChainID);
   const tokenTotalSupplyInUSD = getLendingPoolTokenTotalSupplyInUSD(selectedLendingPool, poolTokenType);
@@ -99,7 +143,15 @@ const BorrowableDetails = ({
   const tokenSupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, poolTokenType);
   const tokenBorrowAPY = getLendingPoolTokenBorrowAPY(selectedLendingPool, poolTokenType);
   const tokenIcon = getLendingPoolTokenIcon(selectedLendingPool, poolTokenType);
-  // ray test touch >>
+
+  const imxPrice = getIMXPrice(selectedChainID, lendingPools);
+  const rewardSpeed = getRewardSpeed(selectedLendingPool, poolTokenType);
+  let farmingAPY;
+  if (tokenTotalBorrowInUSD === 0) {
+    farmingAPY = 0;
+  } else {
+    farmingAPY = toAPY(imxPrice * rewardSpeed / tokenTotalBorrowInUSD);
+  }
 
   const borrowableDetails = [
     {

@@ -56,7 +56,7 @@ const getLendingPoolTokenTotalSupplyInUSD = (
 
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
   const currentTotalSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
-  const tokenPriceInUSD = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
+  const tokenPriceInUSD = getLendingPoolTokenPrice(lendingPool, poolTokenType);
   const totalSupplyInUSD = currentTotalSupply * tokenPriceInUSD;
 
   return totalSupplyInUSD;
@@ -70,11 +70,10 @@ const getLendingPoolTokenTotalBorrowInUSD = (
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const currentTotalBorrow = totalBorrows * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
-  const tokenPriceInUSD = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
-  // TODO: it's also from lendingPool[poolTokenType].totalBorrowsUSD. What is different?
-  const totalBorrowInUSD = currentTotalBorrow * tokenPriceInUSD;
+  const tokenPriceInUSD = getLendingPoolTokenPrice(lendingPool, poolTokenType);
 
-  return totalBorrowInUSD;
+  // TODO: it's also from lendingPool[poolTokenType].totalBorrowsUSD. What is different?
+  return currentTotalBorrow * tokenPriceInUSD;
 };
 
 const getLendingPoolTokenUtilizationRate = (
@@ -127,6 +126,19 @@ const getLendingPoolTokenIcon = (
   return `/assets/images/token-logos/${convertedUnderlyingAddress}.png`;
 };
 
+const getLendingPoolTokenPrice = (
+  lendingPool: LendingPoolData,
+  poolTokenType: PoolTokenType
+): number => {
+  switch (poolTokenType) {
+  case PoolTokenType.BorrowableA:
+  case PoolTokenType.BorrowableB:
+    return parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
+  case PoolTokenType.Collateral:
+    return parseFloat(lendingPool.pair.derivedUSD);
+  }
+};
+
 export {
   getLendingPoolTokenName,
   getLendingPoolTokenSymbol,
@@ -135,5 +147,6 @@ export {
   getLendingPoolTokenUtilizationRate,
   getLendingPoolTokenSupplyAPY,
   getLendingPoolTokenBorrowAPY,
-  getLendingPoolTokenIcon
+  getLendingPoolTokenIcon,
+  getLendingPoolTokenPrice
 };

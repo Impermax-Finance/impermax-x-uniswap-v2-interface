@@ -74,9 +74,6 @@ class Subgraph {
   public getNextSupplyAPY = cacheData.getNextSupplyAPY;
   public getUniswapAPY = cacheData.getUniswapAPY;
   public getRewardSpeed = cacheData.getRewardSpeed;
-  // ray test touch <<
-  public getFarmingAPY = cacheData.getFarmingAPY;
-  // ray test touch >>
   public getNextFarmingAPY = cacheData.getNextFarmingAPY;
 
   // Account

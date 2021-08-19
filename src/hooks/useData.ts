@@ -113,15 +113,6 @@ export function useUniswapAPY() : number {
   return uniswapAPY;
 }
 
-// ray test touch <<
-export function useFarmingAPY(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [farmingAPY, setFarmingAPY] = useState<number>(0);
-  useSubgraphCallback(async subgraph => setFarmingAPY(await subgraph.getFarmingAPY(uniswapV2PairAddress, poolTokenType)));
-  return farmingAPY;
-}
-// ray test touch >>
-
 export function useHasFarming(poolTokenTypeArg?: PoolTokenType) : boolean {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [farmingPool, setFarmingPool] = useState<number>(0);
