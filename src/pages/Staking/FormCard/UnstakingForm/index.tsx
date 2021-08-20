@@ -244,7 +244,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
       return 'Unstaking amount must be less than allowance!';
     }
 
-    if (bigUnstakingAmount.eq(Zero)) {
+    if (bigUnstakingAmount.lte(Zero)) {
       return 'Unstaking amount must be greater than zero!';
     }
 

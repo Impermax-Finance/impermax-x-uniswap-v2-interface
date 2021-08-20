@@ -244,7 +244,7 @@ const StakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element =>
       return 'Staking amount must be less than allowance!';
     }
 
-    if (bigStakingAmount.eq(Zero)) {
+    if (bigStakingAmount.lte(Zero)) {
       return 'Staking amount must be greater than zero!';
     }
 
