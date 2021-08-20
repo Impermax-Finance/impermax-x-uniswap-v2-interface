@@ -5,20 +5,20 @@
 
 import { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
-import { PoolTokenType } from '../../../../types/interfaces';
+import { PoolTokenType } from '../../../types/interfaces';
 import InlineAccountTokenInfo from './InlineAccountTokenInfo';
-import DepositInteractionModal from '../../../../components/InteractionModal/DepositInteractionModal';
-import LeverageInteractionModal from '../../../../components/InteractionModal/LeverageInteractionModal';
-import WithdrawInteractionModal from '../../../../components/InteractionModal/WithdrawInteractionModal';
-import DeleverageInteractionModal from '../../../../components/InteractionModal/DeleverageInteractionModal';
+import DepositInteractionModal from '../../../components/InteractionModal/DepositInteractionModal';
+import LeverageInteractionModal from '../../../components/InteractionModal/LeverageInteractionModal';
+import WithdrawInteractionModal from '../../../components/InteractionModal/WithdrawInteractionModal';
+import DeleverageInteractionModal from '../../../components/InteractionModal/DeleverageInteractionModal';
 import {
   useDeposited,
   useSymbol,
   useDepositedUSD,
   useMaxDeleverage
-} from '../../../../hooks/useData';
-import { useTokenIcon } from '../../../../hooks/useUrlGenerator';
-import DisabledButtonHelper from '../../../../components/DisabledButtonHelper';
+} from '../../../hooks/useData';
+import { useTokenIcon } from '../../../hooks/useUrlGenerator';
+import DisabledButtonHelper from '../../../components/DisabledButtonHelper';
 
 export default function AccountLendingPoolLPRow(): JSX.Element {
   const symbol = useSymbol();

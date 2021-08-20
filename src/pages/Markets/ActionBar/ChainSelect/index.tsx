@@ -25,8 +25,8 @@ interface Props {
 const ChainSelect = ({
   routeLink
 }: Props): JSX.Element => {
-  const { [PARAMETERS.CHAIN_ID]: chainIDParam } = useParams<Record<string, string>>();
-  const value = SUPPORTED_CHAINS.find(supportedChain => supportedChain.id === Number(chainIDParam));
+  const { [PARAMETERS.CHAIN_ID]: selectedChainIDParam } = useParams<Record<string, string>>();
+  const value = SUPPORTED_CHAINS.find(supportedChain => supportedChain.id === Number(selectedChainIDParam));
 
   if (!value) {
     throw new Error('Something went wrong!');

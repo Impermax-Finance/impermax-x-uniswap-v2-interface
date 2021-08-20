@@ -5,15 +5,15 @@ import { Web3Provider } from '@ethersproject/providers';
 import Button from 'react-bootstrap/Button';
 
 import { injected } from 'utils/helpers/web3/connectors';
-import { PoolTokenType } from '../../../../types/interfaces';
+import { PoolTokenType } from '../../../types/interfaces';
 import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
-import PoolTokenContext from '../../../../contexts/PoolToken';
+import PoolTokenContext from '../../../contexts/PoolToken';
 import AccountLendingPoolPageSelector from './AccountLendingPoolPageSelector';
 import AccountLendingPoolSupplyRow from './AccountLendingPoolSupplyRow';
 import AccountLendingPoolBorrowRow from './AccountLendingPoolBorrowRow';
 import AccountLendingPoolDetailsLeverage from './AccountLendingPoolDetailsLeverage';
 import AccountLendingPoolDetailsEarnInterest from './AccountLendingPoolDetailsEarnInterest';
-import { useDepositedUSD, useSuppliedUSD } from '../../../../hooks/useData';
+import { useDepositedUSD, useSuppliedUSD } from '../../../hooks/useData';
 import AccountLendingPoolFarming from './AccountLendingPoolFarming';
 import './index.scss';
 

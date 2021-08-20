@@ -7,7 +7,7 @@ import { Contract } from '@ethersproject/contracts';
 
 import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 import getAirdropData from 'services/get-airdrop-data';
-import { formatAmount } from 'utils/format';
+import { formatNumberWithCommaDecimals } from 'utils/helpers/format-number';
 import MerkleDistributorJSON from 'abis/contracts/IMerkleDistributor.json';
 import { MERKLE_DISTRIBUTOR_ADDRESSES } from 'config/web3/contracts/merkle-distributors';
 import { IMX_DECIMALS } from 'config/web3/contracts/imxes';
@@ -109,7 +109,7 @@ const ClaimAirdropButton = (): JSX.Element | null => {
 
       // const amount = parseFloat(airdropData.amount.toString()) / 1e18; // TODO: update other cases
       const amount = parseFloat(formatUnits(airdropData.amount, IMX_DECIMALS));
-      const summary = `Claim ${formatAmount(amount)} IMX`;
+      const summary = `Claim ${formatNumberWithCommaDecimals(amount)} IMX`;
       addTransaction({ hash: receipt.transactionHash }, { summary });
       setClaimStatus(STATUSES.RESOLVED);
       setClaimed(true);
@@ -130,7 +130,7 @@ const ClaimAirdropButton = (): JSX.Element | null => {
       }}
       pending={claimStatus === STATUSES.PENDING}
       onClick={handleClaim}>
-      Claim {formatAmount(parseFloat(formatUnits(airdropData.amount, IMX_DECIMALS)))} IMX
+      Claim {formatNumberWithCommaDecimals(parseFloat(formatUnits(airdropData.amount, IMX_DECIMALS)))} IMX
     </ImpermaxJadeContainedButton>
   );
 };

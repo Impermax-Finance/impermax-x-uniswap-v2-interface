@@ -8,8 +8,8 @@ import MainContainer from 'parts/MainContainer';
 import { PARAMETERS } from 'utils/constants/links';
 
 const Markets = (): JSX.Element => {
-  const { [PARAMETERS.CHAIN_ID]: chainIDParam } = useParams<Record<string, string>>();
-  const selectedChainID = Number(chainIDParam);
+  const { [PARAMETERS.CHAIN_ID]: selectedChainIDParam } = useParams<Record<string, string>>();
+  const selectedChainID = Number(selectedChainIDParam);
 
   return (
     <MainContainer>

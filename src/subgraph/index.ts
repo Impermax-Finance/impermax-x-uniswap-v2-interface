@@ -45,7 +45,6 @@ class Subgraph {
   public getUserData = initializer.getUserData;
 
   // Data Getters
-  public getName = cacheData.getName;
   public getSymbol = cacheData.getSymbol;
   public getDecimals = cacheData.getDecimals;
   public getExchangeRate = cacheData.getExchangeRate;
@@ -65,12 +64,9 @@ class Subgraph {
   public getCurrentTotalBorrows = cacheData.getCurrentTotalBorrows;
   public getTotalBorrowsUSD = cacheData.getTotalBorrowsUSD;
   public getBorrowRate = cacheData.getBorrowRate;
-  public getBorrowAPY = cacheData.getBorrowAPY;
   public getNextBorrowRate = cacheData.getNextBorrowRate;
   public getNextBorrowAPY = cacheData.getNextBorrowAPY;
   public getSupply = cacheData.getSupply;
-  public getCurrentSupply = cacheData.getCurrentSupply;
-  public getSupplyUSD = cacheData.getSupplyUSD;
   public getUtilizationRate = cacheData.getUtilizationRate;
   public getSupplyRate = cacheData.getSupplyRate;
   public getSupplyAPY = cacheData.getSupplyAPY;
@@ -78,7 +74,6 @@ class Subgraph {
   public getNextSupplyAPY = cacheData.getNextSupplyAPY;
   public getUniswapAPY = cacheData.getUniswapAPY;
   public getRewardSpeed = cacheData.getRewardSpeed;
-  public getFarmingAPY = cacheData.getFarmingAPY;
   public getNextFarmingAPY = cacheData.getNextFarmingAPY;
 
   // Account

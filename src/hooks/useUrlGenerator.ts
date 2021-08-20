@@ -27,11 +27,11 @@ export function useTokenIcon(poolTokenTypeArg?: PoolTokenType) : string {
 
 export function useAddLiquidityUrl() : string {
   const { chainId } = useWeb3React<Web3Provider>();
-  const wethAddress = W_ETH_ADDRESSES[chainId];
+  const wETHAddress = W_ETH_ADDRESSES[chainId];
   const tokenAAddress = useUnderlyingAddress(PoolTokenType.BorrowableA);
   const tokenBAddress = useUnderlyingAddress(PoolTokenType.BorrowableB);
-  const addressA = tokenAAddress === wethAddress ? 'ETH' : tokenAAddress;
-  const addressB = tokenBAddress === wethAddress ? 'ETH' : tokenBAddress;
+  const addressA = tokenAAddress === wETHAddress ? 'ETH' : tokenAAddress;
+  const addressB = tokenBAddress === wETHAddress ? 'ETH' : tokenBAddress;
   return 'https://app.uniswap.org/#/add/' + addressA + '/' + addressB;
 }
 

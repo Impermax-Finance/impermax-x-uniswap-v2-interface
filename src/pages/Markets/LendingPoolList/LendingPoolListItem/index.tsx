@@ -1,255 +1,39 @@
 
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { getAddress } from '@ethersproject/address';
 
 import LendingPoolListItemDesktopGridWrapper from './LendingPoolListItemDesktopGridWrapper';
 import LendingPoolListItemMobileGridWrapper from './LendingPoolListItemMobileGridWrapper';
+import TokenPairLabel from './TokenPairLabel';
+import TokenLabel from './TokenLabel';
+import PropertyLabel from './PropertyLabel';
+import Value from './Value';
+import PairWrapper from './PairWrapper';
 import Panel from 'components/Panel';
-import ImpermaxImage from 'components/UI/ImpermaxImage';
-import toAPY from 'utils/helpers/web3/to-apy';
+import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
+import toAPY from 'utils/helpers/to-apy';
 import {
-  formatUSD,
-  formatPercentage
-} from 'utils/format';
+  formatNumberWithUSDCommaDecimals,
+  formatNumberWithPercentageCommaDecimals
+} from 'utils/helpers/format-number';
+import {
+  getLendingPoolTokenSymbol,
+  getLendingPoolTokenTotalSupplyInUSD,
+  getLendingPoolTokenTotalBorrowInUSD,
+  getLendingPoolTokenSupplyAPY,
+  getLendingPoolTokenBorrowAPY,
+  getLendingPoolTokenIcon
+} from 'utils/helpers/lending-pools';
 import {
   PAGES,
   PARAMETERS
 } from 'utils/constants/links';
-import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
-import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import {
   PoolTokenType,
   LendingPoolData
 } from 'types/interfaces';
 
 const LEVERAGE = 5;
-
-interface TokenPairLabelCustomProps {
-  tokenIconA: string;
-  tokenIconB: string;
-  symbolA: string;
-  symbolB: string;
-}
-
-const TokenPairLabel = ({
-  tokenIconA,
-  tokenIconB,
-  symbolA,
-  symbolB,
-  className
-}: TokenPairLabelCustomProps & React.ComponentPropsWithRef<'div'>): JSX.Element => (
-  <div
-    className={clsx(
-      'flex',
-      'flex-shrink-0',
-      'items-center',
-      '-space-x-1.5',
-      className
-    )}>
-    <ImpermaxImage
-      width={32}
-      height={32}
-      // TODO: could componentize
-      className={clsx(
-        'inline-block',
-        'rounded-full',
-        'ring-2',
-        'ring-white'
-      )}
-      src={tokenIconA}
-      placeholder='/assets/images/default.png'
-      error='/assets/images/default.png'
-      alt='Token A' />
-    <ImpermaxImage
-      width={32}
-      height={32}
-      className={clsx(
-        'inline-block',
-        'rounded-full',
-        'ring-2',
-        'ring-white'
-      )}
-      src={tokenIconB}
-      placeholder='/assets/images/default.png'
-      error='/assets/images/default.png'
-      alt='Token B' />
-    <span
-      className={clsx(
-        'font-medium',
-        'text-textSecondary',
-        '!ml-1.5'
-      )}>
-      {symbolA}/{symbolB}
-    </span>
-  </div>
-);
-
-interface TokenLabelProps {
-  tokenIcon: string;
-  symbol: string;
-}
-
-const TokenLabel = ({
-  tokenIcon,
-  symbol
-}: TokenLabelProps): JSX.Element => (
-  <div
-    className={clsx(
-      'flex',
-      'flex-shrink-0',
-      'items-center',
-      'space-x-1.5'
-    )}>
-    <ImpermaxImage
-      width={20}
-      height={20}
-      className={clsx(
-        'inline-block',
-        'rounded-full',
-        'ring-2',
-        'ring-white'
-      )}
-      src={tokenIcon}
-      placeholder='/assets/images/default.png'
-      error='/assets/images/default.png'
-      alt='Token' />
-    <span
-      className={clsx(
-        'font-medium',
-        'text-textSecondary'
-      )}>
-      {symbol}
-    </span>
-  </div>
-);
-
-const PropertyLabel = ({
-  className,
-  children,
-  ...rest
-}: React.ComponentPropsWithRef<'h5'>) => (
-  <h5
-    className={clsx(
-      'text-textSecondary',
-      'font-medium',
-      'text-sm',
-      className
-    )}
-    {...rest}>
-    {children}
-  </h5>
-);
-
-const Value = (props: React.ComponentPropsWithRef<'span'>): JSX.Element => (
-  <span {...props} />
-);
-
-const SetWrapper = ({
-  className,
-  children
-}: React.ComponentPropsWithRef<'div'>) => (
-  <div
-    className={clsx(
-      'flex',
-      'flex-col',
-      'space-y-1',
-      className
-    )}>
-    {children}
-  </div>
-);
-
-const getLendingPoolSymbol = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
-  chainID: number
-): string => {
-  const underlying = lendingPool[poolTokenType].underlying;
-  const wethAddress = W_ETH_ADDRESSES[chainID];
-  let symbol;
-  if (underlying.id === wethAddress.toLowerCase()) {
-    symbol = 'ETH';
-  } else {
-    symbol = underlying.symbol;
-  }
-
-  return symbol;
-};
-
-const getLendingPoolSupplyUSD = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): number => {
-  const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
-  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const supply = totalBalance + totalBorrows;
-  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply; // TODO: could be a function
-
-  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
-  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
-
-  const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
-  const currentSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
-  const tokenPrice = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
-  const supplyUSD = currentSupply * tokenPrice;
-
-  return supplyUSD;
-};
-
-const getLendingPoolTotalBorrowsUSD = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): number => {
-  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
-  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const currentTotalBorrows = totalBorrows * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
-  const tokenPrice = parseFloat(lendingPool[poolTokenType].underlying.derivedUSD);
-  // TODO: it's also from lendingPool[poolTokenType].totalBorrowsUSD. What is different?
-  const totalBorrowsUSD = currentTotalBorrows * tokenPrice;
-
-  return totalBorrowsUSD;
-};
-
-const getLendingPoolSupplyAPY = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): number => {
-  const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
-  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const supply = totalBalance + totalBorrows;
-  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply; // TODO: could be a function
-
-  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
-  const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
-
-  const supplyAPY = toAPY(supplyRate);
-
-  return supplyAPY;
-};
-
-const getLendingPoolBorrowAPY = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): number => {
-  const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const borrowAPY = toAPY(borrowRate);
-
-  return borrowAPY;
-};
-
-const getLendingPoolTokenIcon = (
-  lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
-): string => {
-  const tokenAddress = lendingPool[poolTokenType].underlying.id;
-  const convertedAddress = getAddress(tokenAddress);
-
-  return `/assets/images/token-logos/${convertedAddress}.png`;
-};
 
 interface Props {
   chainID: number;
@@ -264,16 +48,16 @@ const LendingPoolListItem = ({
   lendingPool,
   greaterThanMd
 }: Props): JSX.Element => {
-  const symbolA = getLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
-  const symbolB = getLendingPoolSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
-  const supplyUSDA = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableA);
-  const supplyUSDB = getLendingPoolSupplyUSD(lendingPool, PoolTokenType.BorrowableB);
-  const totalBorrowsUSDA = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableA);
-  const totalBorrowsUSDB = getLendingPoolTotalBorrowsUSD(lendingPool, PoolTokenType.BorrowableB);
-  const supplyAPYA = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableA);
-  const supplyAPYB = getLendingPoolSupplyAPY(lendingPool, PoolTokenType.BorrowableB);
-  const borrowAPYA = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableA);
-  const borrowAPYB = getLendingPoolBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
+  const tokenASymbol = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
+  const tokenBSymbol = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
+  const tokenATotalSupplyInUSD = getLendingPoolTokenTotalSupplyInUSD(lendingPool, PoolTokenType.BorrowableA);
+  const tokenBTotalSupplyInUSD = getLendingPoolTokenTotalSupplyInUSD(lendingPool, PoolTokenType.BorrowableB);
+  const tokenATotalBorrowInUSD = getLendingPoolTokenTotalBorrowInUSD(lendingPool, PoolTokenType.BorrowableA);
+  const tokenBTotalBorrowInUSD = getLendingPoolTokenTotalBorrowInUSD(lendingPool, PoolTokenType.BorrowableB);
+  const tokenASupplyAPY = getLendingPoolTokenSupplyAPY(lendingPool, PoolTokenType.BorrowableA);
+  const tokenBSupplyAPY = getLendingPoolTokenSupplyAPY(lendingPool, PoolTokenType.BorrowableB);
+  const tokenABorrowAPY = getLendingPoolTokenBorrowAPY(lendingPool, PoolTokenType.BorrowableA);
+  const tokenBBorrowAPY = getLendingPoolTokenBorrowAPY(lendingPool, PoolTokenType.BorrowableB);
 
   const imxAddress = IMX_ADDRESSES[chainID];
   const aAddress = imxLendingPool[PoolTokenType.BorrowableA].underlying.id;
@@ -300,16 +84,16 @@ const LendingPoolListItem = ({
     }
   }
   let farmingPoolAPYA;
-  if (totalBorrowsUSDA === 0) {
+  if (tokenATotalBorrowInUSD === 0) {
     farmingPoolAPYA = 0;
   } else {
-    farmingPoolAPYA = toAPY(imxPrice * rewardSpeed / totalBorrowsUSDA);
+    farmingPoolAPYA = toAPY(imxPrice * rewardSpeed / tokenATotalBorrowInUSD);
   }
   let farmingPoolAPYB;
-  if (totalBorrowsUSDA === 0) {
+  if (tokenATotalBorrowInUSD === 0) {
     farmingPoolAPYB = 0;
   } else {
-    farmingPoolAPYB = toAPY(imxPrice * rewardSpeed / totalBorrowsUSDB);
+    farmingPoolAPYB = toAPY(imxPrice * rewardSpeed / tokenBTotalBorrowInUSD);
   }
 
   const lendingPoolURL =
@@ -318,7 +102,7 @@ const LendingPoolListItem = ({
       .replace(`:${PARAMETERS.UNISWAP_V2_PAIR_ADDRESS}`, lendingPool.id);
 
   const uniswapAPY = lendingPool.pair.uniswapAPY;
-  const averageAPY = (borrowAPYA + borrowAPYB - farmingPoolAPYA - farmingPoolAPYB) / 2;
+  const averageAPY = (tokenABorrowAPY + tokenBBorrowAPY - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniswapAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
   const tokenIconA = getLendingPoolTokenIcon(lendingPool, PoolTokenType.BorrowableA);
   const tokenIconB = getLendingPoolTokenIcon(lendingPool, PoolTokenType.BorrowableB);
@@ -341,32 +125,32 @@ const LendingPoolListItem = ({
               className='col-span-2'
               tokenIconA={tokenIconA}
               tokenIconB={tokenIconB}
-              symbolA={symbolA}
-              symbolB={symbolB} />
-            <SetWrapper>
+              symbolA={tokenASymbol}
+              symbolB={tokenBSymbol} />
+            <PairWrapper>
               <TokenLabel
                 tokenIcon={tokenIconA}
-                symbol={symbolA} />
+                symbol={tokenASymbol} />
               <TokenLabel
                 tokenIcon={tokenIconB}
-                symbol={symbolB} />
-            </SetWrapper>
-            <SetWrapper>
-              <Value>{formatUSD(supplyUSDA)}</Value>
-              <Value>{formatUSD(supplyUSDB)}</Value>
-            </SetWrapper>
-            <SetWrapper>
-              <Value>{formatUSD(totalBorrowsUSDA)}</Value>
-              <Value>{formatUSD(totalBorrowsUSDB)}</Value>
-            </SetWrapper>
-            <SetWrapper>
-              <Value>{formatPercentage(supplyAPYA)}</Value>
-              <Value>{formatPercentage(supplyAPYB)}</Value>
-            </SetWrapper>
-            <SetWrapper>
-              <Value>{formatPercentage(borrowAPYA)}</Value>
-              <Value>{formatPercentage(borrowAPYB)}</Value>
-            </SetWrapper>
+                symbol={tokenBSymbol} />
+            </PairWrapper>
+            <PairWrapper>
+              <Value>{formatNumberWithUSDCommaDecimals(tokenATotalSupplyInUSD)}</Value>
+              <Value>{formatNumberWithUSDCommaDecimals(tokenBTotalSupplyInUSD)}</Value>
+            </PairWrapper>
+            <PairWrapper>
+              <Value>{formatNumberWithUSDCommaDecimals(tokenATotalBorrowInUSD)}</Value>
+              <Value>{formatNumberWithUSDCommaDecimals(tokenBTotalBorrowInUSD)}</Value>
+            </PairWrapper>
+            <PairWrapper>
+              <Value>{formatNumberWithPercentageCommaDecimals(tokenASupplyAPY)}</Value>
+              <Value>{formatNumberWithPercentageCommaDecimals(tokenBSupplyAPY)}</Value>
+            </PairWrapper>
+            <PairWrapper>
+              <Value>{formatNumberWithPercentageCommaDecimals(tokenABorrowAPY)}</Value>
+              <Value>{formatNumberWithPercentageCommaDecimals(tokenBBorrowAPY)}</Value>
+            </PairWrapper>
             <Value
               className={clsx(
                 'self-center',
@@ -375,7 +159,7 @@ const LendingPoolListItem = ({
                 'font-medium',
                 'text-impermaxAstral'
               )}>
-              {formatPercentage(leveragedAPY)}
+              {formatNumberWithPercentageCommaDecimals(leveragedAPY)}
             </Value>
           </LendingPoolListItemDesktopGridWrapper>
         ) : (
@@ -384,14 +168,14 @@ const LendingPoolListItem = ({
               <TokenPairLabel
                 tokenIconA={tokenIconA}
                 tokenIconB={tokenIconB}
-                symbolA={symbolA}
-                symbolB={symbolB} />
+                symbolA={tokenASymbol}
+                symbolB={tokenBSymbol} />
               <TokenLabel
                 tokenIcon={tokenIconA}
-                symbol={symbolA} />
+                symbol={tokenASymbol} />
               <TokenLabel
                 tokenIcon={tokenIconB}
-                symbol={symbolB} />
+                symbol={tokenBSymbol} />
             </LendingPoolListItemMobileGridWrapper>
             <LendingPoolListItemMobileGridWrapper
               className={clsx(
@@ -402,29 +186,29 @@ const LendingPoolListItem = ({
                 <PropertyLabel className='self-center'>
                   Total supply
                 </PropertyLabel>
-                <Value>{formatUSD(supplyUSDA)}</Value>
-                <Value>{formatUSD(supplyUSDB)}</Value>
+                <Value>{formatNumberWithUSDCommaDecimals(tokenATotalSupplyInUSD)}</Value>
+                <Value>{formatNumberWithUSDCommaDecimals(tokenBTotalSupplyInUSD)}</Value>
               </>
               <>
                 <PropertyLabel className='self-center'>
                   Total borrowed
                 </PropertyLabel>
-                <Value>{formatUSD(totalBorrowsUSDA)}</Value>
-                <Value>{formatUSD(totalBorrowsUSDB)}</Value>
+                <Value>{formatNumberWithUSDCommaDecimals(tokenATotalBorrowInUSD)}</Value>
+                <Value>{formatNumberWithUSDCommaDecimals(tokenBTotalBorrowInUSD)}</Value>
               </>
               <>
                 <PropertyLabel className='self-center'>
                   Supply APY
                 </PropertyLabel>
-                <Value>{formatPercentage(supplyAPYA)}</Value>
-                <Value>{formatPercentage(supplyAPYB)}</Value>
+                <Value>{formatNumberWithPercentageCommaDecimals(tokenASupplyAPY)}</Value>
+                <Value>{formatNumberWithPercentageCommaDecimals(tokenBSupplyAPY)}</Value>
               </>
               <>
                 <PropertyLabel className='self-center'>
                   Borrow APY
                 </PropertyLabel>
-                <Value>{formatPercentage(borrowAPYA)}</Value>
-                <Value>{formatPercentage(borrowAPYB)}</Value>
+                <Value>{formatNumberWithPercentageCommaDecimals(tokenABorrowAPY)}</Value>
+                <Value>{formatNumberWithPercentageCommaDecimals(tokenBBorrowAPY)}</Value>
               </>
               <>
                 <PropertyLabel className='self-center'>
@@ -438,7 +222,7 @@ const LendingPoolListItem = ({
                     'font-medium',
                     'text-impermaxAstral'
                   )}>
-                  {formatPercentage(leveragedAPY)}
+                  {formatNumberWithPercentageCommaDecimals(leveragedAPY)}
                 </Value>
               </>
             </LendingPoolListItemMobileGridWrapper>

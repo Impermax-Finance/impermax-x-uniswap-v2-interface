@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import ImpermaxInput, { Props as ImpermaxInputProps } from 'components/UI/ImpermaxInput';
 import ImpermaxMirageContainedButton from 'components/buttons/ImpermaxMirageContainedButton';
-import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
+import formatNumberWithComma from 'utils/helpers/format-number-with-comma';
 
 interface CustomProps {
   inputMaxValue: () => void;

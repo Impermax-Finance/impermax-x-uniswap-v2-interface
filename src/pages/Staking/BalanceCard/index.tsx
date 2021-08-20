@@ -19,9 +19,9 @@ import {
   IMX_ADDRESSES,
   IMX_DECIMALS
 } from 'config/web3/contracts/imxes';
-import useTokenBalance from 'utils/hooks/web3/use-token-balance';
+import useTokenBalance from 'services/hooks/use-token-balance';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
-import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
+import formatNumberWithComma from 'utils/helpers/format-number-with-comma';
 import xIMXDataFetcher, {
   XIMXData,
   X_IMX_DATA_FETCHER
@@ -154,7 +154,7 @@ const BalanceCard = ({
 
       const xIMXRate = parseFloat(xIMXData.exchangeRate);
       const floatXIMXBalance = parseFloat(formatUnits(xIMXBalance, X_IMX_DECIMALS));
-      stakedBalanceLabel = formatNumberWithFixedDecimals(floatXIMXBalance * xIMXRate, 2);
+      stakedBalanceLabel = formatNumberWithFixedDecimals(2)(floatXIMXBalance * xIMXRate);
       stakedBalanceLabel = formatNumberWithComma(stakedBalanceLabel);
     }
 
@@ -166,7 +166,7 @@ const BalanceCard = ({
       }
 
       unstakedBalanceLabel = parseFloat(formatUnits(imxBalance, IMX_DECIMALS));
-      unstakedBalanceLabel = formatNumberWithFixedDecimals(unstakedBalanceLabel, 2);
+      unstakedBalanceLabel = formatNumberWithFixedDecimals(2)(unstakedBalanceLabel);
       unstakedBalanceLabel = formatNumberWithComma(unstakedBalanceLabel);
     }
 
@@ -185,7 +185,7 @@ const BalanceCard = ({
       const anotherXIMXBalance = parseFloat(stakingUserData?.ximxBalance ?? 0);
       const lastExchangeRate = parseFloat(stakingUserData?.lastExchangeRate ?? 0);
       earnedLabel = totalEarned + anotherXIMXBalance * (xIMXRate - lastExchangeRate);
-      earnedLabel = formatNumberWithFixedDecimals(earnedLabel, 2);
+      earnedLabel = formatNumberWithFixedDecimals(2)(earnedLabel);
       earnedLabel = formatNumberWithComma(earnedLabel);
     }
   } else {

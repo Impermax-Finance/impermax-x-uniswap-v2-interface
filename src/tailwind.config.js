@@ -52,6 +52,18 @@ const IMPERMAX_ASTRAL = Object.freeze({
   800: '#1c455c',
   900: '#17384b'
 });
+const IMPERMAX_CORNFLOWER = Object.freeze({
+  50: '#fafcfd',
+  100: '#f5f9fc',
+  200: '#e5eff6',
+  300: '#d5e5f1',
+  400: '#b6d2e7',
+  500: '#97bedc',
+  600: '#88abc6',
+  700: '#718fa5',
+  800: '#5b7284',
+  900: '#4a5d6c'
+});
 const IMPERMAX_MERCURY = Object.freeze({
   50: '#fefefe',
   100: '#fdfdfd',
@@ -161,6 +173,19 @@ module.exports = {
           700: IMPERMAX_MIRAGE[700],
           800: IMPERMAX_MIRAGE[800],
           900: IMPERMAX_MIRAGE[900]
+        },
+        impermaxCornflower: {
+          50: IMPERMAX_CORNFLOWER[50],
+          100: IMPERMAX_CORNFLOWER[100],
+          200: IMPERMAX_CORNFLOWER[200],
+          300: IMPERMAX_CORNFLOWER[300],
+          400: IMPERMAX_CORNFLOWER[400],
+          500: IMPERMAX_CORNFLOWER[500],
+          DEFAULT: IMPERMAX_CORNFLOWER[500],
+          600: IMPERMAX_CORNFLOWER[600],
+          700: IMPERMAX_CORNFLOWER[700],
+          800: IMPERMAX_CORNFLOWER[800],
+          900: IMPERMAX_CORNFLOWER[900]
         },
         primary: {
           50: IMPERMAX_JADE[50],

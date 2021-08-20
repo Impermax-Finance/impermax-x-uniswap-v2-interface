@@ -40,7 +40,7 @@ import {
 } from 'config/web3/contracts/x-imxes';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import { STAKING_ROUTER_ADDRESSES } from 'config/web3/contracts/staking-routers';
-import useTokenBalance from 'utils/hooks/web3/use-token-balance';
+import useTokenBalance from 'services/hooks/use-token-balance';
 import getERC20Contract from 'utils/helpers/web3/get-erc20-contract';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
@@ -244,7 +244,7 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
       return 'Unstaking amount must be less than allowance!';
     }
 
-    if (bigUnstakingAmount.eq(Zero)) {
+    if (bigUnstakingAmount.lte(Zero)) {
       return 'Unstaking amount must be greater than zero!';
     }
 
@@ -265,8 +265,8 @@ const UnstakingForm = (props: React.ComponentPropsWithRef<'form'>): JSX.Element 
 
     approved = xIMXAllowance.gt(Zero);
     submitButtonText = approved ? 'Unstake' : 'Approve';
-    floatXIMXBalance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXBalance, X_IMX_DECIMALS)), 2);
-    floatXIMXAllowance = formatNumberWithFixedDecimals(parseFloat(formatUnits(xIMXAllowance, X_IMX_DECIMALS)), 2);
+    floatXIMXBalance = formatNumberWithFixedDecimals(2)(parseFloat(formatUnits(xIMXBalance, X_IMX_DECIMALS)));
+    floatXIMXAllowance = formatNumberWithFixedDecimals(2)(parseFloat(formatUnits(xIMXAllowance, X_IMX_DECIMALS)));
   }
   if (xIMXBalanceIdle || xIMXBalanceLoading || xIMXAllowanceIdle || xIMXAllowanceLoading) {
     submitButtonText = 'Loading...';

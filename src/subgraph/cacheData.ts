@@ -4,22 +4,8 @@ import Subgraph from '.';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 import { UNISWAP_V2_FACTORY_ADDRESSES } from 'config/web3/contracts/uniswap-v2-factories';
-import toAPY from 'utils/helpers/web3/to-apy';
+import toAPY from 'utils/helpers/to-apy';
 import getPairAddress from 'utils/helpers/web3/get-pair-address';
-
-// Name
-export async function getName(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
-  if (poolTokenType === PoolTokenType.Collateral) {
-    const nameA = await this.getName(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-    const nameB = await this.getName(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-    return nameA + '-' + nameB + ' LP';
-  }
-  const underlying = await this.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType);
-  const wethAddress = W_ETH_ADDRESSES[this.chainId];
-  if (underlying === wethAddress.toLowerCase()) return 'Ethereum';
-  const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return lendingPoolData[poolTokenType].underlying.name;
-}
 
 // Symbol
 export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<string> {
@@ -29,8 +15,8 @@ export async function getSymbol(this: Subgraph, uniswapV2PairAddress: Address, p
     return symbolA + '-' + symbolB;
   }
   const underlying = await this.getUnderlyingAddress(uniswapV2PairAddress, poolTokenType);
-  const wethAddress = W_ETH_ADDRESSES[this.chainId];
-  if (underlying === wethAddress.toLowerCase()) return 'ETH';
+  const wETHAddress = W_ETH_ADDRESSES[this.chainId];
+  if (underlying === wETHAddress.toLowerCase()) return 'ETH';
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return lendingPoolData[poolTokenType].underlying.symbol;
 }
@@ -48,6 +34,7 @@ export async function getExchangeRate(this: Subgraph, uniswapV2PairAddress: Addr
   return parseFloat(lendingPoolData[poolTokenType].exchangeRate);
 }
 
+// ray test touch <
 // Underlying Address
 export async function getUnderlyingAddress(
   this: Subgraph,
@@ -60,6 +47,7 @@ export async function getUnderlyingAddress(
 
   return lendingPoolData[poolTokenType].underlying.id;
 }
+// ray test touch >
 
 // Token price
 export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
@@ -69,15 +57,17 @@ export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Addres
   }
   return parseFloat((lendingPoolData[poolTokenType] as Borrowable).underlying.derivedUSD);
 }
+// ray test touch <
 export async function getImxPrice(this: Subgraph) : Promise<number> {
   const imxAddress = IMX_ADDRESSES[this.chainId];
-  const wethAddress = W_ETH_ADDRESSES[this.chainId];
+  const wETHAddress = W_ETH_ADDRESSES[this.chainId];
   const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[this.chainId];
-  const imxPair = getPairAddress(wethAddress, imxAddress, uniswapV2FactoryAddress);
-  const AAddress = await this.getUnderlyingAddress(imxPair, PoolTokenType.BorrowableA);
-  const poolTokenType = AAddress.toLowerCase() === imxAddress.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
+  const imxPair = getPairAddress(wETHAddress, imxAddress, uniswapV2FactoryAddress);
+  const aAddress = await this.getUnderlyingAddress(imxPair, PoolTokenType.BorrowableA);
+  const poolTokenType = aAddress.toLowerCase() === imxAddress.toLowerCase() ? PoolTokenType.BorrowableA : PoolTokenType.BorrowableB;
   return this.getTokenPrice(imxPair, poolTokenType);
 }
+// ray test touch >
 
 // Total balance
 export async function getTotalBalance(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
@@ -136,26 +126,24 @@ export async function getTotalBorrows(this: Subgraph, uniswapV2PairAddress: Addr
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return parseFloat((lendingPoolData[poolTokenType] as Borrowable).totalBorrows);
 }
+// ray test touch <
 export async function getCurrentTotalBorrows(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const storedAmount = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
+  const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
   const accrualTimestamp = await this.getAccrualTimestamp(uniswapV2PairAddress, poolTokenType);
   const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
-  return storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
+  return totalBorrows * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
 }
 export async function getTotalBorrowsUSD(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const totalBorrows = await this.getCurrentTotalBorrows(uniswapV2PairAddress, poolTokenType);
   const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
   return totalBorrows * tokenPrice;
 }
+// ray test touch >
 
 // Borrow rate
 export async function getBorrowRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return parseFloat((lendingPoolData[poolTokenType] as Borrowable).borrowRate);
-}
-export async function getBorrowAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
-  return toAPY(borrowRate);
 }
 export async function getNextBorrowRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
   const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
@@ -177,24 +165,13 @@ export async function getSupply(this: Subgraph, uniswapV2PairAddress: Address, p
   const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
   return totalBalance + totalBorrows;
 }
-export async function getCurrentSupply(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const storedAmount = await this.getSupply(uniswapV2PairAddress, poolTokenType);
-  const accrualTimestamp = await this.getAccrualTimestamp(uniswapV2PairAddress, poolTokenType);
-  const supplyRate = await this.getSupplyRate(uniswapV2PairAddress, poolTokenType);
-  return storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
-}
-export async function getSupplyUSD(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const supply = await this.getCurrentSupply(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return supply * tokenPrice;
-}
 
 // Utilization Rate
 export async function getUtilizationRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const supply = await this.getSupply(uniswapV2PairAddress, poolTokenType);
   if (supply === 0) return 0;
-  const totalBalance = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
-  return totalBalance / supply;
+  const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
+  return totalBorrows / supply;
 }
 
 // Supply Rate
@@ -223,12 +200,13 @@ export async function getNextSupplyAPY(this: Subgraph, uniswapV2PairAddress: Add
   return toAPY(supplyRate);
 }
 
-// Utilization Rate
+// Uniswap APY
 export async function getUniswapAPY(this: Subgraph, uniswapV2PairAddress: Address) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
   return lendingPoolData.pair.uniswapAPY;
 }
 
+// ray test touch <
 // Reward Speed
 export async function getRewardSpeed(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
@@ -245,18 +223,18 @@ export async function getRewardSpeed(this: Subgraph, uniswapV2PairAddress: Addre
   }
   return epochAmount / segmentLength;
 }
+// ray test touch >
 
+// ray test touch <
 // Farming
-export async function getFarmingAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  return this.getNextFarmingAPY(uniswapV2PairAddress, poolTokenType, 0);
-}
 export async function getNextFarmingAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, borrowAmount: number) : Promise<number> {
   const imxPrice = await this.getImxPrice();
   const rewardSpeed = await this.getRewardSpeed(uniswapV2PairAddress, poolTokenType);
-  const currentBorrowedUSD = await this.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType);
+  const totalBorrowsUSD = await this.getTotalBorrowsUSD(uniswapV2PairAddress, poolTokenType);
   const tokenPrice = await this.getTokenPrice(uniswapV2PairAddress, poolTokenType);
   const additionalBorrowsUSD = borrowAmount * tokenPrice;
-  const totalBorrowedUSD = currentBorrowedUSD + additionalBorrowsUSD;
+  const totalBorrowedUSD = totalBorrowsUSD + additionalBorrowsUSD;
   if (totalBorrowedUSD === 0) return 0;
   return toAPY(imxPrice * rewardSpeed / totalBorrowedUSD);
 }
+// ray test touch >

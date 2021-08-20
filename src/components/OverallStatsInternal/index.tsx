@@ -6,7 +6,7 @@ import {
 } from '@heroicons/react/solid';
 
 import Panel from 'components/Panel';
-import { formatUSD } from 'utils/format';
+import { formatNumberWithUSDCommaDecimals } from 'utils/helpers/format-number';
 
 interface Props {
   totalValueLocked: number;
@@ -22,22 +22,22 @@ const OverallStatsInternal = ({
   const stats = [
     {
       name: 'Total Value Locked',
-      stat: formatUSD(totalValueLocked),
-      previousStat: formatUSD(totalValueLocked),
+      stat: formatNumberWithUSDCommaDecimals(totalValueLocked),
+      previousStat: formatNumberWithUSDCommaDecimals(totalValueLocked),
       change: '0%',
       changeType: 'increase'
     },
     {
       name: 'Total Supplied',
-      stat: formatUSD(totalValueSupplied),
-      previousStat: formatUSD(totalValueSupplied),
+      stat: formatNumberWithUSDCommaDecimals(totalValueSupplied),
+      previousStat: formatNumberWithUSDCommaDecimals(totalValueSupplied),
       change: '0%',
       changeType: 'increase'
     },
     {
       name: 'Total Borrowed',
-      stat: formatUSD(totalValueBorrowed),
-      previousStat: formatUSD(totalValueBorrowed),
+      stat: formatNumberWithUSDCommaDecimals(totalValueBorrowed),
+      previousStat: formatNumberWithUSDCommaDecimals(totalValueBorrowed),
       change: '0%',
       changeType: 'decrease'
     }

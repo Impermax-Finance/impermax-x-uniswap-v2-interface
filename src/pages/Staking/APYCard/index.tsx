@@ -11,7 +11,7 @@ import { useQuery } from 'react-query';
 import ErrorFallback from 'components/ErrorFallback';
 import { CHAIN_IDS } from 'config/web3/chains';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
-import formatNumberWithComma from 'utils/helpers/web3/format-number-with-comma';
+import formatNumberWithComma from 'utils/helpers/format-number-with-comma';
 import xIMXDataFetcher, {
   XIMXData,
   X_IMX_DATA_FETCHER
@@ -121,11 +121,11 @@ const APYCard = ({
     }
 
     const xIMXAPY = Math.pow(1 + parseFloat(xIMXData.dailyAPR), 365) - 1;
-    stakingAPYLabel = formatNumberWithFixedDecimals(xIMXAPY * 100, 2);
+    stakingAPYLabel = formatNumberWithFixedDecimals(2)(xIMXAPY * 100);
     stakingAPYLabel = formatNumberWithComma(stakingAPYLabel);
     stakingAPYLabel = `${stakingAPYLabel} %`;
 
-    totalIMXStakedLabel = formatNumberWithFixedDecimals(Number(xIMXData.totalBalance), 2);
+    totalIMXStakedLabel = formatNumberWithFixedDecimals(2)(Number(xIMXData.totalBalance));
     totalIMXStakedLabel = formatNumberWithComma(totalIMXStakedLabel);
   }
 
@@ -136,7 +136,7 @@ const APYCard = ({
       throw new Error('Something went wrong!');
     }
 
-    totalIMXDistributedLabel = formatNumberWithFixedDecimals(Number(reservesDistributorData.distributed), 2);
+    totalIMXDistributedLabel = formatNumberWithFixedDecimals(2)(Number(reservesDistributorData.distributed));
     totalIMXDistributedLabel = formatNumberWithComma(totalIMXDistributedLabel);
   }
 
