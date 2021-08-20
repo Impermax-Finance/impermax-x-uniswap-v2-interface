@@ -47,11 +47,11 @@ const AccountLendingPool = (): JSX.Element => {
 
   const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
   const suppliedUSD = useSuppliedUSD();
-  const [pageSelected, setPageSelected] = React.useState<AccountLendingPoolPage>(AccountLendingPoolPage.UNINITIALIZED);
-  const actualPageSelected = pageSelected === AccountLendingPoolPage.UNINITIALIZED ?
+  const [pageSelected, setPageSelected] = React.useState<AccountLendingPoolPage>(AccountLendingPoolPage.Uninitialized);
+  const actualPageSelected = pageSelected === AccountLendingPoolPage.Uninitialized ?
     collateralUSD > 0 || suppliedUSD === 0 ?
-      AccountLendingPoolPage.LEVERAGE :
-      AccountLendingPoolPage.EARN_INTEREST :
+      AccountLendingPoolPage.Leverage :
+      AccountLendingPoolPage.EarnInterest :
     pageSelected;
 
   if (!account) {
@@ -76,7 +76,7 @@ const AccountLendingPool = (): JSX.Element => {
       <AccountLendingPoolPageSelector
         pageSelected={actualPageSelected}
         setPageSelected={setPageSelected} />
-      {actualPageSelected === AccountLendingPoolPage.LEVERAGE && (
+      {actualPageSelected === AccountLendingPoolPage.Leverage && (
         <>
           <AccountLendingPoolDetailsLeverage />
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
@@ -90,7 +90,7 @@ const AccountLendingPool = (): JSX.Element => {
           </PoolTokenContext.Provider>
         </>
       )}
-      {actualPageSelected === AccountLendingPoolPage.EARN_INTEREST && (
+      {actualPageSelected === AccountLendingPoolPage.EarnInterest && (
         <>
           <AccountLendingPoolDetailsEarnInterest />
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
@@ -101,7 +101,7 @@ const AccountLendingPool = (): JSX.Element => {
           </PoolTokenContext.Provider>
         </>
       )}
-      {actualPageSelected === AccountLendingPoolPage.FARMING && (
+      {actualPageSelected === AccountLendingPoolPage.Farming && (
         <>
           <AccountLendingPoolFarming />
         </>
@@ -111,10 +111,10 @@ const AccountLendingPool = (): JSX.Element => {
 };
 
 export enum AccountLendingPoolPage {
-  UNINITIALIZED,
-  LEVERAGE,
-  EARN_INTEREST,
-  FARMING
+  Uninitialized,
+  Leverage,
+  EarnInterest,
+  Farming
 }
 
 export default AccountLendingPool;

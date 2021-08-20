@@ -4,9 +4,9 @@
 // TODO: >
 
 import { Row, Col } from 'react-bootstrap';
-import { formatUSD, formatPercentage } from '../../../utils/format';
-import DetailsRow from '../../../components/DetailsRow';
-import { useSuppliedUSD, useAccountAPY } from '../../../hooks/useData';
+import { formatUSD, formatPercentage } from 'utils/format';
+import DetailsRow from 'components/DetailsRow';
+import { useSuppliedUSD, useAccountAPY } from 'hooks/useData';
 
 /**
  * Generates lending pool aggregate details.

@@ -4,11 +4,11 @@
 // TODO: >
 
 import { Row, Col } from 'react-bootstrap';
-import { formatUSD } from '../../../utils/format';
-import DetailsRow from '../../../components/DetailsRow';
-import { useDebtUSD, useDepositedUSD, useLPEquityUSD } from '../../../hooks/useData';
-import RiskMetrics from '../../../components/RiskMetrics';
-import { PoolTokenType } from '../../../types/interfaces';
+import { formatUSD } from 'utils/format';
+import DetailsRow from 'components/DetailsRow';
+import { useDebtUSD, useDepositedUSD, useLPEquityUSD } from 'hooks/useData';
+import RiskMetrics from 'components/RiskMetrics';
+import { PoolTokenType } from 'types/interfaces';
 
 /**
  * Generates lending pool aggregate details.
