@@ -48,8 +48,8 @@ const LendingPoolListItem = ({
   lendingPool,
   greaterThanMd
 }: Props): JSX.Element => {
-  const tokenSymbolA = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
-  const tokenSymbolB = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
+  const tokenASymbol = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
+  const tokenBSymbol = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
   const tokenATotalSupplyInUSD = getLendingPoolTokenTotalSupplyInUSD(lendingPool, PoolTokenType.BorrowableA);
   const tokenBTotalSupplyInUSD = getLendingPoolTokenTotalSupplyInUSD(lendingPool, PoolTokenType.BorrowableB);
   const tokenATotalBorrowInUSD = getLendingPoolTokenTotalBorrowInUSD(lendingPool, PoolTokenType.BorrowableA);
@@ -125,15 +125,15 @@ const LendingPoolListItem = ({
               className='col-span-2'
               tokenIconA={tokenIconA}
               tokenIconB={tokenIconB}
-              symbolA={tokenSymbolA}
-              symbolB={tokenSymbolB} />
+              symbolA={tokenASymbol}
+              symbolB={tokenBSymbol} />
             <PairWrapper>
               <TokenLabel
                 tokenIcon={tokenIconA}
-                symbol={tokenSymbolA} />
+                symbol={tokenASymbol} />
               <TokenLabel
                 tokenIcon={tokenIconB}
-                symbol={tokenSymbolB} />
+                symbol={tokenBSymbol} />
             </PairWrapper>
             <PairWrapper>
               <Value>{formatNumberWithUSDCommaDecimals(tokenATotalSupplyInUSD)}</Value>
@@ -168,14 +168,14 @@ const LendingPoolListItem = ({
               <TokenPairLabel
                 tokenIconA={tokenIconA}
                 tokenIconB={tokenIconB}
-                symbolA={tokenSymbolA}
-                symbolB={tokenSymbolB} />
+                symbolA={tokenASymbol}
+                symbolB={tokenBSymbol} />
               <TokenLabel
                 tokenIcon={tokenIconA}
-                symbol={tokenSymbolA} />
+                symbol={tokenASymbol} />
               <TokenLabel
                 tokenIcon={tokenIconB}
-                symbol={tokenSymbolB} />
+                symbol={tokenBSymbol} />
             </LendingPoolListItemMobileGridWrapper>
             <LendingPoolListItemMobileGridWrapper
               className={clsx(
