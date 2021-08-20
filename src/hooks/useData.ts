@@ -78,12 +78,13 @@ export function useMarketPrice() : number {
   return marketPrice;
 }
 
-export function useOracleIsInitialized() : boolean {
-  const uniswapV2PairAddress = usePairAddress();
+// ray test touch <
+export function useOracleIsInitialized(uniswapV2PairAddress: string) : boolean {
   const [oracleIsInitialized, setOracleIsInitialized] = useState<boolean>(true);
   useRouterCallback(async router => setOracleIsInitialized(await router.getTWAPPrice(uniswapV2PairAddress) !== 0));
   return oracleIsInitialized;
 }
+// ray test touch >
 
 export function useTWAPPrice() : number {
   const uniswapV2PairAddress = usePairAddress();

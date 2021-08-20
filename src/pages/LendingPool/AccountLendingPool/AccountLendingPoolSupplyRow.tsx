@@ -6,11 +6,11 @@
 import { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import InlineAccountTokenInfo from './InlineAccountTokenInfo';
-import DepositInteractionModal from '../../../../components/InteractionModal/DepositInteractionModal';
-import { useSymbol, useDeposited, useDepositedUSD, useMaxWithdrawable } from '../../../../hooks/useData';
-import { useTokenIcon } from '../../../../hooks/useUrlGenerator';
-import DisabledButtonHelper from '../../../../components/DisabledButtonHelper';
-import WithdrawInteractionModal from '../../../../components/InteractionModal/WithdrawInteractionModal';
+import DepositInteractionModal from '../../../components/InteractionModal/DepositInteractionModal';
+import { useSymbol, useDeposited, useDepositedUSD, useMaxWithdrawable } from '../../../hooks/useData';
+import { useTokenIcon } from '../../../hooks/useUrlGenerator';
+import DisabledButtonHelper from '../../../components/DisabledButtonHelper';
+import WithdrawInteractionModal from '../../../components/InteractionModal/WithdrawInteractionModal';
 
 export default function AccountLendingPoolSupplyRow(): JSX.Element {
   const symbol = useSymbol();

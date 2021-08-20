@@ -1,5 +1,5 @@
 import { Row, Col } from 'react-bootstrap';
-import { formatUSD, formatFloat } from '../../../../utils/format';
+import { formatUSD, formatFloat } from '../../../utils/format';
 
 function InlineAccountTokenInfo({ name, symbol, value, valueUSD }: InlineAccountTokenInfoProps): JSX.Element {
   return (
