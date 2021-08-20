@@ -4,8 +4,12 @@ import clsx from 'clsx';
 
 import LendingPoolListItemDesktopGridWrapper from './LendingPoolListItemDesktopGridWrapper';
 import LendingPoolListItemMobileGridWrapper from './LendingPoolListItemMobileGridWrapper';
+import TokenPairLabel from './TokenPairLabel';
+import TokenLabel from './TokenLabel';
+import PropertyLabel from './PropertyLabel';
+import Value from './Value';
+import PairWrapper from './PairWrapper';
 import Panel from 'components/Panel';
-import ImpermaxImage from 'components/UI/ImpermaxImage';
 import { IMX_ADDRESSES } from 'config/web3/contracts/imxes';
 import toAPY from 'utils/helpers/to-apy';
 import {
@@ -30,141 +34,6 @@ import {
 } from 'types/interfaces';
 
 const LEVERAGE = 5;
-
-interface TokenPairLabelCustomProps {
-  tokenIconA: string;
-  tokenIconB: string;
-  symbolA: string;
-  symbolB: string;
-}
-
-const TokenPairLabel = ({
-  tokenIconA,
-  tokenIconB,
-  symbolA,
-  symbolB,
-  className
-}: TokenPairLabelCustomProps & React.ComponentPropsWithRef<'div'>): JSX.Element => (
-  <div
-    className={clsx(
-      'flex',
-      'flex-shrink-0',
-      'items-center',
-      '-space-x-1.5',
-      className
-    )}>
-    <ImpermaxImage
-      width={32}
-      height={32}
-      // TODO: could componentize
-      className={clsx(
-        'inline-block',
-        'rounded-full',
-        'ring-2',
-        'ring-white'
-      )}
-      src={tokenIconA}
-      placeholder='/assets/images/default.png'
-      error='/assets/images/default.png'
-      alt='Token A' />
-    <ImpermaxImage
-      width={32}
-      height={32}
-      className={clsx(
-        'inline-block',
-        'rounded-full',
-        'ring-2',
-        'ring-white'
-      )}
-      src={tokenIconB}
-      placeholder='/assets/images/default.png'
-      error='/assets/images/default.png'
-      alt='Token B' />
-    <span
-      className={clsx(
-        'font-medium',
-        'text-textSecondary',
-        '!ml-1.5'
-      )}>
-      {symbolA}/{symbolB}
-    </span>
-  </div>
-);
-
-interface TokenLabelProps {
-  tokenIcon: string;
-  symbol: string;
-}
-
-const TokenLabel = ({
-  tokenIcon,
-  symbol
-}: TokenLabelProps): JSX.Element => (
-  <div
-    className={clsx(
-      'flex',
-      'flex-shrink-0',
-      'items-center',
-      'space-x-1.5'
-    )}>
-    <ImpermaxImage
-      width={20}
-      height={20}
-      className={clsx(
-        'inline-block',
-        'rounded-full',
-        'ring-2',
-        'ring-white'
-      )}
-      src={tokenIcon}
-      placeholder='/assets/images/default.png'
-      error='/assets/images/default.png'
-      alt='Token' />
-    <span
-      className={clsx(
-        'font-medium',
-        'text-textSecondary'
-      )}>
-      {symbol}
-    </span>
-  </div>
-);
-
-const PropertyLabel = ({
-  className,
-  children,
-  ...rest
-}: React.ComponentPropsWithRef<'h5'>) => (
-  <h5
-    className={clsx(
-      'text-textSecondary',
-      'font-medium',
-      'text-sm',
-      className
-    )}
-    {...rest}>
-    {children}
-  </h5>
-);
-
-const Value = (props: React.ComponentPropsWithRef<'span'>): JSX.Element => (
-  <span {...props} />
-);
-
-const SetWrapper = ({
-  className,
-  children
-}: React.ComponentPropsWithRef<'div'>) => (
-  <div
-    className={clsx(
-      'flex',
-      'flex-col',
-      'space-y-1',
-      className
-    )}>
-    {children}
-  </div>
-);
 
 interface Props {
   chainID: number;
@@ -258,30 +127,30 @@ const LendingPoolListItem = ({
               tokenIconB={tokenIconB}
               symbolA={tokenSymbolA}
               symbolB={tokenSymbolB} />
-            <SetWrapper>
+            <PairWrapper>
               <TokenLabel
                 tokenIcon={tokenIconA}
                 symbol={tokenSymbolA} />
               <TokenLabel
                 tokenIcon={tokenIconB}
                 symbol={tokenSymbolB} />
-            </SetWrapper>
-            <SetWrapper>
+            </PairWrapper>
+            <PairWrapper>
               <Value>{formatNumberWithUSDCommaDecimals(tokenATotalSupplyInUSD)}</Value>
               <Value>{formatNumberWithUSDCommaDecimals(tokenBTotalSupplyInUSD)}</Value>
-            </SetWrapper>
-            <SetWrapper>
+            </PairWrapper>
+            <PairWrapper>
               <Value>{formatNumberWithUSDCommaDecimals(tokenATotalBorrowInUSD)}</Value>
               <Value>{formatNumberWithUSDCommaDecimals(tokenBTotalBorrowInUSD)}</Value>
-            </SetWrapper>
-            <SetWrapper>
+            </PairWrapper>
+            <PairWrapper>
               <Value>{formatNumberWithPercentageCommaDecimals(tokenASupplyAPY)}</Value>
               <Value>{formatNumberWithPercentageCommaDecimals(tokenBSupplyAPY)}</Value>
-            </SetWrapper>
-            <SetWrapper>
+            </PairWrapper>
+            <PairWrapper>
               <Value>{formatNumberWithPercentageCommaDecimals(tokenABorrowAPY)}</Value>
               <Value>{formatNumberWithPercentageCommaDecimals(tokenBBorrowAPY)}</Value>
-            </SetWrapper>
+            </PairWrapper>
             <Value
               className={clsx(
                 'self-center',
