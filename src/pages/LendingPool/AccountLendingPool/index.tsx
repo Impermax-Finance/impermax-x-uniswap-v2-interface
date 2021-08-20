@@ -1,27 +1,28 @@
-import { useState } from 'react';
+
+import * as React from 'react';
 import { Card } from 'react-bootstrap';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import Button from 'react-bootstrap/Button';
 
-import { injected } from 'utils/helpers/web3/connectors';
-import { PoolTokenType } from '../../../types/interfaces';
 import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
-import PoolTokenContext from '../../../contexts/PoolToken';
 import AccountLendingPoolPageSelector from './AccountLendingPoolPageSelector';
 import AccountLendingPoolSupplyRow from './AccountLendingPoolSupplyRow';
 import AccountLendingPoolBorrowRow from './AccountLendingPoolBorrowRow';
 import AccountLendingPoolDetailsLeverage from './AccountLendingPoolDetailsLeverage';
 import AccountLendingPoolDetailsEarnInterest from './AccountLendingPoolDetailsEarnInterest';
-import { useDepositedUSD, useSuppliedUSD } from '../../../hooks/useData';
 import AccountLendingPoolFarming from './AccountLendingPoolFarming';
+import PoolTokenContext from 'contexts/PoolToken';
+import { useDepositedUSD, useSuppliedUSD } from 'hooks/useData';
+import { injected } from 'utils/helpers/web3/connectors';
+import { PoolTokenType } from 'types/interfaces';
 import './index.scss';
 
 interface AccountLendingPoolContainerProps {
-  children: any;
+  children: React.ReactNode;
 }
 
-function AccountLendingPoolContainer({ children }: AccountLendingPoolContainerProps) {
+const AccountLendingPoolContainer = ({ children }: AccountLendingPoolContainerProps) => {
   return (
     <div className='account-lending-pool'>
       <Card>
@@ -31,21 +32,14 @@ function AccountLendingPoolContainer({ children }: AccountLendingPoolContainerPr
       </Card>
     </div>
   );
-}
+};
 
 /**
  * Generate the Account Lending Pool card, giving details about the particular user's equity in the pool.
  * @params AccountLendingPoolProps
  */
 
-export enum AccountLendingPoolPage {
-  UNINITIALIZED,
-  LEVERAGE,
-  EARN_INTEREST,
-  FARMING,
-}
-
-export default function AccountLendingPool(): JSX.Element {
+const AccountLendingPool = (): JSX.Element => {
   const {
     activate,
     account
@@ -53,7 +47,7 @@ export default function AccountLendingPool(): JSX.Element {
 
   const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
   const suppliedUSD = useSuppliedUSD();
-  const [pageSelected, setPageSelected] = useState<AccountLendingPoolPage>(AccountLendingPoolPage.UNINITIALIZED);
+  const [pageSelected, setPageSelected] = React.useState<AccountLendingPoolPage>(AccountLendingPoolPage.UNINITIALIZED);
   const actualPageSelected = pageSelected === AccountLendingPoolPage.UNINITIALIZED ?
     collateralUSD > 0 || suppliedUSD === 0 ?
       AccountLendingPoolPage.LEVERAGE :
@@ -114,4 +108,13 @@ export default function AccountLendingPool(): JSX.Element {
       )}
     </AccountLendingPoolContainer>
   );
+};
+
+export enum AccountLendingPoolPage {
+  UNINITIALIZED,
+  LEVERAGE,
+  EARN_INTEREST,
+  FARMING
 }
+
+export default AccountLendingPool;
