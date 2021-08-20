@@ -90,7 +90,7 @@ interface Props {
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB;
 }
 
-const BorrowableDetails = ({
+const Borrowable = ({
   poolTokenType
 }: Props): JSX.Element => {
   const {
@@ -226,7 +226,7 @@ const BorrowableDetails = ({
   );
 };
 
-export default withErrorBoundary(BorrowableDetails, {
+export default withErrorBoundary(Borrowable, {
   FallbackComponent: ErrorFallback,
   onReset: () => {
     window.location.reload();

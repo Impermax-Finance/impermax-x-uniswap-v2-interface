@@ -1,6 +1,6 @@
 
 import OracleAlert from './OracleAlert';
-import BorrowablesDetails from './BorrowablesDetails';
+import Borrowables from './Borrowables';
 import AccountLendingPool from './AccountLendingPool';
 import { useOracleIsInitialized } from 'hooks/useData';
 
@@ -15,7 +15,7 @@ const LendingPoolContent = (): JSX.Element => {
 
   return (
     <>
-      <BorrowablesDetails />
+      <Borrowables />
       <AccountLendingPool />
     </>
   );
