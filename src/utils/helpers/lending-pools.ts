@@ -48,7 +48,7 @@ const getLendingPoolTokenTotalSupplyInUSD = (
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
   const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
   const supply = totalBalance + totalBorrows;
-  const utilizationRate = getLendingPoolTokenUtilizationRate(lendingPool, poolTokenType);
+  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply;
 
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
@@ -57,9 +57,8 @@ const getLendingPoolTokenTotalSupplyInUSD = (
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
   const currentTotalSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
   const tokenPriceInUSD = getLendingPoolTokenPrice(lendingPool, poolTokenType);
-  const totalSupplyInUSD = currentTotalSupply * tokenPriceInUSD;
 
-  return totalSupplyInUSD;
+  return currentTotalSupply * tokenPriceInUSD;
 };
 
 const getLendingPoolTokenTotalBorrowInUSD = (
@@ -83,27 +82,21 @@ const getLendingPoolTokenUtilizationRate = (
   const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
   const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
   const supply = totalBalance + totalBorrows;
-  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply;
 
-  return utilizationRate;
+  return supply === 0 ? 0 : totalBorrows / supply;
 };
 
 const getLendingPoolTokenSupplyAPY = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
-  const totalBalance = parseFloat(lendingPool[poolTokenType].totalBalance);
-  const totalBorrows = parseFloat(lendingPool[poolTokenType].totalBorrows);
-  const supply = totalBalance + totalBorrows;
-  const utilizationRate = supply === 0 ? 0 : totalBorrows / supply; // TODO: could be a function
+  const utilizationRate = getLendingPoolTokenUtilizationRate(lendingPool, poolTokenType);
 
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const reserveFactor = parseFloat(lendingPool[poolTokenType].reserveFactor);
   const supplyRate = borrowRate * utilizationRate * (1 - reserveFactor); // TODO: could be a function
 
-  const supplyAPY = toAPY(supplyRate);
-
-  return supplyAPY;
+  return toAPY(supplyRate);
 };
 
 const getLendingPoolTokenBorrowAPY = (
@@ -111,9 +104,8 @@ const getLendingPoolTokenBorrowAPY = (
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): number => {
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
-  const borrowAPY = toAPY(borrowRate);
 
-  return borrowAPY;
+  return toAPY(borrowRate);
 };
 
 const getLendingPoolTokenIcon = (
