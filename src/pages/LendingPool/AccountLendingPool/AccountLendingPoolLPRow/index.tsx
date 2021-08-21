@@ -32,9 +32,6 @@ export default function AccountLendingPoolLPRow(): JSX.Element {
   const [showLeverageModal, toggleLeverageModal] = useState(false);
   const [showDeleverageModal, toggleDeleverageModal] = useState(false);
 
-  // TODO: <
-  // const maxWithdrawable = useMaxWithdrawable();
-  // TODO: >
   const maxDeleverage = useMaxDeleverage(0);
   const withdrawDisabledInfo = `You haven't deposited any ${symbol} yet.`;
   const leverageDisabledInfo = `You need to deposit the ${symbol} LP first in order to leverage it.`;
