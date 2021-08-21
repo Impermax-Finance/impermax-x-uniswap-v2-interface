@@ -1,17 +1,17 @@
 
 import * as React from 'react';
-import { Card } from 'react-bootstrap';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import Button from 'react-bootstrap/Button';
 
-import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
 import AccountLendingPoolPageSelector from './AccountLendingPoolPageSelector';
-import AccountLendingPoolSupplyRow from './AccountLendingPoolSupplyRow';
+import AccountLendingPoolLPRow from './AccountLendingPoolLPRow';
 import AccountLendingPoolBorrowRow from './AccountLendingPoolBorrowRow';
+import AccountLendingPoolSupplyRow from './AccountLendingPoolSupplyRow';
 import AccountLendingPoolDetailsLeverage from './AccountLendingPoolDetailsLeverage';
 import AccountLendingPoolDetailsEarnInterest from './AccountLendingPoolDetailsEarnInterest';
 import AccountLendingPoolFarming from './AccountLendingPoolFarming';
+import Panel from 'components/Panel';
 import PoolTokenContext from 'contexts/PoolToken';
 import { useDepositedUSD, useSuppliedUSD } from 'hooks/useData';
 import { injected } from 'utils/helpers/web3/connectors';
@@ -24,13 +24,9 @@ interface AccountLendingPoolContainerProps {
 
 const AccountLendingPoolContainer = ({ children }: AccountLendingPoolContainerProps) => {
   return (
-    <div className='account-lending-pool'>
-      <Card>
-        <Card.Body>
-          {children}
-        </Card.Body>
-      </Card>
-    </div>
+    <Panel className='bg-white'>
+      {children}
+    </Panel>
   );
 };
 
