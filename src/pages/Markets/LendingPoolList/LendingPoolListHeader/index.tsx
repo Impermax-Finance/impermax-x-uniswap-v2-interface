@@ -5,9 +5,8 @@ import clsx from 'clsx';
 import
 LendingPoolListItemDesktopGridWrapper
   from 'pages/Markets/LendingPoolList/LendingPoolListItem/LendingPoolListItemDesktopGridWrapper';
-// ray test touch <<
-import QuestionHelper from 'components/QuestionHelper';
-// ray test touch >>
+import ImpermaxTooltip from 'components/UI/ImpermaxTooltip';
+import { ReactComponent as OutlineQuestionMarkCircleIcon } from 'assets/images/icons/outline-question-mark-circle.svg';
 
 const Heading = ({
   className,
@@ -50,11 +49,11 @@ const LendingPoolListHeader = ({
           'space-x-1'
         )}>
         <span>Leveraged LP APY</span>
-        {/* ray test touch << */}
-        <QuestionHelper
-          placement='left'
-          text='Based on last 7 days trading fees assuming a 5x leverage' />
-        {/* ray test touch >> */}
+        <ImpermaxTooltip label='Based on last 7 days trading fees assuming a 5x leverage'>
+          <OutlineQuestionMarkCircleIcon
+            width={18}
+            height={18} />
+        </ImpermaxTooltip>
       </Heading>
     </LendingPoolListItemDesktopGridWrapper>
   );
