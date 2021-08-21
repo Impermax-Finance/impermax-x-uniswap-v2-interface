@@ -28,7 +28,7 @@ const ImpermaxButtonBase = React.forwardRef<Ref, Props>(({
     {children}
   </button>
 ));
-ImpermaxButtonBase.displayName = 'InterlayButtonBase';
+ImpermaxButtonBase.displayName = 'ImpermaxButtonBase';
 
 export type Props = CustomProps & React.ComponentPropsWithRef<'button'>;
 

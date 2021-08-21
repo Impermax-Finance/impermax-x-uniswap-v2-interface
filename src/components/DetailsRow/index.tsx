@@ -23,6 +23,7 @@ export function DetailsRowCustom({ children }: DetailsRowCustomProps): JSX.Eleme
  * @params AccountLendingPoolDetailsRowProps
  */
 
+// ray test touch <
 export default function DetailsRow({ name, value, explanation, children }: DetailsRowProps): JSX.Element {
   return (
     <div className='details-row'>
@@ -36,3 +37,4 @@ export default function DetailsRow({ name, value, explanation, children }: Detai
     </div>
   );
 }
+// ray test touch >
