@@ -1,7 +1,3 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import DetailsRow from '../DetailsRow';
 import LiquidationPrices from './LiquidationPrices';
@@ -26,7 +22,7 @@ const RiskMetrics = ({
   changeBorrowedB,
   changeCollateral,
   hideIfNull
-} : Props): JSX.Element => {
+} : Props): JSX.Element | null => {
   const changes =
     changeBorrowedA ||
     changeBorrowedB ||
@@ -34,7 +30,7 @@ const RiskMetrics = ({
         changeBorrowedA: changeBorrowedA ?? 0,
         changeBorrowedB: changeBorrowedB ?? 0,
         changeCollateral: changeCollateral ?? 0
-      } : null;
+      } : undefined;
 
   const currentLeverage = useCurrentLeverage();
   const newLeverage = useCurrentLeverage(changes);
