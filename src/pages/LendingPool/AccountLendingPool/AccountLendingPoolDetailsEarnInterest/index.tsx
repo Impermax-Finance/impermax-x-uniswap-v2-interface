@@ -1,39 +1,52 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
-import { Row, Col } from 'react-bootstrap';
-import { formatUSD, formatPercentage } from 'utils/format';
-import DetailsRow from 'components/DetailsRow';
-import { useSuppliedUSD, useAccountAPY } from 'hooks/useData';
+import clsx from 'clsx';
+
+import DetailList, { DetailListItem } from 'components/DetailList';
+import {
+  useSuppliedUSD,
+  useAccountAPY
+} from 'hooks/useData';
+import {
+  formatUSD,
+  formatPercentage
+} from 'utils/format';
 
 /**
  * Generates lending pool aggregate details.
  */
 
-export default function AccountLendingPoolDetailsEarnInterest(): JSX.Element {
+const AccountLendingPoolDetailsEarnInterest = (): JSX.Element => {
+  // ray test touch <<
   const suppliedUSD = useSuppliedUSD();
   const accountAPY = useAccountAPY();
+  // ray test touch >>
 
   return (
-    <>
-      <Row className='account-lending-pool-details'>
-        <Col
-          sm={12}
-          md={6}>
-          <DetailsRow
-            name='Supply Balance'
-            value={formatUSD(suppliedUSD)} />
-        </Col>
-        <Col
-          sm={12}
-          md={6}>
-          <DetailsRow
-            name='Net APY'
-            value={formatPercentage(accountAPY)} />
-        </Col>
-      </Row>
-    </>
+    <div
+      className={clsx(
+        // ray test touch <<
+        // TODO: componentize
+        'space-y-6',
+        'md:space-y-0',
+        'md:grid',
+        'md:grid-cols-2',
+        'md:gap-6',
+        'px-6',
+        'py-6'
+        // ray test touch >>
+      )}>
+      <DetailList>
+        <DetailListItem title='Supply Balance'>
+          {formatUSD(suppliedUSD)}
+        </DetailListItem>
+      </DetailList>
+      <DetailList>
+        <DetailListItem title='Net APY'>
+          {formatPercentage(accountAPY)}
+        </DetailListItem>
+      </DetailList>
+    </div>
   );
-}
+};
+
+export default AccountLendingPoolDetailsEarnInterest;

@@ -1,10 +1,15 @@
 
-import DetailsRow from '../DetailsRow';
+import clsx from 'clsx';
+import { ArrowRightIcon } from '@heroicons/react/outline';
+
+import DetailList, { DetailListItem } from 'components/DetailList';
 import LiquidationPrices from './LiquidationPrices';
 import CurrentPrice from './CurrentPrice';
 import { formatLeverage } from 'utils/format';
 import { useCurrentLeverage } from 'hooks/useData';
+// ray test touch <<
 import './index.scss';
+// ray test touch >>
 
 interface Props {
   changeBorrowedA?: number;
@@ -32,48 +37,60 @@ const RiskMetrics = ({
         changeCollateral: changeCollateral ?? 0
       } : undefined;
 
+  // ray test touch <<
   const currentLeverage = useCurrentLeverage();
   const newLeverage = useCurrentLeverage(changes);
-
-  const leverageExplanation = 'Calculated as: Total Collateral / LP Equity';
-  const liquidationExplanation = 'If the price crosses these boundaries, your account will become liquidatable';
+  // ray test touch >>
 
   if (hideIfNull && currentLeverage === 1) return null;
 
+  const leverageTooltip = 'Calculated as: Total Collateral / LP Equity';
+  const liquidationTooltip = 'If the price crosses these boundaries, your account will become liquidatable.';
+
   return (
-    <div>
+    <DetailList>
       {changes ? (
-        <DetailsRow
-          name='New Leverage'
-          explanation={leverageExplanation}>
-          {formatLeverage(currentLeverage)}
-          <i className='change-arrow' />
-          {formatLeverage(newLeverage)}
-        </DetailsRow>
+        <DetailListItem
+          title='New Leverage'
+          tooltip={leverageTooltip}>
+          <span>{formatLeverage(currentLeverage)}</span>
+          <ArrowRightIcon
+            className={clsx(
+              'w-6',
+              'h-6'
+            )} />
+          <span>{formatLeverage(newLeverage)}</span>
+        </DetailListItem>
       ) : (
-        <DetailsRow
-          name='Current Leverage'
-          explanation={leverageExplanation}>
-          {formatLeverage(currentLeverage)}
-        </DetailsRow>
+        <DetailListItem
+          title='Current Leverage'
+          tooltip={leverageTooltip}>
+          <span>{formatLeverage(currentLeverage)}</span>
+        </DetailListItem>
       )}
       {changes ? (
-        <DetailsRow
-          name='New Liquidation Prices'
-          explanation={liquidationExplanation}>
+        <DetailListItem
+          title='New Liquidation Prices'
+          tooltip={liquidationTooltip}>
           <LiquidationPrices />
-          <i className='change-arrow' />
+          <ArrowRightIcon
+            className={clsx(
+              'w-6',
+              'h-6'
+            )} />
           <LiquidationPrices changes={changes} />
-        </DetailsRow>
+        </DetailListItem>
       ) : (
-        <DetailsRow
-          name='Liquidation Prices'
-          explanation={liquidationExplanation}>
+        <DetailListItem
+          title='Liquidation Prices'
+          tooltip={liquidationTooltip}>
           <LiquidationPrices />
-        </DetailsRow>
+        </DetailListItem>
       )}
+      {/* ray test touch << */}
       <CurrentPrice />
-    </div>
+      {/* ray test touch >> */}
+    </DetailList>
   );
 };
 

@@ -51,6 +51,7 @@
     "imxes",
     "inmemory",
     "keccak",
+    "liquidatable",
     "localstorage",
     "merkle",
     "mixins",

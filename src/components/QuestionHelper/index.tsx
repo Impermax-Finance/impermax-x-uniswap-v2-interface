@@ -1,3 +1,4 @@
+// ray test touch <<
 import { useCallback, useState } from 'react';
 import { HelpCircle as Question } from 'react-feather';
 import './index.scss';
@@ -27,3 +28,4 @@ export default function QuestionHelper({ text, placement }: { text: string, plac
     </span>
   );
 }
+// ray test touch >>

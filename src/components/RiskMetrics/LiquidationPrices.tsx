@@ -35,6 +35,7 @@ interface LiquidationPricesProps {
  * Generates lending pool aggregate details.
  */
 
+// ray test touch <<
 export default function LiquidationPrices({ changes } : LiquidationPricesProps): JSX.Element {
   const [price0, price1] = useLiquidationPrices(changes);
   const TWAPPrice = useTWAPPrice();
@@ -59,3 +60,4 @@ export default function LiquidationPrices({ changes } : LiquidationPricesProps):
     </>
   );
 }
+// ray test touch >>

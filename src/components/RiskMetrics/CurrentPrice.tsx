@@ -6,7 +6,7 @@
 import { PoolTokenType } from '../../types/interfaces';
 import { useTogglePriceInverted, usePriceInverted } from '../../hooks/useImpermaxRouter';
 import { formatFloat } from '../../utils/format';
-import { DetailsRowCustom } from '../DetailsRow';
+import { DetailsRowCustom } from '../DetailList';
 import { useSymbol, useTWAPPrice, useMarketPrice } from '../../hooks/useData';
 import QuestionHelper from '../QuestionHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,6 +16,7 @@ import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
  * Generates lending pool aggregate details.
  */
 
+// ray test touch <<
 export default function CurrentPrice(): JSX.Element {
   const TWAPPrice = useTWAPPrice();
   const marketPrice = useMarketPrice();
@@ -40,3 +41,4 @@ export default function CurrentPrice(): JSX.Element {
     </DetailsRowCustom>
   );
 }
+// ray test touch >>

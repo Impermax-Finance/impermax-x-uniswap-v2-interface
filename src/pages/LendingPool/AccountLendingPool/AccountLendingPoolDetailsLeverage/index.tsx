@@ -2,7 +2,7 @@
 import clsx from 'clsx';
 
 import RiskMetrics from 'components/RiskMetrics';
-import ImpermaxTooltip from 'components/UI/ImpermaxTooltip';
+import DetailList, { DetailListItem } from 'components/DetailList';
 import {
   useDebtUSD,
   useDepositedUSD,
@@ -10,7 +10,6 @@ import {
 } from 'hooks/useData';
 import { formatUSD } from 'utils/format';
 import { PoolTokenType } from 'types/interfaces';
-import { ReactComponent as OutlineQuestionMarkCircleIcon } from 'assets/images/icons/outline-question-mark-circle.svg';
 
 /**
  * Generates lending pool aggregate details.
@@ -25,15 +24,15 @@ const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
 
   const leftItems = [
     {
-      name: 'Total Collateral',
+      title: 'Total Collateral',
       value: formatUSD(collateralUSD)
     },
     {
-      name: 'Total Debt',
+      title: 'Total Debt',
       value: formatUSD(debtUSD)
     },
     {
-      name: 'LP Equity',
+      title: 'LP Equity',
       value: formatUSD(lpEquityUSD),
       tooltip: 'Calculated as: Total Collateral - Total Debt'
     }
@@ -42,6 +41,8 @@ const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
   return (
     <div
       className={clsx(
+        // ray test touch <<
+        // TODO: componentize
         'space-y-6',
         'md:space-y-0',
         'md:grid',
@@ -49,35 +50,20 @@ const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
         'md:gap-6',
         'px-6',
         'py-6'
+        // ray test touch >>
       )}>
-      <ul className='space-y-3'>
+      <DetailList>
         {leftItems.map(item => (
-          <li key={item.name}>
-            <div
-              className={clsx(
-                'flex',
-                'items-center',
-                'space-x-1'
-              )}>
-              <span>{item.name}</span>
-              {item.tooltip && (
-                <ImpermaxTooltip label={item.tooltip}>
-                  <OutlineQuestionMarkCircleIcon
-                    width={18}
-                    height={18} />
-                </ImpermaxTooltip>
-              )}
-            </div>
-            <div>
-              <span className='font-bold'>{item.value}</span>
-            </div>
-          </li>
+          <DetailListItem
+            key={item.title}
+            title={item.title}
+            tooltip={item.tooltip}>
+            <span>{item.value}</span>
+          </DetailListItem>
         ))}
-      </ul>
+      </DetailList>
       {/* ray test touch << */}
-      <div>
-        <RiskMetrics />
-      </div>
+      <RiskMetrics />
       {/* ray test touch >> */}
     </div>
   );
