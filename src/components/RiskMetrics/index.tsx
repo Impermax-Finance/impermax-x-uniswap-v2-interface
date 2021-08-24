@@ -3,14 +3,14 @@
 // @ts-nocheck
 // TODO: >
 
-import { formatLeverage } from '../../utils/format';
 import DetailsRow from '../DetailsRow';
-import { useCurrentLeverage } from '../../hooks/useData';
 import LiquidationPrices from './LiquidationPrices';
 import CurrentPrice from './CurrentPrice';
+import { formatLeverage } from 'utils/format';
+import { useCurrentLeverage } from 'hooks/useData';
 import './index.scss';
 
-interface RiskMetricsProps {
+interface Props {
   changeBorrowedA?: number;
   changeBorrowedB?: number;
   changeCollateral?: number;
@@ -21,12 +21,20 @@ interface RiskMetricsProps {
  * Generates lending pool aggregate details.
  */
 
-export default function RiskMetrics({ changeBorrowedA, changeBorrowedB, changeCollateral, hideIfNull } : RiskMetricsProps): JSX.Element {
-  const changes = changeBorrowedA || changeBorrowedB || changeCollateral ? {
-    changeBorrowedA: changeBorrowedA ? changeBorrowedA : 0,
-    changeBorrowedB: changeBorrowedB ? changeBorrowedB : 0,
-    changeCollateral: changeCollateral ? changeCollateral : 0
-  } : null;
+const RiskMetrics = ({
+  changeBorrowedA,
+  changeBorrowedB,
+  changeCollateral,
+  hideIfNull
+} : Props): JSX.Element => {
+  const changes =
+    changeBorrowedA ||
+    changeBorrowedB ||
+    changeCollateral ? {
+        changeBorrowedA: changeBorrowedA ?? 0,
+        changeBorrowedB: changeBorrowedB ?? 0,
+        changeCollateral: changeCollateral ?? 0
+      } : null;
 
   const currentLeverage = useCurrentLeverage();
   const newLeverage = useCurrentLeverage(changes);
@@ -71,4 +79,6 @@ export default function RiskMetrics({ changeBorrowedA, changeBorrowedB, changeCo
       <CurrentPrice />
     </div>
   );
-}
+};
+
+export default RiskMetrics;
