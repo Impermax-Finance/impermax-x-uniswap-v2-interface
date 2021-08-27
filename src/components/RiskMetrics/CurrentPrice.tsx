@@ -1,23 +1,21 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
-import { PoolTokenType } from '../../types/interfaces';
-import { useTogglePriceInverted, usePriceInverted } from '../../hooks/useImpermaxRouter';
-import { formatFloat } from '../../utils/format';
-import { DetailsRowCustom } from '../DetailList';
-import { useSymbol, useTWAPPrice, useMarketPrice } from '../../hooks/useData';
-import QuestionHelper from '../QuestionHelper';
+// ray test touch <<
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+// ray test touch >>
+
+import { DetailsRowCustom } from '../DetailList';
+import QuestionHelper from '../QuestionHelper';
+import { PoolTokenType } from 'types/interfaces';
+import { useTogglePriceInverted, usePriceInverted } from 'hooks/useImpermaxRouter';
+import { formatFloat } from 'utils/format';
+import { useSymbol, useTWAPPrice, useMarketPrice } from 'hooks/useData';
 
 /**
  * Generates lending pool aggregate details.
  */
 
-// ray test touch <<
-export default function CurrentPrice(): JSX.Element {
+const CurrentPrice = (): JSX.Element => {
   const TWAPPrice = useTWAPPrice();
   const marketPrice = useMarketPrice();
 
@@ -25,8 +23,10 @@ export default function CurrentPrice(): JSX.Element {
   const togglePriceInverted = useTogglePriceInverted();
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
-  // eslint-disable-next-line no-negated-condition
-  const pair = !priceInverted ? symbolA + '/' + symbolB : symbolB + '/' + symbolA;
+  const pair =
+    priceInverted ?
+      `${symbolB}/${symbolA}` :
+      `${symbolA}/${symbolB}`;
 
   return (
     <DetailsRowCustom>
@@ -40,5 +40,6 @@ export default function CurrentPrice(): JSX.Element {
       </div>
     </DetailsRowCustom>
   );
-}
-// ray test touch >>
+};
+
+export default CurrentPrice;
