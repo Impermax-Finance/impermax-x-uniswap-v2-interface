@@ -271,7 +271,12 @@ const AppBar = ({
                 'border-t',
                 'border-gray-200'
               )}>
-              <div className='flex items-center px-4'>
+              <div
+                className={clsx(
+                  'flex',
+                  'items-center',
+                  'px-4'
+                )}>
                 <ClaimAirdropButton />
                 <WalletConnectButton style={{ height: 36 }} />
               </div>
