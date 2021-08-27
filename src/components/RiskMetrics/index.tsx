@@ -7,9 +7,6 @@ import CurrentPrice from './CurrentPrice';
 import DetailList, { DetailListItem } from 'components/DetailList';
 import { formatLeverage } from 'utils/format';
 import { useCurrentLeverage } from 'hooks/useData';
-// ray test touch <<
-import './index.scss';
-// ray test touch >>
 
 interface Props {
   changeBorrowedA?: number;
@@ -31,11 +28,13 @@ const RiskMetrics = ({
   const changes =
     changeBorrowedA ||
     changeBorrowedB ||
-    changeCollateral ? {
+    changeCollateral ?
+      {
         changeBorrowedA: changeBorrowedA ?? 0,
         changeBorrowedB: changeBorrowedB ?? 0,
         changeCollateral: changeCollateral ?? 0
-      } : undefined;
+      } :
+      undefined;
 
   // ray test touch <<
   const currentLeverage = useCurrentLeverage();
