@@ -2,9 +2,9 @@
 import clsx from 'clsx';
 import { ArrowRightIcon } from '@heroicons/react/outline';
 
-import DetailList, { DetailListItem } from 'components/DetailList';
 import LiquidationPrices from './LiquidationPrices';
 import CurrentPrice from './CurrentPrice';
+import DetailList, { DetailListItem } from 'components/DetailList';
 import { formatLeverage } from 'utils/format';
 import { useCurrentLeverage } from 'hooks/useData';
 // ray test touch <<
@@ -87,9 +87,7 @@ const RiskMetrics = ({
           <LiquidationPrices />
         </DetailListItem>
       )}
-      {/* ray test touch << */}
       <CurrentPrice />
-      {/* ray test touch >> */}
     </DetailList>
   );
 };

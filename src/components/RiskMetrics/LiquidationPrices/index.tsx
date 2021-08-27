@@ -1,6 +1,6 @@
-import { formatFloat } from '../../utils/format';
-import { Changes } from '../../types/interfaces';
-import { useTWAPPrice, useSafetyMargin, useLiquidationPrices } from '../../hooks/useData';
+import { useTWAPPrice, useSafetyMargin, useLiquidationPrices } from 'hooks/useData';
+import { formatFloat } from 'utils/format';
+import { Changes } from 'types/interfaces';
 
 const LIQ_K = 1.7;
 
