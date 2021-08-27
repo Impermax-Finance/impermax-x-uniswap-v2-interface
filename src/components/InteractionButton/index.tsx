@@ -4,8 +4,8 @@
 // TODO: >
 
 import { Spinner } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { CheckIcon } from '@heroicons/react/outline';
+
 import './index.scss';
 
 export enum ButtonState {
@@ -15,13 +15,13 @@ export enum ButtonState {
   Done = 'done',
 }
 
-export interface InteractionButtonProps {
+export interface Props {
   name: string;
   state: ButtonState;
   onCall(): void;
 }
 
-export default function InteractionButton({ name, onCall, state }: InteractionButtonProps): JSX.Element {
+export default function InteractionButton({ name, onCall, state }: Props): JSX.Element {
   return (
     <button
       onClick={state === ButtonState.Ready ? onCall : null}
@@ -31,7 +31,13 @@ export default function InteractionButton({ name, onCall, state }: InteractionBu
       {state === ButtonState.Pending ? (<Spinner
         animation='border'
         size='sm' />) : null}
-      {state === ButtonState.Done ? (<FontAwesomeIcon icon={faCheck} />) : null}
+      {state === ButtonState.Done ? (
+        <CheckIcon
+          className={clsx(
+            'w-6',
+            'h-6'
+          )} />
+      ) : null}
     </button>
   );
 }

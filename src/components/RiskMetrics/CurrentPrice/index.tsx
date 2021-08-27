@@ -1,11 +1,8 @@
 
-// ray test touch <<
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
-// ray test touch >>
+import { RefreshIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
 
-import { DetailsRowCustom } from '../DetailList';
-import QuestionHelper from '../QuestionHelper';
+import { DetailListItem } from 'components/DetailList';
 import { PoolTokenType } from 'types/interfaces';
 import { useTogglePriceInverted, usePriceInverted } from 'hooks/useImpermaxRouter';
 import { formatFloat } from 'utils/format';
@@ -29,16 +26,18 @@ const CurrentPrice = (): JSX.Element => {
       `${symbolA}/${symbolB}`;
 
   return (
-    <DetailsRowCustom>
-      <div className='name'>
-        TWAP Price ({pair}) <QuestionHelper text='The TWAP (Time Weighted Average Price) and the current market price on Uniswap' />
-      </div>
-      <div className='value'>{formatFloat(TWAPPrice, 4)} (current: {formatFloat(marketPrice, 4)}) <FontAwesomeIcon
-        icon={faSyncAlt}
-        className='invert-price'
+    <DetailListItem
+      title={`TWAP Price (${pair})`}
+      tooltip='The TWAP (Time Weighted Average Price) and the current market price on Uniswap.'>
+      <span>{formatFloat(TWAPPrice, 4)}</span>
+      <span>(current: {formatFloat(marketPrice, 4)})</span>
+      <RefreshIcon
+        className={clsx(
+          'w-6',
+          'h-6'
+        )}
         onClick={() => togglePriceInverted()} />
-      </div>
-    </DetailsRowCustom>
+    </DetailListItem>
   );
 };
 

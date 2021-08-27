@@ -14,8 +14,7 @@ import {
   Row,
   Col
 } from 'react-bootstrap';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CheckIcon } from '@heroicons/react/outline';
 
 import MainContainer from 'parts/MainContainer';
 import InteractionButton, { ButtonState } from 'components/InteractionButton';
@@ -70,33 +69,68 @@ const CreateNewPair = (): JSX.Element | null => {
       <Card className='mt-4 p-4'>
         <Row className='steps'>
           <Col className={stepClassName(1)}>
-            <i className='step-number'>{stepSelected > 1 ? (<FontAwesomeIcon
-              icon={faCheck}
-              size='sm' />) : (<>1</>)}
+            <i className='step-number'>
+              {stepSelected > 1 ? (
+                <CheckIcon
+                  className={clsx(
+                    'w-6',
+                    'h-6'
+                  )} />
+              ) : (
+                <>1</>
+              )}
             </i> Insert pair address
           </Col>
           <Col className={stepClassName(2)}>
-            <i className='step-number'>{stepSelected > 2 ? (<FontAwesomeIcon
-              icon={faCheck}
-              size='sm' />) : (<>2</>)}
+            <i className='step-number'>
+              {stepSelected > 2 ? (
+                <CheckIcon
+                  className={clsx(
+                    'w-6',
+                    'h-6'
+                  )} />
+              ) : (
+                <>2</>
+              )}
             </i> First deploy
           </Col>
           <Col className={stepClassName(3)}>
-            <i className='step-number'>{stepSelected > 3 ? (<FontAwesomeIcon
-              icon={faCheck}
-              size='sm' />) : (<>3</>)}
+            <i className='step-number'>
+              {stepSelected > 3 ? (
+                <CheckIcon
+                  className={clsx(
+                    'w-6',
+                    'h-6'
+                  )} />
+              ) : (
+                <>3</>
+              )}
             </i> Second deploy
           </Col>
           <Col className={stepClassName(4)}>
-            <i className='step-number'>{stepSelected > 4 ? (<FontAwesomeIcon
-              icon={faCheck}
-              size='sm' />) : (<>4</>)}
+            <i className='step-number'>
+              {stepSelected > 4 ? (
+                <CheckIcon
+                  className={clsx(
+                    'w-6',
+                    'h-6'
+                  )} />
+              ) : (
+                <>4</>
+              )}
             </i> Third deploy
           </Col>
           <Col className={stepClassName(5)}>
-            <i className='step-number'>{stepSelected > 5 ? (<FontAwesomeIcon
-              icon={faCheck}
-              size='sm' />) : (<>5</>)}
+            <i className='step-number'>
+              {stepSelected > 5 ? (
+                <CheckIcon
+                  className={clsx(
+                    'w-6',
+                    'h-6'
+                  )} />
+              ) : (
+                <>5</>
+              )}
             </i> Initialize pair
           </Col>
         </Row>

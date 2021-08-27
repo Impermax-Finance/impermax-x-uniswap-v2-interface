@@ -3,9 +3,6 @@ import clsx from 'clsx';
 
 import ImpermaxTooltip from 'components/UI/ImpermaxTooltip';
 import { ReactComponent as OutlineQuestionMarkCircleIcon } from 'assets/images/icons/outline-question-mark-circle.svg';
-// ray test touch <<
-import './index.scss';
-// ray test touch >>
 
 /**
  * Build account lending pool detail rows for LP token currencies.
@@ -62,18 +59,6 @@ const DetailListItem = ({
     </div>
   </li>
 );
-
-// ray test touch <<
-interface DetailsRowCustomProps {
-  children: any;
-}
-
-export function DetailsRowCustom({ children }: DetailsRowCustomProps): JSX.Element {
-  return (
-    <div className='details-row'>{children}</div>
-  );
-}
-// ray test touch >>
 
 export {
   DetailListItem
