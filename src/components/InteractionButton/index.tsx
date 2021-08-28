@@ -5,6 +5,7 @@
 
 import { Spinner } from 'react-bootstrap';
 import { CheckIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
 
 import './index.scss';
 

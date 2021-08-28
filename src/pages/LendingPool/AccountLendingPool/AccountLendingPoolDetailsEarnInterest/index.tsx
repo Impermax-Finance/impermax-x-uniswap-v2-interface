@@ -16,8 +16,10 @@ import {
  */
 
 const AccountLendingPoolDetailsEarnInterest = (): JSX.Element => {
-  // ray test touch <<
+  // ray test touch <<<
   const suppliedUSD = useSuppliedUSD();
+  // ray test touch >>>
+  // ray test touch <<
   const accountAPY = useAccountAPY();
   // ray test touch >>
 

@@ -283,12 +283,14 @@ export function useBalanceUSD() : number {
   return balanceUSD;
 }
 
+// ray test touch <<<
 export function useSuppliedUSD() : number {
   const uniswapV2PairAddress = usePairAddress();
   const [suppliedUSD, setSuppliedUSD] = useState<number>(0);
   useRouterCallback(async router => setSuppliedUSD(await router.getSuppliedUSD(uniswapV2PairAddress)));
   return suppliedUSD;
 }
+// ray test touch >>>
 
 export function useDebtUSD() : number {
   const uniswapV2PairAddress = usePairAddress();

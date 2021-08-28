@@ -61,6 +61,7 @@ export async function getLendingPool(this: ImpermaxRouter, uniswapV2PairAddress:
   return cache.lendingPool;
 }
 
+// ray test touch <<<
 export async function getContracts(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
@@ -87,6 +88,7 @@ export async function getContracts(
     lendingPool.uniswapV2Pair
   ];
 }
+// ray test touch >>>
 
 export async function getPoolToken(
   this: ImpermaxRouter,
