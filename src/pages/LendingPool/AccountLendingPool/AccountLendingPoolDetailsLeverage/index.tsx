@@ -8,7 +8,7 @@ import {
   useDepositedUSD,
   useLPEquityUSD
 } from 'hooks/useData';
-import { formatUSD } from 'utils/format';
+import { formatNumberWithUSDCommaDecimals } from 'utils/helpers/format-number';
 import { PoolTokenType } from 'types/interfaces';
 
 /**
@@ -25,15 +25,15 @@ const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
   const leftItems = [
     {
       title: 'Total Collateral',
-      value: formatUSD(collateralUSD)
+      value: formatNumberWithUSDCommaDecimals(collateralUSD)
     },
     {
       title: 'Total Debt',
-      value: formatUSD(debtUSD)
+      value: formatNumberWithUSDCommaDecimals(debtUSD)
     },
     {
       title: 'LP Equity',
-      value: formatUSD(lpEquityUSD),
+      value: formatNumberWithUSDCommaDecimals(lpEquityUSD),
       tooltip: 'Calculated as: Total Collateral - Total Debt'
     }
   ];

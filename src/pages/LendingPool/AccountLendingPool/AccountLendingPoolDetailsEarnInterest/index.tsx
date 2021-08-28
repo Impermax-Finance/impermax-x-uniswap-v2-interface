@@ -7,9 +7,9 @@ import {
   useAccountAPY
 } from 'hooks/useData';
 import {
-  formatUSD,
-  formatPercentage
-} from 'utils/format';
+  formatNumberWithUSDCommaDecimals,
+  formatNumberWithPercentageCommaDecimals
+} from 'utils/helpers/format-number';
 
 /**
  * Generates lending pool aggregate details.
@@ -35,12 +35,12 @@ const AccountLendingPoolDetailsEarnInterest = (): JSX.Element => {
       )}>
       <DetailList>
         <DetailListItem title='Supply Balance'>
-          {formatUSD(suppliedUSD)}
+          {formatNumberWithUSDCommaDecimals(suppliedUSD)}
         </DetailListItem>
       </DetailList>
       <DetailList>
         <DetailListItem title='Net APY'>
-          {formatPercentage(accountAPY)}
+          {formatNumberWithPercentageCommaDecimals(accountAPY)}
         </DetailListItem>
       </DetailList>
     </div>
