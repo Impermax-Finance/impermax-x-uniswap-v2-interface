@@ -6,9 +6,6 @@ import {
 } from 'hooks/useData';
 import { formatFloat } from 'utils/format';
 import { Changes } from 'types/interfaces';
-// ray test touch <<
-import './index.scss';
-// ray test touch >>
 
 const LIQ_K = 1.7;
 
@@ -29,15 +26,15 @@ const LiquidationPrice = ({
       TWAPPrice / liquidationPrice - 1;
   const riskFactor = safetyMargin - 1;
   const riskClass =
-    safetyFactor > riskFactor * LIQ_K ** 2 ? 'risk-0' :
-      safetyFactor > riskFactor * LIQ_K ** 1 ? 'risk-1' :
-        safetyFactor > riskFactor * LIQ_K ** 0 ? 'risk-2' :
-          safetyFactor > riskFactor * LIQ_K ** -1 ? 'risk-3' :
-            safetyFactor > riskFactor * LIQ_K ** -2 ? 'risk-4' :
-              'risk-5';
+    safetyFactor > riskFactor * LIQ_K ** 2 ? 'text-impermaxEmerald' :
+      safetyFactor > riskFactor * LIQ_K ** 1 ? 'text-impermaxInchWorm' :
+        safetyFactor > riskFactor * LIQ_K ** 0 ? 'text-impermaxGoldTips' :
+          safetyFactor > riskFactor * LIQ_K ** -1 ? 'text-impermaxTreePoppy' :
+            safetyFactor > riskFactor * LIQ_K ** -2 ? 'text-impermaxTrinidad' :
+              'text-impermaxMilanoRed';
 
   return (
-    <span className={'liquidation-price ' + riskClass}>
+    <span className={riskClass}>
       {formatFloat(liquidationPrice, 4)}
     </span>
   );
@@ -51,37 +48,37 @@ interface Props {
  * Generates lending pool aggregate details.
  */
 
-// ray test touch <<
 const LiquidationPrices = ({ changes } : Props): JSX.Element => {
+  // ray test touch <<
   const [price0, price1] = useLiquidationPrices(changes);
   const TWAPPrice = useTWAPPrice();
   const safetyMargin = useSafetyMargin();
+  // ray test touch >>
 
   if (!price0 && !price1) {
-    return <>-</>;
+    return <span>-</span>;
   }
   if (price0 >= TWAPPrice || price1 <= TWAPPrice) {
     return (
-      <span className='liquidation-price risk-5'>
+      <span className='text-impermaxMilanoRed'>
         Liquidatable
       </span>
     );
   }
 
   return (
-    <>
+    <div className='space-x-1'>
       <LiquidationPrice
         liquidationPrice={price0}
         TWAPPrice={TWAPPrice}
         safetyMargin={safetyMargin} />
-      -
+      <span>-</span>
       <LiquidationPrice
         liquidationPrice={price1}
         TWAPPrice={TWAPPrice}
         safetyMargin={safetyMargin} />
-    </>
+    </div>
   );
 };
 
 export default LiquidationPrices;
-// ray test touch >>

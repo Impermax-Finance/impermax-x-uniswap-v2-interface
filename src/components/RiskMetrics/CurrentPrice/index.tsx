@@ -34,7 +34,8 @@ const CurrentPrice = (): JSX.Element => {
       <RefreshIcon
         className={clsx(
           'w-6',
-          'h-6'
+          'h-6',
+          'cursor-pointer'
         )}
         onClick={() => togglePriceInverted()} />
     </DetailListItem>

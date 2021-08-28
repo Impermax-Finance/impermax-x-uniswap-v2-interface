@@ -24,7 +24,6 @@ const AccountLendingPoolDetailsEarnInterest = (): JSX.Element => {
   return (
     <div
       className={clsx(
-        // ray test touch <<
         // TODO: componentize
         'space-y-6',
         'md:space-y-0',
@@ -33,7 +32,6 @@ const AccountLendingPoolDetailsEarnInterest = (): JSX.Element => {
         'md:gap-6',
         'px-6',
         'py-6'
-        // ray test touch >>
       )}>
       <DetailList>
         <DetailListItem title='Supply Balance'>

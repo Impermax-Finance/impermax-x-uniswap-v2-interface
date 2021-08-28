@@ -41,7 +41,6 @@ const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
   return (
     <div
       className={clsx(
-        // ray test touch <<
         // TODO: componentize
         'space-y-6',
         'md:space-y-0',
@@ -50,7 +49,6 @@ const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
         'md:gap-6',
         'px-6',
         'py-6'
-        // ray test touch >>
       )}>
       <DetailList>
         {leftItems.map(item => (
@@ -62,9 +60,7 @@ const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
           </DetailListItem>
         ))}
       </DetailList>
-      {/* ray test touch << */}
       <RiskMetrics />
-      {/* ray test touch >> */}
     </div>
   );
 };
