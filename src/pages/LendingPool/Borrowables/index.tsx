@@ -28,7 +28,7 @@ import {
   getLendingPoolTokenSupplyAPY,
   getLendingPoolTokenBorrowAPY,
   getLendingPoolTokenIcon,
-  getLendingPoolTokenPrice
+  getLendingPoolTokenPriceInUSD
 } from 'utils/helpers/lending-pools';
 import { PARAMETERS } from 'utils/constants/links';
 import useLendingPool from 'services/hooks/use-lending-pool';
@@ -49,7 +49,7 @@ const getIMXPrice = (
       PoolTokenType.BorrowableA :
       PoolTokenType.BorrowableB;
 
-  return getLendingPoolTokenPrice(imxLendingPool, poolTokenType);
+  return getLendingPoolTokenPriceInUSD(imxLendingPool, poolTokenType);
 };
 
 const getRewardSpeed = (

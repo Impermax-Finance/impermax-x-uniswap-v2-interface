@@ -13,7 +13,7 @@ import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import ERC20JSON from 'abis/contracts/IERC20.json';
 import { PoolTokenType } from 'types/interfaces';
 
-const useTokenDepositedInUSD = (
+const useTokenDeposited = (
   uniswapV2PairAddress: string,
   poolToken: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
   chainID: number,
@@ -157,5 +157,5 @@ const useTokenDepositedInUSD = (
   };
 };
 
-export default useTokenDepositedInUSD;
+export default useTokenDeposited;
 // ray test touch >>>

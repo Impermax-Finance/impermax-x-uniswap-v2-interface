@@ -13,7 +13,6 @@ import clsx from 'clsx';
 import DetailList, { DetailListItem } from 'components/DetailList';
 // ray test touch <<<
 import ErrorFallback from 'components/ErrorFallback';
-
 // ray test touch >>>
 import {
   useSuppliedUSD,
@@ -25,7 +24,9 @@ import {
 } from 'utils/helpers/format-number';
 // ray test touch <<<
 import { PARAMETERS } from 'utils/constants/links';
-import useTokenDepositedInUSD from 'services/hooks/use-token-deposited-in-usd';
+import { getLendingPoolTokenPriceInUSD } from 'utils/helpers/lending-pools';
+import useLendingPool from 'services/hooks/use-lending-pool';
+import useTokenDeposited from 'services/hooks/use-token-deposited';
 import { PoolTokenType } from 'types/interfaces';
 // ray test touch >>>
 
@@ -42,22 +43,41 @@ const AccountLendingPoolDetailsEarnInterest = (): JSX.Element => {
   const selectedChainID = Number(selectedChainIDParam);
 
   const {
+    isLoading: selectedLendingPoolLoading,
+    data: selectedLendingPool,
+    error: selectedLendingPoolError
+  } = useLendingPool(selectedUniswapV2PairAddress, selectedChainID);
+  useErrorHandler(selectedLendingPoolError);
+
+  const {
     library,
     account
   } = useWeb3React<Web3Provider>();
 
   const {
-    isLoading: tokenADepositedInUSDLoading,
-    data: tokenADepositedInUSD,
-    error: tokenADepositedInUSDError
-  } = useTokenDepositedInUSD(
+    isLoading: tokenADepositedLoading,
+    data: tokenADeposited,
+    error: tokenADepositedError
+  } = useTokenDeposited(
     selectedUniswapV2PairAddress,
     PoolTokenType.BorrowableA,
     selectedChainID,
     library,
     account
   );
-  useErrorHandler(tokenADepositedInUSDError);
+  useErrorHandler(tokenADepositedError);
+  const {
+    isLoading: tokenBDepositedLoading,
+    data: tokenBDeposited,
+    error: tokenBDepositedError
+  } = useTokenDeposited(
+    selectedUniswapV2PairAddress,
+    PoolTokenType.BorrowableB,
+    selectedChainID,
+    library,
+    account
+  );
+  useErrorHandler(tokenBDepositedError);
 
   const suppliedUSD = useSuppliedUSD();
   // ray test touch >>>
@@ -67,14 +87,30 @@ const AccountLendingPoolDetailsEarnInterest = (): JSX.Element => {
 
   // ray test touch <<<
   // TODO: should use skeleton loaders
-  if (tokenADepositedInUSDLoading) {
+  if (selectedLendingPoolLoading) {
     return <>Loading...</>;
   }
-  if (tokenADepositedInUSD === undefined) {
+  if (tokenADepositedLoading) {
+    return <>Loading...</>;
+  }
+  if (tokenBDepositedLoading) {
+    return <>Loading...</>;
+  }
+  if (tokenADeposited === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (tokenBDeposited === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (selectedLendingPool === undefined) {
     throw new Error('Something went wrong!');
   }
 
-  console.log('ray : ***** tokenADepositedInUSD => ', tokenADepositedInUSD);
+  const tokenAPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableA);
+  const tokenBPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableB);
+
+  console.log('ray : ***** tokenADepositedInUSD => ', tokenADeposited * tokenAPriceInUSD);
+  console.log('ray : ***** tokenBDepositedInUSD => ', tokenBDeposited * tokenBPriceInUSD);
   // ray test touch >>>
 
   return (

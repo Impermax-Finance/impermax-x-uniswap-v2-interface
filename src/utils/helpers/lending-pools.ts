@@ -56,7 +56,7 @@ const getLendingPoolTokenTotalSupplyInUSD = (
 
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
   const currentTotalSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
-  const tokenPriceInUSD = getLendingPoolTokenPrice(lendingPool, poolTokenType);
+  const tokenPriceInUSD = getLendingPoolTokenPriceInUSD(lendingPool, poolTokenType);
 
   return currentTotalSupply * tokenPriceInUSD;
 };
@@ -69,7 +69,7 @@ const getLendingPoolTokenTotalBorrowInUSD = (
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const currentTotalBorrow = totalBorrows * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
-  const tokenPriceInUSD = getLendingPoolTokenPrice(lendingPool, poolTokenType);
+  const tokenPriceInUSD = getLendingPoolTokenPriceInUSD(lendingPool, poolTokenType);
 
   // TODO: it's also from lendingPool[poolTokenType].totalBorrowsUSD. What is different?
   return currentTotalBorrow * tokenPriceInUSD;
@@ -118,7 +118,7 @@ const getLendingPoolTokenIcon = (
   return `/assets/images/token-logos/${convertedUnderlyingAddress}.png`;
 };
 
-const getLendingPoolTokenPrice = (
+const getLendingPoolTokenPriceInUSD = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType
 ): number => {
@@ -140,5 +140,5 @@ export {
   getLendingPoolTokenSupplyAPY,
   getLendingPoolTokenBorrowAPY,
   getLendingPoolTokenIcon,
-  getLendingPoolTokenPrice
+  getLendingPoolTokenPriceInUSD
 };
