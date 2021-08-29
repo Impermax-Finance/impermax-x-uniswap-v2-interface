@@ -29,11 +29,13 @@ export async function initializeExchangeRate(
 }
 // ray test touch >>>
 
+// ray test touch <<<
 export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.exchangeRate) cache.exchangeRate = this.initializeExchangeRate(uniswapV2PairAddress, poolTokenType);
   return cache.exchangeRate;
 }
+// ray test touch >>>
 
 // Token Available Balance
 export async function initializeTokenBalance(
@@ -68,6 +70,7 @@ export async function getAvailableBalance(
   return this.getTokenBalance(tokenAddress);
 }
 
+// ray test touch <<<
 // Deposited
 export async function initializeDeposited(
   this: ImpermaxRouter,
@@ -80,7 +83,6 @@ export async function initializeDeposited(
 
   return (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) * exchangeRate;
 }
-
 export async function getDeposited(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.deposited) cache.deposited = this.initializeDeposited(uniswapV2PairAddress, poolTokenType);
@@ -95,6 +97,7 @@ export async function getDepositedUSD(
   const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
   return deposited * tokenPrice;
 }
+// ray test touch >>>
 
 // Borrowed
 export async function initializeBorrowed(
