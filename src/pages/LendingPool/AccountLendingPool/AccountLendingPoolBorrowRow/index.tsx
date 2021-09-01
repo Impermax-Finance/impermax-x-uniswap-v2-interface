@@ -1,29 +1,30 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import { useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
-import { PoolTokenType } from 'types/interfaces';
+import {
+  Row,
+  Col,
+  Button
+} from 'react-bootstrap';
+
 import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import RepayInteractionModal from 'components/InteractionModal/RepayInteractionModal';
+import DisabledButtonHelper from 'components/DisabledButtonHelper';
+import BorrowInteractionModal from 'components/InteractionModal/BorrowInteractionModal';
 import {
   useBorrowed,
   useSymbol,
   useBorrowedUSD
 } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
-import DisabledButtonHelper from 'components/DisabledButtonHelper';
-import BorrowInteractionModal from 'components/InteractionModal/BorrowInteractionModal';
+import { PoolTokenType } from 'types/interfaces';
 
 interface Props {
   collateralDepositedInUSD: number;
 }
 
-export default function AccountLendingPoolBorrowRow({
+const AccountLendingPoolBorrowRow = ({
   collateralDepositedInUSD
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
   const symbol = useSymbol();
   const symbolLP = useSymbol(PoolTokenType.Collateral);
   const borrowed = useBorrowed();
@@ -102,4 +103,6 @@ export default function AccountLendingPoolBorrowRow({
         toggleShow={toggleRepayModal} />
     </>
   );
-}
+};
+
+export default AccountLendingPoolBorrowRow;
