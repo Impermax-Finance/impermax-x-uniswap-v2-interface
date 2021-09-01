@@ -22,8 +22,10 @@ const AccountLendingPoolDetailsLeverage = ({
 }: Props): JSX.Element => {
   // ray test touch <<
   const debtUSD = useDebtUSD();
-  const lpEquityUSD = useLPEquityUSD();
   // ray test touch >>
+  // ray test touch <<<
+  const lpEquityUSD = useLPEquityUSD();
+  // ray test touch >>>
 
   const leftItems = [
     {

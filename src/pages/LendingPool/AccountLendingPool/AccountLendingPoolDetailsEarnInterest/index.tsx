@@ -19,9 +19,9 @@ interface Props {
 const AccountLendingPoolDetailsEarnInterest = ({
   supplyBalanceInUSD
 }: Props): JSX.Element => {
-  // ray test touch <<
+  // ray test touch <<<
   const accountAPY = useAccountAPY();
-  // ray test touch >>
+  // ray test touch >>>
 
   return (
     <div
