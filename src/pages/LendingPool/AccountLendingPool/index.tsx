@@ -169,7 +169,7 @@ const AccountLendingPool = (): JSX.Element => {
         setPageSelected={setPageSelected} />
       {actualPageSelected === AccountLendingPoolPage.Leverage && (
         <>
-          <AccountLendingPoolDetailsLeverage />
+          <AccountLendingPoolDetailsLeverage collateralDepositedInUSD={collateralDepositedInUSD} />
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
             <AccountLendingPoolLPRow />
           </PoolTokenContext.Provider>

@@ -5,20 +5,21 @@ import RiskMetrics from 'components/RiskMetrics';
 import DetailList, { DetailListItem } from 'components/DetailList';
 import {
   useDebtUSD,
-  useDepositedUSD,
   useLPEquityUSD
 } from 'hooks/useData';
 import { formatNumberWithUSDCommaDecimals } from 'utils/helpers/format-number';
-import { PoolTokenType } from 'types/interfaces';
 
 /**
  * Generates lending pool aggregate details.
  */
 
-const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
-  // ray test touch <<<
-  const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
-  // ray test touch >>>
+interface Props {
+  collateralDepositedInUSD: number;
+}
+
+const AccountLendingPoolDetailsLeverage = ({
+  collateralDepositedInUSD
+}: Props): JSX.Element => {
   // ray test touch <<
   const debtUSD = useDebtUSD();
   const lpEquityUSD = useLPEquityUSD();
@@ -27,7 +28,7 @@ const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
   const leftItems = [
     {
       title: 'Total Collateral',
-      value: formatNumberWithUSDCommaDecimals(collateralUSD)
+      value: formatNumberWithUSDCommaDecimals(collateralDepositedInUSD)
     },
     {
       title: 'Total Debt',
