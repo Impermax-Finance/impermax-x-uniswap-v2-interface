@@ -175,16 +175,6 @@ export async function getUtilizationRate(this: Subgraph, uniswapV2PairAddress: A
 }
 
 // Supply Rate
-export async function getSupplyRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const borrowRate = await this.getBorrowRate(uniswapV2PairAddress, poolTokenType);
-  const utilizationRate = await this.getUtilizationRate(uniswapV2PairAddress, poolTokenType);
-  const reserveFactor = await this.getReserveFactor(uniswapV2PairAddress, poolTokenType);
-  return borrowRate * utilizationRate * (1 - reserveFactor);
-}
-export async function getSupplyAPY(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const supplyRate = await this.getSupplyRate(uniswapV2PairAddress, poolTokenType);
-  return toAPY(supplyRate);
-}
 export async function getNextSupplyRate(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType, supplyAmount: number) : Promise<number> {
   const totalBorrows = await this.getTotalBorrows(uniswapV2PairAddress, poolTokenType);
   const supply = await this.getSupply(uniswapV2PairAddress, poolTokenType);

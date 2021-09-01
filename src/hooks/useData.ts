@@ -283,13 +283,6 @@ export function useLPEquityUSD() : number {
   return LPEquityUSD;
 }
 
-export function useAccountAPY() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [accountAPY, setAccountAPY] = useState<number>(0);
-  useRouterCallback(async router => setAccountAPY(await router.getAccountAPY(uniswapV2PairAddress)));
-  return accountAPY;
-}
-
 export function useClaimHistory() : ClaimEvent[] {
   const uniswapV2PairAddress = usePairAddress();
   const [claimHistory, setClaimHistory] = useState<ClaimEvent[]>([]);

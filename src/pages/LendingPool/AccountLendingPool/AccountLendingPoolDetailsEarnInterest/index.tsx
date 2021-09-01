@@ -2,7 +2,6 @@
 import clsx from 'clsx';
 
 import DetailList, { DetailListItem } from 'components/DetailList';
-import { useAccountAPY } from 'hooks/useData';
 import {
   formatNumberWithUSDCommaDecimals,
   formatNumberWithPercentageCommaDecimals
@@ -14,15 +13,13 @@ import {
 
 interface Props {
   supplyBalanceInUSD: number;
+  accountAPY: number;
 }
 
 const AccountLendingPoolDetailsEarnInterest = ({
-  supplyBalanceInUSD
+  supplyBalanceInUSD,
+  accountAPY
 }: Props): JSX.Element => {
-  // ray test touch <<<
-  const accountAPY = useAccountAPY();
-  // ray test touch >>>
-
   return (
     <div
       className={clsx(

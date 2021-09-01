@@ -132,16 +132,6 @@ export async function getLPEquityUSD(this: ImpermaxRouter, uniswapV2PairAddress:
   return collateralUSD - debtUSD;
 }
 
-// Debt
-export async function getAccountAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const depositedAUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const depositedBUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const totalSupplied = depositedAUSD + depositedBUSD;
-  const supplyAPYA = await this.subgraph.getSupplyAPY(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const supplyAPYB = await this.subgraph.getSupplyAPY(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  return totalSupplied > 0 ? (depositedAUSD * supplyAPYA + depositedBUSD * supplyAPYB) / totalSupplied : 0;
-}
-
 // Values
 export async function getValuesFromPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes, priceA: number, priceB: number) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
   const valueCollateral = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral) + changes.changeCollateral;

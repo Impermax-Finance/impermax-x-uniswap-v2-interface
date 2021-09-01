@@ -20,8 +20,11 @@ import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 import PoolTokenContext from 'contexts/PoolToken';
 import { injected } from 'utils/helpers/web3/connectors';
+import {
+  getLendingPoolTokenPriceInUSD,
+  getLendingPoolTokenSupplyAPY
+} from 'utils/helpers/lending-pools';
 import { PARAMETERS } from 'utils/constants/links';
-import { getLendingPoolTokenPriceInUSD } from 'utils/helpers/lending-pools';
 import useLendingPool from 'services/hooks/use-lending-pool';
 import useTokenDeposited from 'services/hooks/use-token-deposited';
 import { PoolTokenType } from 'types/interfaces';
@@ -137,6 +140,12 @@ const AccountLendingPool = (): JSX.Element => {
   const tokenBDepositedInUSD = tokenBDeposited * tokenBPriceInUSD;
   const supplyBalanceInUSD = tokenADepositedInUSD + tokenBDepositedInUSD;
   const collateralDepositedInUSD = collateralDeposited * collateralPriceInUSD;
+  const tokenASupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, PoolTokenType.BorrowableA);
+  const tokenBSupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, PoolTokenType.BorrowableB);
+  const accountAPY =
+    supplyBalanceInUSD > 0 ?
+      (tokenADepositedInUSD * tokenASupplyAPY + tokenBDepositedInUSD * tokenBSupplyAPY) / supplyBalanceInUSD :
+      0;
 
   if (!account) {
     return (
@@ -183,7 +192,9 @@ const AccountLendingPool = (): JSX.Element => {
       )}
       {actualPageSelected === AccountLendingPoolPage.EarnInterest && (
         <>
-          <AccountLendingPoolDetailsEarnInterest supplyBalanceInUSD={supplyBalanceInUSD} />
+          <AccountLendingPoolDetailsEarnInterest
+            supplyBalanceInUSD={supplyBalanceInUSD}
+            accountAPY={accountAPY} />
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolSupplyRow collateralDepositedInUSD={collateralDepositedInUSD} />
           </PoolTokenContext.Provider>
