@@ -10,11 +10,12 @@ import Router01JSON from 'abis/contracts/IRouter01.json';
 import BorrowableJSON from 'abis/contracts/IBorrowable.json';
 import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import ERC20JSON from 'abis/contracts/IERC20.json';
+import CollateralSON from 'abis/contracts/ICollateral.json';
 import { PoolTokenType } from 'types/interfaces';
 
 const useTokenDeposited = (
   uniswapV2PairAddress: string,
-  poolToken: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
+  poolToken: PoolTokenType,
   chainID: number,
   library: Web3Provider | undefined,
   account: string | null | undefined
@@ -45,10 +46,20 @@ const useTokenDeposited = (
     }
   );
 
-  const borrowableAddress =
-    poolToken === PoolTokenType.BorrowableA ?
-      lendingPool?.borrowableA :
-      lendingPool?.borrowableB;
+  let borrowableOrCollateralAddress;
+  switch (poolToken) {
+  case PoolTokenType.BorrowableA:
+    borrowableOrCollateralAddress = lendingPool?.borrowableA;
+    break;
+  case PoolTokenType.BorrowableB:
+    borrowableOrCollateralAddress = lendingPool?.borrowableB;
+    break;
+  case PoolTokenType.Collateral:
+    borrowableOrCollateralAddress = lendingPool?.collateral;
+    break;
+  default:
+    throw new Error('Invalid PoolTokenType!');
+  }
   const {
     isLoading: bigTokenBalanceLoading,
     data: bigTokenBalance,
@@ -57,15 +68,20 @@ const useTokenDeposited = (
     [
       GENERIC_FETCHER,
       chainID,
-      borrowableAddress,
+      borrowableOrCollateralAddress,
       'balanceOf',
       account
     ],
-    (borrowableAddress && library && account) ?
-      genericFetcher<BigNumber>(library, BorrowableJSON.abi) :
+    (library && account) ?
+      genericFetcher<BigNumber>(
+        library,
+        poolToken === PoolTokenType.Collateral ?
+          CollateralSON.abi :
+          BorrowableJSON.abi
+      ) :
       Promise.resolve,
     {
-      enabled: !!(borrowableAddress && library && account)
+      enabled: !!(library && account)
     }
   );
 
@@ -77,17 +93,30 @@ const useTokenDeposited = (
     [
       GENERIC_FETCHER,
       chainID,
-      borrowableAddress,
+      borrowableOrCollateralAddress,
       'exchangeRate'
     ],
-    (borrowableAddress && library) ?
-      genericFetcher<BigNumber>(library, BorrowableJSON.abi, true) :
+    library ?
+      genericFetcher<BigNumber>(
+        library,
+        poolToken === PoolTokenType.Collateral ?
+          CollateralSON.abi :
+          BorrowableJSON.abi,
+        true
+      ) :
       Promise.resolve,
     {
-      enabled: !!(borrowableAddress && library)
+      enabled: !!library
     }
   );
 
+  let tokenAddressMethodName: string | undefined;
+  if (poolToken === PoolTokenType.BorrowableA) {
+    tokenAddressMethodName = 'token0';
+  }
+  if (poolToken === PoolTokenType.BorrowableB) {
+    tokenAddressMethodName = 'token1';
+  }
   const {
     isLoading: tokenAddressLoading,
     data: tokenAddress,
@@ -97,15 +126,13 @@ const useTokenDeposited = (
       GENERIC_FETCHER,
       chainID,
       uniswapV2PairAddress,
-      poolToken === PoolTokenType.BorrowableA ?
-        'token0' :
-        'token1'
+      tokenAddressMethodName
     ],
-    library ?
+    (library && tokenAddressMethodName) ?
       genericFetcher<string>(library, UniswapV2PairJSON.abi) :
       Promise.resolve,
     {
-      enabled: !!library
+      enabled: !!library && !!tokenAddressMethodName
     }
   );
 
@@ -127,9 +154,15 @@ const useTokenDeposited = (
       enabled: !!(tokenAddress && library)
     }
   );
+  let decimals;
+  if (poolToken === PoolTokenType.Collateral) {
+    decimals = 18;
+  } else {
+    decimals = tokenDecimals;
+  }
 
   let tokenDepositedInUSD: number | undefined;
-  if (bigTokenExchangeRate && bigTokenBalance && tokenDecimals) {
+  if (bigTokenExchangeRate && bigTokenBalance && decimals) {
     const tokenExchangeRate = parseFloat(formatUnits(bigTokenExchangeRate));
     const tokenBalance = parseFloat(formatUnits(bigTokenBalance, tokenDecimals));
     tokenDepositedInUSD = tokenBalance * tokenExchangeRate;

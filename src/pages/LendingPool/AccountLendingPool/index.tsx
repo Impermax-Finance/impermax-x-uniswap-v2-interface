@@ -19,7 +19,6 @@ import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 import PoolTokenContext from 'contexts/PoolToken';
-import { useDepositedUSD } from 'hooks/useData';
 import { injected } from 'utils/helpers/web3/connectors';
 import { PARAMETERS } from 'utils/constants/links';
 import { getLendingPoolTokenPriceInUSD } from 'utils/helpers/lending-pools';
@@ -92,9 +91,18 @@ const AccountLendingPool = (): JSX.Element => {
 
   const [pageSelected, setPageSelected] = React.useState<AccountLendingPoolPage>(AccountLendingPoolPage.Uninitialized);
 
-  // ray test touch <<
-  const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
-  // ray test touch >>
+  const {
+    isLoading: collateralDepositedLoading,
+    data: collateralDeposited,
+    error: collateralDepositedError
+  } = useTokenDeposited(
+    selectedUniswapV2PairAddress,
+    PoolTokenType.Collateral,
+    selectedChainID,
+    library,
+    account
+  );
+  useErrorHandler(collateralDepositedError);
 
   // TODO: should use skeleton loaders
   if (selectedLendingPoolLoading) {
@@ -106,6 +114,9 @@ const AccountLendingPool = (): JSX.Element => {
   if (tokenBDepositedLoading) {
     return <>Loading...</>;
   }
+  if (collateralDepositedLoading) {
+    return <>Loading...</>;
+  }
   if (tokenADeposited === undefined) {
     throw new Error('Something went wrong!');
   }
@@ -115,11 +126,16 @@ const AccountLendingPool = (): JSX.Element => {
   if (selectedLendingPool === undefined) {
     throw new Error('Something went wrong!');
   }
+  if (collateralDeposited === undefined) {
+    throw new Error('Something went wrong!');
+  }
 
   const tokenAPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableA);
   const tokenBPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableB);
+  const collateralPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.Collateral);
   const tokenADepositedInUSD = tokenADeposited * tokenAPriceInUSD;
   const tokenBDepositedInUSD = tokenBDeposited * tokenBPriceInUSD;
+  const collateralDepositedInUSD = collateralDeposited * collateralPriceInUSD;
   const supplyBalanceInUSD = tokenADepositedInUSD + tokenBDepositedInUSD;
 
   if (!account) {
@@ -141,7 +157,7 @@ const AccountLendingPool = (): JSX.Element => {
 
   const actualPageSelected =
     pageSelected === AccountLendingPoolPage.Uninitialized ?
-      collateralUSD > 0 || supplyBalanceInUSD === 0 ?
+      collateralDepositedInUSD > 0 || supplyBalanceInUSD === 0 ?
         AccountLendingPoolPage.Leverage :
         AccountLendingPoolPage.EarnInterest :
       pageSelected;
