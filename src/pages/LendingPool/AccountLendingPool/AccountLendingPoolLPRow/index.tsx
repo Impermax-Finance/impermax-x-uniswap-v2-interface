@@ -1,16 +1,17 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import { useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
-import { PoolTokenType } from 'types/interfaces';
+import {
+  Row,
+  Col,
+  Button
+} from 'react-bootstrap';
+
 import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import DepositInteractionModal from 'components/InteractionModal/DepositInteractionModal';
 import LeverageInteractionModal from 'components/InteractionModal/LeverageInteractionModal';
 import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
 import DeleverageInteractionModal from 'components/InteractionModal/DeleverageInteractionModal';
+import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import {
   useDeposited,
   useSymbol,
@@ -18,12 +19,14 @@ import {
   useMaxDeleverage
 } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
-import DisabledButtonHelper from 'components/DisabledButtonHelper';
+import { PoolTokenType } from 'types/interfaces';
 
-export default function AccountLendingPoolLPRow(): JSX.Element {
+const AccountLendingPoolLPRow = (): JSX.Element => {
   const symbol = useSymbol();
   const deposited = useDeposited();
+  // ray test touch <<<
   const depositedUSD = useDepositedUSD();
+  // ray test touch >>>
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
 
@@ -135,4 +138,6 @@ export default function AccountLendingPoolLPRow(): JSX.Element {
         toggleShow={toggleDeleverageModal} />
     </>
   );
-}
+};
+
+export default AccountLendingPoolLPRow;

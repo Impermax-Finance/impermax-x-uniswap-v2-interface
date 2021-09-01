@@ -15,7 +15,9 @@ import WithdrawInteractionModal from 'components/InteractionModal/WithdrawIntera
 export default function AccountLendingPoolSupplyRow(): JSX.Element {
   const symbol = useSymbol();
   const deposited = useDeposited();
+  // ray test touch <<<
   const depositedUSD = useDepositedUSD();
+  // ray test touch >>>
   const tokenIcon = useTokenIcon();
 
   const [showDepositModal, toggleDepositModal] = useState(false);
