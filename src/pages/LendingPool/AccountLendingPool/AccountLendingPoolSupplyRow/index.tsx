@@ -1,23 +1,31 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import { useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Button
+} from 'react-bootstrap';
+
 import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import DepositInteractionModal from 'components/InteractionModal/DepositInteractionModal';
-import { useSymbol, useDeposited, useDepositedUSD, useMaxWithdrawable } from 'hooks/useData';
-import { useTokenIcon } from 'hooks/useUrlGenerator';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
+import {
+  useSymbol,
+  useDeposited,
+  useMaxWithdrawable
+} from 'hooks/useData';
+import { useTokenIcon } from 'hooks/useUrlGenerator';
 
-export default function AccountLendingPoolSupplyRow(): JSX.Element {
+interface Props {
+  collateralDepositedInUSD: number;
+}
+
+const AccountLendingPoolSupplyRow = ({
+  collateralDepositedInUSD
+}: Props): JSX.Element => {
   const symbol = useSymbol();
   const deposited = useDeposited();
-  // ray test touch <<<
-  const depositedUSD = useDepositedUSD();
-  // ray test touch >>>
   const tokenIcon = useTokenIcon();
 
   const [showDepositModal, toggleDepositModal] = useState(false);
@@ -49,7 +57,7 @@ export default function AccountLendingPoolSupplyRow(): JSX.Element {
             name='Supplied'
             symbol={symbol}
             value={deposited}
-            valueUSD={depositedUSD} />
+            valueUSD={collateralDepositedInUSD} />
         </Col>
         <Col
           md={5}
@@ -86,4 +94,6 @@ export default function AccountLendingPoolSupplyRow(): JSX.Element {
         toggleShow={toggleWithdrawModal} />
     </>
   );
-}
+};
+
+export default AccountLendingPoolSupplyRow;

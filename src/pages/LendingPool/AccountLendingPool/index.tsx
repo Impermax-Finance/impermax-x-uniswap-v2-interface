@@ -185,10 +185,10 @@ const AccountLendingPool = (): JSX.Element => {
         <>
           <AccountLendingPoolDetailsEarnInterest supplyBalanceInUSD={supplyBalanceInUSD} />
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
-            <AccountLendingPoolSupplyRow />
+            <AccountLendingPoolSupplyRow collateralDepositedInUSD={collateralDepositedInUSD} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
-            <AccountLendingPoolSupplyRow />
+            <AccountLendingPoolSupplyRow collateralDepositedInUSD={collateralDepositedInUSD} />
           </PoolTokenContext.Provider>
         </>
       )}
