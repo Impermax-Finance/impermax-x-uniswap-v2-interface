@@ -8,16 +8,25 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { PoolTokenType } from 'types/interfaces';
 import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import RepayInteractionModal from 'components/InteractionModal/RepayInteractionModal';
-import { useBorrowed, useSymbol, useBorrowedUSD, useDepositedUSD } from 'hooks/useData';
+import {
+  useBorrowed,
+  useSymbol,
+  useBorrowedUSD
+} from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import BorrowInteractionModal from 'components/InteractionModal/BorrowInteractionModal';
 
-export default function AccountLendingPoolBorrowRow(): JSX.Element {
+interface Props {
+  collateralDepositedInUSD: number;
+}
+
+export default function AccountLendingPoolBorrowRow({
+  collateralDepositedInUSD
+}: Props): JSX.Element {
   const symbol = useSymbol();
   const symbolLP = useSymbol(PoolTokenType.Collateral);
   const borrowed = useBorrowed();
-  const depositedUSD = useDepositedUSD(PoolTokenType.Collateral);
   const borrowedUSD = useBorrowedUSD();
   const tokenIcon = useTokenIcon();
 
@@ -57,7 +66,7 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
           className='btn-table'>
           <Row>
             <Col>
-              {depositedUSD > 0 ? (
+              {collateralDepositedInUSD > 0 ? (
                 <Button
                   variant='primary'
                   onClick={() => toggleBorrowModal(true)}>

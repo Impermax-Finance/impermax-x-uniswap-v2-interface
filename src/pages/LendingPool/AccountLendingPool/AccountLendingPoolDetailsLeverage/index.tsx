@@ -16,8 +16,10 @@ import { PoolTokenType } from 'types/interfaces';
  */
 
 const AccountLendingPoolDetailsLeverage = (): JSX.Element => {
-  // ray test touch <<
+  // ray test touch <<<
   const collateralUSD = useDepositedUSD(PoolTokenType.Collateral);
+  // ray test touch >>>
+  // ray test touch <<
   const debtUSD = useDebtUSD();
   const lpEquityUSD = useLPEquityUSD();
   // ray test touch >>

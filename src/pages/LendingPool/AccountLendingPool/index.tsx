@@ -135,8 +135,8 @@ const AccountLendingPool = (): JSX.Element => {
   const collateralPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.Collateral);
   const tokenADepositedInUSD = tokenADeposited * tokenAPriceInUSD;
   const tokenBDepositedInUSD = tokenBDeposited * tokenBPriceInUSD;
-  const collateralDepositedInUSD = collateralDeposited * collateralPriceInUSD;
   const supplyBalanceInUSD = tokenADepositedInUSD + tokenBDepositedInUSD;
+  const collateralDepositedInUSD = collateralDeposited * collateralPriceInUSD;
 
   if (!account) {
     return (
@@ -174,10 +174,10 @@ const AccountLendingPool = (): JSX.Element => {
             <AccountLendingPoolLPRow />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
-            <AccountLendingPoolBorrowRow />
+            <AccountLendingPoolBorrowRow collateralDepositedInUSD={collateralDepositedInUSD} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
-            <AccountLendingPoolBorrowRow />
+            <AccountLendingPoolBorrowRow collateralDepositedInUSD={collateralDepositedInUSD} />
           </PoolTokenContext.Provider>
         </>
       )}
