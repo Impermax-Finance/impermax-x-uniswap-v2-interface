@@ -15,7 +15,6 @@ import {
 } from '../types/interfaces';
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
 
-// ray test touch <<<
 // Exchange rate
 export async function initializeExchangeRate(
   this: ImpermaxRouter,
@@ -27,15 +26,12 @@ export async function initializeExchangeRate(
 
   return exchangeRate / 1e18;
 }
-// ray test touch >>>
 
-// ray test touch <<<
 export async function getExchangeRate(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.exchangeRate) cache.exchangeRate = this.initializeExchangeRate(uniswapV2PairAddress, poolTokenType);
   return cache.exchangeRate;
 }
-// ray test touch >>>
 
 // Token Available Balance
 export async function initializeTokenBalance(
@@ -70,7 +66,6 @@ export async function getAvailableBalance(
   return this.getTokenBalance(tokenAddress);
 }
 
-// ray test touch <<<
 // Deposited
 export async function initializeDeposited(
   this: ImpermaxRouter,
@@ -97,7 +92,6 @@ export async function getDepositedUSD(
   const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
   return deposited * tokenPrice;
 }
-// ray test touch >>>
 
 // Borrowed
 export async function initializeBorrowed(
@@ -131,15 +125,6 @@ export async function getBalanceUSD(this: ImpermaxRouter, uniswapV2PairAddress: 
   const depositedCUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.Collateral);
   return depositedAUSD + depositedBUSD + depositedCUSD;
 }
-
-// ray test touch <<<
-// Supplied
-export async function getSuppliedUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const depositedAUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const depositedBUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  return depositedAUSD + depositedBUSD;
-}
-// ray test touch >>>
 
 // Debt
 export async function getDebtUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
