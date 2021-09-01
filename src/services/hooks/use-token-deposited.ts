@@ -1,5 +1,4 @@
 
-// ray test touch <<<
 import { Web3Provider } from '@ethersproject/providers';
 import { BigNumber } from '@ethersproject/bignumber';
 import { formatUnits } from '@ethersproject/units';
@@ -158,4 +157,3 @@ const useTokenDeposited = (
 };
 
 export default useTokenDeposited;
-// ray test touch >>>
