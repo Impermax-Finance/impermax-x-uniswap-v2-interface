@@ -171,7 +171,7 @@ const AccountLendingPool = (): JSX.Element => {
         <>
           <AccountLendingPoolDetailsLeverage collateralDepositedInUSD={collateralDepositedInUSD} />
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
-            <AccountLendingPoolLPRow />
+            <AccountLendingPoolLPRow collateralDepositedInUSD={collateralDepositedInUSD} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow collateralDepositedInUSD={collateralDepositedInUSD} />

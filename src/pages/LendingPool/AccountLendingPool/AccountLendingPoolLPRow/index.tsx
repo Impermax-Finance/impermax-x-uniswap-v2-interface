@@ -15,18 +15,20 @@ import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import {
   useDeposited,
   useSymbol,
-  useDepositedUSD,
   useMaxDeleverage
 } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 import { PoolTokenType } from 'types/interfaces';
 
-const AccountLendingPoolLPRow = (): JSX.Element => {
+interface Props {
+  collateralDepositedInUSD: number;
+}
+
+const AccountLendingPoolLPRow = ({
+  collateralDepositedInUSD
+}: Props): JSX.Element => {
   const symbol = useSymbol();
   const deposited = useDeposited();
-  // ray test touch <<<
-  const depositedUSD = useDepositedUSD();
-  // ray test touch >>>
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
 
@@ -67,7 +69,7 @@ const AccountLendingPoolLPRow = (): JSX.Element => {
             name='Deposited'
             symbol='LP'
             value={deposited}
-            valueUSD={depositedUSD} />
+            valueUSD={collateralDepositedInUSD} />
         </Col>
         <Col
           md={5}
@@ -81,7 +83,7 @@ const AccountLendingPoolLPRow = (): JSX.Element => {
               </Button>
             </Col>
             <Col>
-              {depositedUSD > 0 ? (
+              {collateralDepositedInUSD > 0 ? (
                 <Button
                   variant='primary'
                   onClick={() => toggleWithdrawModal(true)}>
@@ -96,7 +98,7 @@ const AccountLendingPoolLPRow = (): JSX.Element => {
           </Row>
           <Row>
             <Col>
-              {depositedUSD > 0 ? (
+              {collateralDepositedInUSD > 0 ? (
                 <Button
                   variant='primary'
                   onClick={() => toggleLeverageModal(true)}>
