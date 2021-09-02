@@ -225,9 +225,6 @@ class ImpermaxRouter {
   public getBorrowed = account.getBorrowed;
   public getBorrowedUSD = account.getBorrowedUSD;
   public getDeposited = account.getDeposited;
-  public getDepositedUSD = account.getDepositedUSD;
-  public getDebtUSD = account.getDebtUSD;
-  public getLPEquityUSD = account.getLPEquityUSD;
   public getValuesFromPrice = account.getValuesFromPrice;
   public getValues = account.getValues;
   public getMarketValues = account.getMarketValues;

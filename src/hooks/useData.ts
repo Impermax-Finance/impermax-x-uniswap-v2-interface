@@ -269,20 +269,6 @@ export function useLiquidationPrices(changes?: Changes) : [number, number] {
   return liquidationPrices;
 }
 
-export function useDebtUSD() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [debtUSD, setDebtUSD] = useState<number>(0);
-  useRouterCallback(async router => setDebtUSD(await router.getDebtUSD(uniswapV2PairAddress)));
-  return debtUSD;
-}
-
-export function useLPEquityUSD() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [LPEquityUSD, setLPEquityUSD] = useState<number>(0);
-  useRouterCallback(async router => setLPEquityUSD(await router.getLPEquityUSD(uniswapV2PairAddress)));
-  return LPEquityUSD;
-}
-
 export function useClaimHistory() : ClaimEvent[] {
   const uniswapV2PairAddress = usePairAddress();
   const [claimHistory, setClaimHistory] = useState<ClaimEvent[]>([]);

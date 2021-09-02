@@ -27,6 +27,7 @@ import {
 import { PARAMETERS } from 'utils/constants/links';
 import useLendingPool from 'services/hooks/use-lending-pool';
 import useTokenDeposited from 'services/hooks/use-token-deposited';
+import useTokenBorrowBalance from 'services/hooks/use-token-borrow-balance';
 import { PoolTokenType } from 'types/interfaces';
 import './index.scss';
 
@@ -107,45 +108,30 @@ const AccountLendingPool = (): JSX.Element => {
   );
   useErrorHandler(collateralDepositedError);
 
-  // TODO: should use skeleton loaders
-  if (selectedLendingPoolLoading) {
-    return <>Loading...</>;
-  }
-  if (tokenADepositedLoading) {
-    return <>Loading...</>;
-  }
-  if (tokenBDepositedLoading) {
-    return <>Loading...</>;
-  }
-  if (collateralDepositedLoading) {
-    return <>Loading...</>;
-  }
-  if (tokenADeposited === undefined) {
-    throw new Error('Something went wrong!');
-  }
-  if (tokenBDeposited === undefined) {
-    throw new Error('Something went wrong!');
-  }
-  if (selectedLendingPool === undefined) {
-    throw new Error('Something went wrong!');
-  }
-  if (collateralDeposited === undefined) {
-    throw new Error('Something went wrong!');
-  }
-
-  const tokenAPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableA);
-  const tokenBPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableB);
-  const collateralPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.Collateral);
-  const tokenADepositedInUSD = tokenADeposited * tokenAPriceInUSD;
-  const tokenBDepositedInUSD = tokenBDeposited * tokenBPriceInUSD;
-  const supplyBalanceInUSD = tokenADepositedInUSD + tokenBDepositedInUSD;
-  const collateralDepositedInUSD = collateralDeposited * collateralPriceInUSD;
-  const tokenASupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, PoolTokenType.BorrowableA);
-  const tokenBSupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, PoolTokenType.BorrowableB);
-  const accountAPY =
-    supplyBalanceInUSD > 0 ?
-      (tokenADepositedInUSD * tokenASupplyAPY + tokenBDepositedInUSD * tokenBSupplyAPY) / supplyBalanceInUSD :
-      0;
+  const {
+    isLoading: tokenABorrowBalanceLoading,
+    data: tokenABorrowBalance,
+    error: tokenABorrowBalanceError
+  } = useTokenBorrowBalance(
+    selectedUniswapV2PairAddress,
+    PoolTokenType.BorrowableA,
+    selectedChainID,
+    library,
+    account
+  );
+  useErrorHandler(tokenABorrowBalanceError);
+  const {
+    isLoading: tokenBBorrowBalanceLoading,
+    data: tokenBBorrowBalance,
+    error: tokenBBorrowBalanceError
+  } = useTokenBorrowBalance(
+    selectedUniswapV2PairAddress,
+    PoolTokenType.BorrowableA,
+    selectedChainID,
+    library,
+    account
+  );
+  useErrorHandler(tokenBBorrowBalanceError);
 
   if (!account) {
     return (
@@ -164,6 +150,72 @@ const AccountLendingPool = (): JSX.Element => {
     );
   }
 
+  // TODO: should use skeleton loaders
+  if (selectedLendingPoolLoading) {
+    return <>Loading...</>;
+  }
+  if (tokenADepositedLoading) {
+    return <>Loading...</>;
+  }
+  if (tokenBDepositedLoading) {
+    return <>Loading...</>;
+  }
+  if (collateralDepositedLoading) {
+    return <>Loading...</>;
+  }
+  if (tokenABorrowBalanceLoading) {
+    return <>Loading...</>;
+  }
+  if (tokenBBorrowBalanceLoading) {
+    return <>Loading...</>;
+  }
+  if (tokenADeposited === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (tokenBDeposited === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (selectedLendingPool === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (collateralDeposited === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (tokenABorrowBalance === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (tokenBBorrowBalance === undefined) {
+    throw new Error('Something went wrong!');
+  }
+
+  const tokenAPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableA);
+  const tokenBPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableB);
+
+  const tokenADepositedInUSD = tokenADeposited * tokenAPriceInUSD;
+  const tokenBDepositedInUSD = tokenBDeposited * tokenBPriceInUSD;
+  const supplyBalanceInUSD = tokenADepositedInUSD + tokenBDepositedInUSD;
+
+  const collateralPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.Collateral);
+  const collateralDepositedInUSD = collateralDeposited * collateralPriceInUSD;
+
+  const tokenASupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, PoolTokenType.BorrowableA);
+  const tokenBSupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, PoolTokenType.BorrowableB);
+  const accountAPY =
+    supplyBalanceInUSD > 0 ?
+      (tokenADepositedInUSD * tokenASupplyAPY + tokenBDepositedInUSD * tokenBSupplyAPY) / supplyBalanceInUSD :
+      0;
+
+  const tokenAAccrualTimestamp = parseFloat(selectedLendingPool[PoolTokenType.BorrowableA].accrualTimestamp);
+  const tokenBAccrualTimestamp = parseFloat(selectedLendingPool[PoolTokenType.BorrowableB].accrualTimestamp);
+  const tokenABorrowRate = parseFloat(selectedLendingPool[PoolTokenType.BorrowableA].borrowRate);
+  const tokenBBorrowRate = parseFloat(selectedLendingPool[PoolTokenType.BorrowableB].borrowRate);
+  const tokenABorrowed = tokenABorrowBalance * (1 + (Date.now() / 1000 - tokenAAccrualTimestamp) * tokenABorrowRate);
+  const tokenBBorrowed = tokenABorrowBalance * (1 + (Date.now() / 1000 - tokenBAccrualTimestamp) * tokenBBorrowRate);
+  const tokenABorrowedInUSD = tokenABorrowed * tokenAPriceInUSD;
+  const tokenBBorrowedInUSD = tokenBBorrowed * tokenBPriceInUSD;
+  const debtInUSD = tokenABorrowedInUSD + tokenBBorrowedInUSD;
+  const lpEquityInUSD = collateralDepositedInUSD - debtInUSD;
+
   const actualPageSelected =
     pageSelected === AccountLendingPoolPage.Uninitialized ?
       collateralDepositedInUSD > 0 || supplyBalanceInUSD === 0 ?
@@ -178,7 +230,10 @@ const AccountLendingPool = (): JSX.Element => {
         setPageSelected={setPageSelected} />
       {actualPageSelected === AccountLendingPoolPage.Leverage && (
         <>
-          <AccountLendingPoolDetailsLeverage collateralDepositedInUSD={collateralDepositedInUSD} />
+          <AccountLendingPoolDetailsLeverage
+            collateralDepositedInUSD={collateralDepositedInUSD}
+            debtInUSD={debtInUSD}
+            lpEquityInUSD={lpEquityInUSD} />
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
             <AccountLendingPoolLPRow collateralDepositedInUSD={collateralDepositedInUSD} />
           </PoolTokenContext.Provider>

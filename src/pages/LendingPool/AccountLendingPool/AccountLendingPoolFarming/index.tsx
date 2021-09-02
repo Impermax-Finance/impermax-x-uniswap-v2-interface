@@ -8,6 +8,7 @@ import useClaims from 'hooks/useClaims';
 import { useTransactionUrlGenerator } from 'hooks/useUrlGenerator';
 
 export default function AccountLendingPoolFarming(): JSX.Element {
+  // ray test touch <<
   const symbol = useSymbol(PoolTokenType.Collateral);
   const borrowedA = useBorrowedUSD(PoolTokenType.BorrowableA);
   const borrowedB = useBorrowedUSD(PoolTokenType.BorrowableB);
@@ -16,6 +17,7 @@ export default function AccountLendingPoolFarming(): JSX.Element {
   const availableReward = useAvailableReward();
   const claimHistory = useClaimHistory();
   const urlGenerator = useTransactionUrlGenerator();
+  // ray test touch >>
 
   const [trackBorrowsState, onTrackBorrows] = useTrackBorrows();
   const [claimsState, onClaims] = useClaims();

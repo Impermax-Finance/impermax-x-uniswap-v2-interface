@@ -3,10 +3,6 @@ import clsx from 'clsx';
 
 import RiskMetrics from 'components/RiskMetrics';
 import DetailList, { DetailListItem } from 'components/DetailList';
-import {
-  useDebtUSD,
-  useLPEquityUSD
-} from 'hooks/useData';
 import { formatNumberWithUSDCommaDecimals } from 'utils/helpers/format-number';
 
 /**
@@ -15,18 +11,15 @@ import { formatNumberWithUSDCommaDecimals } from 'utils/helpers/format-number';
 
 interface Props {
   collateralDepositedInUSD: number;
+  debtInUSD: number;
+  lpEquityInUSD: number;
 }
 
 const AccountLendingPoolDetailsLeverage = ({
-  collateralDepositedInUSD
+  collateralDepositedInUSD,
+  debtInUSD,
+  lpEquityInUSD
 }: Props): JSX.Element => {
-  // ray test touch <<
-  const debtUSD = useDebtUSD();
-  // ray test touch >>
-  // ray test touch <<<
-  const lpEquityUSD = useLPEquityUSD();
-  // ray test touch >>>
-
   const leftItems = [
     {
       title: 'Total Collateral',
@@ -34,11 +27,11 @@ const AccountLendingPoolDetailsLeverage = ({
     },
     {
       title: 'Total Debt',
-      value: formatNumberWithUSDCommaDecimals(debtUSD)
+      value: formatNumberWithUSDCommaDecimals(debtInUSD)
     },
     {
       title: 'LP Equity',
-      value: formatNumberWithUSDCommaDecimals(lpEquityUSD),
+      value: formatNumberWithUSDCommaDecimals(lpEquityInUSD),
       tooltip: 'Calculated as: Total Collateral - Total Debt'
     }
   ];

@@ -83,15 +83,6 @@ export async function getDeposited(this: ImpermaxRouter, uniswapV2PairAddress: A
   if (!cache.deposited) cache.deposited = this.initializeDeposited(uniswapV2PairAddress, poolTokenType);
   return cache.deposited;
 }
-export async function getDepositedUSD(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  poolTokenType: PoolTokenType
-) : Promise<number> {
-  const deposited = await this.getDeposited(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return deposited * tokenPrice;
-}
 
 // Borrowed
 export async function initializeBorrowed(
@@ -116,20 +107,6 @@ export async function getBorrowedUSD(this: ImpermaxRouter, uniswapV2PairAddress:
   const borrowed = await this.getBorrowed(uniswapV2PairAddress, poolTokenType);
   const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
   return borrowed * tokenPrice;
-}
-
-// Debt
-export async function getDebtUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const borrowedAUSD = await this.getBorrowedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const borrowedBUSD = await this.getBorrowedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  return borrowedAUSD + borrowedBUSD;
-}
-
-// Equity
-export async function getLPEquityUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const collateralUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const debtUSD = await this.getDebtUSD(uniswapV2PairAddress);
-  return collateralUSD - debtUSD;
 }
 
 // Values
