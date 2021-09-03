@@ -12,18 +12,19 @@ import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import BorrowInteractionModal from 'components/InteractionModal/BorrowInteractionModal';
 import {
   useBorrowed,
-  useSymbol,
-  useBorrowedUSD
+  useSymbol
 } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 import { PoolTokenType } from 'types/interfaces';
 
 interface Props {
   collateralDepositedInUSD: number;
+  tokenBorrowedInUSD: number;
 }
 
 const AccountLendingPoolBorrowRow = ({
-  collateralDepositedInUSD
+  collateralDepositedInUSD,
+  tokenBorrowedInUSD
 }: Props): JSX.Element => {
   // ray test touch <<
   const symbol = useSymbol();
@@ -31,9 +32,6 @@ const AccountLendingPoolBorrowRow = ({
   const borrowed = useBorrowed();
   const tokenIcon = useTokenIcon();
   // ray test touch >>
-  // ray test touch <<<
-  const borrowedUSD = useBorrowedUSD();
-  // ray test touch >>>
 
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepayModal] = useState(false);
@@ -64,7 +62,7 @@ const AccountLendingPoolBorrowRow = ({
             name='Borrowed'
             symbol={symbol}
             value={borrowed}
-            valueUSD={borrowedUSD} />
+            valueUSD={tokenBorrowedInUSD} />
         </Col>
         <Col
           md={5}

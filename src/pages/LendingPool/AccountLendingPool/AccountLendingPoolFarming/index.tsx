@@ -1,17 +1,35 @@
-import { Row, Col } from 'react-bootstrap';
-import { formatAmount } from 'utils/format';
-import { useSymbol, useBorrowedUSD, useFarmingShares, useAvailableReward, useClaimHistory } from 'hooks/useData';
-import { PoolTokenType, ClaimEvent } from 'types/interfaces';
-import useTrackBorrows from 'hooks/useTrackBorrows';
+import {
+  Row,
+  Col
+} from 'react-bootstrap';
+
 import InteractionButton from 'components/InteractionButton';
+import {
+  useSymbol,
+  useFarmingShares,
+  useAvailableReward,
+  useClaimHistory
+} from 'hooks/useData';
+import {
+  PoolTokenType,
+  ClaimEvent
+} from 'types/interfaces';
+import useTrackBorrows from 'hooks/useTrackBorrows';
 import useClaims from 'hooks/useClaims';
 import { useTransactionUrlGenerator } from 'hooks/useUrlGenerator';
+import { formatAmount } from 'utils/format';
 
-export default function AccountLendingPoolFarming(): JSX.Element {
+interface Props {
+  tokenABorrowedInUSD: number;
+  tokenBBorrowedInUSD: number;
+}
+
+const AccountLendingPoolFarming = ({
+  tokenABorrowedInUSD,
+  tokenBBorrowedInUSD
+}: Props): JSX.Element => {
   // ray test touch <<
   const symbol = useSymbol(PoolTokenType.Collateral);
-  const borrowedA = useBorrowedUSD(PoolTokenType.BorrowableA);
-  const borrowedB = useBorrowedUSD(PoolTokenType.BorrowableB);
   const farmingSharesA = useFarmingShares(PoolTokenType.BorrowableA);
   const farmingSharesB = useFarmingShares(PoolTokenType.BorrowableB);
   const availableReward = useAvailableReward();
@@ -23,7 +41,7 @@ export default function AccountLendingPoolFarming(): JSX.Element {
   const [claimsState, onClaims] = useClaims();
 
   // if is farming, show to reward accumulated and show a button to claim it
-  if (availableReward > 0 || (borrowedA > 1 && farmingSharesA > 0) && (borrowedB > 1 && farmingSharesB > 0)) {
+  if (availableReward > 0 || (tokenABorrowedInUSD > 1 && farmingSharesA > 0) && (tokenBBorrowedInUSD > 1 && farmingSharesB > 0)) {
     return (
       <>
         <Row className='account-lending-pool-claim'>
@@ -56,7 +74,7 @@ export default function AccountLendingPoolFarming(): JSX.Element {
   }
 
   // if doesn't have anything borrowed, tell the user to borrow or leverage
-  if (borrowedA + borrowedB < 1) {
+  if (tokenABorrowedInUSD + tokenBBorrowedInUSD < 1) {
     return (
       <div className='account-lending-pool-farming'>
         <div className='info'>Leverage {symbol} or Borrow to start receiving the IMX reward</div>
@@ -76,4 +94,6 @@ export default function AccountLendingPoolFarming(): JSX.Element {
       </div>
     </div>
   );
-}
+};
+
+export default AccountLendingPoolFarming;

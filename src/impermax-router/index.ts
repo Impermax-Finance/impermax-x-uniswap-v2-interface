@@ -223,7 +223,6 @@ class ImpermaxRouter {
   public getTokenBalance = account.getTokenBalance;
   public getAvailableBalance = account.getAvailableBalance;
   public getBorrowed = account.getBorrowed;
-  public getBorrowedUSD = account.getBorrowedUSD;
   public getDeposited = account.getDeposited;
   public getValuesFromPrice = account.getValuesFromPrice;
   public getValues = account.getValues;

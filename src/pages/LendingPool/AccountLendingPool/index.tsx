@@ -234,14 +234,20 @@ const AccountLendingPool = (): JSX.Element => {
             collateralDepositedInUSD={collateralDepositedInUSD}
             debtInUSD={debtInUSD}
             lpEquityInUSD={lpEquityInUSD} />
+          {/* ray test touch << */}
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
+            {/* ray test touch >> */}
             <AccountLendingPoolLPRow collateralDepositedInUSD={collateralDepositedInUSD} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
-            <AccountLendingPoolBorrowRow collateralDepositedInUSD={collateralDepositedInUSD} />
+            <AccountLendingPoolBorrowRow
+              collateralDepositedInUSD={collateralDepositedInUSD}
+              tokenBorrowedInUSD={tokenABorrowedInUSD} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
-            <AccountLendingPoolBorrowRow collateralDepositedInUSD={collateralDepositedInUSD} />
+            <AccountLendingPoolBorrowRow
+              collateralDepositedInUSD={collateralDepositedInUSD}
+              tokenBorrowedInUSD={tokenBBorrowedInUSD} />
           </PoolTokenContext.Provider>
         </>
       )}
@@ -260,7 +266,9 @@ const AccountLendingPool = (): JSX.Element => {
       )}
       {actualPageSelected === AccountLendingPoolPage.Farming && (
         <>
-          <AccountLendingPoolFarming />
+          <AccountLendingPoolFarming
+            tokenABorrowedInUSD={tokenABorrowedInUSD}
+            tokenBBorrowedInUSD={tokenBBorrowedInUSD} />
         </>
       )}
     </AccountLendingPoolContainer>

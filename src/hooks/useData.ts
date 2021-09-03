@@ -231,13 +231,6 @@ export function useBorrowed(poolTokenTypeArg?: PoolTokenType) : number {
   return borrowed;
 }
 
-export function useBorrowedUSD(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [borrowedUSD, setBorrowedUSD] = useState<number>(0);
-  useRouterCallback(async router => setBorrowedUSD(await router.getBorrowedUSD(uniswapV2PairAddress, poolTokenType)));
-  return borrowedUSD;
-}
-
 export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [availableBalance, setAvailableBalance] = useState<number>(0);

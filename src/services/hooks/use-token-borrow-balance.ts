@@ -54,7 +54,7 @@ const useTokenBorrowBalance = (
     borrowableAddress = lendingPool?.borrowableB;
     break;
   default:
-    throw new Error('Invalid PoolTokenType!');
+    throw new Error('Invalid poolTokenType!');
   }
   const {
     isLoading: bigBorrowBalanceLoading,
@@ -88,7 +88,7 @@ const useTokenBorrowBalance = (
     tokenAddressMethodName = 'token1';
     break;
   default:
-    throw new Error('Invalid PoolTokenType!');
+    throw new Error('Invalid poolTokenType!');
   }
   const {
     isLoading: tokenAddressLoading,

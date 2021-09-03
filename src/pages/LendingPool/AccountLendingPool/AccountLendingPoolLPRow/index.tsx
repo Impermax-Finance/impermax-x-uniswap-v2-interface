@@ -27,10 +27,12 @@ interface Props {
 const AccountLendingPoolLPRow = ({
   collateralDepositedInUSD
 }: Props): JSX.Element => {
+  // ray test touch <<
   const symbol = useSymbol();
   const deposited = useDeposited();
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
+  // ray test touch >>
 
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);

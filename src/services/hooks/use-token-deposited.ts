@@ -58,7 +58,7 @@ const useTokenDeposited = (
     borrowableOrCollateralAddress = lendingPool?.collateral;
     break;
   default:
-    throw new Error('Invalid PoolTokenType!');
+    throw new Error('Invalid poolTokenType!');
   }
   const {
     isLoading: bigTokenBalanceLoading,

@@ -97,16 +97,10 @@ export async function initializeBorrowed(
   const borrowRate = await this.subgraph.getBorrowRate(uniswapV2PairAddress, poolTokenType);
   return storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
 }
-
 export async function getBorrowed(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.borrowed) cache.borrowed = this.initializeBorrowed(uniswapV2PairAddress, poolTokenType);
   return cache.borrowed;
-}
-export async function getBorrowedUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const borrowed = await this.getBorrowed(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return borrowed * tokenPrice;
 }
 
 // Values
