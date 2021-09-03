@@ -5,7 +5,6 @@ import {
 
 import InteractionButton from 'components/InteractionButton';
 import {
-  useSymbol,
   useFarmingShares,
   useAvailableReward,
   useClaimHistory
@@ -22,14 +21,15 @@ import { formatAmount } from 'utils/format';
 interface Props {
   tokenABorrowedInUSD: number;
   tokenBBorrowedInUSD: number;
+  collateralSymbol: string;
 }
 
 const AccountLendingPoolFarming = ({
   tokenABorrowedInUSD,
-  tokenBBorrowedInUSD
+  tokenBBorrowedInUSD,
+  collateralSymbol
 }: Props): JSX.Element => {
   // ray test touch <<
-  const symbol = useSymbol(PoolTokenType.Collateral);
   const farmingSharesA = useFarmingShares(PoolTokenType.BorrowableA);
   const farmingSharesB = useFarmingShares(PoolTokenType.BorrowableB);
   const availableReward = useAvailableReward();
@@ -77,7 +77,7 @@ const AccountLendingPoolFarming = ({
   if (tokenABorrowedInUSD + tokenBBorrowedInUSD < 1) {
     return (
       <div className='account-lending-pool-farming'>
-        <div className='info'>Leverage {symbol} or Borrow to start receiving the IMX reward</div>
+        <div className='info'>Leverage {collateralSymbol} or Borrow to start receiving the IMX reward</div>
       </div>
     );
   }
@@ -85,7 +85,7 @@ const AccountLendingPoolFarming = ({
   // if has borrowed, but it is not tracked, show a button to track the LP
   return (
     <div className='account-lending-pool-farming'>
-      <div className='info'>IMX reward on your borrowed position in {symbol} is not active</div>
+      <div className='info'>IMX reward on your borrowed position in {collateralSymbol} is not active</div>
       <div className='activate-imx-reward'>
         <InteractionButton
           name='Activate IMX Reward'

@@ -27,9 +27,16 @@ const getLendingPoolTokenName = (
 // TODO: double-check with `useSymbol`
 const getLendingPoolTokenSymbol = (
   lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
+  poolTokenType: PoolTokenType,
   chainID: number
 ): string => {
+  if (poolTokenType === PoolTokenType.Collateral) {
+    const symbolA = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
+    const symbolB = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
+
+    return `${symbolA}-${symbolB}`;
+  }
+
   const wETHAddress = W_ETH_ADDRESSES[chainID];
   const lowerCasedWETHAddress = wETHAddress.toLowerCase();
   const underlyingAddress = lendingPool[poolTokenType].underlying.id;

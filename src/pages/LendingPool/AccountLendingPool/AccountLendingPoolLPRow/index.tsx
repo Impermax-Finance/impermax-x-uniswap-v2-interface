@@ -12,10 +12,7 @@ import LeverageInteractionModal from 'components/InteractionModal/LeverageIntera
 import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
 import DeleverageInteractionModal from 'components/InteractionModal/DeleverageInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
-import {
-  useSymbol,
-  useMaxDeleverage
-} from 'hooks/useData';
+import { useMaxDeleverage } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 import { PoolTokenType } from 'types/interfaces';
 
@@ -24,16 +21,17 @@ interface Props {
   collateralDeposited: number;
   tokenABorrowed: number;
   tokenBBorrowed: number;
+  collateralSymbol: string;
 }
 
 const AccountLendingPoolLPRow = ({
   collateralDepositedInUSD,
   collateralDeposited,
   tokenABorrowed,
-  tokenBBorrowed
+  tokenBBorrowed,
+  collateralSymbol
 }: Props): JSX.Element => {
   // ray test touch <<
-  const symbol = useSymbol();
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
   // ray test touch >>
@@ -44,8 +42,8 @@ const AccountLendingPoolLPRow = ({
   const [showDeleverageModal, toggleDeleverageModal] = useState(false);
 
   const maxDeleverage = useMaxDeleverage(0);
-  const withdrawDisabledInfo = `You haven't deposited any ${symbol} yet.`;
-  const leverageDisabledInfo = `You need to deposit the ${symbol} LP first in order to leverage it.`;
+  const withdrawDisabledInfo = `You haven't deposited any ${collateralSymbol} yet.`;
+  const leverageDisabledInfo = `You need to deposit the ${collateralSymbol} LP first in order to leverage it.`;
   const deleverageDisabledInfo = `You need to open a leveraged position in order to deleverage it.`;
 
   return (
@@ -64,7 +62,7 @@ const AccountLendingPoolLPRow = ({
                 alt='' />
             </Col>
             <Col className='token-name'>
-              {`${symbol} LP`}
+              {`${collateralSymbol} LP`}
             </Col>
           </Row>
         </Col>

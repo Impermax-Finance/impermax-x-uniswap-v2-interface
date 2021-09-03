@@ -10,23 +10,21 @@ import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import DepositInteractionModal from 'components/InteractionModal/DepositInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
-import {
-  useSymbol,
-  useMaxWithdrawable
-} from 'hooks/useData';
+import { useMaxWithdrawable } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 
 interface Props {
   collateralDepositedInUSD: number;
   collateralDeposited: number;
+  tokenSymbol: string;
 }
 
 const AccountLendingPoolSupplyRow = ({
   collateralDepositedInUSD,
-  collateralDeposited
+  collateralDeposited,
+  tokenSymbol
 }: Props): JSX.Element => {
   // ray test touch <<
-  const symbol = useSymbol();
   const tokenIcon = useTokenIcon();
   // ray test touch >>
 
@@ -34,7 +32,7 @@ const AccountLendingPoolSupplyRow = ({
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
 
   const maxWithdrawable = useMaxWithdrawable();
-  const withdrawDisabledInfo = `You haven't supplied any ${symbol} yet.`;
+  const withdrawDisabledInfo = `You haven't supplied any ${tokenSymbol} yet.`;
 
   return (
     <>
@@ -48,7 +46,7 @@ const AccountLendingPoolSupplyRow = ({
                 alt='' />
             </Col>
             <Col className='token-name'>
-              {`${symbol}`}
+              {`${tokenSymbol}`}
             </Col>
           </Row>
         </Col>
@@ -57,7 +55,7 @@ const AccountLendingPoolSupplyRow = ({
           className='inline-account-token-info-container'>
           <InlineAccountTokenInfo
             name='Supplied'
-            symbol={symbol}
+            symbol={tokenSymbol}
             value={collateralDeposited}
             valueUSD={collateralDepositedInUSD} />
         </Col>

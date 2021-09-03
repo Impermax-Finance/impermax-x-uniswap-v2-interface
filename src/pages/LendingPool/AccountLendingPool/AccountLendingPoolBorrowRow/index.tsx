@@ -10,32 +10,33 @@ import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import RepayInteractionModal from 'components/InteractionModal/RepayInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import BorrowInteractionModal from 'components/InteractionModal/BorrowInteractionModal';
-import { useSymbol } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
-import { PoolTokenType } from 'types/interfaces';
 
 interface Props {
   collateralDepositedInUSD: number;
   tokenBorrowedInUSD: number;
   tokenBorrowed: number;
+  tokenSymbol: string;
+  collateralSymbol: string;
 }
 
 const AccountLendingPoolBorrowRow = ({
   collateralDepositedInUSD,
   tokenBorrowedInUSD,
-  tokenBorrowed
+  tokenBorrowed,
+  tokenSymbol,
+  collateralSymbol
 }: Props): JSX.Element => {
   // ray test touch <<
-  const symbol = useSymbol();
-  const symbolLP = useSymbol(PoolTokenType.Collateral);
   const tokenIcon = useTokenIcon();
   // ray test touch >>
 
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepayModal] = useState(false);
 
-  const borrowDisabledInfo = `You need to deposit ${symbolLP} as collateral in order to be able to borrow ${symbol}.`;
-  const repayDisabledInfo = `You haven't borrowed any ${symbol} yet.`;
+  const borrowDisabledInfo =
+    `You need to deposit ${collateralSymbol} as collateral in order to be able to borrow ${tokenSymbol}.`;
+  const repayDisabledInfo = `You haven't borrowed any ${tokenSymbol} yet.`;
 
   return (
     <>
@@ -49,7 +50,7 @@ const AccountLendingPoolBorrowRow = ({
                 alt='' />
             </Col>
             <Col className='token-name'>
-              {`${symbol}`}
+              {`${tokenSymbol}`}
             </Col>
           </Row>
         </Col>
@@ -58,7 +59,7 @@ const AccountLendingPoolBorrowRow = ({
           className='inline-account-token-info-container'>
           <InlineAccountTokenInfo
             name='Borrowed'
-            symbol={symbol}
+            symbol={tokenSymbol}
             value={tokenBorrowed}
             valueUSD={tokenBorrowedInUSD} />
         </Col>
