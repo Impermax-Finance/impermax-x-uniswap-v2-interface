@@ -10,26 +10,24 @@ import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import RepayInteractionModal from 'components/InteractionModal/RepayInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import BorrowInteractionModal from 'components/InteractionModal/BorrowInteractionModal';
-import {
-  useBorrowed,
-  useSymbol
-} from 'hooks/useData';
+import { useSymbol } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 import { PoolTokenType } from 'types/interfaces';
 
 interface Props {
   collateralDepositedInUSD: number;
   tokenBorrowedInUSD: number;
+  tokenBorrowed: number;
 }
 
 const AccountLendingPoolBorrowRow = ({
   collateralDepositedInUSD,
-  tokenBorrowedInUSD
+  tokenBorrowedInUSD,
+  tokenBorrowed
 }: Props): JSX.Element => {
   // ray test touch <<
   const symbol = useSymbol();
   const symbolLP = useSymbol(PoolTokenType.Collateral);
-  const borrowed = useBorrowed();
   const tokenIcon = useTokenIcon();
   // ray test touch >>
 
@@ -61,7 +59,7 @@ const AccountLendingPoolBorrowRow = ({
           <InlineAccountTokenInfo
             name='Borrowed'
             symbol={symbol}
-            value={borrowed}
+            value={tokenBorrowed}
             valueUSD={tokenBorrowedInUSD} />
         </Col>
         <Col
@@ -82,7 +80,7 @@ const AccountLendingPoolBorrowRow = ({
               )}
             </Col>
             <Col>
-              {borrowed > 0 ? (
+              {tokenBorrowed > 0 ? (
                 <Button
                   variant='primary'
                   onClick={() => toggleRepayModal(true)}>
@@ -102,7 +100,8 @@ const AccountLendingPoolBorrowRow = ({
         toggleShow={toggleBorrowModal} />
       <RepayInteractionModal
         show={showRepayModal}
-        toggleShow={toggleRepayModal} />
+        toggleShow={toggleRepayModal}
+        tokenBorrowed={tokenBorrowed} />
     </>
   );
 };

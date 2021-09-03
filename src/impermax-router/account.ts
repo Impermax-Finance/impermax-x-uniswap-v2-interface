@@ -84,6 +84,7 @@ export async function getDeposited(this: ImpermaxRouter, uniswapV2PairAddress: A
   return cache.deposited;
 }
 
+// ray test touch <<<
 // Borrowed
 export async function initializeBorrowed(
   this: ImpermaxRouter,
@@ -102,6 +103,7 @@ export async function getBorrowed(this: ImpermaxRouter, uniswapV2PairAddress: Ad
   if (!cache.borrowed) cache.borrowed = this.initializeBorrowed(uniswapV2PairAddress, poolTokenType);
   return cache.borrowed;
 }
+// ray test touch >>>
 
 // Values
 export async function getValuesFromPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes, priceA: number, priceB: number) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {

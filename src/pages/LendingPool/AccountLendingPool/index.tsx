@@ -126,7 +126,7 @@ const AccountLendingPool = (): JSX.Element => {
     error: tokenBBorrowBalanceError
   } = useTokenBorrowBalance(
     selectedUniswapV2PairAddress,
-    PoolTokenType.BorrowableA,
+    PoolTokenType.BorrowableB,
     selectedChainID,
     library,
     account
@@ -210,7 +210,7 @@ const AccountLendingPool = (): JSX.Element => {
   const tokenABorrowRate = parseFloat(selectedLendingPool[PoolTokenType.BorrowableA].borrowRate);
   const tokenBBorrowRate = parseFloat(selectedLendingPool[PoolTokenType.BorrowableB].borrowRate);
   const tokenABorrowed = tokenABorrowBalance * (1 + (Date.now() / 1000 - tokenAAccrualTimestamp) * tokenABorrowRate);
-  const tokenBBorrowed = tokenABorrowBalance * (1 + (Date.now() / 1000 - tokenBAccrualTimestamp) * tokenBBorrowRate);
+  const tokenBBorrowed = tokenBBorrowBalance * (1 + (Date.now() / 1000 - tokenBAccrualTimestamp) * tokenBBorrowRate);
   const tokenABorrowedInUSD = tokenABorrowed * tokenAPriceInUSD;
   const tokenBBorrowedInUSD = tokenBBorrowed * tokenBPriceInUSD;
   const debtInUSD = tokenABorrowedInUSD + tokenBBorrowedInUSD;
@@ -239,17 +239,21 @@ const AccountLendingPool = (): JSX.Element => {
             {/* ray test touch >> */}
             <AccountLendingPoolLPRow
               collateralDepositedInUSD={collateralDepositedInUSD}
-              collateralDeposited={collateralDeposited} />
+              collateralDeposited={collateralDeposited}
+              tokenABorrowed={tokenABorrowed}
+              tokenBBorrowed={tokenBBorrowed} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow
               collateralDepositedInUSD={collateralDepositedInUSD}
-              tokenBorrowedInUSD={tokenABorrowedInUSD} />
+              tokenBorrowedInUSD={tokenABorrowedInUSD}
+              tokenBorrowed={tokenABorrowed} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolBorrowRow
               collateralDepositedInUSD={collateralDepositedInUSD}
-              tokenBorrowedInUSD={tokenBBorrowedInUSD} />
+              tokenBorrowedInUSD={tokenBBorrowedInUSD}
+              tokenBorrowed={tokenBBorrowed} />
           </PoolTokenContext.Provider>
         </>
       )}

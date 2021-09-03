@@ -13,14 +13,16 @@ import InputAmount, { InputAmountMini } from '../InputAmount';
 import InteractionButton from '../InteractionButton';
 import useDeleverage from '../../hooks/useDeleverage';
 import useApprove from '../../hooks/useApprove';
-import { useSymbol, useBorrowed, useDeleverageAmounts, useToBigNumber, useToTokens, useMaxDeleverage, useNextBorrowAPY, useUniswapAPY, useCurrentLeverage, useNextFarmingAPY } from '../../hooks/useData';
+import { useSymbol, useDeleverageAmounts, useToBigNumber, useToTokens, useMaxDeleverage, useNextBorrowAPY, useUniswapAPY, useCurrentLeverage, useNextFarmingAPY } from '../../hooks/useData';
 
-export interface DeleverageInteractionModalProps {
+interface DeleverageInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
 }
 
-export default function DeleverageInteractionModal({ show, toggleShow }: DeleverageInteractionModalProps): JSX.Element {
+export default function DeleverageInteractionModal({ show, toggleShow, tokenABorrowed, tokenBBorrowed }: DeleverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
 
@@ -29,8 +31,6 @@ export default function DeleverageInteractionModal({ show, toggleShow }: Delever
   const symbol = useSymbol(PoolTokenType.Collateral);
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
-  const borrowedA = useBorrowed(PoolTokenType.BorrowableA);
-  const borrowedB = useBorrowed(PoolTokenType.BorrowableB);
 
   const tokens = useToTokens(val);
   const invalidInput = val > maxDeleverage;
@@ -99,28 +99,28 @@ export default function DeleverageInteractionModal({ show, toggleShow }: Delever
             <Col xs={6}>You will repay at least:</Col>
             <Col
               xs={6}
-              className='text-right'>{formatFloat(Math.min(changeAmounts.bAmountAMin, borrowedA))} {symbolA}
+              className='text-right'>{formatFloat(Math.min(changeAmounts.bAmountAMin, tokenABorrowed))} {symbolA}
             </Col>
           </Row>
           <Row>
             <Col xs={6}>You will repay at least:</Col>
             <Col
               xs={6}
-              className='text-right'>{formatFloat(Math.min(changeAmounts.bAmountBMin, borrowedB))} {symbolB}
+              className='text-right'>{formatFloat(Math.min(changeAmounts.bAmountBMin, tokenBBorrowed))} {symbolB}
             </Col>
           </Row>
           <Row>
             <Col xs={6}>You will receive at least:</Col>
             <Col
               xs={6}
-              className='text-right'>{formatFloat(changeAmounts.bAmountAMin > borrowedA ? changeAmounts.bAmountAMin - borrowedA : 0)} {symbolA}
+              className='text-right'>{formatFloat(changeAmounts.bAmountAMin > tokenABorrowed ? changeAmounts.bAmountAMin - tokenABorrowed : 0)} {symbolA}
             </Col>
           </Row>
           <Row>
             <Col xs={6}>You will receive at least:</Col>
             <Col
               xs={6}
-              className='text-right'>{formatFloat(changeAmounts.bAmountBMin > borrowedB ? changeAmounts.bAmountBMin - borrowedB : 0)} {symbolB}
+              className='text-right'>{formatFloat(changeAmounts.bAmountBMin > tokenBBorrowed ? changeAmounts.bAmountBMin - tokenBBorrowed : 0)} {symbolB}
             </Col>
           </Row>
           <Row>

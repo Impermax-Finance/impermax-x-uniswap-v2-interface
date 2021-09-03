@@ -22,11 +22,15 @@ import { PoolTokenType } from 'types/interfaces';
 interface Props {
   collateralDepositedInUSD: number;
   collateralDeposited: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
 }
 
 const AccountLendingPoolLPRow = ({
   collateralDepositedInUSD,
-  collateralDeposited
+  collateralDeposited,
+  tokenABorrowed,
+  tokenBBorrowed
 }: Props): JSX.Element => {
   // ray test touch <<
   const symbol = useSymbol();
@@ -139,7 +143,9 @@ const AccountLendingPoolLPRow = ({
         toggleShow={toggleLeverageModal} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
-        toggleShow={toggleDeleverageModal} />
+        toggleShow={toggleDeleverageModal}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed} />
     </>
   );
 };
