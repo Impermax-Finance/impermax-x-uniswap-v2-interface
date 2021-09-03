@@ -160,9 +160,6 @@ export async function getNewLiquidationPrices(this: ImpermaxRouter, uniswapV2Pai
   // eslint-disable-next-line no-negated-condition
   return !this.priceInverted ? [currentPrice / priceSwingB, currentPrice * priceSwingA] : [currentPrice / priceSwingA, currentPrice * priceSwingB];
 }
-export async function getLiquidationPriceSwings(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
-  return await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, NO_CHANGES);
-}
 export async function getLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   return await this.getNewLiquidationPrices(uniswapV2PairAddress, NO_CHANGES);
 }

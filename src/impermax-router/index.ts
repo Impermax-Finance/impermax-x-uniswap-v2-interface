@@ -231,7 +231,6 @@ class ImpermaxRouter {
   public getNewLiquidationPriceSwings = account.getNewLiquidationPriceSwings;
   public getNewLiquidationPrices = account.getNewLiquidationPrices;
   public getLeverage = account.getLeverage;
-  public getLiquidationPriceSwings = account.getLiquidationPriceSwings;
   public getLiquidationPrices = account.getLiquidationPrices;
   public getMaxWithdrawable = account.getMaxWithdrawable;
   public getMaxBorrowable = account.getMaxBorrowable;
