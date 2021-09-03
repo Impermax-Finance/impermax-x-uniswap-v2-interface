@@ -38,40 +38,42 @@ const borrowableStr = `{
   }
 }`;
 
-// TODO: `1000` is hardcoded
-const query = gql`{
-  lendingPools(first: 1000, orderBy: totalBorrowsUSD, orderDirection: desc) {
-    id
-    borrowable0 ${borrowableStr}
-    borrowable1 ${borrowableStr}
-    collateral {
+const getLendingPool = async (
+  chainID: number,
+  lowerCasedUniswapV2PairAddress: string
+): Promise<LendingPoolData> => {
+  const query = gql`{
+    lendingPool(id: "${lowerCasedUniswapV2PairAddress}") {
       id
-      totalBalance
-      totalBalanceUSD
-      safetyMargin
-      liquidationIncentive
-      exchangeRate 
+      borrowable0 ${borrowableStr}
+      borrowable1 ${borrowableStr}
+      collateral {
+        id
+        totalBalance
+        totalBalanceUSD
+        safetyMargin
+        liquidationIncentive
+        exchangeRate 
+      }
+      pair {
+        reserve0
+        reserve1
+        reserveUSD
+        token0Price
+        token1Price
+        derivedUSD
+      }
     }
-    pair {
-      reserve0
-      reserve1
-      reserveUSD
-      token0Price
-      token1Price
-      derivedUSD
-    }
-  }
-}`;
+  }`;
 
-const getLendingPools = async (chainID: number): Promise<Array<LendingPoolData>> => {
   const impermaxSubgraphURL = IMPERMAX_SUBGRAPH_URLS[chainID];
   const result = await apolloFetcher(impermaxSubgraphURL, query);
 
-  return result.data.lendingPools;
+  return result.data.lendingPool;
 };
 
 export type {
   LendingPoolData
 };
 
-export default getLendingPools;
+export default getLendingPool;
