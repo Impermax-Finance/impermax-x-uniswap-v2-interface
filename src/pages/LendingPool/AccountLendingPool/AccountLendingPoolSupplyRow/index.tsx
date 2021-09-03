@@ -12,21 +12,21 @@ import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
 import {
   useSymbol,
-  useDeposited,
   useMaxWithdrawable
 } from 'hooks/useData';
 import { useTokenIcon } from 'hooks/useUrlGenerator';
 
 interface Props {
   collateralDepositedInUSD: number;
+  collateralDeposited: number;
 }
 
 const AccountLendingPoolSupplyRow = ({
-  collateralDepositedInUSD
+  collateralDepositedInUSD,
+  collateralDeposited
 }: Props): JSX.Element => {
   // ray test touch <<
   const symbol = useSymbol();
-  const deposited = useDeposited();
   const tokenIcon = useTokenIcon();
   // ray test touch >>
 
@@ -58,7 +58,7 @@ const AccountLendingPoolSupplyRow = ({
           <InlineAccountTokenInfo
             name='Supplied'
             symbol={symbol}
-            value={deposited}
+            value={collateralDeposited}
             valueUSD={collateralDepositedInUSD} />
         </Col>
         <Col

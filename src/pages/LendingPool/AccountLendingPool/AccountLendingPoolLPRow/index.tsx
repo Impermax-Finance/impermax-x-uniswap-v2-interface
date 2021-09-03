@@ -13,7 +13,6 @@ import WithdrawInteractionModal from 'components/InteractionModal/WithdrawIntera
 import DeleverageInteractionModal from 'components/InteractionModal/DeleverageInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import {
-  useDeposited,
   useSymbol,
   useMaxDeleverage
 } from 'hooks/useData';
@@ -22,14 +21,15 @@ import { PoolTokenType } from 'types/interfaces';
 
 interface Props {
   collateralDepositedInUSD: number;
+  collateralDeposited: number;
 }
 
 const AccountLendingPoolLPRow = ({
-  collateralDepositedInUSD
+  collateralDepositedInUSD,
+  collateralDeposited
 }: Props): JSX.Element => {
   // ray test touch <<
   const symbol = useSymbol();
-  const deposited = useDeposited();
   const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
   const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
   // ray test touch >>
@@ -70,7 +70,7 @@ const AccountLendingPoolLPRow = ({
           <InlineAccountTokenInfo
             name='Deposited'
             symbol='LP'
-            value={deposited}
+            value={collateralDeposited}
             valueUSD={collateralDepositedInUSD} />
         </Col>
         <Col

@@ -237,7 +237,9 @@ const AccountLendingPool = (): JSX.Element => {
           {/* ray test touch << */}
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
             {/* ray test touch >> */}
-            <AccountLendingPoolLPRow collateralDepositedInUSD={collateralDepositedInUSD} />
+            <AccountLendingPoolLPRow
+              collateralDepositedInUSD={collateralDepositedInUSD}
+              collateralDeposited={collateralDeposited} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow
@@ -257,10 +259,14 @@ const AccountLendingPool = (): JSX.Element => {
             supplyBalanceInUSD={supplyBalanceInUSD}
             accountAPY={accountAPY} />
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
-            <AccountLendingPoolSupplyRow collateralDepositedInUSD={collateralDepositedInUSD} />
+            <AccountLendingPoolSupplyRow
+              collateralDepositedInUSD={collateralDepositedInUSD}
+              collateralDeposited={collateralDeposited} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
-            <AccountLendingPoolSupplyRow collateralDepositedInUSD={collateralDepositedInUSD} />
+            <AccountLendingPoolSupplyRow
+              collateralDepositedInUSD={collateralDepositedInUSD}
+              collateralDeposited={collateralDeposited} />
           </PoolTokenContext.Provider>
         </>
       )}
