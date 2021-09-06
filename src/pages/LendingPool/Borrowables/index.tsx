@@ -27,7 +27,7 @@ import {
   getLendingPoolTokenUtilizationRate,
   getLendingPoolTokenSupplyAPY,
   getLendingPoolTokenBorrowAPY,
-  getLendingPoolTokenIcon,
+  getLendingPoolTokenIconPath,
   getLendingPoolTokenPriceInUSD
 } from 'utils/helpers/lending-pools';
 import { PARAMETERS } from 'utils/constants/links';
@@ -135,7 +135,7 @@ const Borrowables = (): JSX.Element => {
     const tokenUtilizationRate = getLendingPoolTokenUtilizationRate(selectedLendingPool, poolTokenType);
     const tokenSupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, poolTokenType);
     const tokenBorrowAPY = getLendingPoolTokenBorrowAPY(selectedLendingPool, poolTokenType);
-    const tokenIcon = getLendingPoolTokenIcon(selectedLendingPool, poolTokenType);
+    const tokenIcon = getLendingPoolTokenIconPath(selectedLendingPool, poolTokenType);
 
     const rewardSpeed = getRewardSpeed(selectedLendingPool, poolTokenType);
     let farmingAPY;

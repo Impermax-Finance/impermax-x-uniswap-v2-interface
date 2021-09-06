@@ -34,7 +34,6 @@ export async function getExchangeRate(this: Subgraph, uniswapV2PairAddress: Addr
   return parseFloat(lendingPoolData[poolTokenType].exchangeRate);
 }
 
-// ray test touch <
 // Underlying Address
 export async function getUnderlyingAddress(
   this: Subgraph,
@@ -47,7 +46,6 @@ export async function getUnderlyingAddress(
 
   return lendingPoolData[poolTokenType].underlying.id;
 }
-// ray test touch >
 
 // Token price
 export async function getTokenPrice(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {

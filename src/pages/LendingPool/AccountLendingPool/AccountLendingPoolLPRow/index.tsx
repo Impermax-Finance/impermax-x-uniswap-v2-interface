@@ -13,8 +13,6 @@ import WithdrawInteractionModal from 'components/InteractionModal/WithdrawIntera
 import DeleverageInteractionModal from 'components/InteractionModal/DeleverageInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import { useMaxDeleverage } from 'hooks/useData';
-import { useTokenIcon } from 'hooks/useUrlGenerator';
-import { PoolTokenType } from 'types/interfaces';
 
 interface Props {
   collateralDepositedInUSD: number;
@@ -22,6 +20,8 @@ interface Props {
   tokenABorrowed: number;
   tokenBBorrowed: number;
   collateralSymbol: string;
+  tokenAIconPath: string;
+  tokenBIconPath: string;
 }
 
 const AccountLendingPoolLPRow = ({
@@ -29,13 +29,10 @@ const AccountLendingPoolLPRow = ({
   collateralDeposited,
   tokenABorrowed,
   tokenBBorrowed,
-  collateralSymbol
+  collateralSymbol,
+  tokenAIconPath,
+  tokenBIconPath
 }: Props): JSX.Element => {
-  // ray test touch <<
-  const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
-  const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
-  // ray test touch >>
-
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
   const [showLeverageModal, toggleLeverageModal] = useState(false);
@@ -54,11 +51,11 @@ const AccountLendingPoolLPRow = ({
             <Col className='token-icon icon-overlapped'>
               <img
                 className='inline-block'
-                src={tokenIconA}
+                src={tokenAIconPath}
                 alt='' />
               <img
                 className='inline-block'
-                src={tokenIconB}
+                src={tokenBIconPath}
                 alt='' />
             </Col>
             <Col className='token-name'>

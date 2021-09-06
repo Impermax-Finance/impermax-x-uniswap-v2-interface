@@ -115,7 +115,7 @@ const getLendingPoolTokenBorrowAPY = (
   return toAPY(borrowRate);
 };
 
-const getLendingPoolTokenIcon = (
+const getLendingPoolTokenIconPath = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): string => {
@@ -146,6 +146,6 @@ export {
   getLendingPoolTokenUtilizationRate,
   getLendingPoolTokenSupplyAPY,
   getLendingPoolTokenBorrowAPY,
-  getLendingPoolTokenIcon,
+  getLendingPoolTokenIconPath,
   getLendingPoolTokenPriceInUSD
 };

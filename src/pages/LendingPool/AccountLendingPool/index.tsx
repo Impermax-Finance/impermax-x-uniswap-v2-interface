@@ -23,7 +23,8 @@ import { injected } from 'utils/helpers/web3/connectors';
 import {
   getLendingPoolTokenPriceInUSD,
   getLendingPoolTokenSupplyAPY,
-  getLendingPoolTokenSymbol
+  getLendingPoolTokenSymbol,
+  getLendingPoolTokenIconPath
 } from 'utils/helpers/lending-pools';
 import { PARAMETERS } from 'utils/constants/links';
 import useLendingPool from 'services/hooks/use-lending-pool';
@@ -228,6 +229,9 @@ const AccountLendingPool = (): JSX.Element => {
         AccountLendingPoolPage.EarnInterest :
       pageSelected;
 
+  const tokenAIconPath = getLendingPoolTokenIconPath(selectedLendingPool, PoolTokenType.BorrowableA);
+  const tokenBIconPath = getLendingPoolTokenIconPath(selectedLendingPool, PoolTokenType.BorrowableB);
+
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector
@@ -247,7 +251,9 @@ const AccountLendingPool = (): JSX.Element => {
               collateralDeposited={collateralDeposited}
               tokenABorrowed={tokenABorrowed}
               tokenBBorrowed={tokenBBorrowed}
-              collateralSymbol={collateralSymbol} />
+              collateralSymbol={collateralSymbol}
+              tokenAIconPath={tokenAIconPath}
+              tokenBIconPath={tokenBIconPath} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow
@@ -255,7 +261,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenBorrowedInUSD={tokenABorrowedInUSD}
               tokenBorrowed={tokenABorrowed}
               tokenSymbol={tokenASymbol}
-              collateralSymbol={collateralSymbol} />
+              collateralSymbol={collateralSymbol}
+              tokenIconPath={tokenAIconPath} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolBorrowRow
@@ -263,7 +270,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenBorrowedInUSD={tokenBBorrowedInUSD}
               tokenBorrowed={tokenBBorrowed}
               tokenSymbol={tokenBSymbol}
-              collateralSymbol={collateralSymbol} />
+              collateralSymbol={collateralSymbol}
+              tokenIconPath={tokenBIconPath} />
           </PoolTokenContext.Provider>
         </>
       )}
@@ -276,13 +284,15 @@ const AccountLendingPool = (): JSX.Element => {
             <AccountLendingPoolSupplyRow
               collateralDepositedInUSD={collateralDepositedInUSD}
               collateralDeposited={collateralDeposited}
-              tokenSymbol={tokenASymbol} />
+              tokenSymbol={tokenASymbol}
+              tokenIconPath={tokenAIconPath} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolSupplyRow
               collateralDepositedInUSD={collateralDepositedInUSD}
               collateralDeposited={collateralDeposited}
-              tokenSymbol={tokenBSymbol} />
+              tokenSymbol={tokenBSymbol}
+              tokenIconPath={tokenBIconPath} />
           </PoolTokenContext.Provider>
         </>
       )}

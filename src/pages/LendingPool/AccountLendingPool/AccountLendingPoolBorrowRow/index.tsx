@@ -10,7 +10,6 @@ import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import RepayInteractionModal from 'components/InteractionModal/RepayInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import BorrowInteractionModal from 'components/InteractionModal/BorrowInteractionModal';
-import { useTokenIcon } from 'hooks/useUrlGenerator';
 
 interface Props {
   collateralDepositedInUSD: number;
@@ -18,6 +17,7 @@ interface Props {
   tokenBorrowed: number;
   tokenSymbol: string;
   collateralSymbol: string;
+  tokenIconPath: string;
 }
 
 const AccountLendingPoolBorrowRow = ({
@@ -25,12 +25,9 @@ const AccountLendingPoolBorrowRow = ({
   tokenBorrowedInUSD,
   tokenBorrowed,
   tokenSymbol,
-  collateralSymbol
+  collateralSymbol,
+  tokenIconPath
 }: Props): JSX.Element => {
-  // ray test touch <<
-  const tokenIcon = useTokenIcon();
-  // ray test touch >>
-
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepayModal] = useState(false);
 
@@ -46,7 +43,7 @@ const AccountLendingPoolBorrowRow = ({
             <Col className='token-icon'>
               <img
                 className='inline-block'
-                src={tokenIcon}
+                src={tokenIconPath}
                 alt='' />
             </Col>
             <Col className='token-name'>

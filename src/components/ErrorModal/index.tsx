@@ -56,7 +56,12 @@ const ErrorModal = ({
             height={18}
             className='text-textSecondary' />
         </IconButton>
-        <p className='text-base'>
+        <p
+          className={clsx(
+            'text-base',
+            'break-all',
+            'mt-4'
+          )}>
           {description}
         </p>
       </ImpermaxModalInnerWrapper>
