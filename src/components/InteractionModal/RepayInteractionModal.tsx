@@ -19,6 +19,7 @@ export interface RepayInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   tokenBorrowed: number;
+  safetyMargin: number;
 }
 
 /**
@@ -27,7 +28,12 @@ export interface RepayInteractionModalProps {
  * @see RepayInteractionModalProps
  */
 
-export default function RepayInteractionModal({ show, toggleShow, tokenBorrowed }: RepayInteractionModalProps): JSX.Element {
+export default function RepayInteractionModal({
+  show,
+  toggleShow,
+  tokenBorrowed,
+  safetyMargin
+}: RepayInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
@@ -52,7 +58,8 @@ export default function RepayInteractionModal({ show, toggleShow, tokenBorrowed 
       <>
         <RiskMetrics
           changeBorrowedA={poolTokenType === PoolTokenType.BorrowableA ? -val : 0}
-          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? -val : 0} />
+          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? -val : 0}
+          safetyMargin={safetyMargin} />
         <InputAmount
           val={val}
           setVal={setVal}

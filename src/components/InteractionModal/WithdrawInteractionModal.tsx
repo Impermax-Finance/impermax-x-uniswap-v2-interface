@@ -19,6 +19,7 @@ import { useMaxWithdrawable, useSymbol, useToTokens } from '../../hooks/useData'
 export interface WithdrawInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
+  safetyMargin: number;
 }
 
 /**
@@ -27,7 +28,11 @@ export interface WithdrawInteractionModalProps {
  * @see WithdrawInteractionModalProps
  */
 
-export default function WithdrawInteractionModal({ show, toggleShow }: WithdrawInteractionModalProps): JSX.Element {
+export default function WithdrawInteractionModal({
+  show,
+  toggleShow,
+  safetyMargin
+}: WithdrawInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
@@ -50,7 +55,11 @@ export default function WithdrawInteractionModal({ show, toggleShow }: WithdrawI
       show={show}
       toggleShow={toggleShow}>
       <>
-        {poolTokenType === PoolTokenType.Collateral && (<RiskMetrics changeCollateral={-val} />)}
+        {poolTokenType === PoolTokenType.Collateral && (
+          <RiskMetrics
+            changeCollateral={-val}
+            safetyMargin={safetyMargin} />
+        )}
         <InputAmount
           val={val}
           setVal={setVal}

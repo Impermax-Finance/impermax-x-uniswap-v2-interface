@@ -13,6 +13,7 @@ interface Props {
   changeBorrowedB?: number;
   changeCollateral?: number;
   hideIfNull?: boolean;
+  safetyMargin: number;
 }
 
 /**
@@ -23,7 +24,8 @@ const RiskMetrics = ({
   changeBorrowedA,
   changeBorrowedB,
   changeCollateral,
-  hideIfNull
+  hideIfNull,
+  safetyMargin
 } : Props): JSX.Element | null => {
   const changes =
     changeBorrowedA ||
@@ -71,19 +73,21 @@ const RiskMetrics = ({
         <DetailListItem
           title='New Liquidation Prices'
           tooltip={liquidationTooltip}>
-          <LiquidationPrices />
+          <LiquidationPrices safetyMargin={safetyMargin} />
           <ArrowRightIcon
             className={clsx(
               'w-6',
               'h-6'
             )} />
-          <LiquidationPrices changes={changes} />
+          <LiquidationPrices
+            changes={changes}
+            safetyMargin={safetyMargin} />
         </DetailListItem>
       ) : (
         <DetailListItem
           title='Liquidation Prices'
           tooltip={liquidationTooltip}>
-          <LiquidationPrices />
+          <LiquidationPrices safetyMargin={safetyMargin} />
         </DetailListItem>
       )}
       <CurrentPrice />

@@ -22,6 +22,7 @@ interface Props {
   collateralSymbol: string;
   tokenAIconPath: string;
   tokenBIconPath: string;
+  safetyMargin: number;
 }
 
 const AccountLendingPoolLPRow = ({
@@ -31,7 +32,8 @@ const AccountLendingPoolLPRow = ({
   tokenBBorrowed,
   collateralSymbol,
   tokenAIconPath,
-  tokenBIconPath
+  tokenBIconPath,
+  safetyMargin
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -129,18 +131,22 @@ const AccountLendingPoolLPRow = ({
       </Row>
       <DepositInteractionModal
         show={showDepositModal}
-        toggleShow={toggleDepositModal} />
+        toggleShow={toggleDepositModal}
+        safetyMargin={safetyMargin} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
-        toggleShow={toggleWithdrawModal} />
+        toggleShow={toggleWithdrawModal}
+        safetyMargin={safetyMargin} />
       <LeverageInteractionModal
         show={showLeverageModal}
-        toggleShow={toggleLeverageModal} />
+        toggleShow={toggleLeverageModal}
+        safetyMargin={safetyMargin} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
         toggleShow={toggleDeleverageModal}
         tokenABorrowed={tokenABorrowed}
-        tokenBBorrowed={tokenBBorrowed} />
+        tokenBBorrowed={tokenBBorrowed}
+        safetyMargin={safetyMargin} />
     </>
   );
 };

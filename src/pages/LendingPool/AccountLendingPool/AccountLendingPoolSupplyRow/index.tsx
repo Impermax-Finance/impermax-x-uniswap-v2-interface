@@ -17,13 +17,15 @@ interface Props {
   collateralDeposited: number;
   tokenSymbol: string;
   tokenIconPath: string;
+  safetyMargin: number;
 }
 
 const AccountLendingPoolSupplyRow = ({
   collateralDepositedInUSD,
   collateralDeposited,
   tokenSymbol,
-  tokenIconPath
+  tokenIconPath,
+  safetyMargin
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -85,10 +87,12 @@ const AccountLendingPoolSupplyRow = ({
       </Row>
       <DepositInteractionModal
         show={showDepositModal}
-        toggleShow={toggleDepositModal} />
+        toggleShow={toggleDepositModal}
+        safetyMargin={safetyMargin} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
-        toggleShow={toggleWithdrawModal} />
+        toggleShow={toggleWithdrawModal}
+        safetyMargin={safetyMargin} />
     </>
   );
 };

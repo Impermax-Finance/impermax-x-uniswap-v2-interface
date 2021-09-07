@@ -1,7 +1,6 @@
 
 import {
   useTWAPPrice,
-  useSafetyMargin,
   useLiquidationPrices
 } from 'hooks/useData';
 import { formatFloat } from 'utils/format';
@@ -42,17 +41,20 @@ const LiquidationPrice = ({
 
 interface Props {
   changes?: Changes;
+  safetyMargin: number;
 }
 
 /**
  * Generates lending pool aggregate details.
  */
 
-const LiquidationPrices = ({ changes } : Props): JSX.Element => {
+const LiquidationPrices = ({
+  changes,
+  safetyMargin
+} : Props): JSX.Element => {
   // ray test touch <<
   const [price0, price1] = useLiquidationPrices(changes);
   const TWAPPrice = useTWAPPrice();
-  const safetyMargin = useSafetyMargin();
   // ray test touch >>
 
   if (!price0 && !price1) {

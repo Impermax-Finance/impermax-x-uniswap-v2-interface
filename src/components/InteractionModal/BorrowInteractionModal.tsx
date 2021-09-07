@@ -21,6 +21,7 @@ import FarmingAPY from './TransactionRecap/FarmingAPY';
 export interface BorrowInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
+  safetyMargin: number;
 }
 
 /**
@@ -29,7 +30,11 @@ export interface BorrowInteractionModalProps {
  * @see BorrowInteractionModalProps
  */
 
-export default function BorrowInteractionModal({ show, toggleShow }: BorrowInteractionModalProps): JSX.Element {
+export default function BorrowInteractionModal({
+  show,
+  toggleShow,
+  safetyMargin
+}: BorrowInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
@@ -54,7 +59,8 @@ export default function BorrowInteractionModal({ show, toggleShow }: BorrowInter
       <>
         <RiskMetrics
           changeBorrowedA={poolTokenType === PoolTokenType.BorrowableA ? val : 0}
-          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? val : 0} />
+          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? val : 0}
+          safetyMargin={safetyMargin} />
         <InputAmount
           val={val}
           setVal={setVal}

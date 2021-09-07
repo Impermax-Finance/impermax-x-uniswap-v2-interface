@@ -13,12 +13,14 @@ interface Props {
   collateralDepositedInUSD: number;
   debtInUSD: number;
   lpEquityInUSD: number;
+  safetyMargin: number;
 }
 
 const AccountLendingPoolDetailsLeverage = ({
   collateralDepositedInUSD,
   debtInUSD,
-  lpEquityInUSD
+  lpEquityInUSD,
+  safetyMargin
 }: Props): JSX.Element => {
   const leftItems = [
     {
@@ -58,7 +60,7 @@ const AccountLendingPoolDetailsLeverage = ({
           </DetailListItem>
         ))}
       </DetailList>
-      <RiskMetrics />
+      <RiskMetrics safetyMargin={safetyMargin} />
     </div>
   );
 };

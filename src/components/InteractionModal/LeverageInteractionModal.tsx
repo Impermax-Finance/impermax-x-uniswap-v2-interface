@@ -14,9 +14,14 @@ import { useSymbol, useDeadline, useMaxLeverage, useCurrentLeverage, useLeverage
 export interface LeverageInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
+  safetyMargin: number;
 }
 
-export default function LeverageInteractionModal({ show, toggleShow }: LeverageInteractionModalProps): JSX.Element {
+export default function LeverageInteractionModal({
+  show,
+  toggleShow,
+  safetyMargin
+}: LeverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
 
@@ -63,7 +68,8 @@ export default function LeverageInteractionModal({ show, toggleShow }: LeverageI
         <RiskMetrics
           changeBorrowedA={changeAmounts.bAmountA}
           changeBorrowedB={changeAmounts.bAmountB}
-          changeCollateral={changeAmounts.cAmount} />
+          changeCollateral={changeAmounts.cAmount}
+          safetyMargin={safetyMargin} />
         <InputAmount
           val={val}
           setVal={setVal}

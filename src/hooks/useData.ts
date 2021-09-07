@@ -57,12 +57,14 @@ export function useStoredBorrowIndex(poolTokenTypeArg?: PoolTokenType) : number 
   return storedBorrowIndex;
 }
 
+// ray test touch <<<
 export function useSafetyMargin() : number {
   const uniswapV2PairAddress = usePairAddress();
   const [safetyMargin, setSafetyMargin] = useState<number>(1);
   useSubgraphCallback(async subgraph => setSafetyMargin(await subgraph.getSafetyMargin(uniswapV2PairAddress)));
   return safetyMargin;
 }
+// ray test touch >>>
 
 export function useTokenPrice(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
