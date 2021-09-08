@@ -27,11 +27,11 @@ import {
   getLendingPoolTokenUtilizationRate,
   getLendingPoolTokenSupplyAPY,
   getLendingPoolTokenBorrowAPY,
-  getLendingPoolTokenIcon,
-  getLendingPoolTokenPrice
+  getLendingPoolTokenIconPath,
+  getLendingPoolTokenPriceInUSD
 } from 'utils/helpers/lending-pools';
 import { PARAMETERS } from 'utils/constants/links';
-import useLendingPools from 'services/hooks/use-lending-pools';
+import useLendingPool from 'services/hooks/use-lending-pool';
 import useFarmingPoolAddresses from 'services/hooks/use-farming-pool-addresses';
 import {
   PoolTokenType,
@@ -40,23 +40,16 @@ import {
 
 const getIMXPrice = (
   chainID: number,
-  lendingPools: Array<LendingPoolData>
+  imxLendingPool: LendingPoolData
 ) => {
   const imxAddress = IMX_ADDRESSES[chainID];
-  const wETHAddress = W_ETH_ADDRESSES[chainID];
-  const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[chainID];
-  const imxPair = getPairAddress(wETHAddress, imxAddress, uniswapV2FactoryAddress).toLowerCase();
-  const imxLendingPool = lendingPools.find(lendingPool => lendingPool.id === imxPair);
-  if (!imxLendingPool) {
-    throw new Error('Something went wrong!');
-  }
   const aAddress = imxLendingPool[PoolTokenType.BorrowableA].underlying.id;
   const poolTokenType =
     aAddress.toLowerCase() === imxAddress.toLowerCase() ?
       PoolTokenType.BorrowableA :
       PoolTokenType.BorrowableB;
 
-  return getLendingPoolTokenPrice(imxLendingPool, poolTokenType);
+  return getLendingPoolTokenPriceInUSD(imxLendingPool, poolTokenType);
 };
 
 const getRewardSpeed = (
@@ -98,31 +91,41 @@ const Borrowables = (): JSX.Element => {
   useErrorHandler(farmingPoolAddressesError);
 
   const {
-    isLoading: lendingPoolsLoading,
-    data: lendingPools,
-    error: lendingPoolsError
-  } = useLendingPools(selectedChainID);
-  useErrorHandler(lendingPoolsError);
+    isLoading: selectedLendingPoolLoading,
+    data: selectedLendingPool,
+    error: selectedLendingPoolError
+  } = useLendingPool(selectedUniswapV2PairAddress, selectedChainID);
+  useErrorHandler(selectedLendingPoolError);
+
+  const imxAddress = IMX_ADDRESSES[selectedChainID];
+  const wETHAddress = W_ETH_ADDRESSES[selectedChainID];
+  const uniswapV2FactoryAddress = UNISWAP_V2_FACTORY_ADDRESSES[selectedChainID];
+  const imxPairAddress = getPairAddress(wETHAddress, imxAddress, uniswapV2FactoryAddress);
+  const {
+    isLoading: imxLendingPoolLoading,
+    data: imxLendingPool,
+    error: imxLendingPoolError
+  } = useLendingPool(imxPairAddress, selectedChainID);
+  useErrorHandler(imxLendingPoolError);
 
   // TODO: should use skeleton loaders
-  if (lendingPoolsLoading) {
+  if (selectedLendingPoolLoading) {
+    return <>Loading...</>;
+  }
+  if (imxLendingPoolLoading) {
     return <>Loading...</>;
   }
   if (farmingPoolAddressesLoading) {
     return <>Loading...</>;
   }
-  if (lendingPools === undefined) {
+  if (imxLendingPool === undefined) {
     throw new Error('Something went wrong!');
   }
-
-  const lowerCasedSelectedUniswapV2PairAddress = selectedUniswapV2PairAddress.toLowerCase();
-  const selectedLendingPool =
-    lendingPools.find(lendingPool => lendingPool.id === lowerCasedSelectedUniswapV2PairAddress);
   if (selectedLendingPool === undefined) {
     throw new Error('Something went wrong!');
   }
 
-  const imxPrice = getIMXPrice(selectedChainID, lendingPools);
+  const imxPrice = getIMXPrice(selectedChainID, imxLendingPool);
 
   const renderBorrowable = (poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB) => {
     const tokenName = getLendingPoolTokenName(selectedLendingPool, poolTokenType, selectedChainID);
@@ -132,7 +135,7 @@ const Borrowables = (): JSX.Element => {
     const tokenUtilizationRate = getLendingPoolTokenUtilizationRate(selectedLendingPool, poolTokenType);
     const tokenSupplyAPY = getLendingPoolTokenSupplyAPY(selectedLendingPool, poolTokenType);
     const tokenBorrowAPY = getLendingPoolTokenBorrowAPY(selectedLendingPool, poolTokenType);
-    const tokenIcon = getLendingPoolTokenIcon(selectedLendingPool, poolTokenType);
+    const tokenIcon = getLendingPoolTokenIconPath(selectedLendingPool, poolTokenType);
 
     const rewardSpeed = getRewardSpeed(selectedLendingPool, poolTokenType);
     let farmingAPY;

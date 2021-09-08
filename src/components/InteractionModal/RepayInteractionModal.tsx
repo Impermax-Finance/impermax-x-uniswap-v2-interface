@@ -8,7 +8,7 @@ import InputAmount from '../InputAmount';
 import InteractionButton from '../InteractionButton';
 import useApprove from '../../hooks/useApprove';
 import useRepay from '../../hooks/useRepay';
-import { useSymbol, useAvailableBalance, useBorrowed, useToBigNumber } from '../../hooks/useData';
+import { useSymbol, useAvailableBalance, useToBigNumber } from '../../hooks/useData';
 
 /**
  * Props for the deposit interaction modal.
@@ -18,24 +18,30 @@ import { useSymbol, useAvailableBalance, useBorrowed, useToBigNumber } from '../
 export interface RepayInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
+  tokenBorrowed: number;
+  safetyMargin: number;
 }
 
 /**
- * Styled component for the norrow modal.
+ * Styled component for the narrow modal.
  * @param param0 any Props for component
  * @see RepayInteractionModalProps
  */
 
-export default function RepayInteractionModal({ show, toggleShow }: RepayInteractionModalProps): JSX.Element {
+export default function RepayInteractionModal({
+  show,
+  toggleShow,
+  tokenBorrowed,
+  safetyMargin
+}: RepayInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
   const availableBalance = useAvailableBalance();
-  const borrowed = useBorrowed();
 
   const amount = useToBigNumber(val);
-  const invalidInput = val > Math.min(availableBalance, borrowed);
+  const invalidInput = val > Math.min(availableBalance, tokenBorrowed);
   const [approvalState, onApprove] = useApprove(ApprovalType.UNDERLYING, amount, invalidInput);
   const [repayState, repay] = useRepay(approvalState, amount, invalidInput);
   const onRepay = async () => {
@@ -52,13 +58,14 @@ export default function RepayInteractionModal({ show, toggleShow }: RepayInterac
       <>
         <RiskMetrics
           changeBorrowedA={poolTokenType === PoolTokenType.BorrowableA ? -val : 0}
-          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? -val : 0} />
+          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? -val : 0}
+          safetyMargin={safetyMargin} />
         <InputAmount
           val={val}
           setVal={setVal}
           suffix={symbol}
           maxTitle='Available'
-          max={Math.min(availableBalance, borrowed)} />
+          max={Math.min(availableBalance, tokenBorrowed)} />
         <Row className='interaction-row'>
           <Col xs={6}>
             <InteractionButton

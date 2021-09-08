@@ -21,9 +21,14 @@ import { useAddLiquidityUrl } from '../../hooks/useUrlGenerator';
 export interface DepositInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
+  safetyMargin: number;
 }
 
-export default function DepositInteractionModal({ show, toggleShow }: DepositInteractionModalProps): JSX.Element {
+export default function DepositInteractionModal({
+  show,
+  toggleShow,
+  safetyMargin
+}: DepositInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
@@ -72,9 +77,12 @@ export default function DepositInteractionModal({ show, toggleShow }: DepositInt
       show={show}
       toggleShow={toggleShow}>
       <>
-        {poolTokenType === PoolTokenType.Collateral && (<RiskMetrics
-          changeCollateral={val}
-          hideIfNull={true} />)}
+        {poolTokenType === PoolTokenType.Collateral && (
+          <RiskMetrics
+            changeCollateral={val}
+            hideIfNull={true}
+            safetyMargin={safetyMargin} />
+        )}
         <InputAmount
           val={val}
           setVal={setVal}

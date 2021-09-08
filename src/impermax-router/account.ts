@@ -78,20 +78,10 @@ export async function initializeDeposited(
 
   return (await this.normalize(uniswapV2PairAddress, poolTokenType, balance)) * exchangeRate;
 }
-
 export async function getDeposited(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.deposited) cache.deposited = this.initializeDeposited(uniswapV2PairAddress, poolTokenType);
   return cache.deposited;
-}
-export async function getDepositedUSD(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  poolTokenType: PoolTokenType
-) : Promise<number> {
-  const deposited = await this.getDeposited(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return deposited * tokenPrice;
 }
 
 // Borrowed
@@ -107,60 +97,10 @@ export async function initializeBorrowed(
   const borrowRate = await this.subgraph.getBorrowRate(uniswapV2PairAddress, poolTokenType);
   return storedAmount * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
 }
-
 export async function getBorrowed(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.borrowed) cache.borrowed = this.initializeBorrowed(uniswapV2PairAddress, poolTokenType);
   return cache.borrowed;
-}
-export async function getBorrowedUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const borrowed = await this.getBorrowed(uniswapV2PairAddress, poolTokenType);
-  const tokenPrice = await this.subgraph.getTokenPrice(uniswapV2PairAddress, poolTokenType);
-  return borrowed * tokenPrice;
-}
-
-// Balance
-export async function getBalanceUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const depositedAUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const depositedBUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const depositedCUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.Collateral);
-  return depositedAUSD + depositedBUSD + depositedCUSD;
-}
-
-// Supplied
-export async function getSuppliedUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const depositedAUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const depositedBUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  return depositedAUSD + depositedBUSD;
-}
-
-// Debt
-export async function getDebtUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const borrowedAUSD = await this.getBorrowedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const borrowedBUSD = await this.getBorrowedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  return borrowedAUSD + borrowedBUSD;
-}
-
-// Equity
-export async function getEquityUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const balanceUSD = await this.getBalanceUSD(uniswapV2PairAddress);
-  const debtUSD = await this.getDebtUSD(uniswapV2PairAddress);
-  return balanceUSD - debtUSD;
-}
-export async function getLPEquityUSD(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const collateralUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const debtUSD = await this.getDebtUSD(uniswapV2PairAddress);
-  return collateralUSD - debtUSD;
-}
-
-// Debt
-export async function getAccountAPY(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const depositedAUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const depositedBUSD = await this.getDepositedUSD(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const totalSupplied = depositedAUSD + depositedBUSD;
-  const supplyAPYA = await this.subgraph.getSupplyAPY(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const supplyAPYB = await this.subgraph.getSupplyAPY(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  return totalSupplied > 0 ? (depositedAUSD * supplyAPYA + depositedBUSD * supplyAPYB) / totalSupplied : 0;
 }
 
 // Values
@@ -217,9 +157,6 @@ export async function getNewLiquidationPrices(this: ImpermaxRouter, uniswapV2Pai
   const [priceSwingA, priceSwingB] = await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, changes);
   // eslint-disable-next-line no-negated-condition
   return !this.priceInverted ? [currentPrice / priceSwingB, currentPrice * priceSwingA] : [currentPrice / priceSwingA, currentPrice * priceSwingB];
-}
-export async function getLiquidationPriceSwings(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
-  return await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, NO_CHANGES);
 }
 export async function getLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   return await this.getNewLiquidationPrices(uniswapV2PairAddress, NO_CHANGES);

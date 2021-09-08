@@ -17,13 +17,12 @@ const Footer = React.forwardRef<Ref, Props>(({
     ref={ref}
     className={clsx(
       'border-t',
-      'bg-IMPERMAXAlabaster',
+      'bg-impermaxBlackHaze',
       className
     )}
     aria-labelledby='footerHeading'
     {...rest}>
     <h2
-      id='footerHeading'
       className='sr-only'>
       Footer
     </h2>

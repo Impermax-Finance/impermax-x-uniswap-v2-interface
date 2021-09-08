@@ -53,7 +53,7 @@ const useFarmingPoolAddresses = (
       borrowableAAddress,
       'borrowTracker'
     ],
-    library ?
+    (borrowableAAddress && library) ?
       genericFetcher<string>(library, BorrowableJSON.abi) :
       Promise.resolve,
     {
@@ -72,7 +72,7 @@ const useFarmingPoolAddresses = (
       borrowableBAddress,
       'borrowTracker'
     ],
-    library ?
+    (borrowableAAddress && library) ?
       genericFetcher<string>(library, BorrowableJSON.abi) :
       Promise.resolve,
     {

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import clsx from 'clsx';
 import { useMeasure } from 'react-use';
 
@@ -16,7 +15,7 @@ const Layout = ({
   return (
     <div
       style={{
-        paddingTop: LAYOUT.appBarHeight
+        paddingTop: LAYOUT.APP_BAR_HEIGHT
       }}
       className={clsx(
         'bg-impermaxBlackHaze',
@@ -26,7 +25,7 @@ const Layout = ({
       )}
       {...rest}>
       <AppBar
-        appBarHeight={LAYOUT.appBarHeight}
+        appBarHeight={LAYOUT.APP_BAR_HEIGHT}
         className={clsx(
           'fixed',
           'top-0',

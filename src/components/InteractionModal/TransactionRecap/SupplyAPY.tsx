@@ -8,10 +8,10 @@ export default function SupplyAPY({ amount }: { amount: number }): JSX.Element |
   const poolTokenType = usePoolToken();
   if (poolTokenType === PoolTokenType.Collateral) return null;
 
-  // TODO: <
+  // TODO: <<
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const supplyAPY = useNextSupplyAPY(amount);
-  // TODO: >
+  // TODO: >>
 
   return (
     <Row>

@@ -223,15 +223,7 @@ class ImpermaxRouter {
   public getTokenBalance = account.getTokenBalance;
   public getAvailableBalance = account.getAvailableBalance;
   public getBorrowed = account.getBorrowed;
-  public getBorrowedUSD = account.getBorrowedUSD;
   public getDeposited = account.getDeposited;
-  public getDepositedUSD = account.getDepositedUSD;
-  public getBalanceUSD = account.getBalanceUSD;
-  public getSuppliedUSD = account.getSuppliedUSD;
-  public getDebtUSD = account.getDebtUSD;
-  public getEquityUSD = account.getEquityUSD;
-  public getLPEquityUSD = account.getLPEquityUSD;
-  public getAccountAPY = account.getAccountAPY;
   public getValuesFromPrice = account.getValuesFromPrice;
   public getValues = account.getValues;
   public getMarketValues = account.getMarketValues;
@@ -239,7 +231,6 @@ class ImpermaxRouter {
   public getNewLiquidationPriceSwings = account.getNewLiquidationPriceSwings;
   public getNewLiquidationPrices = account.getNewLiquidationPrices;
   public getLeverage = account.getLeverage;
-  public getLiquidationPriceSwings = account.getLiquidationPriceSwings;
   public getLiquidationPrices = account.getLiquidationPrices;
   public getMaxWithdrawable = account.getMaxWithdrawable;
   public getMaxBorrowable = account.getMaxBorrowable;

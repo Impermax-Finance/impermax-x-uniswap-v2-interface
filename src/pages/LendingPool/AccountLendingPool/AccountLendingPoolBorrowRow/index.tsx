@@ -1,31 +1,41 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import { useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
-import { PoolTokenType } from '../../../types/interfaces';
-import InlineAccountTokenInfo from './InlineAccountTokenInfo';
-import RepayInteractionModal from '../../../components/InteractionModal/RepayInteractionModal';
-import { useBorrowed, useSymbol, useBorrowedUSD, useDepositedUSD } from '../../../hooks/useData';
-import { useTokenIcon } from '../../../hooks/useUrlGenerator';
-import DisabledButtonHelper from '../../../components/DisabledButtonHelper';
-import BorrowInteractionModal from '../../../components/InteractionModal/BorrowInteractionModal';
+import {
+  Row,
+  Col,
+  Button
+} from 'react-bootstrap';
 
-export default function AccountLendingPoolBorrowRow(): JSX.Element {
-  const symbol = useSymbol();
-  const symbolLP = useSymbol(PoolTokenType.Collateral);
-  const borrowed = useBorrowed();
-  const depositedUSD = useDepositedUSD(PoolTokenType.Collateral);
-  const borrowedUSD = useBorrowedUSD();
-  const tokenIcon = useTokenIcon();
+import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
+import RepayInteractionModal from 'components/InteractionModal/RepayInteractionModal';
+import DisabledButtonHelper from 'components/DisabledButtonHelper';
+import BorrowInteractionModal from 'components/InteractionModal/BorrowInteractionModal';
 
+interface Props {
+  collateralDepositedInUSD: number;
+  tokenBorrowedInUSD: number;
+  tokenBorrowed: number;
+  tokenSymbol: string;
+  collateralSymbol: string;
+  tokenIconPath: string;
+  safetyMargin: number;
+}
+
+const AccountLendingPoolBorrowRow = ({
+  collateralDepositedInUSD,
+  tokenBorrowedInUSD,
+  tokenBorrowed,
+  tokenSymbol,
+  collateralSymbol,
+  tokenIconPath,
+  safetyMargin
+}: Props): JSX.Element => {
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepayModal] = useState(false);
 
-  const borrowDisabledInfo = `You need to deposit ${symbolLP} as collateral in order to be able to borrow ${symbol}.`;
-  const repayDisabledInfo = `You haven't borrowed any ${symbol} yet.`;
+  const borrowDisabledInfo =
+    `You need to deposit ${collateralSymbol} as collateral in order to be able to borrow ${tokenSymbol}.`;
+  const repayDisabledInfo = `You haven't borrowed any ${tokenSymbol} yet.`;
 
   return (
     <>
@@ -35,11 +45,11 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
             <Col className='token-icon'>
               <img
                 className='inline-block'
-                src={tokenIcon}
+                src={tokenIconPath}
                 alt='' />
             </Col>
             <Col className='token-name'>
-              {`${symbol}`}
+              {`${tokenSymbol}`}
             </Col>
           </Row>
         </Col>
@@ -48,16 +58,16 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
           className='inline-account-token-info-container'>
           <InlineAccountTokenInfo
             name='Borrowed'
-            symbol={symbol}
-            value={borrowed}
-            valueUSD={borrowedUSD} />
+            symbol={tokenSymbol}
+            value={tokenBorrowed}
+            valueUSD={tokenBorrowedInUSD} />
         </Col>
         <Col
           md={5}
           className='btn-table'>
           <Row>
             <Col>
-              {depositedUSD > 0 ? (
+              {collateralDepositedInUSD > 0 ? (
                 <Button
                   variant='primary'
                   onClick={() => toggleBorrowModal(true)}>
@@ -70,7 +80,7 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
               )}
             </Col>
             <Col>
-              {borrowed > 0 ? (
+              {tokenBorrowed > 0 ? (
                 <Button
                   variant='primary'
                   onClick={() => toggleRepayModal(true)}>
@@ -87,10 +97,15 @@ export default function AccountLendingPoolBorrowRow(): JSX.Element {
       </Row>
       <BorrowInteractionModal
         show={showBorrowModal}
-        toggleShow={toggleBorrowModal} />
+        toggleShow={toggleBorrowModal}
+        safetyMargin={safetyMargin} />
       <RepayInteractionModal
         show={showRepayModal}
-        toggleShow={toggleRepayModal} />
+        toggleShow={toggleRepayModal}
+        tokenBorrowed={tokenBorrowed}
+        safetyMargin={safetyMargin} />
     </>
   );
-}
+};
+
+export default AccountLendingPoolBorrowRow;

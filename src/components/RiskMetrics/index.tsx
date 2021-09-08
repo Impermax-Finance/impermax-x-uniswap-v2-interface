@@ -1,74 +1,98 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
-import { formatLeverage } from '../../utils/format';
-import DetailsRow from '../DetailsRow';
-import { useCurrentLeverage } from '../../hooks/useData';
+import clsx from 'clsx';
+import { ArrowRightIcon } from '@heroicons/react/outline';
+
 import LiquidationPrices from './LiquidationPrices';
 import CurrentPrice from './CurrentPrice';
-import './index.scss';
+import DetailList, { DetailListItem } from 'components/DetailList';
+import { formatLeverage } from 'utils/format';
+import { useCurrentLeverage } from 'hooks/useData';
 
-interface RiskMetricsProps {
+interface Props {
   changeBorrowedA?: number;
   changeBorrowedB?: number;
   changeCollateral?: number;
   hideIfNull?: boolean;
+  safetyMargin: number;
 }
 
 /**
  * Generates lending pool aggregate details.
  */
 
-export default function RiskMetrics({ changeBorrowedA, changeBorrowedB, changeCollateral, hideIfNull } : RiskMetricsProps): JSX.Element {
-  const changes = changeBorrowedA || changeBorrowedB || changeCollateral ? {
-    changeBorrowedA: changeBorrowedA ? changeBorrowedA : 0,
-    changeBorrowedB: changeBorrowedB ? changeBorrowedB : 0,
-    changeCollateral: changeCollateral ? changeCollateral : 0
-  } : null;
+const RiskMetrics = ({
+  changeBorrowedA,
+  changeBorrowedB,
+  changeCollateral,
+  hideIfNull,
+  safetyMargin
+} : Props): JSX.Element | null => {
+  const changes =
+    changeBorrowedA ||
+    changeBorrowedB ||
+    changeCollateral ?
+      {
+        changeBorrowedA: changeBorrowedA ?? 0,
+        changeBorrowedB: changeBorrowedB ?? 0,
+        changeCollateral: changeCollateral ?? 0
+      } :
+      undefined;
 
+  // ray test touch <<
   const currentLeverage = useCurrentLeverage();
   const newLeverage = useCurrentLeverage(changes);
-
-  const leverageExplanation = 'Calculated as: Total Collateral / LP Equity';
-  const liquidationExplanation = 'If the price crosses these boundaries, your account will become liquidatable';
+  // ray test touch >>
 
   if (hideIfNull && currentLeverage === 1) return null;
 
+  const leverageTooltip = 'Calculated as: Total Collateral / LP Equity';
+  const liquidationTooltip = 'If the price crosses these boundaries, your account will become liquidatable.';
+
   return (
-    <div>
+    <DetailList>
       {changes ? (
-        <DetailsRow
-          name='New Leverage'
-          explanation={leverageExplanation}>
-          {formatLeverage(currentLeverage)}
-          <i className='change-arrow' />
-          {formatLeverage(newLeverage)}
-        </DetailsRow>
+        <DetailListItem
+          title='New Leverage'
+          tooltip={leverageTooltip}>
+          <span>{formatLeverage(currentLeverage)}</span>
+          <ArrowRightIcon
+            className={clsx(
+              'w-6',
+              'h-6'
+            )} />
+          <span>{formatLeverage(newLeverage)}</span>
+        </DetailListItem>
       ) : (
-        <DetailsRow
-          name='Current Leverage'
-          explanation={leverageExplanation}>
-          {formatLeverage(currentLeverage)}
-        </DetailsRow>
+        <DetailListItem
+          title='Current Leverage'
+          tooltip={leverageTooltip}>
+          <span>{formatLeverage(currentLeverage)}</span>
+        </DetailListItem>
       )}
       {changes ? (
-        <DetailsRow
-          name='New Liquidation Prices'
-          explanation={liquidationExplanation}>
-          <LiquidationPrices />
-          <i className='change-arrow' />
-          <LiquidationPrices changes={changes} />
-        </DetailsRow>
+        <DetailListItem
+          title='New Liquidation Prices'
+          tooltip={liquidationTooltip}>
+          <LiquidationPrices safetyMargin={safetyMargin} />
+          <ArrowRightIcon
+            className={clsx(
+              'w-6',
+              'h-6'
+            )} />
+          <LiquidationPrices
+            changes={changes}
+            safetyMargin={safetyMargin} />
+        </DetailListItem>
       ) : (
-        <DetailsRow
-          name='Liquidation Prices'
-          explanation={liquidationExplanation}>
-          <LiquidationPrices />
-        </DetailsRow>
+        <DetailListItem
+          title='Liquidation Prices'
+          tooltip={liquidationTooltip}>
+          <LiquidationPrices safetyMargin={safetyMargin} />
+        </DetailListItem>
       )}
       <CurrentPrice />
-    </div>
+    </DetailList>
   );
-}
+};
+
+export default RiskMetrics;

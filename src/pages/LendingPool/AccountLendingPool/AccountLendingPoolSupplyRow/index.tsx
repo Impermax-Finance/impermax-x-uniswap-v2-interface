@@ -1,28 +1,37 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import { useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
-import InlineAccountTokenInfo from './InlineAccountTokenInfo';
-import DepositInteractionModal from '../../../components/InteractionModal/DepositInteractionModal';
-import { useSymbol, useDeposited, useDepositedUSD, useMaxWithdrawable } from '../../../hooks/useData';
-import { useTokenIcon } from '../../../hooks/useUrlGenerator';
-import DisabledButtonHelper from '../../../components/DisabledButtonHelper';
-import WithdrawInteractionModal from '../../../components/InteractionModal/WithdrawInteractionModal';
+import {
+  Row,
+  Col,
+  Button
+} from 'react-bootstrap';
 
-export default function AccountLendingPoolSupplyRow(): JSX.Element {
-  const symbol = useSymbol();
-  const deposited = useDeposited();
-  const depositedUSD = useDepositedUSD();
-  const tokenIcon = useTokenIcon();
+import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
+import DepositInteractionModal from 'components/InteractionModal/DepositInteractionModal';
+import DisabledButtonHelper from 'components/DisabledButtonHelper';
+import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
+import { useMaxWithdrawable } from 'hooks/useData';
 
+interface Props {
+  collateralDepositedInUSD: number;
+  collateralDeposited: number;
+  tokenSymbol: string;
+  tokenIconPath: string;
+  safetyMargin: number;
+}
+
+const AccountLendingPoolSupplyRow = ({
+  collateralDepositedInUSD,
+  collateralDeposited,
+  tokenSymbol,
+  tokenIconPath,
+  safetyMargin
+}: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
 
   const maxWithdrawable = useMaxWithdrawable();
-  const withdrawDisabledInfo = `You haven't supplied any ${symbol} yet.`;
+  const withdrawDisabledInfo = `You haven't supplied any ${tokenSymbol} yet.`;
 
   return (
     <>
@@ -32,11 +41,11 @@ export default function AccountLendingPoolSupplyRow(): JSX.Element {
             <Col className='token-icon'>
               <img
                 className='inline-block'
-                src={tokenIcon}
+                src={tokenIconPath}
                 alt='' />
             </Col>
             <Col className='token-name'>
-              {`${symbol}`}
+              {`${tokenSymbol}`}
             </Col>
           </Row>
         </Col>
@@ -45,9 +54,9 @@ export default function AccountLendingPoolSupplyRow(): JSX.Element {
           className='inline-account-token-info-container'>
           <InlineAccountTokenInfo
             name='Supplied'
-            symbol={symbol}
-            value={deposited}
-            valueUSD={depositedUSD} />
+            symbol={tokenSymbol}
+            value={collateralDeposited}
+            valueUSD={collateralDepositedInUSD} />
         </Col>
         <Col
           md={5}
@@ -78,10 +87,14 @@ export default function AccountLendingPoolSupplyRow(): JSX.Element {
       </Row>
       <DepositInteractionModal
         show={showDepositModal}
-        toggleShow={toggleDepositModal} />
+        toggleShow={toggleDepositModal}
+        safetyMargin={safetyMargin} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
-        toggleShow={toggleWithdrawModal} />
+        toggleShow={toggleWithdrawModal}
+        safetyMargin={safetyMargin} />
     </>
   );
-}
+};
+
+export default AccountLendingPoolSupplyRow;

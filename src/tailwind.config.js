@@ -88,6 +88,78 @@ const IMPERMAX_MIRAGE = Object.freeze({
   800: '#0a0e17',
   900: '#080c13'
 });
+const IMPERMAX_EMERALD = Object.freeze({
+  50: '#f3fcf9',
+  100: '#e6faf2',
+  200: '#c1f1e0',
+  300: '#9be9cd',
+  400: '#50d9a7',
+  500: '#05c881',
+  600: '#05b474',
+  700: '#049661',
+  800: '#03784d',
+  900: '#02623f'
+});
+const IMPERMAX_INCH_WORM = Object.freeze({
+  50: '#fafdf2',
+  100: '#f4fbe6',
+  200: '#e4f5bf',
+  300: '#d4ef99',
+  400: '#b3e44d',
+  500: '#93d800',
+  600: '#84c200',
+  700: '#6ea200',
+  800: '#588200',
+  900: '#486a00'
+});
+const IMPERMAX_GOLD_TIPS = Object.freeze({
+  50: '#fdfcf2',
+  100: '#fbf9e6',
+  200: '#f5f0bf',
+  300: '#efe699',
+  400: '#e4d44d',
+  500: '#d8c100',
+  600: '#c2ae00',
+  700: '#a29100',
+  800: '#827400',
+  900: '#6a5f00'
+});
+const IMPERMAX_TREE_POPPY = Object.freeze({
+  50: '#fefaf3',
+  100: '#fdf4e6',
+  200: '#fbe4c1',
+  300: '#f8d49b',
+  400: '#f3b350',
+  500: '#ee9305',
+  600: '#d68405',
+  700: '#b36e04',
+  800: '#8f5803',
+  900: '#754802'
+});
+const IMPERMAX_TRINIDAD = Object.freeze({
+  50: '#fef7f3',
+  100: '#fdeee6',
+  200: '#fbd5c1',
+  300: '#f8bc9b',
+  400: '#f38950',
+  500: '#ee5705',
+  600: '#d64e05',
+  700: '#b34104',
+  800: '#8f3403',
+  900: '#752b02'
+});
+const IMPERMAX_MILANO_RED = Object.freeze({
+  50: '#fbf2f2',
+  100: '#f8e6e6',
+  200: '#edc0c0',
+  300: '#e39b9b',
+  400: '#cd4f4f',
+  500: '#b80404',
+  600: '#a60404',
+  700: '#8a0303',
+  800: '#6e0202',
+  900: '#5a0202'
+});
 
 module.exports = {
   purge: [
@@ -141,7 +213,6 @@ module.exports = {
           200: IMPERMAX_ASTRAL[200],
           300: IMPERMAX_ASTRAL[300],
           400: IMPERMAX_ASTRAL[400],
-          500: IMPERMAX_ASTRAL[500],
           DEFAULT: IMPERMAX_ASTRAL[500],
           600: IMPERMAX_ASTRAL[600],
           700: IMPERMAX_ASTRAL[700],
@@ -154,7 +225,6 @@ module.exports = {
           200: IMPERMAX_MERCURY[200],
           300: IMPERMAX_MERCURY[300],
           400: IMPERMAX_MERCURY[400],
-          500: IMPERMAX_MERCURY[500],
           DEFAULT: IMPERMAX_MERCURY[500],
           600: IMPERMAX_MERCURY[600],
           700: IMPERMAX_MERCURY[700],
@@ -167,7 +237,6 @@ module.exports = {
           200: IMPERMAX_MIRAGE[200],
           300: IMPERMAX_MIRAGE[300],
           400: IMPERMAX_MIRAGE[400],
-          500: IMPERMAX_MIRAGE[500],
           DEFAULT: IMPERMAX_MIRAGE[500],
           600: IMPERMAX_MIRAGE[600],
           700: IMPERMAX_MIRAGE[700],
@@ -180,12 +249,83 @@ module.exports = {
           200: IMPERMAX_CORNFLOWER[200],
           300: IMPERMAX_CORNFLOWER[300],
           400: IMPERMAX_CORNFLOWER[400],
-          500: IMPERMAX_CORNFLOWER[500],
           DEFAULT: IMPERMAX_CORNFLOWER[500],
           600: IMPERMAX_CORNFLOWER[600],
           700: IMPERMAX_CORNFLOWER[700],
           800: IMPERMAX_CORNFLOWER[800],
           900: IMPERMAX_CORNFLOWER[900]
+        },
+        impermaxEmerald: {
+          50: IMPERMAX_EMERALD[50],
+          100: IMPERMAX_EMERALD[100],
+          200: IMPERMAX_EMERALD[200],
+          300: IMPERMAX_EMERALD[300],
+          400: IMPERMAX_EMERALD[400],
+          DEFAULT: IMPERMAX_EMERALD[500],
+          600: IMPERMAX_EMERALD[600],
+          700: IMPERMAX_EMERALD[700],
+          800: IMPERMAX_EMERALD[800],
+          900: IMPERMAX_EMERALD[900]
+        },
+        impermaxInchWorm: {
+          50: IMPERMAX_INCH_WORM[50],
+          100: IMPERMAX_INCH_WORM[100],
+          200: IMPERMAX_INCH_WORM[200],
+          300: IMPERMAX_INCH_WORM[300],
+          400: IMPERMAX_INCH_WORM[400],
+          DEFAULT: IMPERMAX_INCH_WORM[500],
+          600: IMPERMAX_INCH_WORM[600],
+          700: IMPERMAX_INCH_WORM[700],
+          800: IMPERMAX_INCH_WORM[800],
+          900: IMPERMAX_INCH_WORM[900]
+        },
+        impermaxGoldTips: {
+          50: IMPERMAX_GOLD_TIPS[50],
+          100: IMPERMAX_GOLD_TIPS[100],
+          200: IMPERMAX_GOLD_TIPS[200],
+          300: IMPERMAX_GOLD_TIPS[300],
+          400: IMPERMAX_GOLD_TIPS[400],
+          DEFAULT: IMPERMAX_GOLD_TIPS[500],
+          600: IMPERMAX_GOLD_TIPS[600],
+          700: IMPERMAX_GOLD_TIPS[700],
+          800: IMPERMAX_GOLD_TIPS[800],
+          900: IMPERMAX_GOLD_TIPS[900]
+        },
+        impermaxTreePoppy: {
+          50: IMPERMAX_TREE_POPPY[50],
+          100: IMPERMAX_TREE_POPPY[100],
+          200: IMPERMAX_TREE_POPPY[200],
+          300: IMPERMAX_TREE_POPPY[300],
+          400: IMPERMAX_TREE_POPPY[400],
+          DEFAULT: IMPERMAX_TREE_POPPY[500],
+          600: IMPERMAX_TREE_POPPY[600],
+          700: IMPERMAX_TREE_POPPY[700],
+          800: IMPERMAX_TREE_POPPY[800],
+          900: IMPERMAX_TREE_POPPY[900]
+        },
+        impermaxTrinidad: {
+          50: IMPERMAX_TRINIDAD[50],
+          100: IMPERMAX_TRINIDAD[100],
+          200: IMPERMAX_TRINIDAD[200],
+          300: IMPERMAX_TRINIDAD[300],
+          400: IMPERMAX_TRINIDAD[400],
+          DEFAULT: IMPERMAX_TRINIDAD[500],
+          600: IMPERMAX_TRINIDAD[600],
+          700: IMPERMAX_TRINIDAD[700],
+          800: IMPERMAX_TRINIDAD[800],
+          900: IMPERMAX_TRINIDAD[900]
+        },
+        impermaxMilanoRed: {
+          50: IMPERMAX_MILANO_RED[50],
+          100: IMPERMAX_MILANO_RED[100],
+          200: IMPERMAX_MILANO_RED[200],
+          300: IMPERMAX_MILANO_RED[300],
+          400: IMPERMAX_MILANO_RED[400],
+          DEFAULT: IMPERMAX_MILANO_RED[500],
+          600: IMPERMAX_MILANO_RED[600],
+          700: IMPERMAX_MILANO_RED[700],
+          800: IMPERMAX_MILANO_RED[800],
+          900: IMPERMAX_MILANO_RED[900]
         },
         primary: {
           50: IMPERMAX_JADE[50],

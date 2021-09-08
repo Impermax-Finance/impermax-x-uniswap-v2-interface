@@ -22,7 +22,7 @@ import {
   getLendingPoolTokenTotalBorrowInUSD,
   getLendingPoolTokenSupplyAPY,
   getLendingPoolTokenBorrowAPY,
-  getLendingPoolTokenIcon
+  getLendingPoolTokenIconPath
 } from 'utils/helpers/lending-pools';
 import {
   PAGES,
@@ -104,8 +104,8 @@ const LendingPoolListItem = ({
   const uniswapAPY = lendingPool.pair.uniswapAPY;
   const averageAPY = (tokenABorrowAPY + tokenBBorrowAPY - farmingPoolAPYA - farmingPoolAPYB) / 2;
   const leveragedAPY = uniswapAPY * LEVERAGE - averageAPY * (LEVERAGE - 1);
-  const tokenIconA = getLendingPoolTokenIcon(lendingPool, PoolTokenType.BorrowableA);
-  const tokenIconB = getLendingPoolTokenIcon(lendingPool, PoolTokenType.BorrowableB);
+  const tokenIconA = getLendingPoolTokenIconPath(lendingPool, PoolTokenType.BorrowableA);
+  const tokenIconB = getLendingPoolTokenIconPath(lendingPool, PoolTokenType.BorrowableB);
 
   return (
     <Link

@@ -33,7 +33,7 @@ export async function deposit(
       const tx = await this.router.mintCollateral(poolToken.address, amount, this.account, deadline, data);
       receipt = await tx.wait();
     } else {
-      const tx = this.router.mint(poolToken.address, amount, this.account, deadline);
+      const tx = await this.router.mint(poolToken.address, amount, this.account, deadline);
       receipt = await tx.wait();
     }
     onTransactionHash(receipt.transactionHash);

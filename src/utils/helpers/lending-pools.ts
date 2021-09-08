@@ -27,9 +27,16 @@ const getLendingPoolTokenName = (
 // TODO: double-check with `useSymbol`
 const getLendingPoolTokenSymbol = (
   lendingPool: LendingPoolData,
-  poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB,
+  poolTokenType: PoolTokenType,
   chainID: number
 ): string => {
+  if (poolTokenType === PoolTokenType.Collateral) {
+    const symbolA = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableA, chainID);
+    const symbolB = getLendingPoolTokenSymbol(lendingPool, PoolTokenType.BorrowableB, chainID);
+
+    return `${symbolA}-${symbolB}`;
+  }
+
   const wETHAddress = W_ETH_ADDRESSES[chainID];
   const lowerCasedWETHAddress = wETHAddress.toLowerCase();
   const underlyingAddress = lendingPool[poolTokenType].underlying.id;
@@ -56,7 +63,7 @@ const getLendingPoolTokenTotalSupplyInUSD = (
 
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
   const currentTotalSupply = supply * (1 + (Date.now() / 1000 - accrualTimestamp) * supplyRate);
-  const tokenPriceInUSD = getLendingPoolTokenPrice(lendingPool, poolTokenType);
+  const tokenPriceInUSD = getLendingPoolTokenPriceInUSD(lendingPool, poolTokenType);
 
   return currentTotalSupply * tokenPriceInUSD;
 };
@@ -69,7 +76,7 @@ const getLendingPoolTokenTotalBorrowInUSD = (
   const accrualTimestamp = parseFloat(lendingPool[poolTokenType].accrualTimestamp);
   const borrowRate = parseFloat(lendingPool[poolTokenType].borrowRate);
   const currentTotalBorrow = totalBorrows * (1 + (Date.now() / 1000 - accrualTimestamp) * borrowRate);
-  const tokenPriceInUSD = getLendingPoolTokenPrice(lendingPool, poolTokenType);
+  const tokenPriceInUSD = getLendingPoolTokenPriceInUSD(lendingPool, poolTokenType);
 
   // TODO: it's also from lendingPool[poolTokenType].totalBorrowsUSD. What is different?
   return currentTotalBorrow * tokenPriceInUSD;
@@ -108,7 +115,7 @@ const getLendingPoolTokenBorrowAPY = (
   return toAPY(borrowRate);
 };
 
-const getLendingPoolTokenIcon = (
+const getLendingPoolTokenIconPath = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType.BorrowableA | PoolTokenType.BorrowableB
 ): string => {
@@ -118,7 +125,7 @@ const getLendingPoolTokenIcon = (
   return `/assets/images/token-logos/${convertedUnderlyingAddress}.png`;
 };
 
-const getLendingPoolTokenPrice = (
+const getLendingPoolTokenPriceInUSD = (
   lendingPool: LendingPoolData,
   poolTokenType: PoolTokenType
 ): number => {
@@ -139,6 +146,6 @@ export {
   getLendingPoolTokenUtilizationRate,
   getLendingPoolTokenSupplyAPY,
   getLendingPoolTokenBorrowAPY,
-  getLendingPoolTokenIcon,
-  getLendingPoolTokenPrice
+  getLendingPoolTokenIconPath,
+  getLendingPoolTokenPriceInUSD
 };

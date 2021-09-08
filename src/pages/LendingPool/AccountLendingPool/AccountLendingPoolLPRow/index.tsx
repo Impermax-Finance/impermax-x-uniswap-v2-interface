@@ -1,43 +1,48 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import { useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
-import { PoolTokenType } from '../../../types/interfaces';
-import InlineAccountTokenInfo from './InlineAccountTokenInfo';
-import DepositInteractionModal from '../../../components/InteractionModal/DepositInteractionModal';
-import LeverageInteractionModal from '../../../components/InteractionModal/LeverageInteractionModal';
-import WithdrawInteractionModal from '../../../components/InteractionModal/WithdrawInteractionModal';
-import DeleverageInteractionModal from '../../../components/InteractionModal/DeleverageInteractionModal';
 import {
-  useDeposited,
-  useSymbol,
-  useDepositedUSD,
-  useMaxDeleverage
-} from '../../../hooks/useData';
-import { useTokenIcon } from '../../../hooks/useUrlGenerator';
-import DisabledButtonHelper from '../../../components/DisabledButtonHelper';
+  Row,
+  Col,
+  Button
+} from 'react-bootstrap';
 
-export default function AccountLendingPoolLPRow(): JSX.Element {
-  const symbol = useSymbol();
-  const deposited = useDeposited();
-  const depositedUSD = useDepositedUSD();
-  const tokenIconA = useTokenIcon(PoolTokenType.BorrowableA);
-  const tokenIconB = useTokenIcon(PoolTokenType.BorrowableB);
+import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
+import DepositInteractionModal from 'components/InteractionModal/DepositInteractionModal';
+import LeverageInteractionModal from 'components/InteractionModal/LeverageInteractionModal';
+import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
+import DeleverageInteractionModal from 'components/InteractionModal/DeleverageInteractionModal';
+import DisabledButtonHelper from 'components/DisabledButtonHelper';
+import { useMaxDeleverage } from 'hooks/useData';
 
+interface Props {
+  collateralDepositedInUSD: number;
+  collateralDeposited: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
+  collateralSymbol: string;
+  tokenAIconPath: string;
+  tokenBIconPath: string;
+  safetyMargin: number;
+}
+
+const AccountLendingPoolLPRow = ({
+  collateralDepositedInUSD,
+  collateralDeposited,
+  tokenABorrowed,
+  tokenBBorrowed,
+  collateralSymbol,
+  tokenAIconPath,
+  tokenBIconPath,
+  safetyMargin
+}: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
   const [showLeverageModal, toggleLeverageModal] = useState(false);
   const [showDeleverageModal, toggleDeleverageModal] = useState(false);
 
-  // TODO: <
-  // const maxWithdrawable = useMaxWithdrawable();
-  // TODO: >
   const maxDeleverage = useMaxDeleverage(0);
-  const withdrawDisabledInfo = `You haven't deposited any ${symbol} yet.`;
-  const leverageDisabledInfo = `You need to deposit the ${symbol} LP first in order to leverage it.`;
+  const withdrawDisabledInfo = `You haven't deposited any ${collateralSymbol} yet.`;
+  const leverageDisabledInfo = `You need to deposit the ${collateralSymbol} LP first in order to leverage it.`;
   const deleverageDisabledInfo = `You need to open a leveraged position in order to deleverage it.`;
 
   return (
@@ -48,15 +53,15 @@ export default function AccountLendingPoolLPRow(): JSX.Element {
             <Col className='token-icon icon-overlapped'>
               <img
                 className='inline-block'
-                src={tokenIconA}
+                src={tokenAIconPath}
                 alt='' />
               <img
                 className='inline-block'
-                src={tokenIconB}
+                src={tokenBIconPath}
                 alt='' />
             </Col>
             <Col className='token-name'>
-              {`${symbol} LP`}
+              {`${collateralSymbol} LP`}
             </Col>
           </Row>
         </Col>
@@ -66,8 +71,8 @@ export default function AccountLendingPoolLPRow(): JSX.Element {
           <InlineAccountTokenInfo
             name='Deposited'
             symbol='LP'
-            value={deposited}
-            valueUSD={depositedUSD} />
+            value={collateralDeposited}
+            valueUSD={collateralDepositedInUSD} />
         </Col>
         <Col
           md={5}
@@ -81,7 +86,7 @@ export default function AccountLendingPoolLPRow(): JSX.Element {
               </Button>
             </Col>
             <Col>
-              {depositedUSD > 0 ? (
+              {collateralDepositedInUSD > 0 ? (
                 <Button
                   variant='primary'
                   onClick={() => toggleWithdrawModal(true)}>
@@ -96,7 +101,7 @@ export default function AccountLendingPoolLPRow(): JSX.Element {
           </Row>
           <Row>
             <Col>
-              {depositedUSD > 0 ? (
+              {collateralDepositedInUSD > 0 ? (
                 <Button
                   variant='primary'
                   onClick={() => toggleLeverageModal(true)}>
@@ -126,16 +131,24 @@ export default function AccountLendingPoolLPRow(): JSX.Element {
       </Row>
       <DepositInteractionModal
         show={showDepositModal}
-        toggleShow={toggleDepositModal} />
+        toggleShow={toggleDepositModal}
+        safetyMargin={safetyMargin} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
-        toggleShow={toggleWithdrawModal} />
+        toggleShow={toggleWithdrawModal}
+        safetyMargin={safetyMargin} />
       <LeverageInteractionModal
         show={showLeverageModal}
-        toggleShow={toggleLeverageModal} />
+        toggleShow={toggleLeverageModal}
+        safetyMargin={safetyMargin} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
-        toggleShow={toggleDeleverageModal} />
+        toggleShow={toggleDeleverageModal}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed}
+        safetyMargin={safetyMargin} />
     </>
   );
-}
+};
+
+export default AccountLendingPoolLPRow;

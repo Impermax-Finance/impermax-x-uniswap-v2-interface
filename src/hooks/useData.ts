@@ -57,13 +57,6 @@ export function useStoredBorrowIndex(poolTokenTypeArg?: PoolTokenType) : number 
   return storedBorrowIndex;
 }
 
-export function useSafetyMargin() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [safetyMargin, setSafetyMargin] = useState<number>(1);
-  useSubgraphCallback(async subgraph => setSafetyMargin(await subgraph.getSafetyMargin(uniswapV2PairAddress)));
-  return safetyMargin;
-}
-
 export function useTokenPrice(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [tokenPrice, setTokenPrice] = useState<number>(null);
@@ -217,34 +210,6 @@ export function useAvailableReward() : number {
   return availableReward;
 }
 
-export function useDeposited(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [deposited, setDeposited] = useState<number>(0);
-  useRouterCallback(async router => setDeposited(await router.getDeposited(uniswapV2PairAddress, poolTokenType)));
-  return deposited;
-}
-
-export function useDepositedUSD(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [depositedUSD, setDepositedUSD] = useState<number>(0);
-  useRouterCallback(async router => setDepositedUSD(await router.getDepositedUSD(uniswapV2PairAddress, poolTokenType)));
-  return depositedUSD;
-}
-
-export function useBorrowed(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [borrowed, setBorrowed] = useState<number>(0);
-  useRouterCallback(async router => setBorrowed(await router.getBorrowed(uniswapV2PairAddress, poolTokenType)));
-  return borrowed;
-}
-
-export function useBorrowedUSD(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [borrowedUSD, setBorrowedUSD] = useState<number>(0);
-  useRouterCallback(async router => setBorrowedUSD(await router.getBorrowedUSD(uniswapV2PairAddress, poolTokenType)));
-  return borrowedUSD;
-}
-
 export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [availableBalance, setAvailableBalance] = useState<number>(0);
@@ -274,48 +239,6 @@ export function useLiquidationPrices(changes?: Changes) : [number, number] {
     );
   }, [changes]);
   return liquidationPrices;
-}
-
-export function useBalanceUSD() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [balanceUSD, setBalanceUSD] = useState<number>(0);
-  useRouterCallback(async router => setBalanceUSD(await router.getBalanceUSD(uniswapV2PairAddress)));
-  return balanceUSD;
-}
-
-export function useSuppliedUSD() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [suppliedUSD, setSuppliedUSD] = useState<number>(0);
-  useRouterCallback(async router => setSuppliedUSD(await router.getSuppliedUSD(uniswapV2PairAddress)));
-  return suppliedUSD;
-}
-
-export function useDebtUSD() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [debtUSD, setDebtUSD] = useState<number>(0);
-  useRouterCallback(async router => setDebtUSD(await router.getDebtUSD(uniswapV2PairAddress)));
-  return debtUSD;
-}
-
-export function useEquityUSD() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [equityUSD, setEquityUSD] = useState<number>(0);
-  useRouterCallback(async router => setEquityUSD(await router.getEquityUSD(uniswapV2PairAddress)));
-  return equityUSD;
-}
-
-export function useLPEquityUSD() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [LPEquityUSD, setLPEquityUSD] = useState<number>(0);
-  useRouterCallback(async router => setLPEquityUSD(await router.getLPEquityUSD(uniswapV2PairAddress)));
-  return LPEquityUSD;
-}
-
-export function useAccountAPY() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [accountAPY, setAccountAPY] = useState<number>(0);
-  useRouterCallback(async router => setAccountAPY(await router.getAccountAPY(uniswapV2PairAddress)));
-  return accountAPY;
 }
 
 export function useClaimHistory() : ClaimEvent[] {
