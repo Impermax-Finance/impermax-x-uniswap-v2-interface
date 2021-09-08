@@ -1,5 +1,4 @@
 
-// ray test touch <<<
 import * as React from 'react';
 import { createChart } from 'lightweight-charts';
 
@@ -40,4 +39,3 @@ const TVLChart = (): JSX.Element => {
 };
 
 export default TVLChart;
-// ray test touch >>>
