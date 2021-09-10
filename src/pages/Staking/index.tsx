@@ -9,13 +9,11 @@ import TVLChart from 'components/charts/TVLChart';
 
 const MD_WIDTH_72_CLASS = 'md:w-72';
 
-interface ContainerProps {
-  children: React.ReactNode;
-}
-
 const InternalContainer = ({
-  children
-}: ContainerProps) => (
+  children,
+  className,
+  ...rest
+}: React.ComponentPropsWithRef<'div'>) => (
   <div
     className={clsx(
       'md:flex',
@@ -23,8 +21,10 @@ const InternalContainer = ({
       'space-y-6',
       'md:space-y-0',
       'md:space-x-6',
-      'w-full'
-    )}>
+      'w-full',
+      className
+    )}
+    {...rest}>
     {children}
   </div>
 );
@@ -40,15 +40,17 @@ const Staking = (): JSX.Element => (
       )}>
       <InternalContainer>
         <TVLChart
-          style={{
-            width: 420,
-            height: 400
-          }} />
+          className={clsx(
+            'w-full',
+            'md:w-96',
+            'h-96'
+          )} />
         <TVLChart
-          style={{
-            width: 420,
-            height: 400
-          }} />
+          className={clsx(
+            'w-full',
+            'md:w-96',
+            'h-96'
+          )} />
       </InternalContainer>
       <InternalContainer>
         <Information
