@@ -1,20 +1,19 @@
 import clsx from 'clsx';
 
-import Layout from 'parts/Layout';
 import Information from './Information';
 import APYCard from './APYCard';
 import FormCard from './FormCard';
 import BalanceCard from './BalanceCard';
+import Layout from 'parts/Layout';
+import TVLChart from 'components/charts/TVLChart';
 
 const MD_WIDTH_72_CLASS = 'md:w-72';
 
-interface ContainerProps {
-  children: React.ReactNode;
-}
-
 const InternalContainer = ({
-  children
-}: ContainerProps) => (
+  children,
+  className,
+  ...rest
+}: React.ComponentPropsWithRef<'div'>) => (
   <div
     className={clsx(
       'md:flex',
@@ -22,8 +21,10 @@ const InternalContainer = ({
       'space-y-6',
       'md:space-y-0',
       'md:space-x-6',
-      'w-full'
-    )}>
+      'w-full',
+      className
+    )}
+    {...rest}>
     {children}
   </div>
 );
@@ -35,8 +36,22 @@ const Staking = (): JSX.Element => (
         'space-y-6',
         'max-w-6xl',
         'mx-auto',
-        'my-4'
+        'my-10'
       )}>
+      <InternalContainer>
+        <TVLChart
+          className={clsx(
+            'w-full',
+            'md:w-96',
+            'h-96'
+          )} />
+        <TVLChart
+          className={clsx(
+            'w-full',
+            'md:w-96',
+            'h-96'
+          )} />
+      </InternalContainer>
       <InternalContainer>
         <Information
           className={clsx(
