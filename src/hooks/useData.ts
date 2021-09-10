@@ -79,13 +79,6 @@ export function useOracleIsInitialized(uniswapV2PairAddress: string) : boolean {
 }
 // ray test touch >
 
-export function useTWAPPrice() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [TWAPPrice, setTWAPPrice] = useState<number>(null);
-  useRouterCallback(async router => setTWAPPrice(await router.getTWAPPrice(uniswapV2PairAddress)));
-  return TWAPPrice;
-}
-
 export function usePriceDenomLP() : [number, number] {
   const uniswapV2PairAddress = usePairAddress();
   const [priceDenomLP, setPriceDenomLP] = useState<[number, number]>([1, 1]);

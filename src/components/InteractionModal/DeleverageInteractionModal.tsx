@@ -21,6 +21,7 @@ interface DeleverageInteractionModalProps {
   tokenABorrowed: number;
   tokenBBorrowed: number;
   safetyMargin: number;
+  twapPrice: number;
 }
 
 export default function DeleverageInteractionModal({
@@ -28,7 +29,8 @@ export default function DeleverageInteractionModal({
   toggleShow,
   tokenABorrowed,
   tokenBBorrowed,
-  safetyMargin
+  safetyMargin,
+  twapPrice
 }: DeleverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
@@ -75,7 +77,8 @@ export default function DeleverageInteractionModal({
           changeBorrowedA={-changeAmounts.bAmountA}
           changeBorrowedB={-changeAmounts.bAmountB}
           changeCollateral={-changeAmounts.cAmount}
-          safetyMargin={safetyMargin} />
+          safetyMargin={safetyMargin}
+          twapPrice={twapPrice} />
         <InputAmount
           val={val}
           setVal={setVal}

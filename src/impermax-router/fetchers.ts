@@ -134,7 +134,6 @@ export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress:
   return this.priceInverted ? 1 * reserve0 / reserve1 : 1 * reserve1 / reserve0;
 }
 
-// ray test touch <
 // TWAP Price
 export async function initializeTWAPPrice(
   this: ImpermaxRouter,
@@ -157,14 +156,12 @@ export async function initializeTWAPPrice(
     return 0; // TODO: error-prone
   }
 }
-// ray test touch >
 
 export async function getTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.TWAPPrice) {
     cache.TWAPPrice = this.initializeTWAPPrice(uniswapV2PairAddress);
   }
-
   const twapPrice = await cache.TWAPPrice;
 
   return this.priceInverted ? 1 / twapPrice : twapPrice;

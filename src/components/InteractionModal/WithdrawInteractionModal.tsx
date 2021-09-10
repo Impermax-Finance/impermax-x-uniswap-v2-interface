@@ -20,6 +20,7 @@ export interface WithdrawInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   safetyMargin: number;
+  twapPrice: number;
 }
 
 /**
@@ -31,7 +32,8 @@ export interface WithdrawInteractionModalProps {
 export default function WithdrawInteractionModal({
   show,
   toggleShow,
-  safetyMargin
+  safetyMargin,
+  twapPrice
 }: WithdrawInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -58,7 +60,8 @@ export default function WithdrawInteractionModal({
         {poolTokenType === PoolTokenType.Collateral && (
           <RiskMetrics
             changeCollateral={-val}
-            safetyMargin={safetyMargin} />
+            safetyMargin={safetyMargin}
+            twapPrice={twapPrice} />
         )}
         <InputAmount
           val={val}

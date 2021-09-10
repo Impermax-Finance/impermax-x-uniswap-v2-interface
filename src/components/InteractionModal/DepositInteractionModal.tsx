@@ -22,12 +22,14 @@ export interface DepositInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   safetyMargin: number;
+  twapPrice: number;
 }
 
 export default function DepositInteractionModal({
   show,
   toggleShow,
-  safetyMargin
+  safetyMargin,
+  twapPrice
 }: DepositInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -81,7 +83,8 @@ export default function DepositInteractionModal({
           <RiskMetrics
             changeCollateral={val}
             hideIfNull={true}
-            safetyMargin={safetyMargin} />
+            safetyMargin={safetyMargin}
+            twapPrice={twapPrice} />
         )}
         <InputAmount
           val={val}

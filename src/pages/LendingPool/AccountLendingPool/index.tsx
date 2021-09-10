@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import {
   useErrorHandler,
   withErrorBoundary
@@ -19,6 +20,7 @@ import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 import PoolTokenContext from 'contexts/PoolToken';
+import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracles';
 import { injected } from 'utils/helpers/web3/connectors';
 import {
   getLendingPoolTokenPriceInUSD,
@@ -30,6 +32,8 @@ import { PARAMETERS } from 'utils/constants/links';
 import useLendingPool from 'services/hooks/use-lending-pool';
 import useTokenDeposited from 'services/hooks/use-token-deposited';
 import useTokenBorrowBalance from 'services/hooks/use-token-borrow-balance';
+import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
+import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
 import { PoolTokenType } from 'types/interfaces';
 import './index.scss';
 
@@ -135,6 +139,32 @@ const AccountLendingPool = (): JSX.Element => {
   );
   useErrorHandler(tokenBBorrowBalanceError);
 
+  const {
+    isLoading: priceObjLoading,
+    data: priceObj,
+    error: priceObjLoadingError
+    // TODO: should type properly
+  } = useQuery<any, Error>(
+    [
+      GENERIC_FETCHER,
+      selectedChainID,
+      SIMPLE_UNISWAP_ORACLE_ADDRESSES[selectedChainID],
+      'getResult',
+      selectedUniswapV2PairAddress
+    ],
+    library ?
+      genericFetcher<any>(
+        library,
+        SimpleUniswapOracleJSON.abi,
+        true
+      ) :
+      Promise.resolve,
+    {
+      enabled: !!library
+    }
+  );
+  useErrorHandler(priceObjLoadingError);
+
   if (!account) {
     return (
       <AccountLendingPoolContainer>
@@ -171,6 +201,9 @@ const AccountLendingPool = (): JSX.Element => {
   if (tokenBBorrowBalanceLoading) {
     return <>Loading...</>;
   }
+  if (priceObjLoading) {
+    return <>Loading...</>;
+  }
   if (tokenADeposited === undefined) {
     throw new Error('Something went wrong!');
   }
@@ -187,6 +220,9 @@ const AccountLendingPool = (): JSX.Element => {
     throw new Error('Something went wrong!');
   }
   if (tokenBBorrowBalance === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (priceObj === undefined) {
     throw new Error('Something went wrong!');
   }
 
@@ -234,6 +270,11 @@ const AccountLendingPool = (): JSX.Element => {
 
   const safetyMargin = parseFloat(selectedLendingPool[PoolTokenType.Collateral].safetyMargin);
 
+  const price = priceObj[0];
+  const tokenADecimals = parseInt(selectedLendingPool[PoolTokenType.BorrowableA].underlying.decimals);
+  const tokenBDecimals = parseInt(selectedLendingPool[PoolTokenType.BorrowableB].underlying.decimals);
+  const twapPrice = price / 2 ** 112 * Math.pow(10, tokenADecimals) / Math.pow(10, tokenBDecimals);
+
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector
@@ -245,7 +286,8 @@ const AccountLendingPool = (): JSX.Element => {
             collateralDepositedInUSD={collateralDepositedInUSD}
             debtInUSD={debtInUSD}
             lpEquityInUSD={lpEquityInUSD}
-            safetyMargin={safetyMargin} />
+            safetyMargin={safetyMargin}
+            twapPrice={twapPrice} />
           {/* ray test touch << */}
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
             {/* ray test touch >> */}
@@ -257,7 +299,8 @@ const AccountLendingPool = (): JSX.Element => {
               collateralSymbol={collateralSymbol}
               tokenAIconPath={tokenAIconPath}
               tokenBIconPath={tokenBIconPath}
-              safetyMargin={safetyMargin} />
+              safetyMargin={safetyMargin}
+              twapPrice={twapPrice} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow
@@ -267,7 +310,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenSymbol={tokenASymbol}
               collateralSymbol={collateralSymbol}
               tokenIconPath={tokenAIconPath}
-              safetyMargin={safetyMargin} />
+              safetyMargin={safetyMargin}
+              twapPrice={twapPrice} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolBorrowRow
@@ -277,7 +321,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenSymbol={tokenBSymbol}
               collateralSymbol={collateralSymbol}
               tokenIconPath={tokenBIconPath}
-              safetyMargin={safetyMargin} />
+              safetyMargin={safetyMargin}
+              twapPrice={twapPrice} />
           </PoolTokenContext.Provider>
         </>
       )}
@@ -292,7 +337,8 @@ const AccountLendingPool = (): JSX.Element => {
               collateralDeposited={collateralDeposited}
               tokenSymbol={tokenASymbol}
               tokenIconPath={tokenAIconPath}
-              safetyMargin={safetyMargin} />
+              safetyMargin={safetyMargin}
+              twapPrice={twapPrice} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolSupplyRow
@@ -300,7 +346,8 @@ const AccountLendingPool = (): JSX.Element => {
               collateralDeposited={collateralDeposited}
               tokenSymbol={tokenBSymbol}
               tokenIconPath={tokenBIconPath}
-              safetyMargin={safetyMargin} />
+              safetyMargin={safetyMargin}
+              twapPrice={twapPrice} />
           </PoolTokenContext.Provider>
         </>
       )}

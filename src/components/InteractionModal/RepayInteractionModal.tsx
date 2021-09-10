@@ -20,6 +20,7 @@ export interface RepayInteractionModalProps {
   toggleShow(s: boolean): void;
   tokenBorrowed: number;
   safetyMargin: number;
+  twapPrice: number;
 }
 
 /**
@@ -32,7 +33,8 @@ export default function RepayInteractionModal({
   show,
   toggleShow,
   tokenBorrowed,
-  safetyMargin
+  safetyMargin,
+  twapPrice
 }: RepayInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -59,7 +61,8 @@ export default function RepayInteractionModal({
         <RiskMetrics
           changeBorrowedA={poolTokenType === PoolTokenType.BorrowableA ? -val : 0}
           changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? -val : 0}
-          safetyMargin={safetyMargin} />
+          safetyMargin={safetyMargin}
+          twapPrice={twapPrice} />
         <InputAmount
           val={val}
           setVal={setVal}

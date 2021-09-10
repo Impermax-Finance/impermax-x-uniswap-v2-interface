@@ -14,6 +14,7 @@ interface Props {
   changeCollateral?: number;
   hideIfNull?: boolean;
   safetyMargin: number;
+  twapPrice: number;
 }
 
 /**
@@ -25,7 +26,8 @@ const RiskMetrics = ({
   changeBorrowedB,
   changeCollateral,
   hideIfNull,
-  safetyMargin
+  safetyMargin,
+  twapPrice
 } : Props): JSX.Element | null => {
   const changes =
     changeBorrowedA ||
@@ -73,7 +75,9 @@ const RiskMetrics = ({
         <DetailListItem
           title='New Liquidation Prices'
           tooltip={liquidationTooltip}>
-          <LiquidationPrices safetyMargin={safetyMargin} />
+          <LiquidationPrices
+            safetyMargin={safetyMargin}
+            twapPrice={twapPrice} />
           <ArrowRightIcon
             className={clsx(
               'w-6',
@@ -81,16 +85,19 @@ const RiskMetrics = ({
             )} />
           <LiquidationPrices
             changes={changes}
-            safetyMargin={safetyMargin} />
+            safetyMargin={safetyMargin}
+            twapPrice={twapPrice} />
         </DetailListItem>
       ) : (
         <DetailListItem
           title='Liquidation Prices'
           tooltip={liquidationTooltip}>
-          <LiquidationPrices safetyMargin={safetyMargin} />
+          <LiquidationPrices
+            safetyMargin={safetyMargin}
+            twapPrice={twapPrice} />
         </DetailListItem>
       )}
-      <CurrentPrice />
+      <CurrentPrice twapPrice={twapPrice} />
     </DetailList>
   );
 };

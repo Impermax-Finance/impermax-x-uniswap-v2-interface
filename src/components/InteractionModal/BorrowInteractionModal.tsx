@@ -22,6 +22,7 @@ export interface BorrowInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   safetyMargin: number;
+  twapPrice: number;
 }
 
 /**
@@ -33,7 +34,8 @@ export interface BorrowInteractionModalProps {
 export default function BorrowInteractionModal({
   show,
   toggleShow,
-  safetyMargin
+  safetyMargin,
+  twapPrice
 }: BorrowInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -60,7 +62,8 @@ export default function BorrowInteractionModal({
         <RiskMetrics
           changeBorrowedA={poolTokenType === PoolTokenType.BorrowableA ? val : 0}
           changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? val : 0}
-          safetyMargin={safetyMargin} />
+          safetyMargin={safetyMargin}
+          twapPrice={twapPrice} />
         <InputAmount
           val={val}
           setVal={setVal}

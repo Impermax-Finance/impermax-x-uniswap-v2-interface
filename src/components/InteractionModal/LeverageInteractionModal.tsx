@@ -15,12 +15,14 @@ export interface LeverageInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   safetyMargin: number;
+  twapPrice: number;
 }
 
 export default function LeverageInteractionModal({
   show,
   toggleShow,
-  safetyMargin
+  safetyMargin,
+  twapPrice
 }: LeverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
@@ -69,7 +71,8 @@ export default function LeverageInteractionModal({
           changeBorrowedA={changeAmounts.bAmountA}
           changeBorrowedB={changeAmounts.bAmountB}
           changeCollateral={changeAmounts.cAmount}
-          safetyMargin={safetyMargin} />
+          safetyMargin={safetyMargin}
+          twapPrice={twapPrice} />
         <InputAmount
           val={val}
           setVal={setVal}
