@@ -22,10 +22,43 @@ const TVLChart = (props: React.ComponentPropsWithRef<'div'>): JSX.Element => {
 
     const chart = createChart(innerRef.current, {
       width: containerWidth,
-      height: containerHeight
+      height: containerHeight,
+      layout: {
+        textColor: '#6b7280',
+        backgroundColor: '#fff'
+      },
+      rightPriceScale: {
+        scaleMargins: {
+          top: 0.3,
+          bottom: 0.25
+        }
+      },
+      crosshair: {
+        vertLine: {
+          color: '#b8b9b9',
+          style: 0
+        },
+        horzLine: {
+          visible: false,
+          labelVisible: false
+        }
+      },
+      grid: {
+        vertLines: {
+          color: 'rgba(42, 46, 57, 0)'
+        },
+        horzLines: {
+          color: 'rgba(42, 46, 57, 0)'
+        }
+      }
     });
-    const lineSeries = chart.addLineSeries();
-    lineSeries.setData(data);
+    const areaSeries = chart.addAreaSeries({
+      topColor: 'rgba(38, 198, 218, 0.56)',
+      bottomColor: 'rgba(38, 198, 218, 0.04)',
+      lineColor: 'rgba(38, 198, 218, 1)',
+      lineWidth: 2
+    });
+    areaSeries.setData(data);
 
     return () => {
       chart.remove();
