@@ -36,10 +36,19 @@ const Staking = (): JSX.Element => (
         'space-y-6',
         'max-w-6xl',
         'mx-auto',
-        'my-4'
+        'my-10'
       )}>
       <InternalContainer>
-        <TVLChart />
+        <TVLChart
+          style={{
+            width: 420,
+            height: 400
+          }} />
+        <TVLChart
+          style={{
+            width: 420,
+            height: 400
+          }} />
       </InternalContainer>
       <InternalContainer>
         <Information
