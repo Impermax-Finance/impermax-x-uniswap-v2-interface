@@ -16,6 +16,7 @@ import AccountLendingPoolSupplyRow from './AccountLendingPoolSupplyRow';
 import AccountLendingPoolDetailsLeverage from './AccountLendingPoolDetailsLeverage';
 import AccountLendingPoolDetailsEarnInterest from './AccountLendingPoolDetailsEarnInterest';
 import AccountLendingPoolFarming from './AccountLendingPoolFarming';
+import OracleAlert from './OracleAlert';
 import Panel from 'components/Panel';
 import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
@@ -222,8 +223,10 @@ const AccountLendingPool = (): JSX.Element => {
   if (tokenBBorrowBalance === undefined) {
     throw new Error('Something went wrong!');
   }
-  if (priceObj === undefined) {
-    throw new Error('Something went wrong!');
+  if (!priceObj?.[0]) {
+    return (
+      <OracleAlert />
+    );
   }
 
   const tokenAPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableA);
