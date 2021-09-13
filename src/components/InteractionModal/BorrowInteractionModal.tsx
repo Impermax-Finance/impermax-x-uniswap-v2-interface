@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { InteractionModalContainer } from '.';
 import { Row, Col } from 'react-bootstrap';
-import { PoolTokenType, ApprovalType } from '../../types/interfaces';
-import usePoolToken from '../../hooks/usePoolToken';
+import { ApprovalType } from '../../types/interfaces';
 import InputAmount from '../InputAmount';
 import InteractionButton from '../InteractionButton';
 import BorrowAPY from './TransactionRecap/BorrowAPY';
@@ -12,6 +11,7 @@ import useBorrow from '../../hooks/useBorrow';
 import { useSymbol, useMaxBorrowable, useToBigNumber } from '../../hooks/useData';
 import RiskMetrics from '../RiskMetrics';
 import FarmingAPY from './TransactionRecap/FarmingAPY';
+import getLeverage from 'utils/helpers/get-leverage';
 
 /**
  * Props for the deposit interaction modal.
@@ -23,10 +23,13 @@ export interface BorrowInteractionModalProps {
   toggleShow(s: boolean): void;
   safetyMargin: number;
   twapPrice: number;
+  valueCollateralWithoutChanges: number;
+  valueAWithoutChanges: number;
+  valueBWithoutChanges: number;
 }
 
 /**
- * Styled component for the norrow modal.
+ * Styled component for the narrow modal.
  * @param param0 any Props for component
  * @see BorrowInteractionModalProps
  */
@@ -35,9 +38,11 @@ export default function BorrowInteractionModal({
   show,
   toggleShow,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  valueCollateralWithoutChanges,
+  valueAWithoutChanges,
+  valueBWithoutChanges
 }: BorrowInteractionModalProps): JSX.Element {
-  const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
@@ -53,6 +58,17 @@ export default function BorrowInteractionModal({
     toggleShow(false);
   };
 
+  const changes = {
+    changeCollateral: 0,
+    changeBorrowedA: val,
+    changeBorrowedB: val
+  };
+  const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
+  const valueA = valueAWithoutChanges + changes.changeBorrowedA;
+  const valueB = valueBWithoutChanges + changes.changeBorrowedB;
+  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
+  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
+
   return (
     <InteractionModalContainer
       title='Borrow'
@@ -60,10 +76,11 @@ export default function BorrowInteractionModal({
       toggleShow={toggleShow}>
       <>
         <RiskMetrics
-          changeBorrowedA={poolTokenType === PoolTokenType.BorrowableA ? val : 0}
-          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? val : 0}
           safetyMargin={safetyMargin}
-          twapPrice={twapPrice} />
+          twapPrice={twapPrice}
+          changes={changes}
+          currentLeverage={currentLeverage}
+          newLeverage={newLeverage} />
         <InputAmount
           val={val}
           setVal={setVal}

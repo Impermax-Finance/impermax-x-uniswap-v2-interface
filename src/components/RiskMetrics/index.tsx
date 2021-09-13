@@ -6,15 +6,23 @@ import LiquidationPrices from './LiquidationPrices';
 import CurrentPrice from './CurrentPrice';
 import DetailList, { DetailListItem } from 'components/DetailList';
 import { formatLeverage } from 'utils/format';
-import { useCurrentLeverage } from 'hooks/useData';
+import { Changes } from 'types/interfaces';
+
+const checkValidChanges = (changes: Changes) => {
+  return (
+    changes.changeCollateral ||
+    changes.changeBorrowedA ||
+    changes.changeBorrowedB
+  );
+};
 
 interface Props {
-  changeBorrowedA?: number;
-  changeBorrowedB?: number;
-  changeCollateral?: number;
   hideIfNull?: boolean;
   safetyMargin: number;
   twapPrice: number;
+  changes: Changes;
+  currentLeverage: number;
+  newLeverage: number;
 }
 
 /**
@@ -22,28 +30,14 @@ interface Props {
  */
 
 const RiskMetrics = ({
-  changeBorrowedA,
-  changeBorrowedB,
-  changeCollateral,
   hideIfNull,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  changes,
+  currentLeverage,
+  newLeverage
 } : Props): JSX.Element | null => {
-  const changes =
-    changeBorrowedA ||
-    changeBorrowedB ||
-    changeCollateral ?
-      {
-        changeBorrowedA: changeBorrowedA ?? 0,
-        changeBorrowedB: changeBorrowedB ?? 0,
-        changeCollateral: changeCollateral ?? 0
-      } :
-      undefined;
-
-  // ray test touch <<
-  const currentLeverage = useCurrentLeverage();
-  const newLeverage = useCurrentLeverage(changes);
-  // ray test touch >>
+  const validChanges = checkValidChanges(changes);
 
   if (hideIfNull && currentLeverage === 1) return null;
 
@@ -52,7 +46,7 @@ const RiskMetrics = ({
 
   return (
     <DetailList>
-      {changes ? (
+      {validChanges ? (
         <DetailListItem
           title='New Leverage'
           tooltip={leverageTooltip}>
@@ -71,7 +65,7 @@ const RiskMetrics = ({
           <span>{formatLeverage(currentLeverage)}</span>
         </DetailListItem>
       )}
-      {changes ? (
+      {validChanges ? (
         <DetailListItem
           title='New Liquidation Prices'
           tooltip={liquidationTooltip}>

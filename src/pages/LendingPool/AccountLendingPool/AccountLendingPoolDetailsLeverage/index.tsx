@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import RiskMetrics from 'components/RiskMetrics';
 import DetailList, { DetailListItem } from 'components/DetailList';
 import { formatNumberWithUSDCommaDecimals } from 'utils/helpers/format-number';
+import getLeverage from 'utils/helpers/get-leverage';
 
 /**
  * Generates lending pool aggregate details.
@@ -15,6 +16,9 @@ interface Props {
   lpEquityInUSD: number;
   safetyMargin: number;
   twapPrice: number;
+  valueCollateralWithoutChanges: number;
+  valueAWithoutChanges: number;
+  valueBWithoutChanges: number;
 }
 
 const AccountLendingPoolDetailsLeverage = ({
@@ -22,7 +26,10 @@ const AccountLendingPoolDetailsLeverage = ({
   debtInUSD,
   lpEquityInUSD,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  valueCollateralWithoutChanges,
+  valueAWithoutChanges,
+  valueBWithoutChanges
 }: Props): JSX.Element => {
   const leftItems = [
     {
@@ -39,6 +46,17 @@ const AccountLendingPoolDetailsLeverage = ({
       tooltip: 'Calculated as: Total Collateral - Total Debt'
     }
   ];
+
+  const changes = {
+    changeCollateral: 0,
+    changeBorrowedA: 0,
+    changeBorrowedB: 0
+  };
+  const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
+  const valueA = valueAWithoutChanges + changes.changeBorrowedA;
+  const valueB = valueBWithoutChanges + changes.changeBorrowedB;
+  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
+  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
 
   return (
     <div
@@ -64,7 +82,10 @@ const AccountLendingPoolDetailsLeverage = ({
       </DetailList>
       <RiskMetrics
         safetyMargin={safetyMargin}
-        twapPrice={twapPrice} />
+        twapPrice={twapPrice}
+        changes={changes}
+        currentLeverage={currentLeverage}
+        newLeverage={newLeverage} />
     </div>
   );
 };

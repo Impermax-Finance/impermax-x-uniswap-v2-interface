@@ -206,7 +206,6 @@ class ImpermaxRouter {
   public getPriceDenomLP = fetchers.getPriceDenomLP;
   public getBorrowablePriceDenomLP = fetchers.getBorrowablePriceDenomLP;
   public getMarketPriceDenomLP = fetchers.getMarketPriceDenomLP;
-  public getBorrowableMarketPriceDenomLP = fetchers.getBorrowableMarketPriceDenomLP;
   public getMarketPrice = fetchers.getMarketPrice;
   public getTWAPPrice = fetchers.getTWAPPrice;
   public isValidPair = fetchers.isValidPair;

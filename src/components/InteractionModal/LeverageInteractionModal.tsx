@@ -9,31 +9,58 @@ import InteractionButton from '../InteractionButton';
 import BorrowFee from './TransactionRecap/BorrowFee';
 import useApprove from '../../hooks/useApprove';
 import useLeverage from '../../hooks/useLeverage';
-import { useSymbol, useDeadline, useMaxLeverage, useCurrentLeverage, useLeverageAmounts, useToBigNumber, useUniswapAPY, useNextBorrowAPY, useNextFarmingAPY } from '../../hooks/useData';
+import {
+  useSymbol,
+  useDeadline,
+  useMaxLeverage,
+  useLeverageAmounts,
+  useToBigNumber,
+  useUniswapAPY,
+  useNextBorrowAPY,
+  useNextFarmingAPY
+} from '../../hooks/useData';
+import getLeverage from 'utils/helpers/get-leverage';
 
 export interface LeverageInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   safetyMargin: number;
   twapPrice: number;
+  valueCollateralWithoutChanges: number;
+  valueAWithoutChanges: number;
+  valueBWithoutChanges: number;
 }
 
 export default function LeverageInteractionModal({
   show,
   toggleShow,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  valueCollateralWithoutChanges,
+  valueAWithoutChanges,
+  valueBWithoutChanges
 }: LeverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
 
   const changeAmounts = useLeverageAmounts(val, slippage);
-  const minLeverage = useCurrentLeverage();
   const maxLeverage = useMaxLeverage();
   const symbol = useSymbol();
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const deadline = useDeadline();
+
+  const changes = {
+    changeCollateral: changeAmounts.cAmount,
+    changeBorrowedA: changeAmounts.bAmountA,
+    changeBorrowedB: changeAmounts.bAmountB
+  };
+  const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
+  const valueA = valueAWithoutChanges + changes.changeBorrowedA;
+  const valueB = valueBWithoutChanges + changes.changeBorrowedB;
+  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
+  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
+  const minLeverage = newLeverage;
 
   useEffect(() => {
     if (val === 0) setVal(Math.ceil(minLeverage * 1000) / 1000);
@@ -68,11 +95,11 @@ export default function LeverageInteractionModal({
       toggleShow={toggleShow}>
       <>
         <RiskMetrics
-          changeBorrowedA={changeAmounts.bAmountA}
-          changeBorrowedB={changeAmounts.bAmountB}
-          changeCollateral={changeAmounts.cAmount}
           safetyMargin={safetyMargin}
-          twapPrice={twapPrice} />
+          twapPrice={twapPrice}
+          changes={changes}
+          currentLeverage={currentLeverage}
+          newLeverage={newLeverage} />
         <InputAmount
           val={val}
           setVal={setVal}

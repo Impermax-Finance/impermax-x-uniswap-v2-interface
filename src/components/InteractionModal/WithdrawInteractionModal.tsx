@@ -9,7 +9,12 @@ import InteractionButton from '../InteractionButton';
 import TransactionSize from './TransactionRecap/TransactionSize';
 import useApprove from '../../hooks/useApprove';
 import useWithdraw from '../../hooks/useWithdraw';
-import { useMaxWithdrawable, useSymbol, useToTokens } from '../../hooks/useData';
+import {
+  useMaxWithdrawable,
+  useSymbol,
+  useToTokens
+} from '../../hooks/useData';
+import getLeverage from 'utils/helpers/get-leverage';
 
 /**
  * Props for the withdraw interaction modal.
@@ -21,6 +26,9 @@ export interface WithdrawInteractionModalProps {
   toggleShow(s: boolean): void;
   safetyMargin: number;
   twapPrice: number;
+  valueCollateralWithoutChanges: number;
+  valueAWithoutChanges: number;
+  valueBWithoutChanges: number;
 }
 
 /**
@@ -33,7 +41,10 @@ export default function WithdrawInteractionModal({
   show,
   toggleShow,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  valueCollateralWithoutChanges,
+  valueAWithoutChanges,
+  valueBWithoutChanges
 }: WithdrawInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -51,6 +62,17 @@ export default function WithdrawInteractionModal({
     toggleShow(false);
   };
 
+  const changes = {
+    changeCollateral: -val,
+    changeBorrowedA: 0,
+    changeBorrowedB: 0
+  };
+  const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
+  const valueA = valueAWithoutChanges + changes.changeBorrowedA;
+  const valueB = valueBWithoutChanges + changes.changeBorrowedB;
+  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
+  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
+
   return (
     <InteractionModalContainer
       title='Withdraw'
@@ -59,9 +81,11 @@ export default function WithdrawInteractionModal({
       <>
         {poolTokenType === PoolTokenType.Collateral && (
           <RiskMetrics
-            changeCollateral={-val}
             safetyMargin={safetyMargin}
-            twapPrice={twapPrice} />
+            twapPrice={twapPrice}
+            changes={changes}
+            currentLeverage={currentLeverage}
+            newLeverage={newLeverage} />
         )}
         <InputAmount
           val={val}

@@ -12,6 +12,7 @@ import useApprove from '../../hooks/useApprove';
 import useDeposit from '../../hooks/useDeposit';
 import { useSymbol, useAvailableBalance, useToBigNumber } from '../../hooks/useData';
 import { useAddLiquidityUrl } from '../../hooks/useUrlGenerator';
+import getLeverage from 'utils/helpers/get-leverage';
 
 /**
  * Props for the deposit interaction modal.
@@ -23,13 +24,19 @@ export interface DepositInteractionModalProps {
   toggleShow(s: boolean): void;
   safetyMargin: number;
   twapPrice: number;
+  valueCollateralWithoutChanges: number;
+  valueAWithoutChanges: number;
+  valueBWithoutChanges: number;
 }
 
 export default function DepositInteractionModal({
   show,
   toggleShow,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  valueCollateralWithoutChanges,
+  valueAWithoutChanges,
+  valueBWithoutChanges
 }: DepositInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -73,6 +80,17 @@ export default function DepositInteractionModal({
     );
   }
 
+  const changes = {
+    changeCollateral: val,
+    changeBorrowedA: 0,
+    changeBorrowedB: 0
+  };
+  const valueCollateral = valueCollateralWithoutChanges + val;
+  const valueA = valueAWithoutChanges + 0;
+  const valueB = valueBWithoutChanges + 0;
+  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
+  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
+
   return (
     <InteractionModalContainer
       title={poolTokenType === PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
@@ -81,10 +99,12 @@ export default function DepositInteractionModal({
       <>
         {poolTokenType === PoolTokenType.Collateral && (
           <RiskMetrics
-            changeCollateral={val}
             hideIfNull={true}
             safetyMargin={safetyMargin}
-            twapPrice={twapPrice} />
+            twapPrice={twapPrice}
+            changes={changes}
+            currentLeverage={currentLeverage}
+            newLeverage={newLeverage} />
         )}
         <InputAmount
           val={val}

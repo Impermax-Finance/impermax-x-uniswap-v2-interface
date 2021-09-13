@@ -202,18 +202,7 @@ export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   return availableBalance;
 }
 
-export function useCurrentLeverage(changes?: Changes) : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [leverage, setLeverage] = useState<number>(0);
-  useRouterCallback(async router => {
-    setLeverage(changes ?
-      await router.getNewLeverage(uniswapV2PairAddress, changes) :
-      await router.getLeverage(uniswapV2PairAddress)
-    );
-  }, [changes]);
-  return leverage;
-}
-
+// ray test touch <<<
 export function useLiquidationPrices(changes?: Changes) : [number, number] {
   const uniswapV2PairAddress = usePairAddress();
   const [liquidationPrices, setLiquidationPrices] = useState<[number, number]>([0, 0]);
@@ -225,6 +214,7 @@ export function useLiquidationPrices(changes?: Changes) : [number, number] {
   }, [changes]);
   return liquidationPrices;
 }
+// ray test touch >>>
 
 export function useClaimHistory() : ClaimEvent[] {
   const uniswapV2PairAddress = usePairAddress();

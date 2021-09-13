@@ -103,6 +103,7 @@ export async function getBorrowed(this: ImpermaxRouter, uniswapV2PairAddress: Ad
   return cache.borrowed;
 }
 
+// ray test touch <<<
 // Values
 export async function getValuesFromPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes, priceA: number, priceB: number) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
   const valueCollateral = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral) + changes.changeCollateral;
@@ -110,16 +111,22 @@ export async function getValuesFromPrice(this: ImpermaxRouter, uniswapV2PairAddr
   const amountB = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableB) + changes.changeBorrowedB;
   const valueA = amountA * priceA;
   const valueB = amountB * priceB;
+  console.log('ray : ***** valueCollateral 1 => ', valueCollateral);
+  console.log('ray : ***** valueA 1 => ', valueA);
+  console.log('ray : ***** valueB 1 => ', valueB);
   return {
     valueCollateral: valueCollateral > 0 ? valueCollateral : 0,
     valueA: valueA > 0 ? valueA : 0,
     valueB: valueB > 0 ? valueB : 0
   };
 }
+// ray test touch >>>
+// ray test touch <<<
 export async function getValues(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
   const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
   return this.getValuesFromPrice(uniswapV2PairAddress, changes, priceA, priceB);
 }
+// ray test touch >>>
 export async function getMarketValues(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
   const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
   return this.getValuesFromPrice(uniswapV2PairAddress, changes, priceA, priceB);
@@ -138,9 +145,14 @@ export async function getLeverage(this: ImpermaxRouter, uniswapV2PairAddress: Ad
   return await this.getNewLeverage(uniswapV2PairAddress, NO_CHANGES);
 }
 
+// ray test touch <<<
 // Liquidation Threshold
 export async function getNewLiquidationPriceSwings(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<[number, number]> {
-  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, changes);
+  const {
+    valueCollateral,
+    valueA,
+    valueB
+  } = await this.getValues(uniswapV2PairAddress, changes);
   if (valueA + valueB === 0) return [Infinity, Infinity];
   const safetyMargin = await this.subgraph.getSafetyMargin(uniswapV2PairAddress);
   const liquidationIncentive = await this.subgraph.getLiquidationIncentive(uniswapV2PairAddress);
@@ -155,12 +167,16 @@ export async function getNewLiquidationPriceSwings(this: ImpermaxRouter, uniswap
 export async function getNewLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<[number, number]> {
   const currentPrice = await this.getTWAPPrice(uniswapV2PairAddress);
   const [priceSwingA, priceSwingB] = await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, changes);
-  // eslint-disable-next-line no-negated-condition
-  return !this.priceInverted ? [currentPrice / priceSwingB, currentPrice * priceSwingA] : [currentPrice / priceSwingA, currentPrice * priceSwingB];
+  return (
+    this.priceInverted ?
+      [currentPrice / priceSwingA, currentPrice * priceSwingB] :
+      [currentPrice / priceSwingB, currentPrice * priceSwingA]
+  );
 }
 export async function getLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   return await this.getNewLiquidationPrices(uniswapV2PairAddress, NO_CHANGES);
 }
+// ray test touch >>>
 
 // Max Withdrawable
 export async function getMaxWithdrawable(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {

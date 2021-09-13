@@ -19,6 +19,9 @@ interface Props {
   tokenIconPath: string;
   safetyMargin: number;
   twapPrice: number;
+  valueCollateralWithoutChanges: number;
+  valueAWithoutChanges: number;
+  valueBWithoutChanges: number;
 }
 
 const AccountLendingPoolSupplyRow = ({
@@ -27,7 +30,10 @@ const AccountLendingPoolSupplyRow = ({
   tokenSymbol,
   tokenIconPath,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  valueCollateralWithoutChanges,
+  valueAWithoutChanges,
+  valueBWithoutChanges
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -91,12 +97,18 @@ const AccountLendingPoolSupplyRow = ({
         show={showDepositModal}
         toggleShow={toggleDepositModal}
         safetyMargin={safetyMargin}
-        twapPrice={twapPrice} />
+        twapPrice={twapPrice}
+        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+        valueAWithoutChanges={valueAWithoutChanges}
+        valueBWithoutChanges={valueBWithoutChanges} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
         safetyMargin={safetyMargin}
-        twapPrice={twapPrice} />
+        twapPrice={twapPrice}
+        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+        valueAWithoutChanges={valueAWithoutChanges}
+        valueBWithoutChanges={valueBWithoutChanges} />
     </>
   );
 };

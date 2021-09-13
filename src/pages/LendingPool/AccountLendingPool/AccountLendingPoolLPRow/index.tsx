@@ -24,6 +24,9 @@ interface Props {
   tokenBIconPath: string;
   safetyMargin: number;
   twapPrice: number;
+  valueCollateralWithoutChanges: number;
+  valueAWithoutChanges: number;
+  valueBWithoutChanges: number;
 }
 
 const AccountLendingPoolLPRow = ({
@@ -35,7 +38,10 @@ const AccountLendingPoolLPRow = ({
   tokenAIconPath,
   tokenBIconPath,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  valueCollateralWithoutChanges,
+  valueAWithoutChanges,
+  valueBWithoutChanges
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -135,24 +141,36 @@ const AccountLendingPoolLPRow = ({
         show={showDepositModal}
         toggleShow={toggleDepositModal}
         safetyMargin={safetyMargin}
-        twapPrice={twapPrice} />
+        twapPrice={twapPrice}
+        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+        valueAWithoutChanges={valueAWithoutChanges}
+        valueBWithoutChanges={valueBWithoutChanges} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
         safetyMargin={safetyMargin}
-        twapPrice={twapPrice} />
+        twapPrice={twapPrice}
+        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+        valueAWithoutChanges={valueAWithoutChanges}
+        valueBWithoutChanges={valueBWithoutChanges} />
       <LeverageInteractionModal
         show={showLeverageModal}
         toggleShow={toggleLeverageModal}
         safetyMargin={safetyMargin}
-        twapPrice={twapPrice} />
+        twapPrice={twapPrice}
+        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+        valueAWithoutChanges={valueAWithoutChanges}
+        valueBWithoutChanges={valueBWithoutChanges} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
         toggleShow={toggleDeleverageModal}
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
         safetyMargin={safetyMargin}
-        twapPrice={twapPrice} />
+        twapPrice={twapPrice}
+        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+        valueAWithoutChanges={valueAWithoutChanges}
+        valueBWithoutChanges={valueBWithoutChanges} />
     </>
   );
 };

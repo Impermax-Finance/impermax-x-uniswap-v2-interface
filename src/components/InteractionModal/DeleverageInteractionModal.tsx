@@ -13,7 +13,17 @@ import InputAmount, { InputAmountMini } from '../InputAmount';
 import InteractionButton from '../InteractionButton';
 import useDeleverage from '../../hooks/useDeleverage';
 import useApprove from '../../hooks/useApprove';
-import { useSymbol, useDeleverageAmounts, useToBigNumber, useToTokens, useMaxDeleverage, useNextBorrowAPY, useUniswapAPY, useCurrentLeverage, useNextFarmingAPY } from '../../hooks/useData';
+import {
+  useSymbol,
+  useDeleverageAmounts,
+  useToBigNumber,
+  useToTokens,
+  useMaxDeleverage,
+  useNextBorrowAPY,
+  useUniswapAPY,
+  useNextFarmingAPY
+} from '../../hooks/useData';
+import getLeverage from 'utils/helpers/get-leverage';
 
 interface DeleverageInteractionModalProps {
   show: boolean;
@@ -22,6 +32,9 @@ interface DeleverageInteractionModalProps {
   tokenBBorrowed: number;
   safetyMargin: number;
   twapPrice: number;
+  valueCollateralWithoutChanges: number;
+  valueAWithoutChanges: number;
+  valueBWithoutChanges: number;
 }
 
 export default function DeleverageInteractionModal({
@@ -30,7 +43,10 @@ export default function DeleverageInteractionModal({
   tokenABorrowed,
   tokenBBorrowed,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  valueCollateralWithoutChanges,
+  valueAWithoutChanges,
+  valueBWithoutChanges
 }: DeleverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
@@ -53,12 +69,18 @@ export default function DeleverageInteractionModal({
     toggleShow(false);
   };
 
-  const changes = -changeAmounts.bAmountA || -changeAmounts.bAmountB || -changeAmounts.cAmount ? {
-    changeBorrowedA: -changeAmounts.bAmountA ? -changeAmounts.bAmountA : 0,
-    changeBorrowedB: -changeAmounts.bAmountB ? -changeAmounts.bAmountB : 0,
-    changeCollateral: -changeAmounts.cAmount ? -changeAmounts.cAmount : 0
-  } : null;
-  const newLeverage = useCurrentLeverage(changes);
+  const changes = {
+    changeBorrowedA: -changeAmounts.bAmountA ?? 0,
+    changeBorrowedB: -changeAmounts.bAmountB ?? 0,
+    changeCollateral: -changeAmounts.cAmount ?? 0
+  };
+
+  const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
+  const valueA = valueAWithoutChanges + changes.changeBorrowedA;
+  const valueB = valueBWithoutChanges + changes.changeBorrowedB;
+  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
+  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
+
   const borrowAPYA = useNextBorrowAPY(-changeAmounts.bAmountA, PoolTokenType.BorrowableA);
   const borrowAPYB = useNextBorrowAPY(-changeAmounts.bAmountB, PoolTokenType.BorrowableB);
   const farmingPoolAPYA = useNextFarmingAPY(-changeAmounts.bAmountA, PoolTokenType.BorrowableA);
@@ -74,11 +96,11 @@ export default function DeleverageInteractionModal({
       toggleShow={toggleShow}>
       <>
         <RiskMetrics
-          changeBorrowedA={-changeAmounts.bAmountA}
-          changeBorrowedB={-changeAmounts.bAmountB}
-          changeCollateral={-changeAmounts.cAmount}
           safetyMargin={safetyMargin}
-          twapPrice={twapPrice} />
+          twapPrice={twapPrice}
+          changes={changes}
+          currentLeverage={currentLeverage}
+          newLeverage={newLeverage} />
         <InputAmount
           val={val}
           setVal={setVal}

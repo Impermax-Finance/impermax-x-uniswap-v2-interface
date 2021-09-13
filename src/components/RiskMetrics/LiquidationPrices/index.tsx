@@ -51,9 +51,9 @@ const LiquidationPrices = ({
   safetyMargin,
   twapPrice
 } : Props): JSX.Element => {
-  // ray test touch <<
+  // ray test touch <<<
   const [price0, price1] = useLiquidationPrices(changes);
-  // ray test touch >>
+  // ray test touch >>>
 
   if (!price0 && !price1) {
     return <span>-</span>;

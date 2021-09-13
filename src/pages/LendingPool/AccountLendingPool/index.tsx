@@ -33,6 +33,7 @@ import { PARAMETERS } from 'utils/constants/links';
 import useLendingPool from 'services/hooks/use-lending-pool';
 import useTokenDeposited from 'services/hooks/use-token-deposited';
 import useTokenBorrowBalance from 'services/hooks/use-token-borrow-balance';
+import usePriceDenomLP from 'services/hooks/use-price-denom-lp';
 import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
 import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
 import { PoolTokenType } from 'types/interfaces';
@@ -166,6 +167,17 @@ const AccountLendingPool = (): JSX.Element => {
   );
   useErrorHandler(priceObjLoadingError);
 
+  const {
+    isLoading: priceDenomLPLoading,
+    data: priceDenomLP,
+    error: priceDenomLPError
+  } = usePriceDenomLP(
+    selectedUniswapV2PairAddress,
+    selectedChainID,
+    library
+  );
+  useErrorHandler(priceDenomLPError);
+
   if (!account) {
     return (
       <AccountLendingPoolContainer>
@@ -205,6 +217,14 @@ const AccountLendingPool = (): JSX.Element => {
   if (priceObjLoading) {
     return <>Loading...</>;
   }
+  if (priceDenomLPLoading) {
+    return <>Loading...</>;
+  }
+  if (!priceObj?.[0]) {
+    return (
+      <OracleAlert />
+    );
+  }
   if (tokenADeposited === undefined) {
     throw new Error('Something went wrong!');
   }
@@ -223,10 +243,8 @@ const AccountLendingPool = (): JSX.Element => {
   if (tokenBBorrowBalance === undefined) {
     throw new Error('Something went wrong!');
   }
-  if (!priceObj?.[0]) {
-    return (
-      <OracleAlert />
-    );
+  if (priceDenomLP === undefined) {
+    throw new Error('Something went wrong!');
   }
 
   const tokenAPriceInUSD = getLendingPoolTokenPriceInUSD(selectedLendingPool, PoolTokenType.BorrowableA);
@@ -278,6 +296,14 @@ const AccountLendingPool = (): JSX.Element => {
   const tokenBDecimals = parseInt(selectedLendingPool[PoolTokenType.BorrowableB].underlying.decimals);
   const twapPrice = price / 2 ** 112 * Math.pow(10, tokenADecimals) / Math.pow(10, tokenBDecimals);
 
+  // ray test touch <<<
+  const tokenADenomLPPrice = priceDenomLP[0] / 1e18 / 1e18 * Math.pow(10, tokenADecimals);
+  const tokenBDenomLPPrice = priceDenomLP[1] / 1e18 / 1e18 * Math.pow(10, tokenBDecimals);
+  const valueCollateralWithoutChanges = collateralDeposited;
+  const valueAWithoutChanges = tokenABorrowed * tokenADenomLPPrice;
+  const valueBWithoutChanges = tokenBBorrowed * tokenBDenomLPPrice;
+  // ray test touch >>>
+
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector
@@ -290,7 +316,10 @@ const AccountLendingPool = (): JSX.Element => {
             debtInUSD={debtInUSD}
             lpEquityInUSD={lpEquityInUSD}
             safetyMargin={safetyMargin}
-            twapPrice={twapPrice} />
+            twapPrice={twapPrice}
+            valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+            valueAWithoutChanges={valueAWithoutChanges}
+            valueBWithoutChanges={valueBWithoutChanges} />
           {/* ray test touch << */}
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
             {/* ray test touch >> */}
@@ -303,7 +332,10 @@ const AccountLendingPool = (): JSX.Element => {
               tokenAIconPath={tokenAIconPath}
               tokenBIconPath={tokenBIconPath}
               safetyMargin={safetyMargin}
-              twapPrice={twapPrice} />
+              twapPrice={twapPrice}
+              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+              valueAWithoutChanges={valueAWithoutChanges}
+              valueBWithoutChanges={valueBWithoutChanges} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow
@@ -314,7 +346,10 @@ const AccountLendingPool = (): JSX.Element => {
               collateralSymbol={collateralSymbol}
               tokenIconPath={tokenAIconPath}
               safetyMargin={safetyMargin}
-              twapPrice={twapPrice} />
+              twapPrice={twapPrice}
+              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+              valueAWithoutChanges={valueAWithoutChanges}
+              valueBWithoutChanges={valueBWithoutChanges} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolBorrowRow
@@ -325,7 +360,10 @@ const AccountLendingPool = (): JSX.Element => {
               collateralSymbol={collateralSymbol}
               tokenIconPath={tokenBIconPath}
               safetyMargin={safetyMargin}
-              twapPrice={twapPrice} />
+              twapPrice={twapPrice}
+              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+              valueAWithoutChanges={valueAWithoutChanges}
+              valueBWithoutChanges={valueBWithoutChanges} />
           </PoolTokenContext.Provider>
         </>
       )}
@@ -341,7 +379,10 @@ const AccountLendingPool = (): JSX.Element => {
               tokenSymbol={tokenASymbol}
               tokenIconPath={tokenAIconPath}
               safetyMargin={safetyMargin}
-              twapPrice={twapPrice} />
+              twapPrice={twapPrice}
+              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+              valueAWithoutChanges={valueAWithoutChanges}
+              valueBWithoutChanges={valueBWithoutChanges} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolSupplyRow
@@ -350,7 +391,10 @@ const AccountLendingPool = (): JSX.Element => {
               tokenSymbol={tokenBSymbol}
               tokenIconPath={tokenBIconPath}
               safetyMargin={safetyMargin}
-              twapPrice={twapPrice} />
+              twapPrice={twapPrice}
+              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
+              valueAWithoutChanges={valueAWithoutChanges}
+              valueBWithoutChanges={valueBWithoutChanges} />
           </PoolTokenContext.Provider>
         </>
       )}

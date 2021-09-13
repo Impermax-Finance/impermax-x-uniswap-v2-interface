@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { InteractionModalContainer } from '.';
 import { Row, Col } from 'react-bootstrap';
-import { PoolTokenType, ApprovalType } from '../../types/interfaces';
-import usePoolToken from '../../hooks/usePoolToken';
+import { ApprovalType } from '../../types/interfaces';
 import RiskMetrics from '../RiskMetrics';
 import InputAmount from '../InputAmount';
 import InteractionButton from '../InteractionButton';
 import useApprove from '../../hooks/useApprove';
 import useRepay from '../../hooks/useRepay';
-import { useSymbol, useAvailableBalance, useToBigNumber } from '../../hooks/useData';
+import {
+  useSymbol,
+  useAvailableBalance,
+  useToBigNumber
+} from '../../hooks/useData';
+import getLeverage from 'utils/helpers/get-leverage';
 
 /**
  * Props for the deposit interaction modal.
@@ -21,6 +25,9 @@ export interface RepayInteractionModalProps {
   tokenBorrowed: number;
   safetyMargin: number;
   twapPrice: number;
+  valueCollateralWithoutChanges: number;
+  valueAWithoutChanges: number;
+  valueBWithoutChanges: number;
 }
 
 /**
@@ -34,9 +41,11 @@ export default function RepayInteractionModal({
   toggleShow,
   tokenBorrowed,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  valueCollateralWithoutChanges,
+  valueAWithoutChanges,
+  valueBWithoutChanges
 }: RepayInteractionModalProps): JSX.Element {
-  const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
@@ -52,6 +61,17 @@ export default function RepayInteractionModal({
     toggleShow(false);
   };
 
+  const changes = {
+    changeCollateral: 0,
+    changeBorrowedA: -val,
+    changeBorrowedB: -val
+  };
+  const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
+  const valueA = valueAWithoutChanges + changes.changeBorrowedA;
+  const valueB = valueBWithoutChanges + changes.changeBorrowedB;
+  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
+  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
+
   return (
     <InteractionModalContainer
       title='Repay'
@@ -59,10 +79,11 @@ export default function RepayInteractionModal({
       toggleShow={toggleShow}>
       <>
         <RiskMetrics
-          changeBorrowedA={poolTokenType === PoolTokenType.BorrowableA ? -val : 0}
-          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? -val : 0}
           safetyMargin={safetyMargin}
-          twapPrice={twapPrice} />
+          twapPrice={twapPrice}
+          changes={changes}
+          currentLeverage={currentLeverage}
+          newLeverage={newLeverage} />
         <InputAmount
           val={val}
           setVal={setVal}
