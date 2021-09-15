@@ -5,6 +5,7 @@ import RiskMetrics from 'components/RiskMetrics';
 import DetailList, { DetailListItem } from 'components/DetailList';
 import { formatNumberWithUSDCommaDecimals } from 'utils/helpers/format-number';
 import getLeverage from 'utils/helpers/get-leverage';
+import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
 
 /**
  * Generates lending pool aggregate details.
@@ -15,6 +16,7 @@ interface Props {
   debtInUSD: number;
   lpEquityInUSD: number;
   safetyMargin: number;
+  liquidationIncentive: number;
   twapPrice: number;
   valueCollateralWithoutChanges: number;
   valueAWithoutChanges: number;
@@ -26,6 +28,7 @@ const AccountLendingPoolDetailsLeverage = ({
   debtInUSD,
   lpEquityInUSD,
   safetyMargin,
+  liquidationIncentive,
   twapPrice,
   valueCollateralWithoutChanges,
   valueAWithoutChanges,
@@ -55,6 +58,24 @@ const AccountLendingPoolDetailsLeverage = ({
   const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
   const valueA = valueAWithoutChanges + changes.changeBorrowedA;
   const valueB = valueBWithoutChanges + changes.changeBorrowedB;
+  const currentLiquidationPrices =
+    getLiquidationPrices(
+      valueCollateralWithoutChanges,
+      valueAWithoutChanges,
+      valueBWithoutChanges,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive
+    );
+  const newLiquidationPrices =
+    getLiquidationPrices(
+      valueCollateral,
+      valueA,
+      valueB,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive
+    );
   const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
   const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
 
@@ -85,7 +106,9 @@ const AccountLendingPoolDetailsLeverage = ({
         twapPrice={twapPrice}
         changes={changes}
         currentLeverage={currentLeverage}
-        newLeverage={newLeverage} />
+        newLeverage={newLeverage}
+        currentLiquidationPrices={currentLiquidationPrices}
+        newLiquidationPrices={newLiquidationPrices} />
     </div>
   );
 };

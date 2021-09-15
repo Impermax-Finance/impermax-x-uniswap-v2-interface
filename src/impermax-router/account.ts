@@ -111,9 +111,6 @@ export async function getValuesFromPrice(this: ImpermaxRouter, uniswapV2PairAddr
   const amountB = await this.getBorrowed(uniswapV2PairAddress, PoolTokenType.BorrowableB) + changes.changeBorrowedB;
   const valueA = amountA * priceA;
   const valueB = amountB * priceB;
-  console.log('ray : ***** valueCollateral 1 => ', valueCollateral);
-  console.log('ray : ***** valueA 1 => ', valueA);
-  console.log('ray : ***** valueB 1 => ', valueB);
   return {
     valueCollateral: valueCollateral > 0 ? valueCollateral : 0,
     valueA: valueA > 0 ? valueA : 0,

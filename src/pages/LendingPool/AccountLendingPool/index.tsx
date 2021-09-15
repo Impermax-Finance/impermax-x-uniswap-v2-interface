@@ -290,19 +290,18 @@ const AccountLendingPool = (): JSX.Element => {
   const tokenBIconPath = getLendingPoolTokenIconPath(selectedLendingPool, PoolTokenType.BorrowableB);
 
   const safetyMargin = parseFloat(selectedLendingPool[PoolTokenType.Collateral].safetyMargin);
+  const liquidationIncentive = parseFloat(selectedLendingPool[PoolTokenType.Collateral].liquidationIncentive);
 
   const price = priceObj[0];
   const tokenADecimals = parseInt(selectedLendingPool[PoolTokenType.BorrowableA].underlying.decimals);
   const tokenBDecimals = parseInt(selectedLendingPool[PoolTokenType.BorrowableB].underlying.decimals);
   const twapPrice = price / 2 ** 112 * Math.pow(10, tokenADecimals) / Math.pow(10, tokenBDecimals);
 
-  // ray test touch <<<
   const tokenADenomLPPrice = priceDenomLP[0] / 1e18 / 1e18 * Math.pow(10, tokenADecimals);
   const tokenBDenomLPPrice = priceDenomLP[1] / 1e18 / 1e18 * Math.pow(10, tokenBDecimals);
   const valueCollateralWithoutChanges = collateralDeposited;
   const valueAWithoutChanges = tokenABorrowed * tokenADenomLPPrice;
   const valueBWithoutChanges = tokenBBorrowed * tokenBDenomLPPrice;
-  // ray test touch >>>
 
   return (
     <AccountLendingPoolContainer>
@@ -316,6 +315,7 @@ const AccountLendingPool = (): JSX.Element => {
             debtInUSD={debtInUSD}
             lpEquityInUSD={lpEquityInUSD}
             safetyMargin={safetyMargin}
+            liquidationIncentive={liquidationIncentive}
             twapPrice={twapPrice}
             valueCollateralWithoutChanges={valueCollateralWithoutChanges}
             valueAWithoutChanges={valueAWithoutChanges}
@@ -332,6 +332,7 @@ const AccountLendingPool = (): JSX.Element => {
               tokenAIconPath={tokenAIconPath}
               tokenBIconPath={tokenBIconPath}
               safetyMargin={safetyMargin}
+              liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
               valueCollateralWithoutChanges={valueCollateralWithoutChanges}
               valueAWithoutChanges={valueAWithoutChanges}
@@ -346,6 +347,7 @@ const AccountLendingPool = (): JSX.Element => {
               collateralSymbol={collateralSymbol}
               tokenIconPath={tokenAIconPath}
               safetyMargin={safetyMargin}
+              liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
               valueCollateralWithoutChanges={valueCollateralWithoutChanges}
               valueAWithoutChanges={valueAWithoutChanges}
@@ -360,6 +362,7 @@ const AccountLendingPool = (): JSX.Element => {
               collateralSymbol={collateralSymbol}
               tokenIconPath={tokenBIconPath}
               safetyMargin={safetyMargin}
+              liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
               valueCollateralWithoutChanges={valueCollateralWithoutChanges}
               valueAWithoutChanges={valueAWithoutChanges}
@@ -379,6 +382,7 @@ const AccountLendingPool = (): JSX.Element => {
               tokenSymbol={tokenASymbol}
               tokenIconPath={tokenAIconPath}
               safetyMargin={safetyMargin}
+              liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
               valueCollateralWithoutChanges={valueCollateralWithoutChanges}
               valueAWithoutChanges={valueAWithoutChanges}
@@ -391,6 +395,7 @@ const AccountLendingPool = (): JSX.Element => {
               tokenSymbol={tokenBSymbol}
               tokenIconPath={tokenBIconPath}
               safetyMargin={safetyMargin}
+              liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
               valueCollateralWithoutChanges={valueCollateralWithoutChanges}
               valueAWithoutChanges={valueAWithoutChanges}

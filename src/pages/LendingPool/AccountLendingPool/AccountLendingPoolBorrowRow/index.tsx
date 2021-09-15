@@ -19,6 +19,7 @@ interface Props {
   collateralSymbol: string;
   tokenIconPath: string;
   safetyMargin: number;
+  liquidationIncentive: number;
   twapPrice: number;
   valueCollateralWithoutChanges: number;
   valueAWithoutChanges: number;
@@ -33,6 +34,7 @@ const AccountLendingPoolBorrowRow = ({
   collateralSymbol,
   tokenIconPath,
   safetyMargin,
+  liquidationIncentive,
   twapPrice,
   valueCollateralWithoutChanges,
   valueAWithoutChanges,
@@ -107,6 +109,7 @@ const AccountLendingPoolBorrowRow = ({
         show={showBorrowModal}
         toggleShow={toggleBorrowModal}
         safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
         valueCollateralWithoutChanges={valueCollateralWithoutChanges}
         valueAWithoutChanges={valueAWithoutChanges}
@@ -116,6 +119,7 @@ const AccountLendingPoolBorrowRow = ({
         toggleShow={toggleRepayModal}
         tokenBorrowed={tokenBorrowed}
         safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
         valueCollateralWithoutChanges={valueCollateralWithoutChanges}
         valueAWithoutChanges={valueAWithoutChanges}

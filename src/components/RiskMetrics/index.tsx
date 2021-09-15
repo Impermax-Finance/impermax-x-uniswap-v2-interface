@@ -23,6 +23,14 @@ interface Props {
   changes: Changes;
   currentLeverage: number;
   newLeverage: number;
+  currentLiquidationPrices: [
+    number,
+    number
+  ];
+  newLiquidationPrices: [
+    number,
+    number
+  ];
 }
 
 /**
@@ -35,7 +43,9 @@ const RiskMetrics = ({
   twapPrice,
   changes,
   currentLeverage,
-  newLeverage
+  newLeverage,
+  currentLiquidationPrices,
+  newLiquidationPrices
 } : Props): JSX.Element | null => {
   const validChanges = checkValidChanges(changes);
 
@@ -71,7 +81,8 @@ const RiskMetrics = ({
           tooltip={liquidationTooltip}>
           <LiquidationPrices
             safetyMargin={safetyMargin}
-            twapPrice={twapPrice} />
+            twapPrice={twapPrice}
+            liquidationPrices={currentLiquidationPrices} />
           <ArrowRightIcon
             className={clsx(
               'w-6',
@@ -80,7 +91,8 @@ const RiskMetrics = ({
           <LiquidationPrices
             changes={changes}
             safetyMargin={safetyMargin}
-            twapPrice={twapPrice} />
+            twapPrice={twapPrice}
+            liquidationPrices={newLiquidationPrices} />
         </DetailListItem>
       ) : (
         <DetailListItem
@@ -88,7 +100,8 @@ const RiskMetrics = ({
           tooltip={liquidationTooltip}>
           <LiquidationPrices
             safetyMargin={safetyMargin}
-            twapPrice={twapPrice} />
+            twapPrice={twapPrice}
+            liquidationPrices={currentLiquidationPrices} />
         </DetailListItem>
       )}
       <CurrentPrice twapPrice={twapPrice} />

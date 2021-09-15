@@ -40,6 +40,10 @@ interface Props {
   changes?: Changes;
   safetyMargin: number;
   twapPrice: number;
+  liquidationPrices: [
+    number,
+    number
+  ];
 }
 
 /**
@@ -49,10 +53,20 @@ interface Props {
 const LiquidationPrices = ({
   changes,
   safetyMargin,
-  twapPrice
+  twapPrice,
+  liquidationPrices
 } : Props): JSX.Element => {
   // ray test touch <<<
   const [price0, price1] = useLiquidationPrices(changes);
+  if (changes) {
+    console.log('ray : ***** new liquidationPrices => ', liquidationPrices);
+    console.log('ray : ***** new price0 => ', price0);
+    console.log('ray : ***** new price1 => ', price1);
+  } else {
+    console.log('ray : ***** current liquidationPrices => ', liquidationPrices);
+    console.log('ray : ***** current price0 => ', price0);
+    console.log('ray : ***** current price1 => ', price1);
+  }
   // ray test touch >>>
 
   if (!price0 && !price1) {

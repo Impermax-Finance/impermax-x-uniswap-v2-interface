@@ -23,6 +23,7 @@ interface Props {
   tokenAIconPath: string;
   tokenBIconPath: string;
   safetyMargin: number;
+  liquidationIncentive: number;
   twapPrice: number;
   valueCollateralWithoutChanges: number;
   valueAWithoutChanges: number;
@@ -38,6 +39,7 @@ const AccountLendingPoolLPRow = ({
   tokenAIconPath,
   tokenBIconPath,
   safetyMargin,
+  liquidationIncentive,
   twapPrice,
   valueCollateralWithoutChanges,
   valueAWithoutChanges,
@@ -141,6 +143,7 @@ const AccountLendingPoolLPRow = ({
         show={showDepositModal}
         toggleShow={toggleDepositModal}
         safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
         valueCollateralWithoutChanges={valueCollateralWithoutChanges}
         valueAWithoutChanges={valueAWithoutChanges}
@@ -149,6 +152,7 @@ const AccountLendingPoolLPRow = ({
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
         safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
         valueCollateralWithoutChanges={valueCollateralWithoutChanges}
         valueAWithoutChanges={valueAWithoutChanges}
@@ -157,6 +161,7 @@ const AccountLendingPoolLPRow = ({
         show={showLeverageModal}
         toggleShow={toggleLeverageModal}
         safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
         valueCollateralWithoutChanges={valueCollateralWithoutChanges}
         valueAWithoutChanges={valueAWithoutChanges}
@@ -167,6 +172,7 @@ const AccountLendingPoolLPRow = ({
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
         safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
         valueCollateralWithoutChanges={valueCollateralWithoutChanges}
         valueAWithoutChanges={valueAWithoutChanges}

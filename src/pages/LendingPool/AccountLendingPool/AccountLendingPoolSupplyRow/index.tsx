@@ -18,6 +18,7 @@ interface Props {
   tokenSymbol: string;
   tokenIconPath: string;
   safetyMargin: number;
+  liquidationIncentive: number;
   twapPrice: number;
   valueCollateralWithoutChanges: number;
   valueAWithoutChanges: number;
@@ -30,6 +31,7 @@ const AccountLendingPoolSupplyRow = ({
   tokenSymbol,
   tokenIconPath,
   safetyMargin,
+  liquidationIncentive,
   twapPrice,
   valueCollateralWithoutChanges,
   valueAWithoutChanges,
@@ -97,6 +99,7 @@ const AccountLendingPoolSupplyRow = ({
         show={showDepositModal}
         toggleShow={toggleDepositModal}
         safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
         valueCollateralWithoutChanges={valueCollateralWithoutChanges}
         valueAWithoutChanges={valueAWithoutChanges}
@@ -105,6 +108,7 @@ const AccountLendingPoolSupplyRow = ({
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
         safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
         valueCollateralWithoutChanges={valueCollateralWithoutChanges}
         valueAWithoutChanges={valueAWithoutChanges}

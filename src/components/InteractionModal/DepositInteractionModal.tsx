@@ -13,6 +13,7 @@ import useDeposit from '../../hooks/useDeposit';
 import { useSymbol, useAvailableBalance, useToBigNumber } from '../../hooks/useData';
 import { useAddLiquidityUrl } from '../../hooks/useUrlGenerator';
 import getLeverage from 'utils/helpers/get-leverage';
+import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
 
 /**
  * Props for the deposit interaction modal.
@@ -23,6 +24,7 @@ export interface DepositInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   safetyMargin: number;
+  liquidationIncentive: number;
   twapPrice: number;
   valueCollateralWithoutChanges: number;
   valueAWithoutChanges: number;
@@ -33,6 +35,7 @@ export default function DepositInteractionModal({
   show,
   toggleShow,
   safetyMargin,
+  liquidationIncentive,
   twapPrice,
   valueCollateralWithoutChanges,
   valueAWithoutChanges,
@@ -88,6 +91,24 @@ export default function DepositInteractionModal({
   const valueCollateral = valueCollateralWithoutChanges + val;
   const valueA = valueAWithoutChanges + 0;
   const valueB = valueBWithoutChanges + 0;
+  const currentLiquidationPrices =
+    getLiquidationPrices(
+      valueCollateralWithoutChanges,
+      valueAWithoutChanges,
+      valueBWithoutChanges,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive
+    );
+  const newLiquidationPrices =
+    getLiquidationPrices(
+      valueCollateral,
+      valueA,
+      valueB,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive
+    );
   const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
   const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
 
@@ -104,7 +125,9 @@ export default function DepositInteractionModal({
             twapPrice={twapPrice}
             changes={changes}
             currentLeverage={currentLeverage}
-            newLeverage={newLeverage} />
+            newLeverage={newLeverage}
+            currentLiquidationPrices={currentLiquidationPrices}
+            newLiquidationPrices={newLiquidationPrices} />
         )}
         <InputAmount
           val={val}
