@@ -89,7 +89,6 @@ const RiskMetrics = ({
               'h-6'
             )} />
           <LiquidationPrices
-            changes={changes}
             safetyMargin={safetyMargin}
             twapPrice={twapPrice}
             liquidationPrices={newLiquidationPrices} />

@@ -295,7 +295,10 @@ const AccountLendingPool = (): JSX.Element => {
   const price = priceObj[0];
   const tokenADecimals = parseInt(selectedLendingPool[PoolTokenType.BorrowableA].underlying.decimals);
   const tokenBDecimals = parseInt(selectedLendingPool[PoolTokenType.BorrowableB].underlying.decimals);
+  // ray test touch <<
+  // this.priceInverted ? 1 / twapPrice : twapPrice
   const twapPrice = price / 2 ** 112 * Math.pow(10, tokenADecimals) / Math.pow(10, tokenBDecimals);
+  // ray test touch >>
 
   const tokenADenomLPPrice = priceDenomLP[0] / 1e18 / 1e18 * Math.pow(10, tokenADecimals);
   const tokenBDenomLPPrice = priceDenomLP[1] / 1e18 / 1e18 * Math.pow(10, tokenBDecimals);

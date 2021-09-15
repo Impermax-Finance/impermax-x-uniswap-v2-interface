@@ -3,7 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { PoolTokenType, Changes, ClaimEvent, Address } from '../types/interfaces';
+import { PoolTokenType, ClaimEvent, Address } from '../types/interfaces';
 import usePoolToken from './usePoolToken';
 import usePairAddress from './usePairAddress';
 import { useState, useEffect } from 'react';
@@ -201,20 +201,6 @@ export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   useRouterCallback(async router => setAvailableBalance(await router.getAvailableBalance(uniswapV2PairAddress, poolTokenType)));
   return availableBalance;
 }
-
-// ray test touch <<<
-export function useLiquidationPrices(changes?: Changes) : [number, number] {
-  const uniswapV2PairAddress = usePairAddress();
-  const [liquidationPrices, setLiquidationPrices] = useState<[number, number]>([0, 0]);
-  useRouterCallback(async router => {
-    setLiquidationPrices(changes ?
-      await router.getNewLiquidationPrices(uniswapV2PairAddress, changes) :
-      await router.getLiquidationPrices(uniswapV2PairAddress)
-    );
-  }, [changes]);
-  return liquidationPrices;
-}
-// ray test touch >>>
 
 export function useClaimHistory() : ClaimEvent[] {
   const uniswapV2PairAddress = usePairAddress();

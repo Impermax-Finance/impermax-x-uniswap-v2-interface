@@ -198,7 +198,6 @@ class ImpermaxRouter {
   public initializeReserves = fetchers.initializeReserves;
   public initializeLPTotalSupply = fetchers.initializeLPTotalSupply;
   public initializePriceDenomLP = fetchers.initializePriceDenomLP;
-  public initializeTWAPPrice = fetchers.initializeTWAPPrice;
   public getTokenDecimals = fetchers.getTokenDecimals;
   public getDecimals = fetchers.getDecimals;
   public getReserves = fetchers.getReserves;
@@ -207,7 +206,6 @@ class ImpermaxRouter {
   public getBorrowablePriceDenomLP = fetchers.getBorrowablePriceDenomLP;
   public getMarketPriceDenomLP = fetchers.getMarketPriceDenomLP;
   public getMarketPrice = fetchers.getMarketPrice;
-  public getTWAPPrice = fetchers.getTWAPPrice;
   public isValidPair = fetchers.isValidPair;
   public getPairSymbols = fetchers.getPairSymbols;
   public isPoolTokenCreated = fetchers.isPoolTokenCreated;
@@ -227,10 +225,7 @@ class ImpermaxRouter {
   public getValues = account.getValues;
   public getMarketValues = account.getMarketValues;
   public getNewLeverage = account.getNewLeverage;
-  public getNewLiquidationPriceSwings = account.getNewLiquidationPriceSwings;
-  public getNewLiquidationPrices = account.getNewLiquidationPrices;
   public getLeverage = account.getLeverage;
-  public getLiquidationPrices = account.getLiquidationPrices;
   public getMaxWithdrawable = account.getMaxWithdrawable;
   public getMaxBorrowable = account.getMaxBorrowable;
   public getMaxLeverage = account.getMaxLeverage;

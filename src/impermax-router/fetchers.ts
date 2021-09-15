@@ -134,39 +134,6 @@ export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress:
   return this.priceInverted ? 1 * reserve0 / reserve1 : 1 * reserve1 / reserve0;
 }
 
-// TWAP Price
-export async function initializeTWAPPrice(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address
-) : Promise<number> {
-  try {
-    /**
-     * MEMO:
-     * https://github.com/EthWorks/Waffle/issues/339
-     * https://ethereum.stackexchange.com/questions/88119/i-see-no-way-to-obtain-the-return-value-of-a-non-view-function-ethers-js
-     * https://ethereum.stackexchange.com/questions/57191/what-happens-if-view-function-calls-function-that-is-neither-view-nor-pure
-     */
-    const { price } = await this.simpleUniswapOracle.callStatic.getResult(uniswapV2PairAddress);
-    const decimalsA = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-    const decimalsB = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-    return price / 2 ** 112 * Math.pow(10, decimalsA) / Math.pow(10, decimalsB);
-  } catch (error) {
-    // Oracle is not initialized yet
-    console.error('[initializeTWAPPrice] error.message => ', error.message);
-    return 0; // TODO: error-prone
-  }
-}
-
-export async function getTWAPPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.TWAPPrice) {
-    cache.TWAPPrice = this.initializeTWAPPrice(uniswapV2PairAddress);
-  }
-  const twapPrice = await cache.TWAPPrice;
-
-  return this.priceInverted ? 1 / twapPrice : twapPrice;
-}
-
 // Check Uniswap Pair Address
 export async function isValidPair(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<boolean> {
   if (!uniswapV2PairAddress) return false;

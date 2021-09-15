@@ -142,39 +142,6 @@ export async function getLeverage(this: ImpermaxRouter, uniswapV2PairAddress: Ad
   return await this.getNewLeverage(uniswapV2PairAddress, NO_CHANGES);
 }
 
-// ray test touch <<<
-// Liquidation Threshold
-export async function getNewLiquidationPriceSwings(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<[number, number]> {
-  const {
-    valueCollateral,
-    valueA,
-    valueB
-  } = await this.getValues(uniswapV2PairAddress, changes);
-  if (valueA + valueB === 0) return [Infinity, Infinity];
-  const safetyMargin = await this.subgraph.getSafetyMargin(uniswapV2PairAddress);
-  const liquidationIncentive = await this.subgraph.getLiquidationIncentive(uniswapV2PairAddress);
-  const actualCollateral = valueCollateral / liquidationIncentive;
-  const rad = Math.sqrt(actualCollateral ** 2 - 4 * valueA * valueB);
-  if (!rad) return [0, 0];
-  const t = (actualCollateral + rad) / (2 * Math.sqrt(safetyMargin));
-  const priceSwingA = (t / valueA) ** 2;
-  const priceSwingB = (t / valueB) ** 2;
-  return [priceSwingA, priceSwingB];
-}
-export async function getNewLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<[number, number]> {
-  const currentPrice = await this.getTWAPPrice(uniswapV2PairAddress);
-  const [priceSwingA, priceSwingB] = await this.getNewLiquidationPriceSwings(uniswapV2PairAddress, changes);
-  return (
-    this.priceInverted ?
-      [currentPrice / priceSwingA, currentPrice * priceSwingB] :
-      [currentPrice / priceSwingB, currentPrice * priceSwingA]
-  );
-}
-export async function getLiquidationPrices(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
-  return await this.getNewLiquidationPrices(uniswapV2PairAddress, NO_CHANGES);
-}
-// ray test touch >>>
-
 // Max Withdrawable
 export async function getMaxWithdrawable(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const deposited = await this.getDeposited(uniswapV2PairAddress, poolTokenType);

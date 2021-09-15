@@ -1,7 +1,5 @@
 
-import { useLiquidationPrices } from 'hooks/useData';
 import { formatFloat } from 'utils/format';
-import { Changes } from 'types/interfaces';
 
 const LIQ_K = 1.7;
 
@@ -37,7 +35,6 @@ const LiquidationPrice = ({
 };
 
 interface Props {
-  changes?: Changes;
   safetyMargin: number;
   twapPrice: number;
   liquidationPrices: [
@@ -51,23 +48,12 @@ interface Props {
  */
 
 const LiquidationPrices = ({
-  changes,
   safetyMargin,
   twapPrice,
   liquidationPrices
 } : Props): JSX.Element => {
-  // ray test touch <<<
-  const [price0, price1] = useLiquidationPrices(changes);
-  if (changes) {
-    console.log('ray : ***** new liquidationPrices => ', liquidationPrices);
-    console.log('ray : ***** new price0 => ', price0);
-    console.log('ray : ***** new price1 => ', price1);
-  } else {
-    console.log('ray : ***** current liquidationPrices => ', liquidationPrices);
-    console.log('ray : ***** current price0 => ', price0);
-    console.log('ray : ***** current price1 => ', price1);
-  }
-  // ray test touch >>>
+  const price0 = liquidationPrices[0];
+  const price1 = liquidationPrices[1];
 
   if (!price0 && !price1) {
     return <span>-</span>;
