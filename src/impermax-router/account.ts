@@ -118,28 +118,15 @@ export async function getValuesFromPrice(this: ImpermaxRouter, uniswapV2PairAddr
   };
 }
 // ray test touch >>>
-// ray test touch <<<
+// ray test touch <<
 export async function getValues(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
   const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
   return this.getValuesFromPrice(uniswapV2PairAddress, changes, priceA, priceB);
 }
-// ray test touch >>>
+// ray test touch >>
 export async function getMarketValues(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
   const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
   return this.getValuesFromPrice(uniswapV2PairAddress, changes, priceA, priceB);
-}
-
-// Leverage
-export async function getNewLeverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<number> {
-  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, changes);
-  const valueDebt = valueA + valueB;
-  if (valueDebt === 0) return 1;
-  const equity = valueCollateral - valueDebt;
-  if (equity <= 0) return Infinity;
-  return valueDebt / equity + 1;
-}
-export async function getLeverage(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  return await this.getNewLeverage(uniswapV2PairAddress, NO_CHANGES);
 }
 
 // Max Withdrawable

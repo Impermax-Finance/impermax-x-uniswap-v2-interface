@@ -16,34 +16,39 @@ import { useMaxDeleverage } from 'hooks/useData';
 
 interface Props {
   collateralDepositedInUSD: number;
-  collateralDeposited: number;
-  tokenABorrowed: number;
-  tokenBBorrowed: number;
   collateralSymbol: string;
   tokenAIconPath: string;
   tokenBIconPath: string;
   safetyMargin: number;
   liquidationIncentive: number;
   twapPrice: number;
-  valueCollateralWithoutChanges: number;
-  valueAWithoutChanges: number;
-  valueBWithoutChanges: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
+  reserves: [
+    number,
+    number
+  ];
+  totalSupply: number;
 }
 
 const AccountLendingPoolLPRow = ({
   collateralDepositedInUSD,
-  collateralDeposited,
-  tokenABorrowed,
-  tokenBBorrowed,
   collateralSymbol,
   tokenAIconPath,
   tokenBIconPath,
   safetyMargin,
   liquidationIncentive,
   twapPrice,
-  valueCollateralWithoutChanges,
-  valueAWithoutChanges,
-  valueBWithoutChanges
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed,
+  reserves,
+  totalSupply
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -145,38 +150,46 @@ const AccountLendingPoolLPRow = ({
         safetyMargin={safetyMargin}
         liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
-        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-        valueAWithoutChanges={valueAWithoutChanges}
-        valueBWithoutChanges={valueBWithoutChanges} />
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
         safetyMargin={safetyMargin}
         liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
-        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-        valueAWithoutChanges={valueAWithoutChanges}
-        valueBWithoutChanges={valueBWithoutChanges} />
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed} />
       <LeverageInteractionModal
         show={showLeverageModal}
         toggleShow={toggleLeverageModal}
         safetyMargin={safetyMargin}
         liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
-        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-        valueAWithoutChanges={valueAWithoutChanges}
-        valueBWithoutChanges={valueBWithoutChanges} />
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed}
+        reserves={reserves}
+        totalSupply={totalSupply} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
         toggleShow={toggleDeleverageModal}
-        tokenABorrowed={tokenABorrowed}
-        tokenBBorrowed={tokenBBorrowed}
         safetyMargin={safetyMargin}
         liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
-        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-        valueAWithoutChanges={valueAWithoutChanges}
-        valueBWithoutChanges={valueBWithoutChanges} />
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed} />
     </>
   );
 };

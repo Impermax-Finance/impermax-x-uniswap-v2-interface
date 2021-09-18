@@ -14,28 +14,30 @@ import { useMaxWithdrawable } from 'hooks/useData';
 
 interface Props {
   collateralDepositedInUSD: number;
-  collateralDeposited: number;
   tokenSymbol: string;
   tokenIconPath: string;
   safetyMargin: number;
   liquidationIncentive: number;
   twapPrice: number;
-  valueCollateralWithoutChanges: number;
-  valueAWithoutChanges: number;
-  valueBWithoutChanges: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
 }
 
 const AccountLendingPoolSupplyRow = ({
   collateralDepositedInUSD,
-  collateralDeposited,
   tokenSymbol,
   tokenIconPath,
   safetyMargin,
   liquidationIncentive,
   twapPrice,
-  valueCollateralWithoutChanges,
-  valueAWithoutChanges,
-  valueBWithoutChanges
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -101,18 +103,22 @@ const AccountLendingPoolSupplyRow = ({
         safetyMargin={safetyMargin}
         liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
-        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-        valueAWithoutChanges={valueAWithoutChanges}
-        valueBWithoutChanges={valueBWithoutChanges} />
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
         safetyMargin={safetyMargin}
         liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
-        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-        valueAWithoutChanges={valueAWithoutChanges}
-        valueBWithoutChanges={valueBWithoutChanges} />
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed} />
     </>
   );
 };

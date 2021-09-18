@@ -1,15 +1,38 @@
 
+import getValues from 'utils/helpers/get-values';
+import { Changes } from 'types/interfaces';
+
 const getLiquidationPrices = (
-  valueCollateral: number,
-  valueA: number,
-  valueB: number,
+  collateralDeposited: number,
+  tokenADenomLPPrice: number,
+  tokenBDenomLPPrice: number,
+  tokenABorrowed: number,
+  tokenBBorrowed: number,
   twapPrice: number,
   safetyMargin: number,
-  liquidationIncentive: number
+  liquidationIncentive: number,
+  changes: Changes = {
+    changeCollateral: 0,
+    changeBorrowedA: 0,
+    changeBorrowedB: 0
+  }
 ): [
   number,
   number
 ] => {
+  const {
+    valueCollateral,
+    valueA,
+    valueB
+  } = getValues(
+    collateralDeposited,
+    tokenADenomLPPrice,
+    tokenBDenomLPPrice,
+    tokenABorrowed,
+    tokenBBorrowed,
+    changes
+  );
+
   let tokenAPriceSwing;
   let tokenBPriceSwing;
   if (valueA + valueB === 0) {

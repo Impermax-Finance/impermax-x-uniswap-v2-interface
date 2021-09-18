@@ -29,27 +29,27 @@ import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
 interface DeleverageInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
-  tokenABorrowed: number;
-  tokenBBorrowed: number;
   safetyMargin: number;
   liquidationIncentive: number;
   twapPrice: number;
-  valueCollateralWithoutChanges: number;
-  valueAWithoutChanges: number;
-  valueBWithoutChanges: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
 }
 
 export default function DeleverageInteractionModal({
   show,
   toggleShow,
-  tokenABorrowed,
-  tokenBBorrowed,
   safetyMargin,
   liquidationIncentive,
   twapPrice,
-  valueCollateralWithoutChanges,
-  valueAWithoutChanges,
-  valueBWithoutChanges
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed
 }: DeleverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
@@ -77,30 +77,46 @@ export default function DeleverageInteractionModal({
     changeBorrowedB: -changeAmounts.bAmountB ?? 0,
     changeCollateral: -changeAmounts.cAmount ?? 0
   };
-
-  const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
-  const valueA = valueAWithoutChanges + changes.changeBorrowedA;
-  const valueB = valueBWithoutChanges + changes.changeBorrowedB;
   const currentLiquidationPrices =
     getLiquidationPrices(
-      valueCollateralWithoutChanges,
-      valueAWithoutChanges,
-      valueBWithoutChanges,
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
       twapPrice,
       safetyMargin,
       liquidationIncentive
     );
   const newLiquidationPrices =
     getLiquidationPrices(
-      valueCollateral,
-      valueA,
-      valueB,
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
       twapPrice,
       safetyMargin,
-      liquidationIncentive
+      liquidationIncentive,
+      changes
     );
-  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
-  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
+  const currentLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed
+    );
+  const newLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      changes
+    );
 
   const borrowAPYA = useNextBorrowAPY(-changeAmounts.bAmountA, PoolTokenType.BorrowableA);
   const borrowAPYB = useNextBorrowAPY(-changeAmounts.bAmountB, PoolTokenType.BorrowableB);

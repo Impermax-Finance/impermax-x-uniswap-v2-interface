@@ -21,9 +21,11 @@ interface Props {
   safetyMargin: number;
   liquidationIncentive: number;
   twapPrice: number;
-  valueCollateralWithoutChanges: number;
-  valueAWithoutChanges: number;
-  valueBWithoutChanges: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
 }
 
 const AccountLendingPoolBorrowRow = ({
@@ -36,9 +38,11 @@ const AccountLendingPoolBorrowRow = ({
   safetyMargin,
   liquidationIncentive,
   twapPrice,
-  valueCollateralWithoutChanges,
-  valueAWithoutChanges,
-  valueBWithoutChanges
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed
 }: Props): JSX.Element => {
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepayModal] = useState(false);
@@ -111,9 +115,11 @@ const AccountLendingPoolBorrowRow = ({
         safetyMargin={safetyMargin}
         liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
-        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-        valueAWithoutChanges={valueAWithoutChanges}
-        valueBWithoutChanges={valueBWithoutChanges} />
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed} />
       <RepayInteractionModal
         show={showRepayModal}
         toggleShow={toggleRepayModal}
@@ -121,9 +127,11 @@ const AccountLendingPoolBorrowRow = ({
         safetyMargin={safetyMargin}
         liquidationIncentive={liquidationIncentive}
         twapPrice={twapPrice}
-        valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-        valueAWithoutChanges={valueAWithoutChanges}
-        valueBWithoutChanges={valueBWithoutChanges} />
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed} />
     </>
   );
 };

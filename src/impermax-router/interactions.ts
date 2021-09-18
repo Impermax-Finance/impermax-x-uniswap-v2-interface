@@ -5,7 +5,6 @@ import { formatUnits } from '@ethersproject/units';
 import ImpermaxRouter from '.';
 import { Address, PoolTokenType } from '../types/interfaces';
 import { PermitData } from '../hooks/useApprove';
-import { impermanentLoss } from '../utils';
 import { DistributorDetails } from '../utils/constants';
 import { CreatePairStep } from '../hooks/useCreateNewPair';
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
@@ -128,33 +127,6 @@ export async function repay(
   }
 }
 
-export async function getLeverageAmounts(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  leverage: number,
-  slippage: number
-) : Promise<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number, cAmountMin: number}> {
-  const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
-  // This function must use the market price, but the account leverage is calculated with the TWAP, so we need an adjustFactor
-  const [priceATWAP] = await this.getPriceDenomLP(uniswapV2PairAddress);
-  const diff = priceA > priceATWAP ? priceA / priceATWAP : priceATWAP / priceA;
-  const adjustFactor = Math.pow(impermanentLoss(diff ** 2), leverage);
-  const currentLeverage = await this.getLeverage(uniswapV2PairAddress);
-  const collateralValue = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const changeCollateralValue = (collateralValue * leverage / currentLeverage - collateralValue) * adjustFactor;
-  const valueForEach = changeCollateralValue / 2;
-  const bAmountA = priceA > 0 ? valueForEach / priceA : 0;
-  const bAmountB = priceB > 0 ? valueForEach / priceB : 0;
-  const cAmount = changeCollateralValue ? changeCollateralValue : 0;
-  return {
-    bAmountA: bAmountA,
-    bAmountB: bAmountB,
-    cAmount: cAmount,
-    bAmountAMin: bAmountA / slippage,
-    bAmountBMin: bAmountB / slippage,
-    cAmountMin: cAmount / Math.sqrt(slippage)
-  };
-}
 export async function leverage(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,

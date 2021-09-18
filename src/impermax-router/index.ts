@@ -224,8 +224,6 @@ class ImpermaxRouter {
   public getValuesFromPrice = account.getValuesFromPrice;
   public getValues = account.getValues;
   public getMarketValues = account.getMarketValues;
-  public getNewLeverage = account.getNewLeverage;
-  public getLeverage = account.getLeverage;
   public getMaxWithdrawable = account.getMaxWithdrawable;
   public getMaxBorrowable = account.getMaxBorrowable;
   public getMaxLeverage = account.getMaxLeverage;
@@ -257,7 +255,6 @@ class ImpermaxRouter {
   public withdraw = interactions.withdraw;
   public borrow = interactions.borrow;
   public repay = interactions.repay;
-  public getLeverageAmounts = interactions.getLeverageAmounts;
   public leverage = interactions.leverage;
   public getDeleverageAmounts = interactions.getDeleverageAmounts;
   public deleverage = interactions.deleverage;

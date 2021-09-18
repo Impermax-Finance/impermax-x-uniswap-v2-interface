@@ -1,19 +1,31 @@
 
+import getValues from 'utils/helpers/get-values';
 import { Changes } from 'types/interfaces';
 
 const getLeverage = (
-  valueCollateralWithoutChanges: number,
-  valueAWithoutChanges: number,
-  valueBWithoutChanges: number,
+  collateralDeposited: number,
+  tokenADenomLPPrice: number,
+  tokenBDenomLPPrice: number,
+  tokenABorrowed: number,
+  tokenBBorrowed: number,
   changes: Changes = {
     changeBorrowedA: 0,
     changeBorrowedB: 0,
     changeCollateral: 0
   }
 ): number => {
-  const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
-  const valueA = valueAWithoutChanges + changes.changeBorrowedA;
-  const valueB = valueBWithoutChanges + changes.changeBorrowedB;
+  const {
+    valueCollateral,
+    valueA,
+    valueB
+  } = getValues(
+    collateralDeposited,
+    tokenADenomLPPrice,
+    tokenBDenomLPPrice,
+    tokenABorrowed,
+    tokenBBorrowed,
+    changes
+  );
 
   const valueDebt = valueA + valueB;
   if (valueDebt === 0) return 1;

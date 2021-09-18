@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
+import { formatUnits } from '@ethersproject/units';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
@@ -36,6 +37,7 @@ import useTokenBorrowBalance from 'services/hooks/use-token-borrow-balance';
 import usePriceDenomLP from 'services/hooks/use-price-denom-lp';
 import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
 import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
+import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import { PoolTokenType } from 'types/interfaces';
 import './index.scss';
 
@@ -178,6 +180,46 @@ const AccountLendingPool = (): JSX.Element => {
   );
   useErrorHandler(priceDenomLPError);
 
+  const {
+    isLoading: reservesLoading,
+    data: reserves,
+    error: reservesError
+  } = useQuery<string, Error>(
+    [
+      GENERIC_FETCHER,
+      selectedChainID,
+      selectedUniswapV2PairAddress,
+      'getReserves'
+    ],
+    library ?
+      genericFetcher<string>(library, UniswapV2PairJSON.abi) :
+      Promise.resolve,
+    {
+      enabled: !!library
+    }
+  );
+  useErrorHandler(reservesError);
+
+  const {
+    isLoading: bigTotalSupplyLoading,
+    data: bigTotalSupply,
+    error: bigTotalSupplyError
+  } = useQuery<string, Error>(
+    [
+      GENERIC_FETCHER,
+      selectedChainID,
+      selectedUniswapV2PairAddress,
+      'totalSupply'
+    ],
+    library ?
+      genericFetcher<string>(library, UniswapV2PairJSON.abi) :
+      Promise.resolve,
+    {
+      enabled: !!library
+    }
+  );
+  useErrorHandler(bigTotalSupplyError);
+
   if (!account) {
     return (
       <AccountLendingPoolContainer>
@@ -220,6 +262,12 @@ const AccountLendingPool = (): JSX.Element => {
   if (priceDenomLPLoading) {
     return <>Loading...</>;
   }
+  if (reservesLoading) {
+    return <>Loading...</>;
+  }
+  if (bigTotalSupplyLoading) {
+    return <>Loading...</>;
+  }
   if (!priceObj?.[0]) {
     return (
       <OracleAlert />
@@ -244,6 +292,12 @@ const AccountLendingPool = (): JSX.Element => {
     throw new Error('Something went wrong!');
   }
   if (priceDenomLP === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (reserves === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (bigTotalSupply === undefined) {
     throw new Error('Something went wrong!');
   }
 
@@ -300,11 +354,16 @@ const AccountLendingPool = (): JSX.Element => {
   const twapPrice = price / 2 ** 112 * Math.pow(10, tokenADecimals) / Math.pow(10, tokenBDecimals);
   // ray test touch >>
 
+  // ray test touch <
+  // TODO: should double-check with pancake swap utilities
   const tokenADenomLPPrice = priceDenomLP[0] / 1e18 / 1e18 * Math.pow(10, tokenADecimals);
   const tokenBDenomLPPrice = priceDenomLP[1] / 1e18 / 1e18 * Math.pow(10, tokenBDecimals);
-  const valueCollateralWithoutChanges = collateralDeposited;
-  const valueAWithoutChanges = tokenABorrowed * tokenADenomLPPrice;
-  const valueBWithoutChanges = tokenBBorrowed * tokenBDenomLPPrice;
+  // ray test touch >
+
+  const reserve0 = parseFloat(formatUnits(reserves[0], tokenADecimals));
+  const reserve1 = parseFloat(formatUnits(reserves[1], tokenADecimals));
+  // TODO: 18 is hardcoded for `PoolTokenType.Collateral`
+  const totalSupply = parseFloat(formatUnits(bigTotalSupply, 18));
 
   return (
     <AccountLendingPoolContainer>
@@ -320,26 +379,32 @@ const AccountLendingPool = (): JSX.Element => {
             safetyMargin={safetyMargin}
             liquidationIncentive={liquidationIncentive}
             twapPrice={twapPrice}
-            valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-            valueAWithoutChanges={valueAWithoutChanges}
-            valueBWithoutChanges={valueBWithoutChanges} />
+            collateralDeposited={collateralDeposited}
+            tokenADenomLPPrice={tokenADenomLPPrice}
+            tokenBDenomLPPrice={tokenBDenomLPPrice}
+            tokenABorrowed={tokenABorrowed}
+            tokenBBorrowed={tokenBBorrowed} />
           {/* ray test touch << */}
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
             {/* ray test touch >> */}
             <AccountLendingPoolLPRow
               collateralDepositedInUSD={collateralDepositedInUSD}
-              collateralDeposited={collateralDeposited}
-              tokenABorrowed={tokenABorrowed}
-              tokenBBorrowed={tokenBBorrowed}
               collateralSymbol={collateralSymbol}
               tokenAIconPath={tokenAIconPath}
               tokenBIconPath={tokenBIconPath}
               safetyMargin={safetyMargin}
               liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
-              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-              valueAWithoutChanges={valueAWithoutChanges}
-              valueBWithoutChanges={valueBWithoutChanges} />
+              collateralDeposited={collateralDeposited}
+              tokenADenomLPPrice={tokenADenomLPPrice}
+              tokenBDenomLPPrice={tokenBDenomLPPrice}
+              tokenABorrowed={tokenABorrowed}
+              tokenBBorrowed={tokenBBorrowed}
+              reserves={[
+                reserve0,
+                reserve1
+              ]}
+              totalSupply={totalSupply} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow
@@ -352,9 +417,11 @@ const AccountLendingPool = (): JSX.Element => {
               safetyMargin={safetyMargin}
               liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
-              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-              valueAWithoutChanges={valueAWithoutChanges}
-              valueBWithoutChanges={valueBWithoutChanges} />
+              collateralDeposited={collateralDeposited}
+              tokenADenomLPPrice={tokenADenomLPPrice}
+              tokenBDenomLPPrice={tokenBDenomLPPrice}
+              tokenABorrowed={tokenABorrowed}
+              tokenBBorrowed={tokenBBorrowed} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolBorrowRow
@@ -367,9 +434,11 @@ const AccountLendingPool = (): JSX.Element => {
               safetyMargin={safetyMargin}
               liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
-              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-              valueAWithoutChanges={valueAWithoutChanges}
-              valueBWithoutChanges={valueBWithoutChanges} />
+              collateralDeposited={collateralDeposited}
+              tokenADenomLPPrice={tokenADenomLPPrice}
+              tokenBDenomLPPrice={tokenBDenomLPPrice}
+              tokenABorrowed={tokenABorrowed}
+              tokenBBorrowed={tokenBBorrowed} />
           </PoolTokenContext.Provider>
         </>
       )}
@@ -381,28 +450,30 @@ const AccountLendingPool = (): JSX.Element => {
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolSupplyRow
               collateralDepositedInUSD={collateralDepositedInUSD}
-              collateralDeposited={collateralDeposited}
               tokenSymbol={tokenASymbol}
               tokenIconPath={tokenAIconPath}
               safetyMargin={safetyMargin}
               liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
-              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-              valueAWithoutChanges={valueAWithoutChanges}
-              valueBWithoutChanges={valueBWithoutChanges} />
+              collateralDeposited={collateralDeposited}
+              tokenADenomLPPrice={tokenADenomLPPrice}
+              tokenBDenomLPPrice={tokenBDenomLPPrice}
+              tokenABorrowed={tokenABorrowed}
+              tokenBBorrowed={tokenBBorrowed} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolSupplyRow
               collateralDepositedInUSD={collateralDepositedInUSD}
-              collateralDeposited={collateralDeposited}
               tokenSymbol={tokenBSymbol}
               tokenIconPath={tokenBIconPath}
               safetyMargin={safetyMargin}
               liquidationIncentive={liquidationIncentive}
               twapPrice={twapPrice}
-              valueCollateralWithoutChanges={valueCollateralWithoutChanges}
-              valueAWithoutChanges={valueAWithoutChanges}
-              valueBWithoutChanges={valueBWithoutChanges} />
+              collateralDeposited={collateralDeposited}
+              tokenADenomLPPrice={tokenADenomLPPrice}
+              tokenBDenomLPPrice={tokenBDenomLPPrice}
+              tokenABorrowed={tokenABorrowed}
+              tokenBBorrowed={tokenBBorrowed} />
           </PoolTokenContext.Provider>
         </>
       )}

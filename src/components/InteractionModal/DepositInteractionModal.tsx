@@ -26,9 +26,11 @@ export interface DepositInteractionModalProps {
   safetyMargin: number;
   liquidationIncentive: number;
   twapPrice: number;
-  valueCollateralWithoutChanges: number;
-  valueAWithoutChanges: number;
-  valueBWithoutChanges: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
 }
 
 export default function DepositInteractionModal({
@@ -37,9 +39,11 @@ export default function DepositInteractionModal({
   safetyMargin,
   liquidationIncentive,
   twapPrice,
-  valueCollateralWithoutChanges,
-  valueAWithoutChanges,
-  valueBWithoutChanges
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed
 }: DepositInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -88,29 +92,46 @@ export default function DepositInteractionModal({
     changeBorrowedA: 0,
     changeBorrowedB: 0
   };
-  const valueCollateral = valueCollateralWithoutChanges + val;
-  const valueA = valueAWithoutChanges + 0;
-  const valueB = valueBWithoutChanges + 0;
   const currentLiquidationPrices =
     getLiquidationPrices(
-      valueCollateralWithoutChanges,
-      valueAWithoutChanges,
-      valueBWithoutChanges,
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
       twapPrice,
       safetyMargin,
       liquidationIncentive
     );
   const newLiquidationPrices =
     getLiquidationPrices(
-      valueCollateral,
-      valueA,
-      valueB,
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
       twapPrice,
       safetyMargin,
-      liquidationIncentive
+      liquidationIncentive,
+      changes
     );
-  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
-  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
+  const currentLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed
+    );
+  const newLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      changes
+    );
 
   return (
     <InteractionModalContainer

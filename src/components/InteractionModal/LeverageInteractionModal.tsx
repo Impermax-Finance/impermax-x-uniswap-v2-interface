@@ -13,7 +13,6 @@ import {
   useSymbol,
   useDeadline,
   useMaxLeverage,
-  useLeverageAmounts,
   useToBigNumber,
   useUniswapAPY,
   useNextBorrowAPY,
@@ -21,6 +20,7 @@ import {
 } from '../../hooks/useData';
 import getLeverage from 'utils/helpers/get-leverage';
 import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
+import getImpermanentLoss from 'utils/helpers/get-impermanent-loss';
 
 export interface LeverageInteractionModalProps {
   show: boolean;
@@ -28,9 +28,16 @@ export interface LeverageInteractionModalProps {
   safetyMargin: number;
   liquidationIncentive: number;
   twapPrice: number;
-  valueCollateralWithoutChanges: number;
-  valueAWithoutChanges: number;
-  valueBWithoutChanges: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
+  reserves: [
+    number,
+    number
+  ];
+  totalSupply: number;
 }
 
 export default function LeverageInteractionModal({
@@ -39,14 +46,51 @@ export default function LeverageInteractionModal({
   safetyMargin,
   liquidationIncentive,
   twapPrice,
-  valueCollateralWithoutChanges,
-  valueAWithoutChanges,
-  valueBWithoutChanges
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed,
+  reserves,
+  totalSupply
 }: LeverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
 
-  const changeAmounts = useLeverageAmounts(val, slippage);
+  const currentLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed
+    );
+
+  const priceA = totalSupply / reserves[0] / 2;
+  const priceB = totalSupply / reserves[1] / 2;
+  const diff = priceA > tokenADenomLPPrice ? priceA / tokenADenomLPPrice : tokenADenomLPPrice / priceA;
+  const adjustFactor = Math.pow(getImpermanentLoss(diff ** 2), val);
+  const changeCollateralValue = (collateralDeposited * val / currentLeverage - collateralDeposited) * adjustFactor;
+  const valueForEach = changeCollateralValue / 2;
+  const bAmountA = priceA > 0 ? valueForEach / priceA : 0;
+  const bAmountB = priceB > 0 ? valueForEach / priceB : 0;
+  const cAmount = changeCollateralValue ?? 0;
+  const changeAmounts = {
+    bAmountA,
+    bAmountB,
+    cAmount,
+    bAmountAMin: bAmountA / (1 + slippage / 100),
+    bAmountBMin: bAmountB / (1 + slippage / 100),
+    cAmountMin: cAmount / Math.sqrt(1 + slippage / 100)
+  };
+  // ray test touch <<<
+  console.log('ray : ***** val => ', val);
+  console.log('ray : ***** adjustFactor => ', adjustFactor);
+  console.log('ray : ***** changeAmounts => ', changeAmounts);
+  console.log('ray : ***** currentLeverage => ', currentLeverage);
+  console.log('ray : ***** changeCollateralValue => ', changeCollateralValue);
+  // ray test touch >>>
+
   const maxLeverage = useMaxLeverage();
   const symbol = useSymbol();
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
@@ -58,29 +102,38 @@ export default function LeverageInteractionModal({
     changeBorrowedA: changeAmounts.bAmountA,
     changeBorrowedB: changeAmounts.bAmountB
   };
-  const valueCollateral = valueCollateralWithoutChanges + changes.changeCollateral;
-  const valueA = valueAWithoutChanges + changes.changeBorrowedA;
-  const valueB = valueBWithoutChanges + changes.changeBorrowedB;
   const currentLiquidationPrices =
     getLiquidationPrices(
-      valueCollateralWithoutChanges,
-      valueAWithoutChanges,
-      valueBWithoutChanges,
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
       twapPrice,
       safetyMargin,
       liquidationIncentive
     );
   const newLiquidationPrices =
     getLiquidationPrices(
-      valueCollateral,
-      valueA,
-      valueB,
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
       twapPrice,
       safetyMargin,
-      liquidationIncentive
+      liquidationIncentive,
+      changes
     );
-  const currentLeverage = getLeverage(valueCollateral, valueA, valueB);
-  const newLeverage = getLeverage(valueCollateral, valueA, valueB, changes);
+  const newLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      changes
+    );
   const minLeverage = newLeverage;
 
   useEffect(() => {
