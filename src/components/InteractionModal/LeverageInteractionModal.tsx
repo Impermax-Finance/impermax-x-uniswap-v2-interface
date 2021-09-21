@@ -134,7 +134,7 @@ export default function LeverageInteractionModal({
       tokenBBorrowed,
       changes
     );
-  const minLeverage = newLeverage;
+  const minLeverage = currentLeverage;
 
   useEffect(() => {
     if (val === 0) setVal(Math.ceil(minLeverage * 1000) / 1000);
