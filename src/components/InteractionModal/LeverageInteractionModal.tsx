@@ -83,13 +83,6 @@ export default function LeverageInteractionModal({
     bAmountBMin: bAmountB / (1 + slippage / 100),
     cAmountMin: cAmount / Math.sqrt(1 + slippage / 100)
   };
-  // ray test touch <<<
-  console.log('ray : ***** val => ', val);
-  console.log('ray : ***** adjustFactor => ', adjustFactor);
-  console.log('ray : ***** changeAmounts => ', changeAmounts);
-  console.log('ray : ***** currentLeverage => ', currentLeverage);
-  console.log('ray : ***** changeCollateralValue => ', changeCollateralValue);
-  // ray test touch >>>
 
   const maxLeverage = useMaxLeverage();
   const symbol = useSymbol();
