@@ -47,50 +47,6 @@ export async function getDecimals(
 }
 
 // ray test touch <<
-// Reserves
-export async function initializeReserves(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address
-) : Promise<[number, number]> {
-  const [, uniswapV2Pair] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const {
-    reserve0,
-    reserve1
-  } = await uniswapV2Pair.getReserves();
-
-  return [
-    await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableA, reserve0),
-    await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableB, reserve1)
-  ];
-}
-// ray test touch >>
-
-export async function getReserves(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
-  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.reserves) cache.reserves = this.initializeReserves(uniswapV2PairAddress);
-  return cache.reserves;
-}
-
-// ray test touch <<
-// LP Total Supply
-export async function initializeLPTotalSupply(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address
-) : Promise<number> {
-  const [, uniswapV2Pair] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const totalSupply = await uniswapV2Pair.totalSupply();
-
-  return this.normalize(uniswapV2PairAddress, PoolTokenType.Collateral, totalSupply);
-}
-
-export async function getLPTotalSupply(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.LPTotalSupply) cache.LPTotalSupply = this.initializeLPTotalSupply(uniswapV2PairAddress);
-  return cache.LPTotalSupply;
-}
-// ray test touch >>
-
-// ray test touch <<
 // Price Denom LP
 export async function initializePriceDenomLP(
   this: ImpermaxRouter,
@@ -123,16 +79,6 @@ export async function getBorrowablePriceDenomLP(this: ImpermaxRouter, uniswapV2P
   if (poolTokenType === PoolTokenType.BorrowableA) return priceA;
   return priceB;
 }
-// ray test touch <<
-export async function getMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
-  const [reserve0, reserve1] = await this.getReserves(uniswapV2PairAddress);
-  const totalSupply = await this.getLPTotalSupply(uniswapV2PairAddress);
-  return [
-    totalSupply / reserve0 / 2,
-    totalSupply / reserve1 / 2
-  ];
-}
-// ray test touch >>
 
 // Check Uniswap Pair Address
 export async function isValidPair(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<boolean> {

@@ -30,6 +30,8 @@ interface Props {
   tokenAMarketDenomLPPrice: number;
   tokenBMarketDenomLPPrice: number;
   marketPrice: number;
+  availableCashA: number;
+  availableCashB: number;
 }
 
 const AccountLendingPoolLPRow = ({
@@ -47,7 +49,9 @@ const AccountLendingPoolLPRow = ({
   tokenBBorrowed,
   tokenAMarketDenomLPPrice,
   tokenBMarketDenomLPPrice,
-  marketPrice
+  marketPrice,
+  availableCashA,
+  availableCashB
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -188,7 +192,9 @@ const AccountLendingPoolLPRow = ({
         tokenBBorrowed={tokenBBorrowed}
         tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
         tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
-        marketPrice={marketPrice} />
+        marketPrice={marketPrice}
+        availableCashA={availableCashA}
+        availableCashB={availableCashB} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
         toggleShow={toggleDeleverageModal}

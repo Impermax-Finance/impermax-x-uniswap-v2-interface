@@ -96,7 +96,6 @@ class ImpermaxRouter {
     this.subgraph = config.subgraph;
     this.library = config.library;
     this.chainId = config.chainId;
-    this.uiMargin = 1.1;
     this.dust = 1.000001;
     this.router = this.newRouter(ROUTER_ADDRESSES[config.chainId]);
     this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
@@ -195,16 +194,11 @@ class ImpermaxRouter {
   // Fetchers
   public getPoolTokenCache = fetchers.getPoolTokenCache;
   public initializeTokenDecimals = fetchers.initializeTokenDecimals;
-  public initializeReserves = fetchers.initializeReserves;
-  public initializeLPTotalSupply = fetchers.initializeLPTotalSupply;
   public initializePriceDenomLP = fetchers.initializePriceDenomLP;
   public getTokenDecimals = fetchers.getTokenDecimals;
   public getDecimals = fetchers.getDecimals;
-  public getReserves = fetchers.getReserves;
-  public getLPTotalSupply = fetchers.getLPTotalSupply;
   public getPriceDenomLP = fetchers.getPriceDenomLP;
   public getBorrowablePriceDenomLP = fetchers.getBorrowablePriceDenomLP;
-  public getMarketPriceDenomLP = fetchers.getMarketPriceDenomLP;
   public isValidPair = fetchers.isValidPair;
   public getPairSymbols = fetchers.getPairSymbols;
   public isPoolTokenCreated = fetchers.isPoolTokenCreated;
@@ -224,7 +218,6 @@ class ImpermaxRouter {
   public getValues = account.getValues;
   public getMaxWithdrawable = account.getMaxWithdrawable;
   public getMaxBorrowable = account.getMaxBorrowable;
-  public getMaxLeverage = account.getMaxLeverage;
 
   // IMX
   public initializeFarmingShares = imx.initializeFarmingShares;

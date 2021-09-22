@@ -12,7 +12,6 @@ import useLeverage from '../../hooks/useLeverage';
 import {
   useSymbol,
   useDeadline,
-  useMaxLeverage,
   useToBigNumber,
   useUniswapAPY,
   useNextBorrowAPY,
@@ -21,6 +20,8 @@ import {
 import getLeverage from 'utils/helpers/get-leverage';
 import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
 import getImpermanentLoss from 'utils/helpers/get-impermanent-loss';
+import { UI_MARGIN } from 'config/general';
+import getValuesFromPrice from 'utils/helpers/get-values-from-price';
 
 export interface LeverageInteractionModalProps {
   show: boolean;
@@ -36,6 +37,8 @@ export interface LeverageInteractionModalProps {
   tokenAMarketDenomLPPrice: number;
   tokenBMarketDenomLPPrice: number;
   marketPrice: number;
+  availableCashA: number;
+  availableCashB: number;
 }
 
 export default function LeverageInteractionModal({
@@ -51,7 +54,9 @@ export default function LeverageInteractionModal({
   tokenBBorrowed,
   tokenAMarketDenomLPPrice,
   tokenBMarketDenomLPPrice,
-  marketPrice
+  marketPrice,
+  availableCashA,
+  availableCashB
 }: LeverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
@@ -67,9 +72,9 @@ export default function LeverageInteractionModal({
 
   const priceA = tokenAMarketDenomLPPrice;
   const priceB = tokenBMarketDenomLPPrice;
-  const diff = priceA > tokenADenomLPPrice ? priceA / tokenADenomLPPrice : tokenADenomLPPrice / priceA;
-  const adjustFactor = Math.pow(getImpermanentLoss(diff ** 2), val);
-  const changeCollateralValue = (collateralDeposited * val / currentLeverage - collateralDeposited) * adjustFactor;
+  const diffOne = priceA > tokenADenomLPPrice ? priceA / tokenADenomLPPrice : tokenADenomLPPrice / priceA;
+  const adjustFactorOne = Math.pow(getImpermanentLoss(diffOne ** 2), val);
+  const changeCollateralValue = (collateralDeposited * val / currentLeverage - collateralDeposited) * adjustFactorOne;
   const valueForEach = changeCollateralValue / 2;
   const bAmountA = priceA > 0 ? valueForEach / priceA : 0;
   const bAmountB = priceB > 0 ? valueForEach / priceB : 0;
@@ -83,7 +88,37 @@ export default function LeverageInteractionModal({
     cAmountMin: cAmount / Math.sqrt(1 + slippage / 100)
   };
 
-  const maxLeverage = useMaxLeverage();
+  const diffTwo = priceA > tokenADenomLPPrice ? priceA / tokenADenomLPPrice : tokenADenomLPPrice / priceA;
+  const adjustFactorTwo = 1 / diffTwo;
+  const availableCashValue1 = availableCashA * priceA;
+  const availableCashValue2 = availableCashB * priceB;
+  const {
+    valueCollateral,
+    valueA,
+    valueB
+  } = getValuesFromPrice(
+    collateralDeposited,
+    tokenADenomLPPrice,
+    tokenBDenomLPPrice,
+    tokenABorrowed,
+    tokenBBorrowed
+  );
+  const safetyMarginWithUIMargin = safetyMargin * UI_MARGIN;
+  const actualCollateral = valueCollateral / liquidationIncentive;
+  const num1 = actualCollateral * Math.sqrt(safetyMarginWithUIMargin) - valueA * safetyMarginWithUIMargin - valueB;
+  const num2 = actualCollateral * Math.sqrt(safetyMarginWithUIMargin) - valueB * safetyMarginWithUIMargin - valueA;
+  const den = safetyMarginWithUIMargin + 1 - 2 * Math.sqrt(safetyMarginWithUIMargin) / liquidationIncentive;
+  const additionalValueBorrowablePerSide =
+    Math.min(num1 / den, num2 / den, availableCashValue1, availableCashValue2) * adjustFactorTwo;
+  const valueDebt = valueA + valueB;
+  const equity = valueCollateral - valueDebt;
+  let maxLeverage;
+  if (equity === 0) {
+    maxLeverage = 1;
+  } else {
+    maxLeverage = (valueDebt + additionalValueBorrowablePerSide * 2) / equity + 1;
+  }
+
   const symbol = useSymbol();
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);

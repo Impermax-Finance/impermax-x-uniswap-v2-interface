@@ -372,6 +372,9 @@ const AccountLendingPool = (): JSX.Element => {
   const marketPrice = 1 * reserve1 / reserve0;
   // ray test touch >>
 
+  const availableCashA = parseFloat(selectedLendingPool[PoolTokenType.BorrowableA].totalBalance);
+  const availableCashB = parseFloat(selectedLendingPool[PoolTokenType.BorrowableB].totalBalance);
+
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector
@@ -410,7 +413,9 @@ const AccountLendingPool = (): JSX.Element => {
               tokenBBorrowed={tokenBBorrowed}
               tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
               tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
-              marketPrice={marketPrice} />
+              marketPrice={marketPrice}
+              availableCashA={availableCashA}
+              availableCashB={availableCashB} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow

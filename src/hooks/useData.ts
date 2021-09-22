@@ -222,13 +222,6 @@ export function useMaxBorrowable(poolTokenTypeArg?: PoolTokenType) : number {
   return maxBorrowable;
 }
 
-export function useMaxLeverage() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [maxLeverage, setMaxLeverage] = useState<number>(0);
-  useRouterCallback(async router => setMaxLeverage(await router.getMaxLeverage(uniswapV2PairAddress)));
-  return maxLeverage;
-}
-
 export function useDeadline() : BigNumber {
   const [deadline, setDeadline] = useState<BigNumber>();
   useRouterCallback(async router => setDeadline(router.getDeadline()));
