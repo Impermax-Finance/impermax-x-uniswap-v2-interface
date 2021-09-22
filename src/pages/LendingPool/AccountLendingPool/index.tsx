@@ -367,6 +367,11 @@ const AccountLendingPool = (): JSX.Element => {
   const tokenAMarketDenomLPPrice = totalSupply / reserve0 / 2;
   const tokenBMarketDenomLPPrice = totalSupply / reserve1 / 2;
 
+  // ray test touch <<
+  // this.priceInverted ? 1 / marketPrice : marketPrice
+  const marketPrice = 1 * reserve1 / reserve0;
+  // ray test touch >>
+
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector
@@ -385,7 +390,8 @@ const AccountLendingPool = (): JSX.Element => {
             tokenADenomLPPrice={tokenADenomLPPrice}
             tokenBDenomLPPrice={tokenBDenomLPPrice}
             tokenABorrowed={tokenABorrowed}
-            tokenBBorrowed={tokenBBorrowed} />
+            tokenBBorrowed={tokenBBorrowed}
+            marketPrice={marketPrice} />
           {/* ray test touch << */}
           <PoolTokenContext.Provider value={PoolTokenType.Collateral}>
             {/* ray test touch >> */}
@@ -403,7 +409,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenABorrowed={tokenABorrowed}
               tokenBBorrowed={tokenBBorrowed}
               tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
-              tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice} />
+              tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
+              marketPrice={marketPrice} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow
@@ -420,7 +427,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenADenomLPPrice={tokenADenomLPPrice}
               tokenBDenomLPPrice={tokenBDenomLPPrice}
               tokenABorrowed={tokenABorrowed}
-              tokenBBorrowed={tokenBBorrowed} />
+              tokenBBorrowed={tokenBBorrowed}
+              marketPrice={marketPrice} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolBorrowRow
@@ -437,7 +445,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenADenomLPPrice={tokenADenomLPPrice}
               tokenBDenomLPPrice={tokenBDenomLPPrice}
               tokenABorrowed={tokenABorrowed}
-              tokenBBorrowed={tokenBBorrowed} />
+              tokenBBorrowed={tokenBBorrowed}
+              marketPrice={marketPrice} />
           </PoolTokenContext.Provider>
         </>
       )}
@@ -458,7 +467,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenADenomLPPrice={tokenADenomLPPrice}
               tokenBDenomLPPrice={tokenBDenomLPPrice}
               tokenABorrowed={tokenABorrowed}
-              tokenBBorrowed={tokenBBorrowed} />
+              tokenBBorrowed={tokenBBorrowed}
+              marketPrice={marketPrice} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolSupplyRow
@@ -472,7 +482,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenADenomLPPrice={tokenADenomLPPrice}
               tokenBDenomLPPrice={tokenBDenomLPPrice}
               tokenABorrowed={tokenABorrowed}
-              tokenBBorrowed={tokenBBorrowed} />
+              tokenBBorrowed={tokenBBorrowed}
+              marketPrice={marketPrice} />
           </PoolTokenContext.Provider>
         </>
       )}

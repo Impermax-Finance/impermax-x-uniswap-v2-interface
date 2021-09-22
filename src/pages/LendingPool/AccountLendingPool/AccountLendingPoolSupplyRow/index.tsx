@@ -24,6 +24,7 @@ interface Props {
   tokenBDenomLPPrice: number;
   tokenABorrowed: number;
   tokenBBorrowed: number;
+  marketPrice: number;
 }
 
 const AccountLendingPoolSupplyRow = ({
@@ -37,7 +38,8 @@ const AccountLendingPoolSupplyRow = ({
   tokenADenomLPPrice,
   tokenBDenomLPPrice,
   tokenABorrowed,
-  tokenBBorrowed
+  tokenBBorrowed,
+  marketPrice
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -107,7 +109,8 @@ const AccountLendingPoolSupplyRow = ({
         tokenADenomLPPrice={tokenADenomLPPrice}
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
-        tokenBBorrowed={tokenBBorrowed} />
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
@@ -118,7 +121,8 @@ const AccountLendingPoolSupplyRow = ({
         tokenADenomLPPrice={tokenADenomLPPrice}
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
-        tokenBBorrowed={tokenBBorrowed} />
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice} />
     </>
   );
 };

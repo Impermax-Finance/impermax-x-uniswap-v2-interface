@@ -23,6 +23,7 @@ interface Props {
   tokenBDenomLPPrice: number;
   tokenABorrowed: number;
   tokenBBorrowed: number;
+  marketPrice: number;
 }
 
 const AccountLendingPoolDetailsLeverage = ({
@@ -36,7 +37,8 @@ const AccountLendingPoolDetailsLeverage = ({
   tokenADenomLPPrice,
   tokenBDenomLPPrice,
   tokenABorrowed,
-  tokenBBorrowed
+  tokenBBorrowed,
+  marketPrice
 }: Props): JSX.Element => {
   const leftItems = [
     {
@@ -129,7 +131,8 @@ const AccountLendingPoolDetailsLeverage = ({
         currentLeverage={currentLeverage}
         newLeverage={newLeverage}
         currentLiquidationPrices={currentLiquidationPrices}
-        newLiquidationPrices={newLiquidationPrices} />
+        newLiquidationPrices={newLiquidationPrices}
+        marketPrice={marketPrice} />
     </div>
   );
 };

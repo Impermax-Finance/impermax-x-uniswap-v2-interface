@@ -11,10 +11,7 @@ import {
   usePriceInverted
 } from 'hooks/useImpermaxRouter';
 import { formatFloat } from 'utils/format';
-import {
-  useSymbol,
-  useMarketPrice
-} from 'hooks/useData';
+import { useSymbol } from 'hooks/useData';
 
 /**
  * Generates lending pool aggregate details.
@@ -22,13 +19,13 @@ import {
 
 interface Props {
   twapPrice: number;
+  marketPrice: number;
 }
 
 const CurrentPrice = ({
-  twapPrice
+  twapPrice,
+  marketPrice
 }: Props): JSX.Element => {
-  const marketPrice = useMarketPrice();
-
   const priceInverted = usePriceInverted();
   // ray test touch <<
   // const togglePriceInverted = useTogglePriceInverted();

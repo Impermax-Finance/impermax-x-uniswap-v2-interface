@@ -134,12 +134,6 @@ export async function getMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairA
 }
 // ray test touch >>
 
-// Market Price
-export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const [reserve0, reserve1] = await this.getReserves(uniswapV2PairAddress);
-  return this.priceInverted ? 1 * reserve0 / reserve1 : 1 * reserve1 / reserve0;
-}
-
 // Check Uniswap Pair Address
 export async function isValidPair(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<boolean> {
   if (!uniswapV2PairAddress) return false;

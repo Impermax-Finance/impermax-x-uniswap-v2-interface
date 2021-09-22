@@ -29,6 +29,7 @@ interface Props {
   tokenBBorrowed: number;
   tokenAMarketDenomLPPrice: number;
   tokenBMarketDenomLPPrice: number;
+  marketPrice: number;
 }
 
 const AccountLendingPoolLPRow = ({
@@ -45,7 +46,8 @@ const AccountLendingPoolLPRow = ({
   tokenABorrowed,
   tokenBBorrowed,
   tokenAMarketDenomLPPrice,
-  tokenBMarketDenomLPPrice
+  tokenBMarketDenomLPPrice,
+  marketPrice
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -159,7 +161,8 @@ const AccountLendingPoolLPRow = ({
         tokenADenomLPPrice={tokenADenomLPPrice}
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
-        tokenBBorrowed={tokenBBorrowed} />
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
@@ -170,7 +173,8 @@ const AccountLendingPoolLPRow = ({
         tokenADenomLPPrice={tokenADenomLPPrice}
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
-        tokenBBorrowed={tokenBBorrowed} />
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice} />
       <LeverageInteractionModal
         show={showLeverageModal}
         toggleShow={toggleLeverageModal}
@@ -183,7 +187,8 @@ const AccountLendingPoolLPRow = ({
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
         tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
-        tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice} />
+        tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
+        marketPrice={marketPrice} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
         toggleShow={toggleDeleverageModal}
@@ -196,7 +201,8 @@ const AccountLendingPoolLPRow = ({
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
         tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
-        tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice} />
+        tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
+        marketPrice={marketPrice} />
     </>
   );
 };

@@ -31,6 +31,7 @@ interface Props {
     number,
     number
   ];
+  marketPrice: number;
 }
 
 /**
@@ -45,7 +46,8 @@ const RiskMetrics = ({
   currentLeverage,
   newLeverage,
   currentLiquidationPrices,
-  newLiquidationPrices
+  newLiquidationPrices,
+  marketPrice
 } : Props): JSX.Element | null => {
   const validChanges = checkValidChanges(changes);
 
@@ -103,7 +105,9 @@ const RiskMetrics = ({
             liquidationPrices={currentLiquidationPrices} />
         </DetailListItem>
       )}
-      <CurrentPrice twapPrice={twapPrice} />
+      <CurrentPrice
+        twapPrice={twapPrice}
+        marketPrice={marketPrice} />
     </DetailList>
   );
 };

@@ -33,6 +33,7 @@ export interface WithdrawInteractionModalProps {
   tokenBDenomLPPrice: number;
   tokenABorrowed: number;
   tokenBBorrowed: number;
+  marketPrice: number;
 }
 
 /**
@@ -51,7 +52,8 @@ export default function WithdrawInteractionModal({
   tokenADenomLPPrice,
   tokenBDenomLPPrice,
   tokenABorrowed,
-  tokenBBorrowed
+  tokenBBorrowed,
+  marketPrice
 }: WithdrawInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -129,7 +131,8 @@ export default function WithdrawInteractionModal({
             currentLeverage={currentLeverage}
             newLeverage={newLeverage}
             currentLiquidationPrices={currentLiquidationPrices}
-            newLiquidationPrices={newLiquidationPrices} />
+            newLiquidationPrices={newLiquidationPrices}
+            marketPrice={marketPrice} />
         )}
         <InputAmount
           val={val}
