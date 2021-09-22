@@ -11,7 +11,6 @@ import useDeleverage from '../../hooks/useDeleverage';
 import useApprove from '../../hooks/useApprove';
 import {
   useSymbol,
-  useDeleverageAmounts,
   useToBigNumber,
   useToTokens,
   useNextBorrowAPY,
@@ -56,7 +55,18 @@ export default function DeleverageInteractionModal({
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
 
-  const changeAmounts = useDeleverageAmounts(val, slippage);
+  const priceA = tokenAMarketDenomLPPrice;
+  const priceB = tokenBMarketDenomLPPrice;
+  const valueForEach = val / 2;
+  const bAmountA = priceA > 0 ? valueForEach / priceA : 0;
+  const bAmountB = priceB > 0 ? valueForEach / priceB : 0;
+  const changeAmounts = {
+    bAmountA,
+    bAmountB,
+    cAmount: val,
+    bAmountAMin: bAmountA / Math.sqrt(1 + slippage / 100),
+    bAmountBMin: bAmountB / Math.sqrt(1 + slippage / 100)
+  };
 
   const maxDeleverage =
     getMaxDeleverage(

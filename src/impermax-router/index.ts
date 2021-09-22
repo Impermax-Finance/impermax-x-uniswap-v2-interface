@@ -253,7 +253,6 @@ class ImpermaxRouter {
   public borrow = interactions.borrow;
   public repay = interactions.repay;
   public leverage = interactions.leverage;
-  public getDeleverageAmounts = interactions.getDeleverageAmounts;
   public deleverage = interactions.deleverage;
   public trackBorrows = interactions.trackBorrows;
   public claims = interactions.claims;

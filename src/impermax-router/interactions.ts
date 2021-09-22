@@ -165,24 +165,6 @@ export async function leverage(
   }
 }
 
-export async function getDeleverageAmounts(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address,
-  changeCollateralValue: number,
-  slippage: number
-) : Promise<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number}> {
-  const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
-  const valueForEach = changeCollateralValue / 2;
-  const bAmountA = priceA > 0 ? valueForEach / priceA : 0;
-  const bAmountB = priceB > 0 ? valueForEach / priceB : 0;
-  return {
-    bAmountA: bAmountA,
-    bAmountB: bAmountB,
-    cAmount: changeCollateralValue,
-    bAmountAMin: bAmountA / Math.sqrt(slippage),
-    bAmountBMin: bAmountB / Math.sqrt(slippage)
-  };
-}
 export async function deleverage(
   this: ImpermaxRouter,
   uniswapV2PairAddress: Address,
