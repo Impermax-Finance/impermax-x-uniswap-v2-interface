@@ -364,6 +364,8 @@ const AccountLendingPool = (): JSX.Element => {
   const reserve1 = parseFloat(formatUnits(reserves[1], tokenADecimals));
   // TODO: 18 is hardcoded for `PoolTokenType.Collateral`
   const totalSupply = parseFloat(formatUnits(bigTotalSupply, 18));
+  const tokenAMarketDenomLPPrice = totalSupply / reserve0 / 2;
+  const tokenBMarketDenomLPPrice = totalSupply / reserve1 / 2;
 
   return (
     <AccountLendingPoolContainer>
@@ -400,11 +402,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenBDenomLPPrice={tokenBDenomLPPrice}
               tokenABorrowed={tokenABorrowed}
               tokenBBorrowed={tokenBBorrowed}
-              reserves={[
-                reserve0,
-                reserve1
-              ]}
-              totalSupply={totalSupply} />
+              tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
+              tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow

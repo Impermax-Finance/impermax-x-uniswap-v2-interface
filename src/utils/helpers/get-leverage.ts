@@ -1,5 +1,5 @@
 
-import getValues from 'utils/helpers/get-values';
+import getValuesFromPrice from 'utils/helpers/get-values-from-price';
 import { Changes } from 'types/interfaces';
 
 const getLeverage = (
@@ -18,7 +18,7 @@ const getLeverage = (
     valueCollateral,
     valueA,
     valueB
-  } = getValues(
+  } = getValuesFromPrice(
     collateralDeposited,
     tokenADenomLPPrice,
     tokenBDenomLPPrice,

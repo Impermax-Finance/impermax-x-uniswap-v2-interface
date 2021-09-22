@@ -236,15 +236,6 @@ export function useMaxLeverage() : number {
   return maxLeverage;
 }
 
-export function useMaxDeleverage(slippage: number) : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [maxDeleverage, setMaxDeleverage] = useState<number>(0);
-  useRouterCallback(async router => setMaxDeleverage(await router.getMaxDeleverage(uniswapV2PairAddress, 1 + slippage / 100)),
-    [slippage]
-  );
-  return maxDeleverage;
-}
-
 export function useDeleverageAmounts(deleverage: number, slippage: number) : {bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number} {
   const uniswapV2PairAddress = usePairAddress();
   const [deleverageAmounts, setDeleverageAmounts] =

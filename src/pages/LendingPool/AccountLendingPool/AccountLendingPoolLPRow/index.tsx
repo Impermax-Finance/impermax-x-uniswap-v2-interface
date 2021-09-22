@@ -12,7 +12,7 @@ import LeverageInteractionModal from 'components/InteractionModal/LeverageIntera
 import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
 import DeleverageInteractionModal from 'components/InteractionModal/DeleverageInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
-import { useMaxDeleverage } from 'hooks/useData';
+import getMaxDeleverage from 'utils/helpers/get-max-deleverage';
 
 interface Props {
   collateralDepositedInUSD: number;
@@ -27,11 +27,8 @@ interface Props {
   tokenBDenomLPPrice: number;
   tokenABorrowed: number;
   tokenBBorrowed: number;
-  reserves: [
-    number,
-    number
-  ];
-  totalSupply: number;
+  tokenAMarketDenomLPPrice: number;
+  tokenBMarketDenomLPPrice: number;
 }
 
 const AccountLendingPoolLPRow = ({
@@ -47,15 +44,23 @@ const AccountLendingPoolLPRow = ({
   tokenBDenomLPPrice,
   tokenABorrowed,
   tokenBBorrowed,
-  reserves,
-  totalSupply
+  tokenAMarketDenomLPPrice,
+  tokenBMarketDenomLPPrice
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
   const [showLeverageModal, toggleLeverageModal] = useState(false);
   const [showDeleverageModal, toggleDeleverageModal] = useState(false);
 
-  const maxDeleverage = useMaxDeleverage(0);
+  const maxDeleverage =
+    getMaxDeleverage(
+      collateralDeposited,
+      tokenAMarketDenomLPPrice,
+      tokenBMarketDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      0
+    );
   const withdrawDisabledInfo = `You haven't deposited any ${collateralSymbol} yet.`;
   const leverageDisabledInfo = `You need to deposit the ${collateralSymbol} LP first in order to leverage it.`;
   const deleverageDisabledInfo = `You need to open a leveraged position in order to deleverage it.`;
@@ -177,8 +182,8 @@ const AccountLendingPoolLPRow = ({
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
-        reserves={reserves}
-        totalSupply={totalSupply} />
+        tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
+        tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
         toggleShow={toggleDeleverageModal}
@@ -189,7 +194,9 @@ const AccountLendingPoolLPRow = ({
         tokenADenomLPPrice={tokenADenomLPPrice}
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
-        tokenBBorrowed={tokenBBorrowed} />
+        tokenBBorrowed={tokenBBorrowed}
+        tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
+        tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice} />
     </>
   );
 };

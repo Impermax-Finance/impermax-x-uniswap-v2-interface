@@ -103,7 +103,7 @@ export async function getBorrowed(this: ImpermaxRouter, uniswapV2PairAddress: Ad
   return cache.borrowed;
 }
 
-// ray test touch <<<
+// ray test touch <<
 // Values
 export async function getValuesFromPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes, priceA: number, priceB: number) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
   const valueCollateral = await this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral) + changes.changeCollateral;
@@ -117,17 +117,13 @@ export async function getValuesFromPrice(this: ImpermaxRouter, uniswapV2PairAddr
     valueB: valueB > 0 ? valueB : 0
   };
 }
-// ray test touch >>>
+// ray test touch >>
 // ray test touch <<
 export async function getValues(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
   const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
   return this.getValuesFromPrice(uniswapV2PairAddress, changes, priceA, priceB);
 }
 // ray test touch >>
-export async function getMarketValues(this: ImpermaxRouter, uniswapV2PairAddress: Address, changes: Changes) : Promise<{valueCollateral: number, valueA: number, valueB: number}> {
-  const [priceA, priceB] = await this.getMarketPriceDenomLP(uniswapV2PairAddress);
-  return this.getValuesFromPrice(uniswapV2PairAddress, changes, priceA, priceB);
-}
 
 // Max Withdrawable
 export async function getMaxWithdrawable(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
@@ -181,17 +177,4 @@ export async function getMaxLeverage(this: ImpermaxRouter, uniswapV2PairAddress:
   const equity = valueCollateral - valueDebt;
   if (equity === 0) return 1;
   return (valueDebt + additionalValueBorrowablePerSide * 2) / equity + 1;
-}
-
-// Max Deleverage
-export async function getMaxDeleverage(this: ImpermaxRouter, uniswapV2PairAddress: Address, slippage: number) : Promise<number> {
-  const { valueCollateral, valueA, valueB } = await this.getMarketValues(uniswapV2PairAddress, NO_CHANGES);
-  const minRepayPerSide = valueCollateral / 2 / Math.sqrt(slippage);
-  if (minRepayPerSide >= valueA && minRepayPerSide >= valueB) {
-    return this.getDeposited(uniswapV2PairAddress, PoolTokenType.Collateral);
-  }
-  if (minRepayPerSide * 2 < valueA + valueB) {
-    return 0;
-  }
-  return Math.min(valueA, valueB) * 2 * Math.sqrt(slippage);
 }

@@ -223,11 +223,9 @@ class ImpermaxRouter {
   public getDeposited = account.getDeposited;
   public getValuesFromPrice = account.getValuesFromPrice;
   public getValues = account.getValues;
-  public getMarketValues = account.getMarketValues;
   public getMaxWithdrawable = account.getMaxWithdrawable;
   public getMaxBorrowable = account.getMaxBorrowable;
   public getMaxLeverage = account.getMaxLeverage;
-  public getMaxDeleverage = account.getMaxDeleverage;
 
   // IMX
   public initializeFarmingShares = imx.initializeFarmingShares;

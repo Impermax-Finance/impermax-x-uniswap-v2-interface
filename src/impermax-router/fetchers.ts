@@ -46,7 +46,7 @@ export async function getDecimals(
   return this.getTokenDecimals(tokenAddress);
 }
 
-// ray test touch <<<
+// ray test touch <<
 // Reserves
 export async function initializeReserves(
   this: ImpermaxRouter,
@@ -63,7 +63,7 @@ export async function initializeReserves(
     await this.normalize(uniswapV2PairAddress, PoolTokenType.BorrowableB, reserve1)
   ];
 }
-// ray test touch >>>
+// ray test touch >>
 
 export async function getReserves(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
@@ -71,7 +71,7 @@ export async function getReserves(this: ImpermaxRouter, uniswapV2PairAddress: Ad
   return cache.reserves;
 }
 
-// ray test touch <<<
+// ray test touch <<
 // LP Total Supply
 export async function initializeLPTotalSupply(
   this: ImpermaxRouter,
@@ -88,9 +88,9 @@ export async function getLPTotalSupply(this: ImpermaxRouter, uniswapV2PairAddres
   if (!cache.LPTotalSupply) cache.LPTotalSupply = this.initializeLPTotalSupply(uniswapV2PairAddress);
   return cache.LPTotalSupply;
 }
-// ray test touch >>>
+// ray test touch >>
 
-// ray test touch <<<
+// ray test touch <<
 // Price Denom LP
 export async function initializePriceDenomLP(
   this: ImpermaxRouter,
@@ -109,21 +109,21 @@ export async function initializePriceDenomLP(
     price1 / 1e18 / 1e18 * Math.pow(10, decimalsB)
   ];
 }
-// ray test touch >>>
+// ray test touch >>
 
-// ray test touch <<<
+// ray test touch <<
 export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.priceDenomLP) cache.priceDenomLP = this.initializePriceDenomLP(uniswapV2PairAddress);
   return cache.priceDenomLP;
 }
-// ray test touch >>>
+// ray test touch >>
 export async function getBorrowablePriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
   if (poolTokenType === PoolTokenType.BorrowableA) return priceA;
   return priceB;
 }
-// ray test touch <<<
+// ray test touch <<
 export async function getMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
   const [reserve0, reserve1] = await this.getReserves(uniswapV2PairAddress);
   const totalSupply = await this.getLPTotalSupply(uniswapV2PairAddress);
@@ -132,7 +132,7 @@ export async function getMarketPriceDenomLP(this: ImpermaxRouter, uniswapV2PairA
     totalSupply / reserve1 / 2
   ];
 }
-// ray test touch >>>
+// ray test touch >>
 
 // Market Price
 export async function getMarketPrice(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {

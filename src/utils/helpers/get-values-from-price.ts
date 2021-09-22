@@ -1,10 +1,10 @@
 
 import { Changes } from 'types/interfaces';
 
-const getValues = (
+const getValuesFromPrice = (
   collateralDeposited: number,
-  tokenADenomLPPrice: number,
-  tokenBDenomLPPrice: number,
+  priceA: number,
+  priceB: number,
   tokenABorrowed: number,
   tokenBBorrowed: number,
   changes: Changes = {
@@ -20,8 +20,8 @@ const getValues = (
   const valueCollateralCandidate = collateralDeposited + changes.changeCollateral;
   const amountA = tokenABorrowed + changes.changeBorrowedA;
   const amountB = tokenBBorrowed + changes.changeBorrowedB;
-  const valueACandidate = amountA * tokenADenomLPPrice;
-  const valueBCandidate = amountB * tokenBDenomLPPrice;
+  const valueACandidate = amountA * priceA;
+  const valueBCandidate = amountB * priceB;
 
   return {
     valueCollateral: valueCollateralCandidate > 0 ? valueCollateralCandidate : 0,
@@ -30,4 +30,4 @@ const getValues = (
   };
 };
 
-export default getValues;
+export default getValuesFromPrice;

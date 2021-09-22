@@ -1,7 +1,3 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import { useState } from 'react';
 import { InteractionModalContainer } from '.';
@@ -18,13 +14,13 @@ import {
   useDeleverageAmounts,
   useToBigNumber,
   useToTokens,
-  useMaxDeleverage,
   useNextBorrowAPY,
   useUniswapAPY,
   useNextFarmingAPY
 } from '../../hooks/useData';
 import getLeverage from 'utils/helpers/get-leverage';
 import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
+import getMaxDeleverage from 'utils/helpers/get-max-deleverage';
 
 interface DeleverageInteractionModalProps {
   show: boolean;
@@ -37,6 +33,8 @@ interface DeleverageInteractionModalProps {
   tokenBDenomLPPrice: number;
   tokenABorrowed: number;
   tokenBBorrowed: number;
+  tokenAMarketDenomLPPrice: number;
+  tokenBMarketDenomLPPrice: number;
 }
 
 export default function DeleverageInteractionModal({
@@ -49,13 +47,24 @@ export default function DeleverageInteractionModal({
   tokenADenomLPPrice,
   tokenBDenomLPPrice,
   tokenABorrowed,
-  tokenBBorrowed
+  tokenBBorrowed,
+  tokenAMarketDenomLPPrice,
+  tokenBMarketDenomLPPrice
 }: DeleverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
 
   const changeAmounts = useDeleverageAmounts(val, slippage);
-  const maxDeleverage = useMaxDeleverage(slippage);
+
+  const maxDeleverage =
+    getMaxDeleverage(
+      collateralDeposited,
+      tokenAMarketDenomLPPrice,
+      tokenBMarketDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      slippage
+    );
   const symbol = useSymbol(PoolTokenType.Collateral);
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);

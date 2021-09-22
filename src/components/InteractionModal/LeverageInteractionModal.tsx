@@ -33,11 +33,8 @@ export interface LeverageInteractionModalProps {
   tokenBDenomLPPrice: number;
   tokenABorrowed: number;
   tokenBBorrowed: number;
-  reserves: [
-    number,
-    number
-  ];
-  totalSupply: number;
+  tokenAMarketDenomLPPrice: number;
+  tokenBMarketDenomLPPrice: number;
 }
 
 export default function LeverageInteractionModal({
@@ -51,8 +48,8 @@ export default function LeverageInteractionModal({
   tokenBDenomLPPrice,
   tokenABorrowed,
   tokenBBorrowed,
-  reserves,
-  totalSupply
+  tokenAMarketDenomLPPrice,
+  tokenBMarketDenomLPPrice
 }: LeverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
@@ -66,8 +63,8 @@ export default function LeverageInteractionModal({
       tokenBBorrowed
     );
 
-  const priceA = totalSupply / reserves[0] / 2;
-  const priceB = totalSupply / reserves[1] / 2;
+  const priceA = tokenAMarketDenomLPPrice;
+  const priceB = tokenBMarketDenomLPPrice;
   const diff = priceA > tokenADenomLPPrice ? priceA / tokenADenomLPPrice : tokenADenomLPPrice / priceA;
   const adjustFactor = Math.pow(getImpermanentLoss(diff ** 2), val);
   const changeCollateralValue = (collateralDeposited * val / currentLeverage - collateralDeposited) * adjustFactor;
