@@ -33,6 +33,8 @@ interface Props {
   availableCashA: number;
   availableCashB: number;
   maxWithdrawable: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 const AccountLendingPoolLPRow = ({
@@ -53,7 +55,9 @@ const AccountLendingPoolLPRow = ({
   marketPrice,
   availableCashA,
   availableCashB,
-  maxWithdrawable
+  maxWithdrawable,
+  tokenASymbol,
+  tokenBSymbol
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -168,7 +172,9 @@ const AccountLendingPoolLPRow = ({
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
-        marketPrice={marketPrice} />
+        marketPrice={marketPrice}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
@@ -181,7 +187,9 @@ const AccountLendingPoolLPRow = ({
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
         marketPrice={marketPrice}
-        maxWithdrawable={maxWithdrawable} />
+        maxWithdrawable={maxWithdrawable}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
       <LeverageInteractionModal
         show={showLeverageModal}
         toggleShow={toggleLeverageModal}
@@ -197,7 +205,9 @@ const AccountLendingPoolLPRow = ({
         tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
         marketPrice={marketPrice}
         availableCashA={availableCashA}
-        availableCashB={availableCashB} />
+        availableCashB={availableCashB}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
         toggleShow={toggleDeleverageModal}
@@ -211,7 +221,9 @@ const AccountLendingPoolLPRow = ({
         tokenBBorrowed={tokenBBorrowed}
         tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
         tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
-        marketPrice={marketPrice} />
+        marketPrice={marketPrice}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
     </>
   );
 };

@@ -6,8 +6,11 @@ function AccountLendingPoolPageSelector({
   pageSelected,
   setPageSelected
 }: AccountLendingPoolPageSelectorProps): JSX.Element {
+  // ray test touch <<
   const hasFarmingA = useHasFarming(PoolTokenType.BorrowableA);
   const hasFarmingB = useHasFarming(PoolTokenType.BorrowableA);
+  // ray test touch >>
+
   return (
     <div className='account-lending-pool-page-selector'>
       {pageSelected === AccountLendingPoolPage.Leverage ? (

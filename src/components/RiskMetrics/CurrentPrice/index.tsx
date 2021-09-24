@@ -3,7 +3,6 @@
 // import clsx from 'clsx';
 
 import { DetailListItem } from 'components/DetailList';
-import { PoolTokenType } from 'types/interfaces';
 import {
   // ray test touch <<
   // useTogglePriceInverted,
@@ -11,7 +10,6 @@ import {
   usePriceInverted
 } from 'hooks/useImpermaxRouter';
 import { formatFloat } from 'utils/format';
-import { useSymbol } from 'hooks/useData';
 
 /**
  * Generates lending pool aggregate details.
@@ -20,22 +18,24 @@ import { useSymbol } from 'hooks/useData';
 interface Props {
   twapPrice: number;
   marketPrice: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 const CurrentPrice = ({
   twapPrice,
-  marketPrice
+  marketPrice,
+  tokenASymbol,
+  tokenBSymbol
 }: Props): JSX.Element => {
   const priceInverted = usePriceInverted();
   // ray test touch <<
   // const togglePriceInverted = useTogglePriceInverted();
   // ray test touch >>
-  const symbolA = useSymbol(PoolTokenType.BorrowableA);
-  const symbolB = useSymbol(PoolTokenType.BorrowableB);
   const pair =
     priceInverted ?
-      `${symbolB}/${symbolA}` :
-      `${symbolA}/${symbolB}`;
+      `${tokenBSymbol}/${tokenASymbol}` :
+      `${tokenASymbol}/${tokenBSymbol}`;
 
   return (
     <DetailListItem

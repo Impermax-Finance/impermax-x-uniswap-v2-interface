@@ -32,6 +32,8 @@ interface Props {
     number
   ];
   marketPrice: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 /**
@@ -47,7 +49,9 @@ const RiskMetrics = ({
   newLeverage,
   currentLiquidationPrices,
   newLiquidationPrices,
-  marketPrice
+  marketPrice,
+  tokenASymbol,
+  tokenBSymbol
 } : Props): JSX.Element | null => {
   const validChanges = checkValidChanges(changes);
 
@@ -107,7 +111,9 @@ const RiskMetrics = ({
       )}
       <CurrentPrice
         twapPrice={twapPrice}
-        marketPrice={marketPrice} />
+        marketPrice={marketPrice}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
     </DetailList>
   );
 };

@@ -39,6 +39,8 @@ export interface LeverageInteractionModalProps {
   marketPrice: number;
   availableCashA: number;
   availableCashB: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 export default function LeverageInteractionModal({
@@ -56,7 +58,9 @@ export default function LeverageInteractionModal({
   tokenBMarketDenomLPPrice,
   marketPrice,
   availableCashA,
-  availableCashB
+  availableCashB,
+  tokenASymbol,
+  tokenBSymbol
 }: LeverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
@@ -203,7 +207,9 @@ export default function LeverageInteractionModal({
           newLeverage={newLeverage}
           currentLiquidationPrices={currentLiquidationPrices}
           newLiquidationPrices={newLiquidationPrices}
-          marketPrice={marketPrice} />
+          marketPrice={marketPrice}
+          tokenASymbol={tokenASymbol}
+          tokenBSymbol={tokenBSymbol} />
         <InputAmount
           val={val}
           setVal={setVal}

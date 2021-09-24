@@ -33,6 +33,8 @@ export interface RepayInteractionModalProps {
   tokenABorrowed: number;
   tokenBBorrowed: number;
   marketPrice: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 /**
@@ -53,7 +55,9 @@ export default function RepayInteractionModal({
   tokenBDenomLPPrice,
   tokenABorrowed,
   tokenBBorrowed,
-  marketPrice
+  marketPrice,
+  tokenASymbol,
+  tokenBSymbol
 }: RepayInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
 
@@ -130,7 +134,9 @@ export default function RepayInteractionModal({
           newLeverage={newLeverage}
           currentLiquidationPrices={currentLiquidationPrices}
           newLiquidationPrices={newLiquidationPrices}
-          marketPrice={marketPrice} />
+          marketPrice={marketPrice}
+          tokenASymbol={tokenASymbol}
+          tokenBSymbol={tokenBSymbol} />
         <InputAmount
           val={val}
           setVal={setVal}

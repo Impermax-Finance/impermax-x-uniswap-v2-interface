@@ -35,6 +35,8 @@ interface DeleverageInteractionModalProps {
   tokenAMarketDenomLPPrice: number;
   tokenBMarketDenomLPPrice: number;
   marketPrice: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 export default function DeleverageInteractionModal({
@@ -50,7 +52,9 @@ export default function DeleverageInteractionModal({
   tokenBBorrowed,
   tokenAMarketDenomLPPrice,
   tokenBMarketDenomLPPrice,
-  marketPrice
+  marketPrice,
+  tokenASymbol,
+  tokenBSymbol
 }: DeleverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
@@ -161,7 +165,9 @@ export default function DeleverageInteractionModal({
           newLeverage={newLeverage}
           currentLiquidationPrices={currentLiquidationPrices}
           newLiquidationPrices={newLiquidationPrices}
-          marketPrice={marketPrice} />
+          marketPrice={marketPrice}
+          tokenASymbol={tokenASymbol}
+          tokenBSymbol={tokenBSymbol} />
         <InputAmount
           val={val}
           setVal={setVal}

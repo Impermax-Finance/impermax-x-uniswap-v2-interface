@@ -28,6 +28,8 @@ interface Props {
   tokenBBorrowed: number;
   marketPrice: number;
   maxBorrowable: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 const AccountLendingPoolBorrowRow = ({
@@ -46,7 +48,9 @@ const AccountLendingPoolBorrowRow = ({
   tokenABorrowed,
   tokenBBorrowed,
   marketPrice,
-  maxBorrowable
+  maxBorrowable,
+  tokenASymbol,
+  tokenBSymbol
 }: Props): JSX.Element => {
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepayModal] = useState(false);
@@ -125,7 +129,9 @@ const AccountLendingPoolBorrowRow = ({
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
         marketPrice={marketPrice}
-        maxBorrowable={maxBorrowable} />
+        maxBorrowable={maxBorrowable}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
       <RepayInteractionModal
         show={showRepayModal}
         toggleShow={toggleRepayModal}
@@ -138,7 +144,9 @@ const AccountLendingPoolBorrowRow = ({
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
-        marketPrice={marketPrice} />
+        marketPrice={marketPrice}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
     </>
   );
 };

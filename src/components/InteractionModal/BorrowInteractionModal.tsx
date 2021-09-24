@@ -35,6 +35,8 @@ export interface BorrowInteractionModalProps {
   tokenBBorrowed: number;
   marketPrice: number;
   maxBorrowable: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 /**
@@ -55,7 +57,9 @@ export default function BorrowInteractionModal({
   tokenABorrowed,
   tokenBBorrowed,
   marketPrice,
-  maxBorrowable
+  maxBorrowable,
+  tokenASymbol,
+  tokenBSymbol
 }: BorrowInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
 
@@ -131,7 +135,9 @@ export default function BorrowInteractionModal({
           newLeverage={newLeverage}
           currentLiquidationPrices={currentLiquidationPrices}
           newLiquidationPrices={newLiquidationPrices}
-          marketPrice={marketPrice} />
+          marketPrice={marketPrice}
+          tokenASymbol={tokenASymbol}
+          tokenBSymbol={tokenBSymbol} />
         <InputAmount
           val={val}
           setVal={setVal}

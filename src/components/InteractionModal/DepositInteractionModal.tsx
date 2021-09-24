@@ -32,6 +32,8 @@ export interface DepositInteractionModalProps {
   tokenABorrowed: number;
   tokenBBorrowed: number;
   marketPrice: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 export default function DepositInteractionModal({
@@ -45,7 +47,9 @@ export default function DepositInteractionModal({
   tokenBDenomLPPrice,
   tokenABorrowed,
   tokenBBorrowed,
-  marketPrice
+  marketPrice,
+  tokenASymbol,
+  tokenBSymbol
 }: DepositInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -151,7 +155,9 @@ export default function DepositInteractionModal({
             newLeverage={newLeverage}
             currentLiquidationPrices={currentLiquidationPrices}
             newLiquidationPrices={newLiquidationPrices}
-            marketPrice={marketPrice} />
+            marketPrice={marketPrice}
+            tokenASymbol={tokenASymbol}
+            tokenBSymbol={tokenBSymbol} />
         )}
         <InputAmount
           val={val}
