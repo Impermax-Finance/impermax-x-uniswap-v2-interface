@@ -208,13 +208,6 @@ export function useAvailableClaimable(claimableAddress: Address) : number {
   return availableClaimable;
 }
 
-export function useMaxWithdrawable(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [maxWithdrawable, setMaxWithdrawable] = useState<number>(0);
-  useRouterCallback(async router => setMaxWithdrawable(await router.getMaxWithdrawable(uniswapV2PairAddress, poolTokenType)));
-  return maxWithdrawable;
-}
-
 export function useMaxBorrowable(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [maxBorrowable, setMaxBorrowable] = useState<number>(0);

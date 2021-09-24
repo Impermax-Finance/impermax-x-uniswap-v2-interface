@@ -32,6 +32,7 @@ interface Props {
   marketPrice: number;
   availableCashA: number;
   availableCashB: number;
+  maxWithdrawable: number;
 }
 
 const AccountLendingPoolLPRow = ({
@@ -51,7 +52,8 @@ const AccountLendingPoolLPRow = ({
   tokenBMarketDenomLPPrice,
   marketPrice,
   availableCashA,
-  availableCashB
+  availableCashB,
+  maxWithdrawable
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
@@ -178,7 +180,8 @@ const AccountLendingPoolLPRow = ({
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
-        marketPrice={marketPrice} />
+        marketPrice={marketPrice}
+        maxWithdrawable={maxWithdrawable} />
       <LeverageInteractionModal
         show={showLeverageModal}
         toggleShow={toggleLeverageModal}

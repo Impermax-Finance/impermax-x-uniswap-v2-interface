@@ -10,7 +10,6 @@ import TransactionSize from './TransactionRecap/TransactionSize';
 import useApprove from '../../hooks/useApprove';
 import useWithdraw from '../../hooks/useWithdraw';
 import {
-  useMaxWithdrawable,
   useSymbol,
   useToTokens
 } from '../../hooks/useData';
@@ -34,6 +33,7 @@ export interface WithdrawInteractionModalProps {
   tokenABorrowed: number;
   tokenBBorrowed: number;
   marketPrice: number;
+  maxWithdrawable: number;
 }
 
 /**
@@ -53,14 +53,13 @@ export default function WithdrawInteractionModal({
   tokenBDenomLPPrice,
   tokenABorrowed,
   tokenBBorrowed,
-  marketPrice
+  marketPrice,
+  maxWithdrawable
 }: WithdrawInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
-  const maxWithdrawable = useMaxWithdrawable();
-
   const tokens = useToTokens(val);
   const invalidInput = val > maxWithdrawable;
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens, invalidInput);

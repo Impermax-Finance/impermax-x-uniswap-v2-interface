@@ -96,7 +96,6 @@ class ImpermaxRouter {
     this.subgraph = config.subgraph;
     this.library = config.library;
     this.chainId = config.chainId;
-    this.dust = 1.000001;
     this.router = this.newRouter(ROUTER_ADDRESSES[config.chainId]);
     this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
     this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
@@ -216,7 +215,6 @@ class ImpermaxRouter {
   public getDeposited = account.getDeposited;
   public getValuesFromPrice = account.getValuesFromPrice;
   public getValues = account.getValues;
-  public getMaxWithdrawable = account.getMaxWithdrawable;
   public getMaxBorrowable = account.getMaxBorrowable;
 
   // IMX

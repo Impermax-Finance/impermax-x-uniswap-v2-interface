@@ -10,7 +10,6 @@ import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import DepositInteractionModal from 'components/InteractionModal/DepositInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
-import { useMaxWithdrawable } from 'hooks/useData';
 
 interface Props {
   collateralDepositedInUSD: number;
@@ -25,6 +24,7 @@ interface Props {
   tokenABorrowed: number;
   tokenBBorrowed: number;
   marketPrice: number;
+  maxWithdrawable: number;
 }
 
 const AccountLendingPoolSupplyRow = ({
@@ -39,12 +39,12 @@ const AccountLendingPoolSupplyRow = ({
   tokenBDenomLPPrice,
   tokenABorrowed,
   tokenBBorrowed,
-  marketPrice
+  marketPrice,
+  maxWithdrawable
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
 
-  const maxWithdrawable = useMaxWithdrawable();
   const withdrawDisabledInfo = `You haven't supplied any ${tokenSymbol} yet.`;
 
   return (
@@ -122,7 +122,8 @@ const AccountLendingPoolSupplyRow = ({
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
-        marketPrice={marketPrice} />
+        marketPrice={marketPrice}
+        maxWithdrawable={maxWithdrawable} />
     </>
   );
 };

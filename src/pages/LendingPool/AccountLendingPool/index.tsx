@@ -23,6 +23,10 @@ import ErrorFallback from 'components/ErrorFallback';
 import ImpermaxJadeContainedButton from 'components/buttons/ImpermaxJadeContainedButton';
 import PoolTokenContext from 'contexts/PoolToken';
 import { SIMPLE_UNISWAP_ORACLE_ADDRESSES } from 'config/web3/contracts/simple-uniswap-oracles';
+import {
+  DUST,
+  UI_MARGIN
+} from 'config/general';
 import { injected } from 'utils/helpers/web3/connectors';
 import {
   getLendingPoolTokenPriceInUSD,
@@ -31,6 +35,7 @@ import {
   getLendingPoolTokenIconPath
 } from 'utils/helpers/lending-pools';
 import { PARAMETERS } from 'utils/constants/links';
+import getValuesFromPrice from 'utils/helpers/get-values-from-price';
 import useLendingPool from 'services/hooks/use-lending-pool';
 import useTokenDeposited from 'services/hooks/use-token-deposited';
 import useTokenBorrowBalance from 'services/hooks/use-token-borrow-balance';
@@ -374,6 +379,31 @@ const AccountLendingPool = (): JSX.Element => {
 
   const availableCashA = parseFloat(selectedLendingPool[PoolTokenType.BorrowableA].totalBalance);
   const availableCashB = parseFloat(selectedLendingPool[PoolTokenType.BorrowableB].totalBalance);
+  const availableCashCollateral = parseFloat(selectedLendingPool[PoolTokenType.Collateral].totalBalance);
+
+  const tokenAMaxWithdrawable = Math.min(tokenADeposited, availableCashA) / DUST;
+  const tokenBMaxWithdrawable = Math.min(tokenBDeposited, availableCashB) / DUST;
+  const {
+    valueCollateral,
+    valueA,
+    valueB
+  } = getValuesFromPrice(
+    collateralDeposited,
+    tokenADenomLPPrice,
+    tokenBDenomLPPrice,
+    tokenABorrowed,
+    tokenBBorrowed
+  );
+  const safetyMarginWithUIMargin = safetyMargin * UI_MARGIN;
+  const actualCollateral = valueCollateral / liquidationIncentive;
+  const maxWithdrawable1 =
+    // eslint-disable-next-line max-len
+    (actualCollateral - (valueA + valueB * safetyMarginWithUIMargin) / Math.sqrt(safetyMarginWithUIMargin)) * liquidationIncentive;
+  const maxWithdrawable2 =
+    // eslint-disable-next-line max-len
+    (actualCollateral - (valueB + valueA * safetyMarginWithUIMargin) / Math.sqrt(safetyMarginWithUIMargin)) * liquidationIncentive;
+  const collateralMaxWithdrawable =
+    Math.max(0, Math.min(collateralDeposited, availableCashCollateral, maxWithdrawable1, maxWithdrawable2) / DUST);
 
   return (
     <AccountLendingPoolContainer>
@@ -415,7 +445,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
               marketPrice={marketPrice}
               availableCashA={availableCashA}
-              availableCashB={availableCashB} />
+              availableCashB={availableCashB}
+              maxWithdrawable={collateralMaxWithdrawable} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableA}>
             <AccountLendingPoolBorrowRow
@@ -473,7 +504,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenBDenomLPPrice={tokenBDenomLPPrice}
               tokenABorrowed={tokenABorrowed}
               tokenBBorrowed={tokenBBorrowed}
-              marketPrice={marketPrice} />
+              marketPrice={marketPrice}
+              maxWithdrawable={tokenAMaxWithdrawable} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolSupplyRow
@@ -488,7 +520,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenBDenomLPPrice={tokenBDenomLPPrice}
               tokenABorrowed={tokenABorrowed}
               tokenBBorrowed={tokenBBorrowed}
-              marketPrice={marketPrice} />
+              marketPrice={marketPrice}
+              maxWithdrawable={tokenBMaxWithdrawable} />
           </PoolTokenContext.Provider>
         </>
       )}

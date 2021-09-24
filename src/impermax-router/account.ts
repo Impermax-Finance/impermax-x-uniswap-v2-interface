@@ -14,7 +14,10 @@ import {
   NO_CHANGES
 } from '../types/interfaces';
 import { W_ETH_ADDRESSES } from 'config/web3/contracts/w-eths';
-import { UI_MARGIN } from 'config/general';
+import {
+  UI_MARGIN,
+  DUST
+} from 'config/general';
 
 // Exchange rate
 export async function initializeExchangeRate(
@@ -43,10 +46,10 @@ export async function initializeTokenBalance(
   const wETHAddress = W_ETH_ADDRESSES[this.chainId];
   if (token.address === wETHAddress) {
     const bigBalance = await this.library.getBalance(this.account);
-    return parseFloat(formatUnits(bigBalance)) / this.dust;
+    return parseFloat(formatUnits(bigBalance)) / DUST;
   }
   const balance = await token.balanceOf(this.account);
-  return (await this.normalizeToken(tokenAddress, balance)) / this.dust;
+  return (await this.normalizeToken(tokenAddress, balance)) / DUST;
 }
 export async function getTokenBalance(
   this: ImpermaxRouter,
@@ -125,20 +128,6 @@ export async function getValues(this: ImpermaxRouter, uniswapV2PairAddress: Addr
   return this.getValuesFromPrice(uniswapV2PairAddress, changes, priceA, priceB);
 }
 // ray test touch >>
-
-// Max Withdrawable
-export async function getMaxWithdrawable(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const deposited = await this.getDeposited(uniswapV2PairAddress, poolTokenType);
-  const availableCash = await this.subgraph.getTotalBalance(uniswapV2PairAddress, poolTokenType);
-  if (poolTokenType !== PoolTokenType.Collateral) return Math.min(deposited, availableCash) / this.dust;
-  const { valueCollateral, valueA, valueB } = await this.getValues(uniswapV2PairAddress, NO_CHANGES);
-  const safetyMargin = (await this.subgraph.getSafetyMargin(uniswapV2PairAddress)) * UI_MARGIN;
-  const liquidationIncentive = await this.subgraph.getLiquidationIncentive(uniswapV2PairAddress);
-  const actualCollateral = valueCollateral / liquidationIncentive;
-  const maxWithdrawable1 = (actualCollateral - (valueA + valueB * safetyMargin) / Math.sqrt(safetyMargin)) * liquidationIncentive;
-  const maxWithdrawable2 = (actualCollateral - (valueB + valueA * safetyMargin) / Math.sqrt(safetyMargin)) * liquidationIncentive;
-  return Math.max(0, Math.min(deposited, availableCash, maxWithdrawable1, maxWithdrawable2) / this.dust);
-}
 
 // Max Borrowable
 export async function getMaxBorrowable(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
