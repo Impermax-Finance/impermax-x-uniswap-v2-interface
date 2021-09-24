@@ -160,7 +160,10 @@ export default function DepositInteractionModal({
           maxTitle='Available'
           max={availableBalance} />
         <div className='transaction-recap'>
-          <TransactionSize amount={val} />
+          <TransactionSize
+            amount={val}
+            tokenADenomLPPrice={tokenADenomLPPrice}
+            tokenBDenomLPPrice={tokenBDenomLPPrice} />
           <SupplyAPY amount={val} />
         </div>
         <Row className='interaction-row'>

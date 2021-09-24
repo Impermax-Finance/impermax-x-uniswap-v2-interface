@@ -140,7 +140,10 @@ export default function WithdrawInteractionModal({
           maxTitle='Available'
           max={maxWithdrawable} />
         <div className='transaction-recap'>
-          <TransactionSize amount={val} />
+          <TransactionSize
+            amount={val}
+            tokenADenomLPPrice={tokenADenomLPPrice}
+            tokenBDenomLPPrice={tokenBDenomLPPrice} />
         </div>
         <Row className='interaction-row'>
           <Col xs={6}>

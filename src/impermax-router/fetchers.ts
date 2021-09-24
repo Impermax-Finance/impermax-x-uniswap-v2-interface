@@ -46,35 +46,6 @@ export async function getDecimals(
   return this.getTokenDecimals(tokenAddress);
 }
 
-// ray test touch <<
-// Price Denom LP
-export async function initializePriceDenomLP(
-  this: ImpermaxRouter,
-  uniswapV2PairAddress: Address
-) : Promise<[number, number]> {
-  const [collateral] = await this.getContracts(uniswapV2PairAddress, PoolTokenType.Collateral);
-  const {
-    price0,
-    price1
-  } = await collateral.callStatic.getPrices();
-
-  const decimalsA = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const decimalsB = await this.subgraph.getDecimals(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  return [
-    price0 / 1e18 / 1e18 * Math.pow(10, decimalsA),
-    price1 / 1e18 / 1e18 * Math.pow(10, decimalsB)
-  ];
-}
-// ray test touch >>
-
-// ray test touch <<
-export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<[number, number]> {
-  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.priceDenomLP) cache.priceDenomLP = this.initializePriceDenomLP(uniswapV2PairAddress);
-  return cache.priceDenomLP;
-}
-// ray test touch >>
-
 // Check Uniswap Pair Address
 export async function isValidPair(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<boolean> {
   if (!uniswapV2PairAddress) return false;

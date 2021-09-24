@@ -64,13 +64,6 @@ export function useTokenPrice(poolTokenTypeArg?: PoolTokenType) : number {
   return tokenPrice;
 }
 
-export function usePriceDenomLP() : [number, number] {
-  const uniswapV2PairAddress = usePairAddress();
-  const [priceDenomLP, setPriceDenomLP] = useState<[number, number]>([1, 1]);
-  useRouterCallback(async router => setPriceDenomLP(await router.getPriceDenomLP(uniswapV2PairAddress)));
-  return priceDenomLP;
-}
-
 export function useUnderlyingAddress(poolTokenTypeArg?: PoolTokenType) : string {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [tokenAddress, setTokenAddress] = useState<string>('');

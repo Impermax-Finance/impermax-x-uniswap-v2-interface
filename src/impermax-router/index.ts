@@ -193,10 +193,8 @@ class ImpermaxRouter {
   // Fetchers
   public getPoolTokenCache = fetchers.getPoolTokenCache;
   public initializeTokenDecimals = fetchers.initializeTokenDecimals;
-  public initializePriceDenomLP = fetchers.initializePriceDenomLP;
   public getTokenDecimals = fetchers.getTokenDecimals;
   public getDecimals = fetchers.getDecimals;
-  public getPriceDenomLP = fetchers.getPriceDenomLP;
   public isValidPair = fetchers.isValidPair;
   public getPairSymbols = fetchers.getPairSymbols;
   public isPoolTokenCreated = fetchers.isPoolTokenCreated;
