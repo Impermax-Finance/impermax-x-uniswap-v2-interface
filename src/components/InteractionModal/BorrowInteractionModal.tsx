@@ -8,7 +8,10 @@ import BorrowAPY from './TransactionRecap/BorrowAPY';
 import BorrowFee from './TransactionRecap/BorrowFee';
 import useApprove from '../../hooks/useApprove';
 import useBorrow from '../../hooks/useBorrow';
-import { useSymbol, useMaxBorrowable, useToBigNumber } from '../../hooks/useData';
+import {
+  useSymbol,
+  useToBigNumber
+} from '../../hooks/useData';
 import RiskMetrics from '../RiskMetrics';
 import FarmingAPY from './TransactionRecap/FarmingAPY';
 import getLeverage from 'utils/helpers/get-leverage';
@@ -31,6 +34,7 @@ export interface BorrowInteractionModalProps {
   tokenABorrowed: number;
   tokenBBorrowed: number;
   marketPrice: number;
+  maxBorrowable: number;
 }
 
 /**
@@ -50,12 +54,12 @@ export default function BorrowInteractionModal({
   tokenBDenomLPPrice,
   tokenABorrowed,
   tokenBBorrowed,
-  marketPrice
+  marketPrice,
+  maxBorrowable
 }: BorrowInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
-  const maxBorrowable = useMaxBorrowable();
 
   const amount = useToBigNumber(val);
   const invalidInput = val > maxBorrowable;

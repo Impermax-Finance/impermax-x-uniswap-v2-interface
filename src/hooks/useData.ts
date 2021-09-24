@@ -208,13 +208,6 @@ export function useAvailableClaimable(claimableAddress: Address) : number {
   return availableClaimable;
 }
 
-export function useMaxBorrowable(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [maxBorrowable, setMaxBorrowable] = useState<number>(0);
-  useRouterCallback(async router => setMaxBorrowable(await router.getMaxBorrowable(uniswapV2PairAddress, poolTokenType)));
-  return maxBorrowable;
-}
-
 export function useDeadline() : BigNumber {
   const [deadline, setDeadline] = useState<BigNumber>();
   useRouterCallback(async router => setDeadline(router.getDeadline()));

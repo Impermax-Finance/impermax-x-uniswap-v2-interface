@@ -17,8 +17,10 @@ export default function TransactionSize({ amount }: TransactionSizeProps): JSX.E
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
+  // ray test touch <<<
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [tokenPriceA, tokenPriceB] = usePriceDenomLP();
+  // ray test touch >>>
   // TODO: >
 
   return (

@@ -197,7 +197,6 @@ class ImpermaxRouter {
   public getTokenDecimals = fetchers.getTokenDecimals;
   public getDecimals = fetchers.getDecimals;
   public getPriceDenomLP = fetchers.getPriceDenomLP;
-  public getBorrowablePriceDenomLP = fetchers.getBorrowablePriceDenomLP;
   public isValidPair = fetchers.isValidPair;
   public getPairSymbols = fetchers.getPairSymbols;
   public isPoolTokenCreated = fetchers.isPoolTokenCreated;
@@ -207,15 +206,10 @@ class ImpermaxRouter {
   public initializeExchangeRate = account.initializeExchangeRate;
   public initializeTokenBalance = account.initializeTokenBalance;
   public initializeBorrowed = account.initializeBorrowed;
-  public initializeDeposited = account.initializeDeposited;
   public getExchangeRate = account.getExchangeRate;
   public getTokenBalance = account.getTokenBalance;
   public getAvailableBalance = account.getAvailableBalance;
   public getBorrowed = account.getBorrowed;
-  public getDeposited = account.getDeposited;
-  public getValuesFromPrice = account.getValuesFromPrice;
-  public getValues = account.getValues;
-  public getMaxBorrowable = account.getMaxBorrowable;
 
   // IMX
   public initializeFarmingShares = imx.initializeFarmingShares;

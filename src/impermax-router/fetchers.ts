@@ -74,11 +74,6 @@ export async function getPriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress
   return cache.priceDenomLP;
 }
 // ray test touch >>
-export async function getBorrowablePriceDenomLP(this: ImpermaxRouter, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
-  const [priceA, priceB] = await this.getPriceDenomLP(uniswapV2PairAddress);
-  if (poolTokenType === PoolTokenType.BorrowableA) return priceA;
-  return priceB;
-}
 
 // Check Uniswap Pair Address
 export async function isValidPair(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<boolean> {

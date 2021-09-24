@@ -53,8 +53,6 @@ class Subgraph {
   public getImxPrice = cacheData.getImxPrice;
   public getTotalBalance = cacheData.getTotalBalance;
   public getTotalBalanceUSD = cacheData.getTotalBalanceUSD;
-  public getSafetyMargin = cacheData.getSafetyMargin;
-  public getLiquidationIncentive = cacheData.getLiquidationIncentive;
   public getReserveFactor = cacheData.getReserveFactor;
   public getKinkBorrowRate = cacheData.getKinkBorrowRate;
   public getKinkUtilizationRate = cacheData.getKinkUtilizationRate;

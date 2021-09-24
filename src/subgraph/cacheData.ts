@@ -77,22 +77,6 @@ export async function getTotalBalanceUSD(this: Subgraph, uniswapV2PairAddress: A
   return parseFloat(lendingPoolData[poolTokenType].totalBalanceUSD);
 }
 
-// ray test touch <<
-// Safety Margin
-export async function getSafetyMargin(this: Subgraph, uniswapV2PairAddress: Address) : Promise<number> {
-  const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat(lendingPoolData[PoolTokenType.Collateral].safetyMargin);
-}
-// ray test touch >>
-
-// ray test touch <<
-// Liquidation Incentive
-export async function getLiquidationIncentive(this: Subgraph, uniswapV2PairAddress: Address) : Promise<number> {
-  const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);
-  return parseFloat(lendingPoolData[PoolTokenType.Collateral].liquidationIncentive);
-}
-// ray test touch >>
-
 // Reserve Factor
 export async function getReserveFactor(this: Subgraph, uniswapV2PairAddress: Address, poolTokenType: PoolTokenType) : Promise<number> {
   const lendingPoolData = await this.getLendingPoolData(uniswapV2PairAddress);

@@ -27,6 +27,7 @@ interface Props {
   tokenABorrowed: number;
   tokenBBorrowed: number;
   marketPrice: number;
+  maxBorrowable: number;
 }
 
 const AccountLendingPoolBorrowRow = ({
@@ -44,7 +45,8 @@ const AccountLendingPoolBorrowRow = ({
   tokenBDenomLPPrice,
   tokenABorrowed,
   tokenBBorrowed,
-  marketPrice
+  marketPrice,
+  maxBorrowable
 }: Props): JSX.Element => {
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepayModal] = useState(false);
@@ -122,7 +124,8 @@ const AccountLendingPoolBorrowRow = ({
         tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
-        marketPrice={marketPrice} />
+        marketPrice={marketPrice}
+        maxBorrowable={maxBorrowable} />
       <RepayInteractionModal
         show={showRepayModal}
         toggleShow={toggleRepayModal}

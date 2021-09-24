@@ -405,6 +405,25 @@ const AccountLendingPool = (): JSX.Element => {
   const collateralMaxWithdrawable =
     Math.max(0, Math.min(collateralDeposited, availableCashCollateral, maxWithdrawable1, maxWithdrawable2) / DUST);
 
+  const tokenAValueBorrowed = valueA;
+  const tokenAValueOther = valueB;
+  const tokenATotalValueBorrowable1 =
+    (actualCollateral * Math.sqrt(safetyMarginWithUIMargin) - tokenAValueOther) / safetyMarginWithUIMargin;
+  const tokenATotalValueBorrowable2 =
+    (actualCollateral / Math.sqrt(safetyMarginWithUIMargin) - tokenAValueOther) * safetyMarginWithUIMargin;
+  const tokenAMaxValueBorrowable =
+    Math.min(tokenATotalValueBorrowable1, tokenATotalValueBorrowable2) - tokenAValueBorrowed;
+  const tokenAMaxBorrowable = Math.max(0, Math.min(availableCashA, tokenAMaxValueBorrowable / tokenADenomLPPrice));
+  const tokenBValueBorrowed = valueB;
+  const tokenBValueOther = valueA;
+  const tokenBTotalValueBorrowable1 =
+    (actualCollateral * Math.sqrt(safetyMarginWithUIMargin) - tokenBValueOther) / safetyMarginWithUIMargin;
+  const tokenBTotalValueBorrowable2 =
+    (actualCollateral / Math.sqrt(safetyMarginWithUIMargin) - tokenBValueOther) * safetyMarginWithUIMargin;
+  const tokenBMaxValueBorrowable =
+    Math.min(tokenBTotalValueBorrowable1, tokenBTotalValueBorrowable2) - tokenBValueBorrowed;
+  const tokenBMaxBorrowable = Math.max(0, Math.min(availableCashB, tokenBMaxValueBorrowable / tokenBDenomLPPrice));
+
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector
@@ -464,7 +483,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenBDenomLPPrice={tokenBDenomLPPrice}
               tokenABorrowed={tokenABorrowed}
               tokenBBorrowed={tokenBBorrowed}
-              marketPrice={marketPrice} />
+              marketPrice={marketPrice}
+              maxBorrowable={tokenAMaxBorrowable} />
           </PoolTokenContext.Provider>
           <PoolTokenContext.Provider value={PoolTokenType.BorrowableB}>
             <AccountLendingPoolBorrowRow
@@ -482,7 +502,8 @@ const AccountLendingPool = (): JSX.Element => {
               tokenBDenomLPPrice={tokenBDenomLPPrice}
               tokenABorrowed={tokenABorrowed}
               tokenBBorrowed={tokenBBorrowed}
-              marketPrice={marketPrice} />
+              marketPrice={marketPrice}
+              maxBorrowable={tokenBMaxBorrowable} />
           </PoolTokenContext.Provider>
         </>
       )}
