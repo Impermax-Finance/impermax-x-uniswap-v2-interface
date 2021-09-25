@@ -78,13 +78,6 @@ export function useUniswapAPY() : number {
   return uniswapAPY;
 }
 
-export function useHasFarming(poolTokenTypeArg?: PoolTokenType) : boolean {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [farmingPool, setFarmingPool] = useState<number>(0);
-  useRouterCallback(async router => setFarmingPool(await router.getFarmingPool(uniswapV2PairAddress, poolTokenType)));
-  return farmingPool ? true : false;
-}
-
 export function useNextSupplyAPY(supplyAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [nextSupplyAPY, setNextSupplyAPY] = useState<number>(0);

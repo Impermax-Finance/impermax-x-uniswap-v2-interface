@@ -541,11 +541,16 @@ const AccountLendingPool = (): JSX.Element => {
 
   const farmingPoolTotalAmount = farmingPoolATotalAmount.add(farmingPoolBTotalAmount);
 
+  const hasFarming =
+    (farmingPoolAAddress !== undefined && farmingPoolAAddress !== ZERO_ADDRESS) ||
+    (farmingPoolBAddress !== undefined && farmingPoolBAddress !== ZERO_ADDRESS);
+
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector
         pageSelected={actualPageSelected}
-        setPageSelected={setPageSelected} />
+        setPageSelected={setPageSelected}
+        hasFarming={hasFarming} />
       {actualPageSelected === AccountLendingPoolPage.Leverage && (
         <>
           <AccountLendingPoolDetailsLeverage
