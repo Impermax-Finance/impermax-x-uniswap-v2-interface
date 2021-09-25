@@ -122,13 +122,6 @@ export function useRewardSpeed(poolTokenTypeArg?: PoolTokenType) : number {
   return rewardSpeed;
 }
 
-export function useFarmingShares(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [farmingShares, setFarmingShares] = useState<number>(0);
-  useRouterCallback(async router => setFarmingShares(await router.getFarmingShares(uniswapV2PairAddress, poolTokenType)));
-  return farmingShares;
-}
-
 export function useIsValidPair(uniswapV2PairAddress: Address) : InputAddressState {
   const [inputAddressState, setInputAddressState] = useState<InputAddressState>(InputAddressState.INVALID_ADDRESS);
   const [toCheckUniswapV2PairAddress, setToCheckUniswapV2PairAddress] = useState<string>();

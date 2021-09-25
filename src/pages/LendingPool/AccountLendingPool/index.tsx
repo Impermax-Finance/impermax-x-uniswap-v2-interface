@@ -3,6 +3,8 @@ import * as React from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
+import { BigNumber } from '@ethersproject/bignumber';
+import { Zero } from '@ethersproject/constants';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
@@ -40,11 +42,16 @@ import useLendingPool from 'services/hooks/use-lending-pool';
 import useTokenDeposited from 'services/hooks/use-token-deposited';
 import useTokenBorrowBalance from 'services/hooks/use-token-borrow-balance';
 import usePriceDenomLP from 'services/hooks/use-price-denom-lp';
+import useFarmingPoolAddresses from 'services/hooks/use-farming-pool-addresses';
 import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
 import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
 import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
+import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
 import { PoolTokenType } from 'types/interfaces';
 import './index.scss';
+
+// TODO: hardcoded
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 interface AccountLendingPoolContainerProps {
   children: React.ReactNode;
@@ -225,6 +232,56 @@ const AccountLendingPool = (): JSX.Element => {
   );
   useErrorHandler(bigTotalSupplyError);
 
+  const {
+    isLoading: farmingPoolAddressesLoading,
+    data: {
+      farmingPoolAAddress,
+      farmingPoolBAddress
+    },
+    error: farmingPoolAddressesError
+  } = useFarmingPoolAddresses(selectedChainID, selectedUniswapV2PairAddress, library);
+  useErrorHandler(farmingPoolAddressesError);
+  const {
+    isLoading: farmingPoolARecipientsLoading,
+    data: farmingPoolARecipients = [Zero],
+    error: farmingPoolARecipientsError
+  } = useQuery<BigNumber[], Error>(
+    [
+      GENERIC_FETCHER,
+      selectedChainID,
+      farmingPoolAAddress,
+      'recipients',
+      account
+    ],
+    library ?
+      genericFetcher<BigNumber[]>(library, FarmingPoolJSON.abi) :
+      Promise.resolve,
+    {
+      enabled: !!library && ZERO_ADDRESS !== farmingPoolAAddress
+    }
+  );
+  useErrorHandler(farmingPoolARecipientsError);
+  const {
+    isLoading: farmingPoolBRecipientsLoading,
+    data: farmingPoolBRecipients = [Zero],
+    error: farmingPoolBRecipientsError
+  } = useQuery<BigNumber[], Error>(
+    [
+      GENERIC_FETCHER,
+      selectedChainID,
+      farmingPoolBAddress,
+      'recipients',
+      account
+    ],
+    library ?
+      genericFetcher<BigNumber[]>(library, FarmingPoolJSON.abi) :
+      Promise.resolve,
+    {
+      enabled: !!library && ZERO_ADDRESS !== farmingPoolBAddress
+    }
+  );
+  useErrorHandler(farmingPoolBRecipientsError);
+
   if (!account) {
     return (
       <AccountLendingPoolContainer>
@@ -271,6 +328,15 @@ const AccountLendingPool = (): JSX.Element => {
     return <>Loading...</>;
   }
   if (bigTotalSupplyLoading) {
+    return <>Loading...</>;
+  }
+  if (farmingPoolAddressesLoading) {
+    return <>Loading...</>;
+  }
+  if (farmingPoolARecipientsLoading) {
+    return <>Loading...</>;
+  }
+  if (farmingPoolBRecipientsLoading) {
     return <>Loading...</>;
   }
   if (!priceObj?.[0]) {
@@ -424,6 +490,9 @@ const AccountLendingPool = (): JSX.Element => {
     Math.min(tokenBTotalValueBorrowable1, tokenBTotalValueBorrowable2) - tokenBValueBorrowed;
   const tokenBMaxBorrowable = Math.max(0, Math.min(availableCashB, tokenBMaxValueBorrowable / tokenBDenomLPPrice));
 
+  const farmingSharesA = farmingPoolARecipients[0];
+  const farmingSharesB = farmingPoolBRecipients[0];
+
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector
@@ -563,7 +632,9 @@ const AccountLendingPool = (): JSX.Element => {
           <AccountLendingPoolFarming
             tokenABorrowedInUSD={tokenABorrowedInUSD}
             tokenBBorrowedInUSD={tokenBBorrowedInUSD}
-            collateralSymbol={collateralSymbol} />
+            collateralSymbol={collateralSymbol}
+            farmingSharesA={farmingSharesA}
+            farmingSharesB={farmingSharesB} />
         </>
       )}
     </AccountLendingPoolContainer>
