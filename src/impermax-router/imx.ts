@@ -43,11 +43,11 @@ export async function initializeAvailableReward(this: ImpermaxRouter, uniswapV2P
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
   let totalAmount = 0;
   if (farmingPoolA) {
-    const bigTotalAmount = await farmingPoolA.claim();
+    const bigTotalAmount = await farmingPoolA.callStatic.claim();
     totalAmount += parseFloat(formatUnits(bigTotalAmount));
   }
   if (farmingPoolB) {
-    const bigTotalAmount = await farmingPoolB.claim();
+    const bigTotalAmount = await farmingPoolB.callStatic.claim();
     totalAmount += parseFloat(formatUnits(bigTotalAmount));
   }
   return totalAmount;
@@ -58,7 +58,6 @@ export async function getAvailableReward(this: ImpermaxRouter, uniswapV2PairAddr
   return cache.availableReward;
 }
 
-// ray test touch <<<
 // Claim History
 export async function initializeClaimHistory(
   this: ImpermaxRouter,
@@ -100,7 +99,6 @@ export async function initializeClaimHistory(
   }
   return result;
 }
-// ray test touch >>>
 export async function getClaimHistory(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<ClaimEvent[]> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.claimHistory) cache.claimHistory = this.initializeClaimHistory(uniswapV2PairAddress);
