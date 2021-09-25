@@ -5,6 +5,11 @@
 // TODO: >
 
 import { formatUnits } from '@ethersproject/units';
+import { Web3Provider } from '@ethersproject/providers';
+import { Log } from '@ethersproject/abstract-provider';
+import { hexZeroPad } from '@ethersproject/bytes';
+import { id } from '@ethersproject/hash';
+import { Interface } from '@ethersproject/abi';
 
 import ImpermaxRouter from '.';
 import {
@@ -12,6 +17,7 @@ import {
   PoolTokenType,
   ClaimEvent
 } from '../types/interfaces';
+import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
 
 // Farming Shares
 export async function initializeFarmingShares(
@@ -52,23 +58,49 @@ export async function getAvailableReward(this: ImpermaxRouter, uniswapV2PairAddr
   return cache.availableReward;
 }
 
+// ray test touch <<<
 // Claim History
-export async function initializeClaimHistory(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<ClaimEvent[]> {
+export async function initializeClaimHistory(
+  this: ImpermaxRouter,
+  uniswapV2PairAddress: Address
+) : Promise<ClaimEvent[]> {
   const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
   const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const claimsA = await farmingPoolA.getPastEvents('Claim', { fromBlock: 0, filter: { account: this.account } });
-  const claimsB = await farmingPoolB.getPastEvents('Claim', { fromBlock: 0, filter: { account: this.account } });
+  // MEMO: inspired by https://github.com/ethers-io/ethers.js/issues/52
+  const claimsA = await (this.library as Web3Provider).getLogs({
+    fromBlock: 0,
+    toBlock: 'latest',
+    address: farmingPoolA.address,
+    topics: [
+      id('Claim(address,uint256)'),
+      hexZeroPad(this.account, 32)
+    ]
+  });
+  const claimsB = await (this.library as Web3Provider).getLogs({
+    fromBlock: 0,
+    toBlock: 'latest',
+    address: farmingPoolB.address,
+    topics: [
+      id('Claim(address,uint256)'),
+      hexZeroPad(this.account, 32)
+    ]
+  });
   const claims = claimsA.concat(claimsB);
-  claims.sort((a: any, b: any) => b.blockNumber - a.blockNumber); // order from newest to oldest
+  claims.sort((a: Log, b: Log) => b.blockNumber - a.blockNumber); // order from newest to oldest
   const result: Array<ClaimEvent> = [];
+  const iface = new Interface(FarmingPoolJSON.abi);
   for (const claim of claims) {
+    // MEMO: inspired by https://github.com/ethers-io/ethers.js/issues/487
+    const logData = iface.parseLog(claim);
+
     result.push({
-      amount: claim.returnValues.amount / 1e18,
+      amount: parseFloat(formatUnits(logData.args.amount)),
       transactionHash: claim.transactionHash
     });
   }
   return result;
 }
+// ray test touch >>>
 export async function getClaimHistory(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<ClaimEvent[]> {
   const cache = this.getLendingPoolCache(uniswapV2PairAddress);
   if (!cache.claimHistory) cache.claimHistory = this.initializeClaimHistory(uniswapV2PairAddress);

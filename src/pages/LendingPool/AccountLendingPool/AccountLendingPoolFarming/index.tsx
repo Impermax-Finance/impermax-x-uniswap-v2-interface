@@ -31,11 +31,11 @@ const AccountLendingPoolFarming = ({
   farmingSharesA,
   farmingSharesB
 }: Props): JSX.Element => {
-  // ray test touch <<
+  // ray test touch <<<
   const availableReward = useAvailableReward();
   const claimHistory = useClaimHistory();
   const urlGenerator = useTransactionUrlGenerator();
-  // ray test touch >>
+  // ray test touch >>>
 
   const [trackBorrowsState, onTrackBorrows] = useTrackBorrows();
   const [claimsState, onClaims] = useClaims();
