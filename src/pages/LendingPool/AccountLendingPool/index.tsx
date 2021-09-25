@@ -282,6 +282,46 @@ const AccountLendingPool = (): JSX.Element => {
   );
   useErrorHandler(farmingPoolBRecipientsError);
 
+  const {
+    isLoading: farmingPoolATotalAmountLoading,
+    data: farmingPoolATotalAmount = Zero,
+    error: farmingPoolATotalAmountError
+  } = useQuery<BigNumber, Error>(
+    [
+      GENERIC_FETCHER,
+      selectedChainID,
+      farmingPoolAAddress,
+      'claim'
+    ],
+    library ?
+      genericFetcher<BigNumber>(library, FarmingPoolJSON.abi, true) :
+      Promise.resolve,
+    {
+      enabled: !!library && ZERO_ADDRESS !== farmingPoolAAddress
+    }
+  );
+  useErrorHandler(farmingPoolATotalAmountError);
+  const {
+    isLoading: farmingPoolBTotalAmountLoading,
+    data: farmingPoolBTotalAmount = Zero,
+    error: farmingPoolBTotalAmountError
+  } = useQuery<BigNumber, Error>(
+    [
+      GENERIC_FETCHER,
+      selectedChainID,
+      farmingPoolBAddress,
+      'claim'
+    ],
+    library ?
+      genericFetcher<BigNumber>(library, FarmingPoolJSON.abi, true) :
+      Promise.resolve,
+    {
+      enabled: !!library && ZERO_ADDRESS !== farmingPoolAAddress
+    }
+  );
+  useErrorHandler(farmingPoolBTotalAmountError);
+  // ray test touch >>>
+
   if (!account) {
     return (
       <AccountLendingPoolContainer>
@@ -337,6 +377,12 @@ const AccountLendingPool = (): JSX.Element => {
     return <>Loading...</>;
   }
   if (farmingPoolBRecipientsLoading) {
+    return <>Loading...</>;
+  }
+  if (farmingPoolATotalAmountLoading) {
+    return <>Loading...</>;
+  }
+  if (farmingPoolBTotalAmountLoading) {
     return <>Loading...</>;
   }
   if (!priceObj?.[0]) {
@@ -493,6 +539,8 @@ const AccountLendingPool = (): JSX.Element => {
   const farmingSharesA = farmingPoolARecipients[0];
   const farmingSharesB = farmingPoolBRecipients[0];
 
+  const farmingPoolTotalAmount = farmingPoolATotalAmount.add(farmingPoolBTotalAmount);
+
   return (
     <AccountLendingPoolContainer>
       <AccountLendingPoolPageSelector
@@ -634,7 +682,8 @@ const AccountLendingPool = (): JSX.Element => {
             tokenBBorrowedInUSD={tokenBBorrowedInUSD}
             collateralSymbol={collateralSymbol}
             farmingSharesA={farmingSharesA}
-            farmingSharesB={farmingSharesB} />
+            farmingSharesB={farmingSharesB}
+            availableReward={farmingPoolTotalAmount} />
         </>
       )}
     </AccountLendingPoolContainer>

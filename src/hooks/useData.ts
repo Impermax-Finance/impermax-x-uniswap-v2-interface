@@ -167,13 +167,6 @@ export function useIsPairInitialized(uniswapV2PairAddress: Address, updater = 0)
   return isPairInitialized;
 }
 
-export function useAvailableReward() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [availableReward, setAvailableReward] = useState<number>(0);
-  useRouterCallback(async router => setAvailableReward(await router.getAvailableReward(uniswapV2PairAddress)));
-  return availableReward;
-}
-
 export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [availableBalance, setAvailableBalance] = useState<number>(0);

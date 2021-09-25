@@ -37,27 +37,6 @@ export async function getFarmingShares(this: ImpermaxRouter, uniswapV2PairAddres
   return cache.farmingShares;
 }
 
-// Available Reward
-export async function initializeAvailableReward(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  let totalAmount = 0;
-  if (farmingPoolA) {
-    const bigTotalAmount = await farmingPoolA.callStatic.claim();
-    totalAmount += parseFloat(formatUnits(bigTotalAmount));
-  }
-  if (farmingPoolB) {
-    const bigTotalAmount = await farmingPoolB.callStatic.claim();
-    totalAmount += parseFloat(formatUnits(bigTotalAmount));
-  }
-  return totalAmount;
-}
-export async function getAvailableReward(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.availableReward) cache.availableReward = this.initializeAvailableReward(uniswapV2PairAddress);
-  return cache.availableReward;
-}
-
 // Claim History
 export async function initializeClaimHistory(
   this: ImpermaxRouter,

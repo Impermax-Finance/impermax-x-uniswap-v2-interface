@@ -4,12 +4,10 @@ import {
 } from 'react-bootstrap';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Zero } from '@ethersproject/constants';
+import { formatUnits } from '@ethersproject/units';
 
 import InteractionButton from 'components/InteractionButton';
-import {
-  useAvailableReward,
-  useClaimHistory
-} from 'hooks/useData';
+import { useClaimHistory } from 'hooks/useData';
 import { ClaimEvent } from 'types/interfaces';
 import useTrackBorrows from 'hooks/useTrackBorrows';
 import useClaims from 'hooks/useClaims';
@@ -22,6 +20,7 @@ interface Props {
   collateralSymbol: string;
   farmingSharesA: BigNumber;
   farmingSharesB: BigNumber;
+  availableReward: BigNumber;
 }
 
 const AccountLendingPoolFarming = ({
@@ -29,25 +28,27 @@ const AccountLendingPoolFarming = ({
   tokenBBorrowedInUSD,
   collateralSymbol,
   farmingSharesA,
-  farmingSharesB
+  farmingSharesB,
+  availableReward
 }: Props): JSX.Element => {
-  // ray test touch <<<
-  const availableReward = useAvailableReward();
+  // ray test touch <<
   const claimHistory = useClaimHistory();
   const urlGenerator = useTransactionUrlGenerator();
-  // ray test touch >>>
+  // ray test touch >>
 
   const [trackBorrowsState, onTrackBorrows] = useTrackBorrows();
   const [claimsState, onClaims] = useClaims();
 
   // if is farming, show to reward accumulated and show a button to claim it
   if (
-    availableReward > 0 ||
+    availableReward.gt(Zero) ||
     (
       (tokenABorrowedInUSD > 1 && farmingSharesA.gt(Zero)) &&
       (tokenBBorrowedInUSD > 1 && farmingSharesB.gt(Zero))
     )
   ) {
+    const floatAvailableReward = parseFloat(formatUnits(availableReward));
+
     return (
       <>
         <Row className='account-lending-pool-claim'>
@@ -55,7 +56,7 @@ const AccountLendingPoolFarming = ({
             md={12}
             className='col-claim-reward'>
             <InteractionButton
-              name={'Claim ' + formatAmount(availableReward) + ' IMX'}
+              name={'Claim ' + formatAmount(floatAvailableReward) + ' IMX'}
               onCall={onClaims}
               state={claimsState} />
           </Col>
