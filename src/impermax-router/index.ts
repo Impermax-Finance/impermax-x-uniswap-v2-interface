@@ -211,10 +211,8 @@ class ImpermaxRouter {
 
   // IMX
   public initializeFarmingShares = imx.initializeFarmingShares;
-  public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
   public getFarmingShares = imx.getFarmingShares;
-  public getClaimHistory = imx.getClaimHistory;
   public getAvailableClaimable = imx.getAvailableClaimable;
 
   // Utils

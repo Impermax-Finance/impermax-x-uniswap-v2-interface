@@ -7,7 +7,6 @@ import { Zero } from '@ethersproject/constants';
 import { formatUnits } from '@ethersproject/units';
 
 import InteractionButton from 'components/InteractionButton';
-import { useClaimHistory } from 'hooks/useData';
 import { ClaimEvent } from 'types/interfaces';
 import useTrackBorrows from 'hooks/useTrackBorrows';
 import useClaims from 'hooks/useClaims';
@@ -21,6 +20,7 @@ interface Props {
   farmingSharesA: BigNumber;
   farmingSharesB: BigNumber;
   availableReward: BigNumber;
+  claimHistory: Array<ClaimEvent>;
 }
 
 const AccountLendingPoolFarming = ({
@@ -29,10 +29,10 @@ const AccountLendingPoolFarming = ({
   collateralSymbol,
   farmingSharesA,
   farmingSharesB,
-  availableReward
+  availableReward,
+  claimHistory
 }: Props): JSX.Element => {
   // ray test touch <<
-  const claimHistory = useClaimHistory();
   const urlGenerator = useTransactionUrlGenerator();
   // ray test touch >>
 
@@ -63,9 +63,9 @@ const AccountLendingPoolFarming = ({
         </Row>
         <div className='claim-history'>
           <b>Claims history</b>
-          {claimHistory.map((claimEvent: ClaimEvent, key: any) => {
+          {claimHistory.map((claimEvent: ClaimEvent, index: number) => {
             return (
-              <div key={key}>
+              <div key={index}>
                 <a
                   href={urlGenerator(claimEvent.transactionHash)}
                   target='_blank'

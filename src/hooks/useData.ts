@@ -3,7 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { PoolTokenType, ClaimEvent, Address } from '../types/interfaces';
+import { PoolTokenType, Address } from '../types/interfaces';
 import usePoolToken from './usePoolToken';
 import usePairAddress from './usePairAddress';
 import { useState, useEffect } from 'react';
@@ -165,13 +165,6 @@ export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   const [availableBalance, setAvailableBalance] = useState<number>(0);
   useRouterCallback(async router => setAvailableBalance(await router.getAvailableBalance(uniswapV2PairAddress, poolTokenType)));
   return availableBalance;
-}
-
-export function useClaimHistory() : ClaimEvent[] {
-  const uniswapV2PairAddress = usePairAddress();
-  const [claimHistory, setClaimHistory] = useState<ClaimEvent[]>([]);
-  useRouterCallback(async router => setClaimHistory(await router.getClaimHistory(uniswapV2PairAddress)));
-  return claimHistory;
 }
 
 export function useAvailableClaimable(claimableAddress: Address) : number {

@@ -5,6 +5,8 @@ import { Web3Provider } from '@ethersproject/providers';
 import { formatUnits } from '@ethersproject/units';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Zero } from '@ethersproject/constants';
+import { Log } from '@ethersproject/abstract-provider';
+import { Interface } from '@ethersproject/abi';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
@@ -44,6 +46,7 @@ import useTokenBorrowBalance from 'services/hooks/use-token-borrow-balance';
 import usePriceDenomLP from 'services/hooks/use-price-denom-lp';
 import useFarmingPoolAddresses from 'services/hooks/use-farming-pool-addresses';
 import genericFetcher, { GENERIC_FETCHER } from 'services/fetchers/generic-fetcher';
+import claimLogsFetcher, { CLAIM_LOGS_FETCHER } from 'services/fetchers/claim-logs-fetcher';
 import SimpleUniswapOracleJSON from 'abis/contracts/ISimpleUniswapOracle.json';
 import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
@@ -320,7 +323,57 @@ const AccountLendingPool = (): JSX.Element => {
     }
   );
   useErrorHandler(farmingPoolBTotalAmountError);
-  // ray test touch >>>
+
+  const {
+    isLoading: claimALogsLoading,
+    data: claimALogs,
+    error: claimALogsError
+  } = useQuery<Array<Log>, Error>(
+    [
+      CLAIM_LOGS_FETCHER,
+      farmingPoolAAddress,
+      account
+    ],
+    library && account && farmingPoolAAddress ?
+      () => claimLogsFetcher(library)(
+        farmingPoolAAddress,
+        account
+      ) :
+      Promise.resolve,
+    {
+      enabled:
+        !!library &&
+        !!account &&
+        !!farmingPoolAAddress &&
+        ZERO_ADDRESS !== farmingPoolAAddress
+    }
+  );
+  useErrorHandler(claimALogsError);
+  const {
+    isLoading: claimBLogsLoading,
+    data: claimBLogs,
+    error: claimBLogsError
+  } = useQuery<Array<Log>, Error>(
+    [
+      CLAIM_LOGS_FETCHER,
+      farmingPoolBAddress,
+      account
+    ],
+    library && account && farmingPoolBAddress ?
+      () => claimLogsFetcher(library)(
+        farmingPoolBAddress,
+        account
+      ) :
+      Promise.resolve,
+    {
+      enabled:
+        !!library &&
+        !!account &&
+        !!farmingPoolBAddress &&
+        ZERO_ADDRESS !== farmingPoolBAddress
+    }
+  );
+  useErrorHandler(claimBLogsError);
 
   if (!account) {
     return (
@@ -385,6 +438,12 @@ const AccountLendingPool = (): JSX.Element => {
   if (farmingPoolBTotalAmountLoading) {
     return <>Loading...</>;
   }
+  if (claimALogsLoading) {
+    return <>Loading...</>;
+  }
+  if (claimBLogsLoading) {
+    return <>Loading...</>;
+  }
   if (!priceObj?.[0]) {
     return (
       <OracleAlert />
@@ -415,6 +474,12 @@ const AccountLendingPool = (): JSX.Element => {
     throw new Error('Something went wrong!');
   }
   if (bigTotalSupply === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (claimALogs === undefined) {
+    throw new Error('Something went wrong!');
+  }
+  if (claimBLogs === undefined) {
     throw new Error('Something went wrong!');
   }
 
@@ -544,6 +609,18 @@ const AccountLendingPool = (): JSX.Element => {
   const hasFarming =
     (farmingPoolAAddress !== undefined && farmingPoolAAddress !== ZERO_ADDRESS) ||
     (farmingPoolBAddress !== undefined && farmingPoolBAddress !== ZERO_ADDRESS);
+
+  const claimLogs = claimALogs.concat(claimBLogs);
+  claimLogs.sort((a: Log, b: Log) => b.blockNumber - a.blockNumber); // Order from newest to oldest
+  const iface = new Interface(FarmingPoolJSON.abi);
+  const claimHistory = claimLogs.map(claimLog => {
+    const logData = iface.parseLog(claimLog);
+
+    return {
+      amount: parseFloat(formatUnits(logData.args.amount)),
+      transactionHash: claimLog.transactionHash
+    };
+  });
 
   return (
     <AccountLendingPoolContainer>
@@ -688,7 +765,8 @@ const AccountLendingPool = (): JSX.Element => {
             collateralSymbol={collateralSymbol}
             farmingSharesA={farmingSharesA}
             farmingSharesB={farmingSharesB}
-            availableReward={farmingPoolTotalAmount} />
+            availableReward={farmingPoolTotalAmount}
+            claimHistory={claimHistory} />
         </>
       )}
     </AccountLendingPoolContainer>
