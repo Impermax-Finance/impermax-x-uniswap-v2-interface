@@ -96,8 +96,6 @@ class ImpermaxRouter {
     this.subgraph = config.subgraph;
     this.library = config.library;
     this.chainId = config.chainId;
-    this.uiMargin = 1.1;
-    this.dust = 1.000001;
     this.router = this.newRouter(ROUTER_ADDRESSES[config.chainId]);
     this.factory = this.newFactory(FACTORY_ADDRESSES[config.chainId]);
     this.uniswapV2Factory = this.newUniswapV2Factory(UNISWAP_V2_FACTORY_ADDRESSES[config.chainId]);
@@ -195,20 +193,8 @@ class ImpermaxRouter {
   // Fetchers
   public getPoolTokenCache = fetchers.getPoolTokenCache;
   public initializeTokenDecimals = fetchers.initializeTokenDecimals;
-  public initializeReserves = fetchers.initializeReserves;
-  public initializeLPTotalSupply = fetchers.initializeLPTotalSupply;
-  public initializePriceDenomLP = fetchers.initializePriceDenomLP;
-  public initializeTWAPPrice = fetchers.initializeTWAPPrice;
   public getTokenDecimals = fetchers.getTokenDecimals;
   public getDecimals = fetchers.getDecimals;
-  public getReserves = fetchers.getReserves;
-  public getLPTotalSupply = fetchers.getLPTotalSupply;
-  public getPriceDenomLP = fetchers.getPriceDenomLP;
-  public getBorrowablePriceDenomLP = fetchers.getBorrowablePriceDenomLP;
-  public getMarketPriceDenomLP = fetchers.getMarketPriceDenomLP;
-  public getBorrowableMarketPriceDenomLP = fetchers.getBorrowableMarketPriceDenomLP;
-  public getMarketPrice = fetchers.getMarketPrice;
-  public getTWAPPrice = fetchers.getTWAPPrice;
   public isValidPair = fetchers.isValidPair;
   public getPairSymbols = fetchers.getPairSymbols;
   public isPoolTokenCreated = fetchers.isPoolTokenCreated;
@@ -218,33 +204,15 @@ class ImpermaxRouter {
   public initializeExchangeRate = account.initializeExchangeRate;
   public initializeTokenBalance = account.initializeTokenBalance;
   public initializeBorrowed = account.initializeBorrowed;
-  public initializeDeposited = account.initializeDeposited;
   public getExchangeRate = account.getExchangeRate;
   public getTokenBalance = account.getTokenBalance;
   public getAvailableBalance = account.getAvailableBalance;
   public getBorrowed = account.getBorrowed;
-  public getDeposited = account.getDeposited;
-  public getValuesFromPrice = account.getValuesFromPrice;
-  public getValues = account.getValues;
-  public getMarketValues = account.getMarketValues;
-  public getNewLeverage = account.getNewLeverage;
-  public getNewLiquidationPriceSwings = account.getNewLiquidationPriceSwings;
-  public getNewLiquidationPrices = account.getNewLiquidationPrices;
-  public getLeverage = account.getLeverage;
-  public getLiquidationPrices = account.getLiquidationPrices;
-  public getMaxWithdrawable = account.getMaxWithdrawable;
-  public getMaxBorrowable = account.getMaxBorrowable;
-  public getMaxLeverage = account.getMaxLeverage;
-  public getMaxDeleverage = account.getMaxDeleverage;
 
   // IMX
   public initializeFarmingShares = imx.initializeFarmingShares;
-  public initializeAvailableReward = imx.initializeAvailableReward;
-  public initializeClaimHistory = imx.initializeClaimHistory;
   public initializeAvailableClaimable = imx.initializeAvailableClaimable;
   public getFarmingShares = imx.getFarmingShares;
-  public getAvailableReward = imx.getAvailableReward;
-  public getClaimHistory = imx.getClaimHistory;
   public getAvailableClaimable = imx.getAvailableClaimable;
 
   // Utils
@@ -263,9 +231,7 @@ class ImpermaxRouter {
   public withdraw = interactions.withdraw;
   public borrow = interactions.borrow;
   public repay = interactions.repay;
-  public getLeverageAmounts = interactions.getLeverageAmounts;
   public leverage = interactions.leverage;
-  public getDeleverageAmounts = interactions.getDeleverageAmounts;
   public deleverage = interactions.deleverage;
   public trackBorrows = interactions.trackBorrows;
   public claims = interactions.claims;

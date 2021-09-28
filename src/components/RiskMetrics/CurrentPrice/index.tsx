@@ -1,43 +1,57 @@
 
-import { RefreshIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
+// import { RefreshIcon } from '@heroicons/react/outline';
+// import clsx from 'clsx';
 
 import { DetailListItem } from 'components/DetailList';
-import { PoolTokenType } from 'types/interfaces';
-import { useTogglePriceInverted, usePriceInverted } from 'hooks/useImpermaxRouter';
+import {
+  // ray test touch <<
+  // useTogglePriceInverted,
+  // ray test touch >>
+  usePriceInverted
+} from 'hooks/useImpermaxRouter';
 import { formatFloat } from 'utils/format';
-import { useSymbol, useTWAPPrice, useMarketPrice } from 'hooks/useData';
 
 /**
  * Generates lending pool aggregate details.
  */
 
-const CurrentPrice = (): JSX.Element => {
-  const TWAPPrice = useTWAPPrice();
-  const marketPrice = useMarketPrice();
+interface Props {
+  twapPrice: number;
+  marketPrice: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
+}
 
+const CurrentPrice = ({
+  twapPrice,
+  marketPrice,
+  tokenASymbol,
+  tokenBSymbol
+}: Props): JSX.Element => {
   const priceInverted = usePriceInverted();
-  const togglePriceInverted = useTogglePriceInverted();
-  const symbolA = useSymbol(PoolTokenType.BorrowableA);
-  const symbolB = useSymbol(PoolTokenType.BorrowableB);
+  // ray test touch <<
+  // const togglePriceInverted = useTogglePriceInverted();
+  // ray test touch >>
   const pair =
     priceInverted ?
-      `${symbolB}/${symbolA}` :
-      `${symbolA}/${symbolB}`;
+      `${tokenBSymbol}/${tokenASymbol}` :
+      `${tokenASymbol}/${tokenBSymbol}`;
 
   return (
     <DetailListItem
       title={`TWAP Price (${pair})`}
       tooltip='The TWAP (Time Weighted Average Price) and the current market price on Uniswap.'>
-      <span>{formatFloat(TWAPPrice, 4)}</span>
+      <span>{formatFloat(twapPrice, 4)}</span>
       <span>(current: {formatFloat(marketPrice, 4)})</span>
-      <RefreshIcon
+      {/* ray test touch << */}
+      {/* <RefreshIcon
         className={clsx(
           'w-6',
           'h-6',
           'cursor-pointer'
         )}
-        onClick={() => togglePriceInverted()} />
+        onClick={() => togglePriceInverted()} /> */}
+      {/* ray test touch >> */}
     </DetailListItem>
   );
 };

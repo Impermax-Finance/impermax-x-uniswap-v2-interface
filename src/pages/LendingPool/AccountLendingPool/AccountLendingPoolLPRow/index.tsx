@@ -12,35 +12,67 @@ import LeverageInteractionModal from 'components/InteractionModal/LeverageIntera
 import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
 import DeleverageInteractionModal from 'components/InteractionModal/DeleverageInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
-import { useMaxDeleverage } from 'hooks/useData';
+import getMaxDeleverage from 'utils/helpers/get-max-deleverage';
 
 interface Props {
   collateralDepositedInUSD: number;
-  collateralDeposited: number;
-  tokenABorrowed: number;
-  tokenBBorrowed: number;
   collateralSymbol: string;
   tokenAIconPath: string;
   tokenBIconPath: string;
   safetyMargin: number;
+  liquidationIncentive: number;
+  twapPrice: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
+  tokenAMarketDenomLPPrice: number;
+  tokenBMarketDenomLPPrice: number;
+  marketPrice: number;
+  availableCashA: number;
+  availableCashB: number;
+  maxWithdrawable: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 const AccountLendingPoolLPRow = ({
   collateralDepositedInUSD,
-  collateralDeposited,
-  tokenABorrowed,
-  tokenBBorrowed,
   collateralSymbol,
   tokenAIconPath,
   tokenBIconPath,
-  safetyMargin
+  safetyMargin,
+  liquidationIncentive,
+  twapPrice,
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed,
+  tokenAMarketDenomLPPrice,
+  tokenBMarketDenomLPPrice,
+  marketPrice,
+  availableCashA,
+  availableCashB,
+  maxWithdrawable,
+  tokenASymbol,
+  tokenBSymbol
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
   const [showLeverageModal, toggleLeverageModal] = useState(false);
   const [showDeleverageModal, toggleDeleverageModal] = useState(false);
 
-  const maxDeleverage = useMaxDeleverage(0);
+  const maxDeleverage =
+    getMaxDeleverage(
+      collateralDeposited,
+      tokenAMarketDenomLPPrice,
+      tokenBMarketDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      0
+    );
   const withdrawDisabledInfo = `You haven't deposited any ${collateralSymbol} yet.`;
   const leverageDisabledInfo = `You need to deposit the ${collateralSymbol} LP first in order to leverage it.`;
   const deleverageDisabledInfo = `You need to open a leveraged position in order to deleverage it.`;
@@ -132,21 +164,66 @@ const AccountLendingPoolLPRow = ({
       <DepositInteractionModal
         show={showDepositModal}
         toggleShow={toggleDepositModal}
-        safetyMargin={safetyMargin} />
+        safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
+        twapPrice={twapPrice}
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
-        safetyMargin={safetyMargin} />
+        safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
+        twapPrice={twapPrice}
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice}
+        maxWithdrawable={maxWithdrawable}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
       <LeverageInteractionModal
         show={showLeverageModal}
         toggleShow={toggleLeverageModal}
-        safetyMargin={safetyMargin} />
+        safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
+        twapPrice={twapPrice}
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed}
+        tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
+        tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
+        marketPrice={marketPrice}
+        availableCashA={availableCashA}
+        availableCashB={availableCashB}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
       <DeleverageInteractionModal
         show={showDeleverageModal}
         toggleShow={toggleDeleverageModal}
+        safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
+        twapPrice={twapPrice}
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
         tokenABorrowed={tokenABorrowed}
         tokenBBorrowed={tokenBBorrowed}
-        safetyMargin={safetyMargin} />
+        tokenAMarketDenomLPPrice={tokenAMarketDenomLPPrice}
+        tokenBMarketDenomLPPrice={tokenBMarketDenomLPPrice}
+        marketPrice={marketPrice}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
     </>
   );
 };

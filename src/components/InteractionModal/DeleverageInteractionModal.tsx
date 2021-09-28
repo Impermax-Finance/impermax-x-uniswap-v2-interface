@@ -1,7 +1,3 @@
-// TODO: <
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// TODO: >
 
 import { useState } from 'react';
 import { InteractionModalContainer } from '.';
@@ -13,28 +9,78 @@ import InputAmount, { InputAmountMini } from '../InputAmount';
 import InteractionButton from '../InteractionButton';
 import useDeleverage from '../../hooks/useDeleverage';
 import useApprove from '../../hooks/useApprove';
-import { useSymbol, useDeleverageAmounts, useToBigNumber, useToTokens, useMaxDeleverage, useNextBorrowAPY, useUniswapAPY, useCurrentLeverage, useNextFarmingAPY } from '../../hooks/useData';
+import {
+  useSymbol,
+  useToBigNumber,
+  useToTokens,
+  useNextBorrowAPY,
+  useUniswapAPY,
+  useNextFarmingAPY
+} from '../../hooks/useData';
+import getLeverage from 'utils/helpers/get-leverage';
+import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
+import getMaxDeleverage from 'utils/helpers/get-max-deleverage';
 
 interface DeleverageInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
+  safetyMargin: number;
+  liquidationIncentive: number;
+  twapPrice: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
   tokenABorrowed: number;
   tokenBBorrowed: number;
-  safetyMargin: number;
+  tokenAMarketDenomLPPrice: number;
+  tokenBMarketDenomLPPrice: number;
+  marketPrice: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 export default function DeleverageInteractionModal({
   show,
   toggleShow,
+  safetyMargin,
+  liquidationIncentive,
+  twapPrice,
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
   tokenABorrowed,
   tokenBBorrowed,
-  safetyMargin
+  tokenAMarketDenomLPPrice,
+  tokenBMarketDenomLPPrice,
+  marketPrice,
+  tokenASymbol,
+  tokenBSymbol
 }: DeleverageInteractionModalProps): JSX.Element {
   const [val, setVal] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(2);
 
-  const changeAmounts = useDeleverageAmounts(val, slippage);
-  const maxDeleverage = useMaxDeleverage(slippage);
+  const priceA = tokenAMarketDenomLPPrice;
+  const priceB = tokenBMarketDenomLPPrice;
+  const valueForEach = val / 2;
+  const bAmountA = priceA > 0 ? valueForEach / priceA : 0;
+  const bAmountB = priceB > 0 ? valueForEach / priceB : 0;
+  const changeAmounts = {
+    bAmountA,
+    bAmountB,
+    cAmount: val,
+    bAmountAMin: bAmountA / Math.sqrt(1 + slippage / 100),
+    bAmountBMin: bAmountB / Math.sqrt(1 + slippage / 100)
+  };
+
+  const maxDeleverage =
+    getMaxDeleverage(
+      collateralDeposited,
+      tokenAMarketDenomLPPrice,
+      tokenBMarketDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      slippage
+    );
   const symbol = useSymbol(PoolTokenType.Collateral);
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
@@ -51,12 +97,52 @@ export default function DeleverageInteractionModal({
     toggleShow(false);
   };
 
-  const changes = -changeAmounts.bAmountA || -changeAmounts.bAmountB || -changeAmounts.cAmount ? {
-    changeBorrowedA: -changeAmounts.bAmountA ? -changeAmounts.bAmountA : 0,
-    changeBorrowedB: -changeAmounts.bAmountB ? -changeAmounts.bAmountB : 0,
-    changeCollateral: -changeAmounts.cAmount ? -changeAmounts.cAmount : 0
-  } : null;
-  const newLeverage = useCurrentLeverage(changes);
+  const changes = {
+    changeBorrowedA: -changeAmounts.bAmountA ?? 0,
+    changeBorrowedB: -changeAmounts.bAmountB ?? 0,
+    changeCollateral: -changeAmounts.cAmount ?? 0
+  };
+  const currentLiquidationPrices =
+    getLiquidationPrices(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive
+    );
+  const newLiquidationPrices =
+    getLiquidationPrices(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive,
+      changes
+    );
+  const currentLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed
+    );
+  const newLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      changes
+    );
+
   const borrowAPYA = useNextBorrowAPY(-changeAmounts.bAmountA, PoolTokenType.BorrowableA);
   const borrowAPYB = useNextBorrowAPY(-changeAmounts.bAmountB, PoolTokenType.BorrowableB);
   const farmingPoolAPYA = useNextFarmingAPY(-changeAmounts.bAmountA, PoolTokenType.BorrowableA);
@@ -72,10 +158,16 @@ export default function DeleverageInteractionModal({
       toggleShow={toggleShow}>
       <>
         <RiskMetrics
-          changeBorrowedA={-changeAmounts.bAmountA}
-          changeBorrowedB={-changeAmounts.bAmountB}
-          changeCollateral={-changeAmounts.cAmount}
-          safetyMargin={safetyMargin} />
+          safetyMargin={safetyMargin}
+          twapPrice={twapPrice}
+          changes={changes}
+          currentLeverage={currentLeverage}
+          newLeverage={newLeverage}
+          currentLiquidationPrices={currentLiquidationPrices}
+          newLiquidationPrices={newLiquidationPrices}
+          marketPrice={marketPrice}
+          tokenASymbol={tokenASymbol}
+          tokenBSymbol={tokenBSymbol} />
         <InputAmount
           val={val}
           setVal={setVal}

@@ -1,13 +1,10 @@
 import { AccountLendingPoolPage } from '../';
-import { PoolTokenType } from 'types/interfaces';
-import { useHasFarming } from 'hooks/useData';
 
 function AccountLendingPoolPageSelector({
   pageSelected,
-  setPageSelected
+  setPageSelected,
+  hasFarming
 }: AccountLendingPoolPageSelectorProps): JSX.Element {
-  const hasFarmingA = useHasFarming(PoolTokenType.BorrowableA);
-  const hasFarmingB = useHasFarming(PoolTokenType.BorrowableA);
   return (
     <div className='account-lending-pool-page-selector'>
       {pageSelected === AccountLendingPoolPage.Leverage ? (
@@ -20,7 +17,7 @@ function AccountLendingPoolPageSelector({
       ) : (
         <div onClick={() => setPageSelected(AccountLendingPoolPage.EarnInterest)}>Lending</div>
       )}
-      {(hasFarmingA || hasFarmingB) && (
+      {hasFarming && (
         <>
           {pageSelected === AccountLendingPoolPage.Farming ? (
             <div className='selected'>IMX Farming</div>
@@ -37,6 +34,7 @@ export interface AccountLendingPoolPageSelectorProps {
   pageSelected: AccountLendingPoolPage;
   // eslint-disable-next-line @typescript-eslint/ban-types
   setPageSelected: Function;
+  hasFarming: boolean;
 }
 
 export default AccountLendingPoolPageSelector;

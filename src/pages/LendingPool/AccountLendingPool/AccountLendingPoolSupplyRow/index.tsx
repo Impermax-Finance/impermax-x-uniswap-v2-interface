@@ -10,27 +10,45 @@ import InlineAccountTokenInfo from '../InlineAccountTokenInfo';
 import DepositInteractionModal from 'components/InteractionModal/DepositInteractionModal';
 import DisabledButtonHelper from 'components/DisabledButtonHelper';
 import WithdrawInteractionModal from 'components/InteractionModal/WithdrawInteractionModal';
-import { useMaxWithdrawable } from 'hooks/useData';
 
 interface Props {
   collateralDepositedInUSD: number;
-  collateralDeposited: number;
   tokenSymbol: string;
   tokenIconPath: string;
   safetyMargin: number;
+  liquidationIncentive: number;
+  twapPrice: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
+  marketPrice: number;
+  maxWithdrawable: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 const AccountLendingPoolSupplyRow = ({
   collateralDepositedInUSD,
-  collateralDeposited,
   tokenSymbol,
   tokenIconPath,
-  safetyMargin
+  safetyMargin,
+  liquidationIncentive,
+  twapPrice,
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed,
+  marketPrice,
+  maxWithdrawable,
+  tokenASymbol,
+  tokenBSymbol
 }: Props): JSX.Element => {
   const [showDepositModal, toggleDepositModal] = useState(false);
   const [showWithdrawModal, toggleWithdrawModal] = useState(false);
 
-  const maxWithdrawable = useMaxWithdrawable();
   const withdrawDisabledInfo = `You haven't supplied any ${tokenSymbol} yet.`;
 
   return (
@@ -88,11 +106,32 @@ const AccountLendingPoolSupplyRow = ({
       <DepositInteractionModal
         show={showDepositModal}
         toggleShow={toggleDepositModal}
-        safetyMargin={safetyMargin} />
+        safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
+        twapPrice={twapPrice}
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
       <WithdrawInteractionModal
         show={showWithdrawModal}
         toggleShow={toggleWithdrawModal}
-        safetyMargin={safetyMargin} />
+        safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
+        twapPrice={twapPrice}
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice}
+        maxWithdrawable={maxWithdrawable}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
     </>
   );
 };

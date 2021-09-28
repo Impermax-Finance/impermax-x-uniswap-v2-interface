@@ -3,7 +3,7 @@
 // @ts-nocheck
 // TODO: >
 
-import { PoolTokenType, Changes, ClaimEvent, Address } from '../types/interfaces';
+import { PoolTokenType, Address } from '../types/interfaces';
 import usePoolToken from './usePoolToken';
 import usePairAddress from './usePairAddress';
 import { useState, useEffect } from 'react';
@@ -64,35 +64,6 @@ export function useTokenPrice(poolTokenTypeArg?: PoolTokenType) : number {
   return tokenPrice;
 }
 
-export function useMarketPrice() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [marketPrice, setMarketPrice] = useState<number>(null);
-  useRouterCallback(async router => setMarketPrice(await router.getMarketPrice(uniswapV2PairAddress)));
-  return marketPrice;
-}
-
-// ray test touch <
-export function useOracleIsInitialized(uniswapV2PairAddress: string) : boolean {
-  const [oracleIsInitialized, setOracleIsInitialized] = useState<boolean>(true);
-  useRouterCallback(async router => setOracleIsInitialized(await router.getTWAPPrice(uniswapV2PairAddress) !== 0));
-  return oracleIsInitialized;
-}
-// ray test touch >
-
-export function useTWAPPrice() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [TWAPPrice, setTWAPPrice] = useState<number>(null);
-  useRouterCallback(async router => setTWAPPrice(await router.getTWAPPrice(uniswapV2PairAddress)));
-  return TWAPPrice;
-}
-
-export function usePriceDenomLP() : [number, number] {
-  const uniswapV2PairAddress = usePairAddress();
-  const [priceDenomLP, setPriceDenomLP] = useState<[number, number]>([1, 1]);
-  useRouterCallback(async router => setPriceDenomLP(await router.getPriceDenomLP(uniswapV2PairAddress)));
-  return priceDenomLP;
-}
-
 export function useUnderlyingAddress(poolTokenTypeArg?: PoolTokenType) : string {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [tokenAddress, setTokenAddress] = useState<string>('');
@@ -105,13 +76,6 @@ export function useUniswapAPY() : number {
   const [uniswapAPY, setUniswapAPY] = useState<number>(0);
   useSubgraphCallback(async subgraph => setUniswapAPY(await subgraph.getUniswapAPY(uniswapV2PairAddress)));
   return uniswapAPY;
-}
-
-export function useHasFarming(poolTokenTypeArg?: PoolTokenType) : boolean {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [farmingPool, setFarmingPool] = useState<number>(0);
-  useRouterCallback(async router => setFarmingPool(await router.getFarmingPool(uniswapV2PairAddress, poolTokenType)));
-  return farmingPool ? true : false;
 }
 
 export function useNextSupplyAPY(supplyAmount: number, poolTokenTypeArg?: PoolTokenType) : number {
@@ -149,13 +113,6 @@ export function useRewardSpeed(poolTokenTypeArg?: PoolTokenType) : number {
   const [rewardSpeed, setRewardSpeed] = useState<number>(0);
   useSubgraphCallback(async subgraph => setRewardSpeed(await subgraph.getRewardSpeed(uniswapV2PairAddress, poolTokenType)));
   return rewardSpeed;
-}
-
-export function useFarmingShares(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [farmingShares, setFarmingShares] = useState<number>(0);
-  useRouterCallback(async router => setFarmingShares(await router.getFarmingShares(uniswapV2PairAddress, poolTokenType)));
-  return farmingShares;
 }
 
 export function useIsValidPair(uniswapV2PairAddress: Address) : InputAddressState {
@@ -203,13 +160,6 @@ export function useIsPairInitialized(uniswapV2PairAddress: Address, updater = 0)
   return isPairInitialized;
 }
 
-export function useAvailableReward() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [availableReward, setAvailableReward] = useState<number>(0);
-  useRouterCallback(async router => setAvailableReward(await router.getAvailableReward(uniswapV2PairAddress)));
-  return availableReward;
-}
-
 export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
   const [availableBalance, setAvailableBalance] = useState<number>(0);
@@ -217,93 +167,10 @@ export function useAvailableBalance(poolTokenTypeArg?: PoolTokenType) : number {
   return availableBalance;
 }
 
-export function useCurrentLeverage(changes?: Changes) : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [leverage, setLeverage] = useState<number>(0);
-  useRouterCallback(async router => {
-    setLeverage(changes ?
-      await router.getNewLeverage(uniswapV2PairAddress, changes) :
-      await router.getLeverage(uniswapV2PairAddress)
-    );
-  }, [changes]);
-  return leverage;
-}
-
-export function useLiquidationPrices(changes?: Changes) : [number, number] {
-  const uniswapV2PairAddress = usePairAddress();
-  const [liquidationPrices, setLiquidationPrices] = useState<[number, number]>([0, 0]);
-  useRouterCallback(async router => {
-    setLiquidationPrices(changes ?
-      await router.getNewLiquidationPrices(uniswapV2PairAddress, changes) :
-      await router.getLiquidationPrices(uniswapV2PairAddress)
-    );
-  }, [changes]);
-  return liquidationPrices;
-}
-
-export function useClaimHistory() : ClaimEvent[] {
-  const uniswapV2PairAddress = usePairAddress();
-  const [claimHistory, setClaimHistory] = useState<ClaimEvent[]>([]);
-  useRouterCallback(async router => setClaimHistory(await router.getClaimHistory(uniswapV2PairAddress)));
-  return claimHistory;
-}
-
 export function useAvailableClaimable(claimableAddress: Address) : number {
   const [availableClaimable, setAvailableClaimable] = useState<number>();
   useRouterCallback(async router => setAvailableClaimable(await router.getAvailableClaimable(claimableAddress)));
   return availableClaimable;
-}
-
-export function useMaxWithdrawable(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [maxWithdrawable, setMaxWithdrawable] = useState<number>(0);
-  useRouterCallback(async router => setMaxWithdrawable(await router.getMaxWithdrawable(uniswapV2PairAddress, poolTokenType)));
-  return maxWithdrawable;
-}
-
-export function useMaxBorrowable(poolTokenTypeArg?: PoolTokenType) : number {
-  const { uniswapV2PairAddress, poolTokenType } = useToken(poolTokenTypeArg);
-  const [maxBorrowable, setMaxBorrowable] = useState<number>(0);
-  useRouterCallback(async router => setMaxBorrowable(await router.getMaxBorrowable(uniswapV2PairAddress, poolTokenType)));
-  return maxBorrowable;
-}
-
-export function useMaxLeverage() : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [maxLeverage, setMaxLeverage] = useState<number>(0);
-  useRouterCallback(async router => setMaxLeverage(await router.getMaxLeverage(uniswapV2PairAddress)));
-  return maxLeverage;
-}
-
-export function useMaxDeleverage(slippage: number) : number {
-  const uniswapV2PairAddress = usePairAddress();
-  const [maxDeleverage, setMaxDeleverage] = useState<number>(0);
-  useRouterCallback(async router => setMaxDeleverage(await router.getMaxDeleverage(uniswapV2PairAddress, 1 + slippage / 100)),
-    [slippage]
-  );
-  return maxDeleverage;
-}
-
-export function useLeverageAmounts(leverage: number, slippage: number) : {bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number, cAmountMin: number} {
-  const uniswapV2PairAddress = usePairAddress();
-  const [leverageAmounts, setLeverageAmounts] =
-    useState<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number, cAmountMin: number}>({ bAmountA: 0, bAmountB: 0, cAmount: 0, bAmountAMin: 0, bAmountBMin: 0, cAmountMin: 0 });
-  useRouterCallback(
-    async router => setLeverageAmounts(await router.getLeverageAmounts(uniswapV2PairAddress, leverage, 1 + slippage / 100)),
-    [leverage, slippage]
-  );
-  return leverageAmounts;
-}
-
-export function useDeleverageAmounts(deleverage: number, slippage: number) : {bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number} {
-  const uniswapV2PairAddress = usePairAddress();
-  const [deleverageAmounts, setDeleverageAmounts] =
-    useState<{bAmountA: number, bAmountB: number, cAmount: number, bAmountAMin: number, bAmountBMin: number}>({ bAmountA: 0, bAmountB: 0, cAmount: 0, bAmountAMin: 0, bAmountBMin: 0 });
-  useRouterCallback(
-    async router => setDeleverageAmounts(await router.getDeleverageAmounts(uniswapV2PairAddress, deleverage, 1 + slippage / 100)),
-    [deleverage, slippage]
-  );
-  return deleverageAmounts;
 }
 
 export function useDeadline() : BigNumber {

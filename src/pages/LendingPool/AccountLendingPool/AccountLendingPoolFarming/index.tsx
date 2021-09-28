@@ -2,17 +2,12 @@ import {
   Row,
   Col
 } from 'react-bootstrap';
+import { BigNumber } from '@ethersproject/bignumber';
+import { Zero } from '@ethersproject/constants';
+import { formatUnits } from '@ethersproject/units';
 
 import InteractionButton from 'components/InteractionButton';
-import {
-  useFarmingShares,
-  useAvailableReward,
-  useClaimHistory
-} from 'hooks/useData';
-import {
-  PoolTokenType,
-  ClaimEvent
-} from 'types/interfaces';
+import { ClaimEvent } from 'types/interfaces';
 import useTrackBorrows from 'hooks/useTrackBorrows';
 import useClaims from 'hooks/useClaims';
 import { useTransactionUrlGenerator } from 'hooks/useUrlGenerator';
@@ -22,18 +17,22 @@ interface Props {
   tokenABorrowedInUSD: number;
   tokenBBorrowedInUSD: number;
   collateralSymbol: string;
+  farmingSharesA: BigNumber;
+  farmingSharesB: BigNumber;
+  availableReward: BigNumber;
+  claimHistory: Array<ClaimEvent>;
 }
 
 const AccountLendingPoolFarming = ({
   tokenABorrowedInUSD,
   tokenBBorrowedInUSD,
-  collateralSymbol
+  collateralSymbol,
+  farmingSharesA,
+  farmingSharesB,
+  availableReward,
+  claimHistory
 }: Props): JSX.Element => {
   // ray test touch <<
-  const farmingSharesA = useFarmingShares(PoolTokenType.BorrowableA);
-  const farmingSharesB = useFarmingShares(PoolTokenType.BorrowableB);
-  const availableReward = useAvailableReward();
-  const claimHistory = useClaimHistory();
   const urlGenerator = useTransactionUrlGenerator();
   // ray test touch >>
 
@@ -41,7 +40,15 @@ const AccountLendingPoolFarming = ({
   const [claimsState, onClaims] = useClaims();
 
   // if is farming, show to reward accumulated and show a button to claim it
-  if (availableReward > 0 || (tokenABorrowedInUSD > 1 && farmingSharesA > 0) && (tokenBBorrowedInUSD > 1 && farmingSharesB > 0)) {
+  if (
+    availableReward.gt(Zero) ||
+    (
+      (tokenABorrowedInUSD > 1 && farmingSharesA.gt(Zero)) &&
+      (tokenBBorrowedInUSD > 1 && farmingSharesB.gt(Zero))
+    )
+  ) {
+    const floatAvailableReward = parseFloat(formatUnits(availableReward));
+
     return (
       <>
         <Row className='account-lending-pool-claim'>
@@ -49,16 +56,16 @@ const AccountLendingPoolFarming = ({
             md={12}
             className='col-claim-reward'>
             <InteractionButton
-              name={'Claim ' + formatAmount(availableReward) + ' IMX'}
+              name={'Claim ' + formatAmount(floatAvailableReward) + ' IMX'}
               onCall={onClaims}
               state={claimsState} />
           </Col>
         </Row>
         <div className='claim-history'>
           <b>Claims history</b>
-          {claimHistory.map((claimEvent: ClaimEvent, key: any) => {
+          {claimHistory.map((claimEvent: ClaimEvent, index: number) => {
             return (
-              <div key={key}>
+              <div key={index}>
                 <a
                   href={urlGenerator(claimEvent.transactionHash)}
                   target='_blank'

@@ -8,7 +8,6 @@ import { IS_STAKING_APP } from 'config/general';
 
 type Ref = HTMLDivElement;
 type Props = React.ComponentPropsWithRef<'footer'>;
-
 const Footer = React.forwardRef<Ref, Props>(({
   className,
   ...rest

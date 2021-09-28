@@ -4,14 +4,11 @@
 // @ts-nocheck
 // TODO: >
 
-import { formatUnits } from '@ethersproject/units';
-
 import ImpermaxRouter from '.';
 import {
   Address,
-  PoolTokenType,
-  ClaimEvent
-} from '../types/interfaces';
+  PoolTokenType
+} from 'types/interfaces';
 
 // Farming Shares
 export async function initializeFarmingShares(
@@ -29,50 +26,6 @@ export async function getFarmingShares(this: ImpermaxRouter, uniswapV2PairAddres
   const cache = this.getPoolTokenCache(uniswapV2PairAddress, poolTokenType);
   if (!cache.farmingShares) cache.farmingShares = this.initializeFarmingShares(uniswapV2PairAddress, poolTokenType);
   return cache.farmingShares;
-}
-
-// Available Reward
-export async function initializeAvailableReward(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  let totalAmount = 0;
-  if (farmingPoolA) {
-    const bigTotalAmount = await farmingPoolA.claim();
-    totalAmount += parseFloat(formatUnits(bigTotalAmount));
-  }
-  if (farmingPoolB) {
-    const bigTotalAmount = await farmingPoolB.claim();
-    totalAmount += parseFloat(formatUnits(bigTotalAmount));
-  }
-  return totalAmount;
-}
-export async function getAvailableReward(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<number> {
-  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.availableReward) cache.availableReward = this.initializeAvailableReward(uniswapV2PairAddress);
-  return cache.availableReward;
-}
-
-// Claim History
-export async function initializeClaimHistory(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<ClaimEvent[]> {
-  const farmingPoolA = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableA);
-  const farmingPoolB = await this.getFarmingPool(uniswapV2PairAddress, PoolTokenType.BorrowableB);
-  const claimsA = await farmingPoolA.getPastEvents('Claim', { fromBlock: 0, filter: { account: this.account } });
-  const claimsB = await farmingPoolB.getPastEvents('Claim', { fromBlock: 0, filter: { account: this.account } });
-  const claims = claimsA.concat(claimsB);
-  claims.sort((a: any, b: any) => b.blockNumber - a.blockNumber); // order from newest to oldest
-  const result: Array<ClaimEvent> = [];
-  for (const claim of claims) {
-    result.push({
-      amount: claim.returnValues.amount / 1e18,
-      transactionHash: claim.transactionHash
-    });
-  }
-  return result;
-}
-export async function getClaimHistory(this: ImpermaxRouter, uniswapV2PairAddress: Address) : Promise<ClaimEvent[]> {
-  const cache = this.getLendingPoolCache(uniswapV2PairAddress);
-  if (!cache.claimHistory) cache.claimHistory = this.initializeClaimHistory(uniswapV2PairAddress);
-  return cache.claimHistory;
 }
 
 // Claim Claimable

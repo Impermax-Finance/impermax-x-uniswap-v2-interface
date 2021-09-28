@@ -1,17 +1,21 @@
 import { useState } from 'react';
 import { InteractionModalContainer } from '.';
 import { Row, Col } from 'react-bootstrap';
-import { PoolTokenType, ApprovalType } from '../../types/interfaces';
-import usePoolToken from '../../hooks/usePoolToken';
+import { ApprovalType } from '../../types/interfaces';
 import InputAmount from '../InputAmount';
 import InteractionButton from '../InteractionButton';
 import BorrowAPY from './TransactionRecap/BorrowAPY';
 import BorrowFee from './TransactionRecap/BorrowFee';
 import useApprove from '../../hooks/useApprove';
 import useBorrow from '../../hooks/useBorrow';
-import { useSymbol, useMaxBorrowable, useToBigNumber } from '../../hooks/useData';
+import {
+  useSymbol,
+  useToBigNumber
+} from '../../hooks/useData';
 import RiskMetrics from '../RiskMetrics';
 import FarmingAPY from './TransactionRecap/FarmingAPY';
+import getLeverage from 'utils/helpers/get-leverage';
+import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
 
 /**
  * Props for the deposit interaction modal.
@@ -22,10 +26,21 @@ export interface BorrowInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   safetyMargin: number;
+  liquidationIncentive: number;
+  twapPrice: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
+  marketPrice: number;
+  maxBorrowable: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 /**
- * Styled component for the norrow modal.
+ * Styled component for the narrow modal.
  * @param param0 any Props for component
  * @see BorrowInteractionModalProps
  */
@@ -33,13 +48,22 @@ export interface BorrowInteractionModalProps {
 export default function BorrowInteractionModal({
   show,
   toggleShow,
-  safetyMargin
+  safetyMargin,
+  liquidationIncentive,
+  twapPrice,
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed,
+  marketPrice,
+  maxBorrowable,
+  tokenASymbol,
+  tokenBSymbol
 }: BorrowInteractionModalProps): JSX.Element {
-  const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
-  const maxBorrowable = useMaxBorrowable();
 
   const amount = useToBigNumber(val);
   const invalidInput = val > maxBorrowable;
@@ -51,6 +75,52 @@ export default function BorrowInteractionModal({
     toggleShow(false);
   };
 
+  const changes = {
+    changeCollateral: 0,
+    changeBorrowedA: val,
+    changeBorrowedB: val
+  };
+  const currentLiquidationPrices =
+    getLiquidationPrices(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive
+    );
+  const newLiquidationPrices =
+    getLiquidationPrices(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive,
+      changes
+    );
+  const currentLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed
+    );
+  const newLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      changes
+    );
+
   return (
     <InteractionModalContainer
       title='Borrow'
@@ -58,9 +128,16 @@ export default function BorrowInteractionModal({
       toggleShow={toggleShow}>
       <>
         <RiskMetrics
-          changeBorrowedA={poolTokenType === PoolTokenType.BorrowableA ? val : 0}
-          changeBorrowedB={poolTokenType === PoolTokenType.BorrowableB ? val : 0}
-          safetyMargin={safetyMargin} />
+          safetyMargin={safetyMargin}
+          twapPrice={twapPrice}
+          changes={changes}
+          currentLeverage={currentLeverage}
+          newLeverage={newLeverage}
+          currentLiquidationPrices={currentLiquidationPrices}
+          newLiquidationPrices={newLiquidationPrices}
+          marketPrice={marketPrice}
+          tokenASymbol={tokenASymbol}
+          tokenBSymbol={tokenBSymbol} />
         <InputAmount
           val={val}
           setVal={setVal}

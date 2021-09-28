@@ -9,7 +9,12 @@ import InteractionButton from '../InteractionButton';
 import TransactionSize from './TransactionRecap/TransactionSize';
 import useApprove from '../../hooks/useApprove';
 import useWithdraw from '../../hooks/useWithdraw';
-import { useMaxWithdrawable, useSymbol, useToTokens } from '../../hooks/useData';
+import {
+  useSymbol,
+  useToTokens
+} from '../../hooks/useData';
+import getLeverage from 'utils/helpers/get-leverage';
+import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
 
 /**
  * Props for the withdraw interaction modal.
@@ -20,6 +25,17 @@ export interface WithdrawInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   safetyMargin: number;
+  liquidationIncentive: number;
+  twapPrice: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
+  marketPrice: number;
+  maxWithdrawable: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 /**
@@ -31,14 +47,23 @@ export interface WithdrawInteractionModalProps {
 export default function WithdrawInteractionModal({
   show,
   toggleShow,
-  safetyMargin
+  safetyMargin,
+  liquidationIncentive,
+  twapPrice,
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed,
+  marketPrice,
+  maxWithdrawable,
+  tokenASymbol,
+  tokenBSymbol
 }: WithdrawInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
 
   const symbol = useSymbol();
-  const maxWithdrawable = useMaxWithdrawable();
-
   const tokens = useToTokens(val);
   const invalidInput = val > maxWithdrawable;
   const [approvalState, onApprove, permitData] = useApprove(ApprovalType.POOL_TOKEN, tokens, invalidInput);
@@ -49,6 +74,52 @@ export default function WithdrawInteractionModal({
     toggleShow(false);
   };
 
+  const changes = {
+    changeCollateral: -val,
+    changeBorrowedA: 0,
+    changeBorrowedB: 0
+  };
+  const currentLiquidationPrices =
+    getLiquidationPrices(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive
+    );
+  const newLiquidationPrices =
+    getLiquidationPrices(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive,
+      changes
+    );
+  const currentLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed
+    );
+  const newLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      changes
+    );
+
   return (
     <InteractionModalContainer
       title='Withdraw'
@@ -57,8 +128,16 @@ export default function WithdrawInteractionModal({
       <>
         {poolTokenType === PoolTokenType.Collateral && (
           <RiskMetrics
-            changeCollateral={-val}
-            safetyMargin={safetyMargin} />
+            safetyMargin={safetyMargin}
+            twapPrice={twapPrice}
+            changes={changes}
+            currentLeverage={currentLeverage}
+            newLeverage={newLeverage}
+            currentLiquidationPrices={currentLiquidationPrices}
+            newLiquidationPrices={newLiquidationPrices}
+            marketPrice={marketPrice}
+            tokenASymbol={tokenASymbol}
+            tokenBSymbol={tokenBSymbol} />
         )}
         <InputAmount
           val={val}
@@ -67,7 +146,10 @@ export default function WithdrawInteractionModal({
           maxTitle='Available'
           max={maxWithdrawable} />
         <div className='transaction-recap'>
-          <TransactionSize amount={val} />
+          <TransactionSize
+            amount={val}
+            tokenADenomLPPrice={tokenADenomLPPrice}
+            tokenBDenomLPPrice={tokenBDenomLPPrice} />
         </div>
         <Row className='interaction-row'>
           <Col xs={6}>

@@ -1,10 +1,5 @@
 
-import {
-  useTWAPPrice,
-  useLiquidationPrices
-} from 'hooks/useData';
 import { formatFloat } from 'utils/format';
-import { Changes } from 'types/interfaces';
 
 const LIQ_K = 1.7;
 
@@ -40,8 +35,12 @@ const LiquidationPrice = ({
 };
 
 interface Props {
-  changes?: Changes;
   safetyMargin: number;
+  twapPrice: number;
+  liquidationPrices: [
+    number,
+    number
+  ];
 }
 
 /**
@@ -49,18 +48,17 @@ interface Props {
  */
 
 const LiquidationPrices = ({
-  changes,
-  safetyMargin
+  safetyMargin,
+  twapPrice,
+  liquidationPrices
 } : Props): JSX.Element => {
-  // ray test touch <<
-  const [price0, price1] = useLiquidationPrices(changes);
-  const TWAPPrice = useTWAPPrice();
-  // ray test touch >>
+  const price0 = liquidationPrices[0];
+  const price1 = liquidationPrices[1];
 
   if (!price0 && !price1) {
     return <span>-</span>;
   }
-  if (price0 >= TWAPPrice || price1 <= TWAPPrice) {
+  if (price0 >= twapPrice || price1 <= twapPrice) {
     return (
       <span className='text-impermaxMilanoRed'>
         Liquidatable
@@ -72,12 +70,12 @@ const LiquidationPrices = ({
     <div className='space-x-1'>
       <LiquidationPrice
         liquidationPrice={price0}
-        TWAPPrice={TWAPPrice}
+        TWAPPrice={twapPrice}
         safetyMargin={safetyMargin} />
       <span>-</span>
       <LiquidationPrice
         liquidationPrice={price1}
-        TWAPPrice={TWAPPrice}
+        TWAPPrice={twapPrice}
         safetyMargin={safetyMargin} />
     </div>
   );

@@ -1,25 +1,29 @@
-import { Row, Col } from 'react-bootstrap';
-import { PoolTokenType } from '../../../types/interfaces';
-import usePoolToken from '../../../hooks/usePoolToken';
-import { formatFloat } from '../../../utils/format';
-import { useSymbol, usePriceDenomLP } from '../../../hooks/useData';
 
-export interface TransactionSizeProps {
+import {
+  Row,
+  Col
+} from 'react-bootstrap';
+import usePoolToken from 'hooks/usePoolToken';
+import { useSymbol } from 'hooks/useData';
+import { formatFloat } from 'utils/format';
+import { PoolTokenType } from 'types/interfaces';
+
+interface Props {
   amount: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
 }
 
-export default function TransactionSize({ amount }: TransactionSizeProps): JSX.Element | null {
+const TransactionSize = ({
+  amount,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice
+}: Props): JSX.Element | null => {
   const poolTokenType = usePoolToken();
-  if (poolTokenType !== PoolTokenType.Collateral) return null;
-
-  // TODO: <
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const symbolA = useSymbol(PoolTokenType.BorrowableA);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const symbolB = useSymbol(PoolTokenType.BorrowableB);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [tokenPriceA, tokenPriceB] = usePriceDenomLP();
-  // TODO: >
+
+  if (poolTokenType !== PoolTokenType.Collateral) return null;
 
   return (
     <Row>
@@ -27,10 +31,12 @@ export default function TransactionSize({ amount }: TransactionSizeProps): JSX.E
       <Col
         xs={6}
         className='text-right'>
-        {formatFloat(amount / 2 / tokenPriceA)} {symbolA}
+        {formatFloat(amount / 2 / tokenADenomLPPrice)} {symbolA}
         <br /> +
-        {formatFloat(amount / 2 / tokenPriceB)} {symbolB}
+        {formatFloat(amount / 2 / tokenBDenomLPPrice)} {symbolB}
       </Col>
     </Row>
   );
-}
+};
+
+export default TransactionSize;

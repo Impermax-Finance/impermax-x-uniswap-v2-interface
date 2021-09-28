@@ -19,6 +19,17 @@ interface Props {
   collateralSymbol: string;
   tokenIconPath: string;
   safetyMargin: number;
+  liquidationIncentive: number;
+  twapPrice: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
+  marketPrice: number;
+  maxBorrowable: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 const AccountLendingPoolBorrowRow = ({
@@ -28,7 +39,18 @@ const AccountLendingPoolBorrowRow = ({
   tokenSymbol,
   collateralSymbol,
   tokenIconPath,
-  safetyMargin
+  safetyMargin,
+  liquidationIncentive,
+  twapPrice,
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed,
+  marketPrice,
+  maxBorrowable,
+  tokenASymbol,
+  tokenBSymbol
 }: Props): JSX.Element => {
   const [showBorrowModal, toggleBorrowModal] = useState(false);
   const [showRepayModal, toggleRepayModal] = useState(false);
@@ -98,12 +120,33 @@ const AccountLendingPoolBorrowRow = ({
       <BorrowInteractionModal
         show={showBorrowModal}
         toggleShow={toggleBorrowModal}
-        safetyMargin={safetyMargin} />
+        safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
+        twapPrice={twapPrice}
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice}
+        maxBorrowable={maxBorrowable}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
       <RepayInteractionModal
         show={showRepayModal}
         toggleShow={toggleRepayModal}
         tokenBorrowed={tokenBorrowed}
-        safetyMargin={safetyMargin} />
+        safetyMargin={safetyMargin}
+        liquidationIncentive={liquidationIncentive}
+        twapPrice={twapPrice}
+        collateralDeposited={collateralDeposited}
+        tokenADenomLPPrice={tokenADenomLPPrice}
+        tokenBDenomLPPrice={tokenBDenomLPPrice}
+        tokenABorrowed={tokenABorrowed}
+        tokenBBorrowed={tokenBBorrowed}
+        marketPrice={marketPrice}
+        tokenASymbol={tokenASymbol}
+        tokenBSymbol={tokenBSymbol} />
     </>
   );
 };

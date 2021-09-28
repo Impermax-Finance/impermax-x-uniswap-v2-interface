@@ -12,6 +12,8 @@ import useApprove from '../../hooks/useApprove';
 import useDeposit from '../../hooks/useDeposit';
 import { useSymbol, useAvailableBalance, useToBigNumber } from '../../hooks/useData';
 import { useAddLiquidityUrl } from '../../hooks/useUrlGenerator';
+import getLeverage from 'utils/helpers/get-leverage';
+import getLiquidationPrices from 'utils/helpers/get-liquidation-prices';
 
 /**
  * Props for the deposit interaction modal.
@@ -22,12 +24,32 @@ export interface DepositInteractionModalProps {
   show: boolean;
   toggleShow(s: boolean): void;
   safetyMargin: number;
+  liquidationIncentive: number;
+  twapPrice: number;
+  collateralDeposited: number;
+  tokenADenomLPPrice: number;
+  tokenBDenomLPPrice: number;
+  tokenABorrowed: number;
+  tokenBBorrowed: number;
+  marketPrice: number;
+  tokenASymbol: string;
+  tokenBSymbol: string;
 }
 
 export default function DepositInteractionModal({
   show,
   toggleShow,
-  safetyMargin
+  safetyMargin,
+  liquidationIncentive,
+  twapPrice,
+  collateralDeposited,
+  tokenADenomLPPrice,
+  tokenBDenomLPPrice,
+  tokenABorrowed,
+  tokenBBorrowed,
+  marketPrice,
+  tokenASymbol,
+  tokenBSymbol
 }: DepositInteractionModalProps): JSX.Element {
   const poolTokenType = usePoolToken();
   const [val, setVal] = useState<number>(0);
@@ -71,6 +93,52 @@ export default function DepositInteractionModal({
     );
   }
 
+  const changes = {
+    changeCollateral: val,
+    changeBorrowedA: 0,
+    changeBorrowedB: 0
+  };
+  const currentLiquidationPrices =
+    getLiquidationPrices(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive
+    );
+  const newLiquidationPrices =
+    getLiquidationPrices(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      twapPrice,
+      safetyMargin,
+      liquidationIncentive,
+      changes
+    );
+  const currentLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed
+    );
+  const newLeverage =
+    getLeverage(
+      collateralDeposited,
+      tokenADenomLPPrice,
+      tokenBDenomLPPrice,
+      tokenABorrowed,
+      tokenBBorrowed,
+      changes
+    );
+
   return (
     <InteractionModalContainer
       title={poolTokenType === PoolTokenType.Collateral ? 'Deposit' : 'Supply'}
@@ -79,9 +147,17 @@ export default function DepositInteractionModal({
       <>
         {poolTokenType === PoolTokenType.Collateral && (
           <RiskMetrics
-            changeCollateral={val}
             hideIfNull={true}
-            safetyMargin={safetyMargin} />
+            safetyMargin={safetyMargin}
+            twapPrice={twapPrice}
+            changes={changes}
+            currentLeverage={currentLeverage}
+            newLeverage={newLeverage}
+            currentLiquidationPrices={currentLiquidationPrices}
+            newLiquidationPrices={newLiquidationPrices}
+            marketPrice={marketPrice}
+            tokenASymbol={tokenASymbol}
+            tokenBSymbol={tokenBSymbol} />
         )}
         <InputAmount
           val={val}
@@ -90,7 +166,10 @@ export default function DepositInteractionModal({
           maxTitle='Available'
           max={availableBalance} />
         <div className='transaction-recap'>
-          <TransactionSize amount={val} />
+          <TransactionSize
+            amount={val}
+            tokenADenomLPPrice={tokenADenomLPPrice}
+            tokenBDenomLPPrice={tokenBDenomLPPrice} />
           <SupplyAPY amount={val} />
         </div>
         <Row className='interaction-row'>
