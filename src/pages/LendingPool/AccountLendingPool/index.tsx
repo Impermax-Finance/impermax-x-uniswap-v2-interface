@@ -7,6 +7,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Zero } from '@ethersproject/constants';
 import { Log } from '@ethersproject/abstract-provider';
 import { Interface } from '@ethersproject/abi';
+import { AddressZero } from '@ethersproject/constants';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
@@ -52,9 +53,6 @@ import UniswapV2PairJSON from 'abis/contracts/IUniswapV2Pair.json';
 import FarmingPoolJSON from 'abis/contracts/IFarmingPool.json';
 import { PoolTokenType } from 'types/interfaces';
 import './index.scss';
-
-// TODO: hardcoded
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 interface AccountLendingPoolContainerProps {
   children: React.ReactNode;
@@ -260,7 +258,7 @@ const AccountLendingPool = (): JSX.Element => {
       genericFetcher<BigNumber[]>(library, FarmingPoolJSON.abi) :
       Promise.resolve,
     {
-      enabled: !!library && ZERO_ADDRESS !== farmingPoolAAddress
+      enabled: !!library && AddressZero !== farmingPoolAAddress
     }
   );
   useErrorHandler(farmingPoolARecipientsError);
@@ -280,7 +278,7 @@ const AccountLendingPool = (): JSX.Element => {
       genericFetcher<BigNumber[]>(library, FarmingPoolJSON.abi) :
       Promise.resolve,
     {
-      enabled: !!library && ZERO_ADDRESS !== farmingPoolBAddress
+      enabled: !!library && AddressZero !== farmingPoolBAddress
     }
   );
   useErrorHandler(farmingPoolBRecipientsError);
@@ -300,7 +298,7 @@ const AccountLendingPool = (): JSX.Element => {
       genericFetcher<BigNumber>(library, FarmingPoolJSON.abi, true) :
       Promise.resolve,
     {
-      enabled: !!library && ZERO_ADDRESS !== farmingPoolAAddress
+      enabled: !!library && AddressZero !== farmingPoolAAddress
     }
   );
   useErrorHandler(farmingPoolATotalAmountError);
@@ -319,7 +317,7 @@ const AccountLendingPool = (): JSX.Element => {
       genericFetcher<BigNumber>(library, FarmingPoolJSON.abi, true) :
       Promise.resolve,
     {
-      enabled: !!library && ZERO_ADDRESS !== farmingPoolAAddress
+      enabled: !!library && AddressZero !== farmingPoolAAddress
     }
   );
   useErrorHandler(farmingPoolBTotalAmountError);
@@ -345,7 +343,7 @@ const AccountLendingPool = (): JSX.Element => {
         !!library &&
         !!account &&
         !!farmingPoolAAddress &&
-        ZERO_ADDRESS !== farmingPoolAAddress
+        AddressZero !== farmingPoolAAddress
     }
   );
   useErrorHandler(claimALogsError);
@@ -370,7 +368,7 @@ const AccountLendingPool = (): JSX.Element => {
         !!library &&
         !!account &&
         !!farmingPoolBAddress &&
-        ZERO_ADDRESS !== farmingPoolBAddress
+        AddressZero !== farmingPoolBAddress
     }
   );
   useErrorHandler(claimBLogsError);
@@ -607,8 +605,8 @@ const AccountLendingPool = (): JSX.Element => {
   const farmingPoolTotalAmount = farmingPoolATotalAmount.add(farmingPoolBTotalAmount);
 
   const hasFarming =
-    (farmingPoolAAddress !== undefined && farmingPoolAAddress !== ZERO_ADDRESS) ||
-    (farmingPoolBAddress !== undefined && farmingPoolBAddress !== ZERO_ADDRESS);
+    (farmingPoolAAddress !== undefined && farmingPoolAAddress !== AddressZero) ||
+    (farmingPoolBAddress !== undefined && farmingPoolBAddress !== AddressZero);
 
   const claimLogs = claimALogs.concat(claimBLogs);
   claimLogs.sort((a: Log, b: Log) => b.blockNumber - a.blockNumber); // Order from newest to oldest
