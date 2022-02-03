@@ -150,7 +150,9 @@ const LowerPart = (): JSX.Element => (
         'md:mt-0',
         'md:order-1'
       )}>
-      &copy; {getCurrentYear()} IMPERMAX, Inc. All rights reserved.
+      {false && (
+        <>&copy; {getCurrentYear()} IMPERMAX, Inc. All rights reserved.</>
+      )}
     </p>
   </div>
 );

@@ -362,8 +362,8 @@ module.exports = {
       // MEMO: inspired by https://material-ui.com/customization/default-theme/
       zIndex: {
         impermaxMobileStepper: 1000,
-        impermaxSpeedDial: 1050,
-        impermaxAppBar: 1100,
+        impermaxSpeedDial: 1020,
+        impermaxAppBar: 1030,
         impermaxDrawer: 1200,
         impermaxModal: 1300,
         impermaxSnackbar: 1400,

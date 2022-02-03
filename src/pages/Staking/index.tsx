@@ -2,11 +2,9 @@ import clsx from 'clsx';
 
 import Layout from 'parts/Layout';
 import Information from './Information';
-import APYCard from './APYCard';
-import FormCard from './FormCard';
-import BalanceCard from './BalanceCard';
-
-const MD_WIDTH_72_CLASS = 'md:w-72';
+import React from 'react';
+import VaultCardIMXxIMX from './VaultCardIMXxIMX';
+import VaultCardIMXxUSDC from './VaultCardIMXxUSDC';
 
 interface ContainerProps {
   children: React.ReactNode;
@@ -32,33 +30,27 @@ const Staking = (): JSX.Element => (
   <Layout>
     <div
       className={clsx(
-        'space-y-6',
-        'max-w-6xl',
+        'space-y-8',
+        'max-w-4xl',
         'mx-auto',
         'my-4'
       )}>
       <InternalContainer>
         <Information
           className={clsx(
-            'max-w-xl',
             'flex-grow'
-          )} />
-        <APYCard
-          className={clsx(
-            'flex-shrink-0',
-            MD_WIDTH_72_CLASS
           )} />
       </InternalContainer>
       <InternalContainer>
-        <FormCard
+        <VaultCardIMXxIMX
           className={clsx(
-            'max-w-xl',
             'flex-grow'
           )} />
-        <BalanceCard
+      </InternalContainer>
+      <InternalContainer>
+        <VaultCardIMXxUSDC
           className={clsx(
-            'flex-shrink-0',
-            MD_WIDTH_72_CLASS
+            'flex-grow'
           )} />
       </InternalContainer>
     </div>

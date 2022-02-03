@@ -9,7 +9,6 @@ const Information = ({
 }: React.ComponentPropsWithRef<'div'>): JSX.Element => (
   <div
     className={clsx(
-      'space-y-3',
       className
     )}
     {...rest}>
@@ -19,7 +18,7 @@ const Information = ({
         'font-medium',
         'text-lg'
       )}>
-      How does IMX staking work?
+      What is IMX Staking?
     </h2>
     <p
       className={clsx(
@@ -28,13 +27,26 @@ const Information = ({
         'text-justify'
       )}>
       {`
-        Up to 20% of all the interests paid on Impermax are kept by the protocol as profit
-         and used to buy back IMX from the market.
-         These tokens are then distributed among IMX stakers
-         proportionally to their share of the pool.
-         By staking IMX you receive an xIMX token that will continuously compound staking profits.
-         You can unstake at any moment
-         in order to receive all the originally deposited IMX and any additional staking profit.
+        IMX staking is the mechanism used to distribute Impermax's protocol profits to IMX token holders. You can choose whether to earn the staking reward in IMX or USDC.
+      `}
+    </p>
+    <h2
+      className={clsx(
+        'text-textPrimary',
+        'font-medium',
+        'text-lg',
+        'mt-4'
+      )}>
+      Stake IMX, Earn IMX
+    </h2>
+    <p
+      className={clsx(
+        'text-textSecondary',
+        'text-base',
+        'text-justify'
+      )}>
+      {`
+        A part of protocol profits is used to buyback IMX from the market and distribute it to stakers of this vault. All tokens distributed are auto-compounded. By staking IMX you receive an xIMX token that you can unstake at any moment.
       `}
       <ImpermaxLink
         href='https://impermax.medium.com/introducing-imx-staking-281e7b7b54c'
@@ -47,6 +59,25 @@ const Information = ({
         rel='noopener noreferrer'>
         Learn more
       </ImpermaxLink>
+    </p>
+    <h2
+      className={clsx(
+        'text-textPrimary',
+        'font-medium',
+        'text-lg',
+        'mt-4'
+      )}>
+      Stake IMX, Earn USDC
+    </h2>
+    <p
+      className={clsx(
+        'text-textSecondary',
+        'text-base',
+        'text-justify'
+      )}>
+      {`
+        The remaining part of protocol profits is used to buy USDC and distribute it to stakers of the second vault. You can unstake your IMX and claim your USDC pending reward at any time.
+      `}
     </p>
   </div>
 );
