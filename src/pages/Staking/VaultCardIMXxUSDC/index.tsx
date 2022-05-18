@@ -95,8 +95,8 @@ const VaultCardIMXxUSDC = ({
   } = useQuery<number, Error>(
     [
       DEBANK_PRICE_FETCHER,
-      chainId,
-      IMX_ADDRESSES[chainId]
+      CHAIN_IDS.MATIC,
+      IMX_ADDRESSES[CHAIN_IDS.MATIC]
     ],
     debankPriceFetcher,
     {
