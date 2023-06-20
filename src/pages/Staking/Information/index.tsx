@@ -18,7 +18,7 @@ const Information = ({
         'font-medium',
         'text-lg'
       )}>
-      What is IMX Staking?
+      What is IBEX Staking?
     </h2>
     <p
       className={clsx(
@@ -27,7 +27,7 @@ const Information = ({
         'text-justify'
       )}>
       {`
-        IMX staking is the mechanism used to distribute Impermax's protocol profits to IMX token holders. You can choose whether to earn the staking reward in IMX or USDC.
+        IBEX staking is the mechanism used to distribute Impermax's protocol profits to IBEX token holders.
       `}
     </p>
     <h2
@@ -37,7 +37,7 @@ const Information = ({
         'text-lg',
         'mt-4'
       )}>
-      Stake IMX, Earn IMX
+      Stake IBEX, Earn IBEX
     </h2>
     <p
       className={clsx(
@@ -46,10 +46,10 @@ const Information = ({
         'text-justify'
       )}>
       {`
-        A part of protocol profits is used to buyback IMX from the market and distribute it to stakers of this vault. All tokens distributed are auto-compounded. By staking IMX you receive an xIMX token that you can unstake at any moment.
+        A part of protocol profits is used to buyback IBEX from the market and distribute it to stakers of this vault. All tokens distributed are auto-compounded. By staking IBEX you receive an xIBEX token that you can unstake at any moment.
       `}
       <ImpermaxLink
-        href='https://impermax.medium.com/introducing-imx-staking-281e7b7b54c'
+        href='https://docs.impermax.finance/tokenomics/ibex-staking'
         className={clsx(
           'underline',
           'cursor-pointer',
@@ -60,6 +60,7 @@ const Information = ({
         Learn more
       </ImpermaxLink>
     </p>
+    {/*
     <h2
       className={clsx(
         'text-textPrimary',
@@ -79,6 +80,7 @@ const Information = ({
         The remaining part of protocol profits is used to buy USDC and distribute it to stakers of the second vault. You can unstake your IMX and claim your USDC pending reward at any time.
       `}
     </p>
+    */}
   </div>
 );
 

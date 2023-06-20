@@ -14,11 +14,11 @@ import { useQuery } from 'react-query';
 import useTokenBalance from '../../../services/hooks/use-token-balance';
 import { X_IMX_ADDRESSES, X_IMX_DECIMALS } from '../../../config/web3/contracts/x-imxes';
 import { formatUnits } from 'ethers/lib/utils';
-import { CHAIN_IDS } from '../../../config/web3/chains';
+import { SUPPORTED_CHAIN_IDS } from '../../../config/web3/chains';
 import VaultModalIMXxIMX from '../VaultModalIMXxIMX';
 import { default as React, useState } from 'react';
 import ImpermaxImage from '../../../components/UI/ImpermaxImage';
-import ximxVaultLogo from '../../../assets/images/icons/ximx-vault.png';
+import ximxVaultLogo from '../../../assets/images/icons/xibex-vault.png';
 
 const Cell = ({
   className,
@@ -63,7 +63,7 @@ const VaultCardIMXxIMX = ({
   const [showModal, toggleModal] = useState(false);
 
   const {
-    chainId = CHAIN_IDS.ETHEREUM_MAIN_NET,
+    chainId = SUPPORTED_CHAIN_IDS[0],
     library,
     account,
     active
@@ -138,7 +138,6 @@ const VaultCardIMXxIMX = ({
   } else {
     stakedBalanceLabel = '-';
   }
-
   return (
     <>
       <ul
@@ -175,7 +174,7 @@ const VaultCardIMXxIMX = ({
               'inline-block',
               'text-xl'
             )}>
-            Stake IMX, Earn IMX
+            Stake IBEX, Earn IBEX
           </span>
         </Cell>
         <Cell
@@ -183,14 +182,14 @@ const VaultCardIMXxIMX = ({
             'col-3'
           )}>
           <Term>Total Staked</Term>
-          <Description>{totalIMXStakedLabel} IMX</Description>
+          <Description>{totalIMXStakedLabel} IBEX</Description>
         </Cell>
         <Cell
           className={clsx(
             'col-3'
           )}>
           <Term>Staked Balance</Term>
-          <Description>{stakedBalanceLabel} IMX</Description>
+          <Description>{stakedBalanceLabel} IBEX</Description>
         </Cell>
         <Cell
           className={clsx(

@@ -13,10 +13,9 @@ import ImpermaxModal, {
 } from 'components/UI/ImpermaxModal';
 import ImpermaxImage from 'components/UI/ImpermaxImage'; // TODO: should use next/image component (ideally)
 import {
-  CHAIN_IDS,
   CHAIN_LABELS,
   CHAIN_ICON_PATHS,
-  CHAIN_DETAILS
+  CHAIN_DETAILS, SUPPORTED_CHAIN_IDS
 } from 'config/web3/chains';
 import { ReactComponent as CloseIcon } from 'assets/images/icons/close.svg';
 
@@ -86,17 +85,7 @@ const ChainConnectModal = ({
             className='text-textSecondary' />
         </IconButton>
         <List className='mt-4'>
-          {[
-            CHAIN_IDS.ETHEREUM_MAIN_NET,
-            CHAIN_IDS.FANTOM,
-            CHAIN_IDS.BSC,
-            CHAIN_IDS.MATIC,
-            CHAIN_IDS.HECO,
-            CHAIN_IDS.XDAI,
-            CHAIN_IDS.HARMONY,
-            CHAIN_IDS.AVALANCHE,
-            CHAIN_IDS.OKEX
-          ].map(chainID => {
+          {SUPPORTED_CHAIN_IDS.map(chainID => {
             const selected = chainId === chainID;
 
             return (

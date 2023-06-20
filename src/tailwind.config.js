@@ -17,16 +17,16 @@ const IMPERMAX_BLACK_HAZE = Object.freeze({
   900: '#787979'
 });
 const IMPERMAX_JADE = Object.freeze({
-  50: '#f2fbf8',
-  100: '#e6f8f1',
-  200: '#bfeddc',
-  300: '#99e1c7',
-  400: '#4dcb9d',
-  500: '#00b573',
-  600: '#00a368',
-  700: '#008856',
-  800: '#006d45',
-  900: '#005938'
+  50: '#e8f6f5',
+  100: '#d1eceb',
+  200: '#a3dad7',
+  300: '#75c7c3',
+  400: '#47b5af',
+  500: '#19a29b',
+  600: '#14827c',
+  700: '#0f615d',
+  800: '#0a413e',
+  900: '#05201f'
 });
 const IMPERMAX_CARNATION = Object.freeze({
   50: '#fef6f6',

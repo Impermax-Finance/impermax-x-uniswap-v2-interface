@@ -11,7 +11,7 @@ import { useQuery } from 'react-query';
 
 import ImpermaxJadeBadge from 'components/badges/ImpermaxJadeBadge';
 import ErrorFallback from 'components/ErrorFallback';
-import { CHAIN_IDS } from 'config/web3/chains';
+import { SUPPORTED_CHAIN_IDS } from 'config/web3/chains';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import xIMXDataFetcher, {
   XIMXData,
@@ -46,7 +46,7 @@ const TokenAmountLabel = ({
   ...rest
 }: CustomProps & Omit<React.ComponentPropsWithRef<'label'>, 'children'>): JSX.Element => {
   const {
-    chainId = CHAIN_IDS.ETHEREUM_MAIN_NET
+    chainId = SUPPORTED_CHAIN_IDS[0]
   } = useWeb3React<Web3Provider>();
 
   const {
@@ -93,7 +93,7 @@ const TokenAmountLabel = ({
         )}>
         {text}
       </span>
-      <ImpermaxJadeBadge>1 xIMX = {xIMXRateLabel} IMX</ImpermaxJadeBadge>
+      <ImpermaxJadeBadge>1 xIBEX = {xIMXRateLabel} IBEX</ImpermaxJadeBadge>
     </label>
   );
 };

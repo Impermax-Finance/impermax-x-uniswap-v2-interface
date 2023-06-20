@@ -5,7 +5,7 @@ import apolloFetcher from './apollo-fetcher';
 import { IMX_STAKING_SUBGRAPH_URLS } from 'config/web3/subgraphs';
 
 const query = gql`{
-  ximxes(first: 1) {
+  xibexes(first: 1) {
     totalSupply
     totalBalance
     exchangeRate
@@ -24,7 +24,7 @@ const getXIMXData = async (chainID: number): Promise<XIMXData> => {
   const impermaxSubgraphURL = IMX_STAKING_SUBGRAPH_URLS[chainID];
   const result = await apolloFetcher(impermaxSubgraphURL, query);
 
-  return result.data.ximxes[0];
+  return result.data.xibexes[0];
 };
 
 export type {

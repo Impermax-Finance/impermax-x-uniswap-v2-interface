@@ -96,7 +96,7 @@ const TokenAmountField = React.forwardRef<Ref, CustomProps & ImpermaxInputProps>
           {...rest} />
         <div
           style={{
-            minWidth: 60
+            minWidth: 65
           }}
           className={clsx(
             'rounded-r-md',

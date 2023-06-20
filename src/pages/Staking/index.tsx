@@ -4,7 +4,6 @@ import Layout from 'parts/Layout';
 import Information from './Information';
 import React from 'react';
 import VaultCardIMXxIMX from './VaultCardIMXxIMX';
-import VaultCardIMXxUSDC from './VaultCardIMXxUSDC';
 
 interface ContainerProps {
   children: React.ReactNode;
@@ -47,12 +46,14 @@ const Staking = (): JSX.Element => (
             'flex-grow'
           )} />
       </InternalContainer>
+      {/*
       <InternalContainer>
         <VaultCardIMXxUSDC
           className={clsx(
             'flex-grow'
           )} />
       </InternalContainer>
+      */}
     </div>
   </Layout>
 );

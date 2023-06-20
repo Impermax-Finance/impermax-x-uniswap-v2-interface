@@ -27,7 +27,7 @@ const VaultModalIMXxIMX = ({
 
   return (
     <InteractionModalContainer
-      title='Stake IMX, Earn IMX'
+      title='Stake IBEX, Earn IBEX'
       show={show}
       toggleShow={toggleShow}>
       <>

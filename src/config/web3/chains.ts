@@ -1,5 +1,6 @@
 
 import { SupportedChain } from 'types/web3/general.d';
+import { IS_STAKING_APP } from '../general';
 
 const POLLING_INTERVAL = 12000;
 
@@ -69,7 +70,7 @@ const CHAIN_DETAILS: {
   }
 } = {
   [CHAIN_IDS.ETHEREUM_MAIN_NET]: {
-    chainId: '0x1',
+    chainId: '0x' + CHAIN_IDS.ETHEREUM_MAIN_NET.toString(16),
     chainName: 'Ethereum',
     nativeCurrency: {
       name: 'Ethereum',
@@ -80,7 +81,7 @@ const CHAIN_DETAILS: {
     blockExplorerUrls: ['https://etherscan.com']
   },
   [CHAIN_IDS.FANTOM]: {
-    chainId: '0xfa',
+    chainId: '0x' + CHAIN_IDS.FANTOM.toString(16),
     chainName: 'Fantom',
     nativeCurrency: {
       name: 'Fantom',
@@ -91,7 +92,7 @@ const CHAIN_DETAILS: {
     blockExplorerUrls: ['https://ftmscan.com']
   },
   [CHAIN_IDS.BSC]: {
-    chainId: '0x38',
+    chainId: '0x' + CHAIN_IDS.BSC.toString(16),
     chainName: 'Binance Smart Chain',
     nativeCurrency: {
       name: 'Binance Coin',
@@ -102,7 +103,7 @@ const CHAIN_DETAILS: {
     blockExplorerUrls: ['https://bscscan.com']
   },
   [CHAIN_IDS.MATIC]: {
-    chainId: '0x89',
+    chainId: '0x' + CHAIN_IDS.MATIC.toString(16),
     chainName: 'Matic',
     nativeCurrency: {
       name: 'Matic',
@@ -116,7 +117,7 @@ const CHAIN_DETAILS: {
     blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com']
   },
   [CHAIN_IDS.HECO]: {
-    chainId: '0x80',
+    chainId: '0x' + CHAIN_IDS.HECO.toString(16),
     chainName: 'Heco',
     nativeCurrency: {
       name: 'Heco Token',
@@ -127,7 +128,7 @@ const CHAIN_DETAILS: {
     blockExplorerUrls: ['https://hecoinfo.com']
   },
   [CHAIN_IDS.XDAI]: {
-    chainId: '0x64',
+    chainId: '0x' + CHAIN_IDS.XDAI.toString(16),
     chainName: 'xDai',
     nativeCurrency: {
       name: 'xDai Token',
@@ -138,7 +139,7 @@ const CHAIN_DETAILS: {
     blockExplorerUrls: ['https://blockscout.com/poa/xdai']
   },
   [CHAIN_IDS.HARMONY]: {
-    chainId: '0x63564C40',
+    chainId: '0x' + CHAIN_IDS.HARMONY.toString(16),
     chainName: 'Harmony One',
     nativeCurrency: {
       name: 'One Token',
@@ -149,7 +150,7 @@ const CHAIN_DETAILS: {
     blockExplorerUrls: ['https://explorer.harmony.one/']
   },
   [CHAIN_IDS.AVALANCHE]: {
-    chainId: '0xA86A',
+    chainId: '0x' + CHAIN_IDS.AVALANCHE.toString(16),
     chainName: 'Avalanche',
     nativeCurrency: {
       name: 'Avalanche Token',
@@ -160,7 +161,7 @@ const CHAIN_DETAILS: {
     blockExplorerUrls: ['https://explorer.avax.network']
   },
   [CHAIN_IDS.OKEX]: {
-    chainId: '0x42',
+    chainId: '0x' + CHAIN_IDS.OKEX.toString(16),
     chainName: 'OKEx',
     nativeCurrency: {
       name: 'OKEx Token',
@@ -169,6 +170,17 @@ const CHAIN_DETAILS: {
     },
     rpcUrls: ['https://exchainrpc.okex.org'],
     blockExplorerUrls: ['https://www.oklink.com/okexchain']
+  },
+  [CHAIN_IDS.ARBITRUM]: {
+    chainId: '0x' + CHAIN_IDS.ARBITRUM.toString(16),
+    chainName: 'Arbitrum',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrls: ['https://arb1.arbitrum.io/rpc/'],
+    blockExplorerUrls: ['https://arbiscan.io/']
   }
 };
 
@@ -182,6 +194,8 @@ const CHAIN_LABELS: { [chainId: number]: string } = {
   [CHAIN_IDS.FANTOM_TESTNET]: 'Fantom Testnet',
   [CHAIN_IDS.MATIC]: 'Polygon (Matic)',
   [CHAIN_IDS.MATIC_TESTNET]: 'Matic Testnet',
+  [CHAIN_IDS.ARBITRUM]: 'Arbitrum',
+  [CHAIN_IDS.ARBITRUM_TESTNET]: 'Arbitrum Testnet',
   [CHAIN_IDS.XDAI]: 'xDai',
   [CHAIN_IDS.BSC]: 'BSC',
   [CHAIN_IDS.BSC_TESTNET]: 'BSC Testnet',
@@ -194,7 +208,9 @@ const CHAIN_LABELS: { [chainId: number]: string } = {
   [CHAIN_IDS.OKEX_TESTNET]: 'OKExChain'
 };
 
-const SUPPORTED_CHAIN_IDS = [
+const SUPPORTED_CHAIN_IDS = IS_STAKING_APP ? [
+  CHAIN_IDS.ARBITRUM
+] : [
   CHAIN_IDS.ETHEREUM_MAIN_NET,
   CHAIN_IDS.ROPSTEN
 ];

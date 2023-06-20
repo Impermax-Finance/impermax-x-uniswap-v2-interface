@@ -30,8 +30,8 @@ const ImpermaxJadeContainedButton = React.forwardRef<Ref, Props>(({
       className={clsx(
         'focus:outline-none',
         'focus:ring',
-        'focus:border-impermaxJade-300',
-        'focus:ring-impermaxJade-200',
+        'focus:border-impermaxJade-200',
+        'focus:ring-impermaxJade-100',
         'focus:ring-opacity-50',
 
         'border',
@@ -48,8 +48,8 @@ const ImpermaxJadeContainedButton = React.forwardRef<Ref, Props>(({
           'dark:text-opacity-30'
         ) : clsx(
           'text-white',
-          'bg-impermaxJade-600',
-          'hover:bg-impermaxJade-700'
+          'bg-impermaxJade',
+          'hover:bg-impermaxJade-600'
         ),
 
         'rounded',

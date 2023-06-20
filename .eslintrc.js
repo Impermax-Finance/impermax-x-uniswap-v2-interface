@@ -48,7 +48,6 @@ module.exports = {
       'error',
       'never'
     ],
-    'no-console': 'warn',
     indent: [
       'error',
       2
@@ -61,7 +60,7 @@ module.exports = {
     'max-len': [
       'warn',
       {
-        code: 120
+        code: 1200
       } // 130 on GitHub, 80 on npmjs.org for README.md code blocks
     ],
     'arrow-parens': [

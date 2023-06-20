@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { useQuery } from 'react-query';
 
 import ErrorFallback from 'components/ErrorFallback';
-import { CHAIN_IDS } from 'config/web3/chains';
+import { SUPPORTED_CHAIN_IDS } from 'config/web3/chains';
 import formatNumberWithFixedDecimals from 'utils/helpers/format-number-with-fixed-decimals';
 import formatNumberWithComma from 'utils/helpers/format-number-with-comma';
 import xIMXDataFetcher, {
@@ -72,7 +72,7 @@ const APYCard = ({
   ...rest
 }: React.ComponentPropsWithRef<'dl'>): JSX.Element => {
   const {
-    chainId = CHAIN_IDS.ETHEREUM_MAIN_NET
+    chainId = SUPPORTED_CHAIN_IDS[0]
   } = useWeb3React<Web3Provider>();
 
   const {
