@@ -32,6 +32,8 @@ const ChainConnect = (): JSX.Element | null => {
     setChainModalOpen(false);
   };
 
+  const chainIdPath: string = CHAIN_ICON_PATHS[chainId] ? CHAIN_ICON_PATHS[chainId] : '';
+
   return (
     <>
       <ImpermaxDefaultOutlinedButton
@@ -45,7 +47,7 @@ const ChainConnect = (): JSX.Element | null => {
             className='rounded'
             width={20}
             height={20}
-            src={CHAIN_ICON_PATHS[chainId]}
+            src={chainIdPath}
             alt='Switch Chain' />
         }>
         {CHAIN_LABELS[chainId]}

@@ -7,9 +7,10 @@ import {
 import { Props } from '@headlessui/react/dist/types';
 import clsx from 'clsx';
 import {
-  CheckIcon,
-  SelectorIcon
+  CheckIcon
 } from '@heroicons/react/solid';
+import ImpermaxImage from 'components/UI/ImpermaxImage';
+import { SupportedChain } from 'types/web3/general.d';
 
 type SelectLabelProps = Props<typeof Listbox.Label>;
 
@@ -29,71 +30,20 @@ const SelectLabel = ({
     {...rest} />
 );
 
-type SelectButtonProps = Props<typeof Listbox.Button>;
-
-const SelectButton = ({
-  className,
-  children,
-  ...rest
-}: SelectButtonProps): JSX.Element => (
-  <Listbox.Button
-    className={clsx(
-      'focus:outline-none',
-      'focus:ring',
-      'focus:border-primary-300',
-      'focus:ring-primary-200',
-      'focus:ring-opacity-50',
-
-      'relative',
-      'w-full',
-      'bg-white',
-      'border',
-      'border-gray-300',
-      'rounded-md',
-      'shadow-sm',
-      'pl-3',
-      'pr-10',
-      'py-2',
-      'text-left',
-      'cursor-default',
-      'sm:text-sm',
-      className
-    )}
-    {...rest}>
-    {children}
-    <span
-      className={clsx(
-        'ml-3',
-        'absolute',
-        'inset-y-0',
-        'right-0',
-        'flex',
-        'items-center',
-        'pr-2',
-        'pointer-events-none'
-      )}>
-      <SelectorIcon
-        className={clsx(
-          'h-5',
-          'w-5',
-          'text-gray-400'
-        )}
-        aria-hidden='true' />
-    </span>
-  </Listbox.Button>
-);
-
 interface CustomSelectOptionsProps {
   open: boolean;
 }
 
 type SelectOptionsProps = CustomSelectOptionsProps & Props<typeof Listbox.Options>;
+interface SelectOptionsPropsInterface extends SelectOptionsProps {
+  SUPPORTED_CHAINS: SupportedChain[]
+}
 
 const SelectOptions = ({
   open,
   className,
-  ...rest
-}: SelectOptionsProps): JSX.Element => (
+  SUPPORTED_CHAINS
+}: SelectOptionsPropsInterface): JSX.Element => (
   <Transition
     show={open}
     as={React.Fragment}
@@ -124,38 +74,44 @@ const SelectOptions = ({
         'focus:outline-none',
         'sm:text-sm',
         className
-      )}
-      {...rest} />
+      )}>
+      {SUPPORTED_CHAINS.map(chain => (
+        <Listbox.Option
+          key={chain.id}
+          value={chain}>
+          {({
+            selected,
+            active
+          }) => (
+            <>
+              <div
+                className={clsx(
+                  'flex',
+                  'items-center',
+                  'space-x-3'
+                )}>
+                <ImpermaxImage
+                  src={chain.iconPath}
+                  alt={chain.label}
+                  className={clsx(
+                    'flex-shrink-0',
+                    'h-6',
+                    'w-6',
+                    'rounded-full'
+                  )} />
+                <SelectText selected={selected}>
+                  {chain.label}
+                </SelectText>
+              </div>
+              {selected ? (
+                <SelectCheck active={active} />
+              ) : null}
+            </>
+          )}
+        </Listbox.Option>
+      ))}
+    </Listbox.Options>
   </Transition>
-);
-
-type SelectOptionProps = Props<typeof Listbox.Option>;
-
-const SelectOption = ({
-  value,
-  className,
-  ...rest
-}: SelectOptionProps): JSX.Element => (
-  <Listbox.Option
-    className={({ active }) =>
-      clsx(
-        active ?
-          clsx(
-            'text-white',
-            'bg-impermaxJade-600'
-          ) :
-          'text-gray-900',
-        'cursor-default',
-        'select-none',
-        'relative',
-        'py-2',
-        'pl-3',
-        'pr-9',
-        className
-      )
-    }
-    value={value}
-    {...rest} />
 );
 
 const SelectBody = ({
@@ -241,9 +197,7 @@ export type SelectProps = Props<typeof Listbox>;
 
 export {
   SelectLabel,
-  SelectButton,
   SelectOptions,
-  SelectOption,
   SelectBody,
   SelectCheck,
   SelectText

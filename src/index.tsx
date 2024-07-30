@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Web3ReactProvider } from '@web3-react/core';
 import { Provider } from 'react-redux';
@@ -20,7 +20,9 @@ import './index.css';
 
 const queryClient = new QueryClient();
 
-ReactDOM.render(
+const rootNode = document.getElementById('root');
+const root = createRoot(rootNode);
+root.render(
   <React.StrictMode>
     <Web3ReactProvider getLibrary={getLibrary}>
       <Router>
@@ -36,8 +38,7 @@ ReactDOM.render(
         </Provider>
       </Router>
     </Web3ReactProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -47,7 +47,7 @@ const ChainConnectModal = ({
        * - https://ethereum.stackexchange.com/questions/95058/where-can-i-find-a-documentation-of-all-wallet-rpc-calls
        * - https://docs.metamask.io/guide/rpc-api.html#other-rpc-methods
        */
-      console.log('[handleChainConnect] error.message => ', error.message);
+      console.log('[handleChainConnect] error.message => ', error);
     }
   };
 

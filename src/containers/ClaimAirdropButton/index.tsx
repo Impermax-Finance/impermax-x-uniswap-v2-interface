@@ -49,7 +49,7 @@ const ClaimAirdropButton = (): JSX.Element | null => {
 
   const [airdropData, setAirdropData] = React.useState<AirdropData>();
   const [claimed, setClaimed] = React.useState<boolean>();
-  const [claimStatus, setClaimStatus] = React.useState(STATUSES.IDLE);
+  const [claimStatus, setClaimStatus] = React.useState<string>(STATUSES.IDLE);
 
   const merkleDistributorContract = useMerkleDistributorContract();
 

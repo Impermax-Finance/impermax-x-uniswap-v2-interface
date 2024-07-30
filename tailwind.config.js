@@ -2,7 +2,7 @@
 const plugin = require('tailwindcss/plugin');
 const colors = require('tailwindcss/colors');
 
-const { BREAKPOINTS } = require('./utils/constants/styles');
+const { BREAKPOINTS } = require('./src/utils/constants/styles');
 
 const IMPERMAX_BLACK_HAZE = Object.freeze({
   50: '#ffffff',

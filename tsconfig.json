@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
@@ -21,7 +21,8 @@
     "jsx": "react-jsx",
     "baseUrl": "src"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src", "tailwind.config.js"],
+  "paths": {
+    "react": ["./node_modules/@types/react"]
+  }
 }

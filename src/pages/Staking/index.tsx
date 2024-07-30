@@ -46,14 +46,6 @@ const Staking = (): JSX.Element => (
             'flex-grow'
           )} />
       </InternalContainer>
-      {/*
-      <InternalContainer>
-        <VaultCardIMXxUSDC
-          className={clsx(
-            'flex-grow'
-          )} />
-      </InternalContainer>
-      */}
     </div>
   </Layout>
 );

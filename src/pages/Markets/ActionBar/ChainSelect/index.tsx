@@ -1,16 +1,14 @@
-
+import { Listbox } from '@headlessui/react';
 import {
   useParams,
   useHistory
 } from 'react-router-dom';
 import clsx from 'clsx';
 
-import Select, {
-  SelectButton,
+import { SelectorIcon } from '@heroicons/react/solid';
+import {
   SelectOptions,
-  SelectOption,
   SelectBody,
-  SelectCheck,
   SelectText
 } from 'components/Select';
 import ImpermaxImage from 'components/UI/ImpermaxImage';
@@ -44,7 +42,7 @@ const ChainSelect = ({
   };
 
   return (
-    <Select
+    <Listbox
       value={value}
       onChange={handleChange}>
       {({ open }) => (
@@ -52,7 +50,27 @@ const ChainSelect = ({
           style={{
             minWidth: 240
           }}>
-          <SelectButton>
+          <Listbox.Button
+            className={clsx(
+              'focus:outline-none',
+              'focus:ring',
+              'focus:border-primary-300',
+              'focus:ring-primary-200',
+              'focus:ring-opacity-50',
+              'relative',
+              'w-full',
+              'bg-white',
+              'border',
+              'border-gray-300',
+              'rounded-md',
+              'shadow-sm',
+              'pl-3',
+              'pr-10',
+              'py-2',
+              'text-left',
+              'cursor-default',
+              'sm:text-sm'
+            )}>
             <span
               className={clsx(
                 'flex',
@@ -72,47 +90,32 @@ const ChainSelect = ({
                 {value.label}
               </SelectText>
             </span>
-          </SelectButton>
-          <SelectOptions open={open}>
-            {SUPPORTED_CHAINS.map(chain => (
-              <SelectOption
-                key={chain.id}
-                value={chain}>
-                {({
-                  selected,
-                  active
-                }) => (
-                  <>
-                    <div
-                      className={clsx(
-                        'flex',
-                        'items-center',
-                        'space-x-3'
-                      )}>
-                      <ImpermaxImage
-                        src={chain.iconPath}
-                        alt={chain.label}
-                        className={clsx(
-                          'flex-shrink-0',
-                          'h-6',
-                          'w-6',
-                          'rounded-full'
-                        )} />
-                      <SelectText selected={selected}>
-                        {chain.label}
-                      </SelectText>
-                    </div>
-                    {selected ? (
-                      <SelectCheck active={active} />
-                    ) : null}
-                  </>
+            <span
+              className={clsx(
+                'ml-3',
+                'absolute',
+                'inset-y-0',
+                'right-0',
+                'flex',
+                'items-center',
+                'pr-2',
+                'pointer-events-none'
+              )}>
+              <SelectorIcon
+                className={clsx(
+                  'h-5',
+                  'w-5',
+                  'text-gray-400'
                 )}
-              </SelectOption>
-            ))}
-          </SelectOptions>
+                aria-hidden='true' />
+            </span>
+          </Listbox.Button>
+          <SelectOptions
+            open={open}
+            SUPPORTED_CHAINS={SUPPORTED_CHAINS} />
         </SelectBody>
       )}
-    </Select>
+    </Listbox>
   );
 };
 

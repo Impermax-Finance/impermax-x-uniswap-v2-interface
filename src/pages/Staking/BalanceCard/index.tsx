@@ -181,9 +181,9 @@ const BalanceCard = ({
       }
 
       const xIMXRate = parseFloat(xIMXData.exchangeRate);
-      const totalEarned = parseFloat(stakingUserData?.totalEarned ?? 0);
-      const anotherXIMXBalance = parseFloat(stakingUserData?.ximxBalance ?? 0);
-      const lastExchangeRate = parseFloat(stakingUserData?.lastExchangeRate ?? 0);
+      const totalEarned = parseFloat(stakingUserData?.totalEarned ?? '0');
+      const anotherXIMXBalance = parseFloat(stakingUserData?.ximxBalance ?? '0');
+      const lastExchangeRate = parseFloat(stakingUserData?.lastExchangeRate ?? '0');
       earnedLabel = totalEarned + anotherXIMXBalance * (xIMXRate - lastExchangeRate);
       earnedLabel = formatNumberWithFixedDecimals(2)(earnedLabel);
       earnedLabel = formatNumberWithComma(earnedLabel);

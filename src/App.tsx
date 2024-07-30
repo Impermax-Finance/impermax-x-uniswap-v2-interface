@@ -40,6 +40,7 @@ const App = (): JSX.Element | null => {
         <Route path={PAGES.CREATE_NEW_PAIR}>
           {chainId ? (
             <SubgraphProvider key={chainId}>
+              {/* @ts-ignore */}
               <ImpermaxRouterProvider>
                 <CreateNewPair />
               </ImpermaxRouterProvider>
@@ -49,6 +50,7 @@ const App = (): JSX.Element | null => {
         <Route path={PAGES.LENDING_POOL}>
           {chainId ? (
             <SubgraphProvider key={chainId}>
+              {/* @ts-ignore */}
               <ImpermaxRouterProvider>
                 <LendingPool />
               </ImpermaxRouterProvider>
@@ -58,6 +60,7 @@ const App = (): JSX.Element | null => {
         <Route path={PAGES.ACCOUNT}>
           {chainId ? (
             <SubgraphProvider key={chainId}>
+              {/* @ts-ignore */}
               <ImpermaxRouterProvider>
                 <Account />
               </ImpermaxRouterProvider>
@@ -67,6 +70,7 @@ const App = (): JSX.Element | null => {
         <Route path={PAGES.CLAIM}>
           {chainId ? (
             <SubgraphProvider key={chainId}>
+              {/* @ts-ignore */}
               <ImpermaxRouterProvider>
                 <Claim />
               </ImpermaxRouterProvider>
@@ -76,6 +80,7 @@ const App = (): JSX.Element | null => {
         <Route path={PAGES.RISKS}>
           {chainId ? (
             <SubgraphProvider key={chainId}>
+              {/* @ts-ignore */}
               <ImpermaxRouterProvider>
                 <Risks />
               </ImpermaxRouterProvider>

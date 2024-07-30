@@ -8,7 +8,7 @@ import useSubgraph from 'hooks/useSubgraph';
 
 const ImpermaxRouterContext = React.createContext<ImpermaxRouterContextInterface | undefined>(undefined);
 
-const ImpermaxRouterProvider: React.FC = ({ children }) => {
+const ImpermaxRouterProvider: React.FC = ({ children }: {children: JSX.Element | null}) => {
   const {
     account,
     chainId,
